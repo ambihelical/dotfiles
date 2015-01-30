@@ -1,0 +1,10 @@
+set editing-mode vi
+# list matches immediately
+set show-all-if-ambiguous On
+# ignore case  
+set completion-ignore-case On
+
+### experiments below ###
+
+set visible-stats On
+

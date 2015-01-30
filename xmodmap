@@ -1,0 +1,12 @@
+
+! set right windows key as compose key
+keycode 134 = Multi_key
+
+! remap capslock to control
+keycode 66 = Control_L
+clear Lock
+add Control = Control_L
+
+! use left windows key as mod4 (i3 control key)
+clear mod4
+add mod4 = Super_L

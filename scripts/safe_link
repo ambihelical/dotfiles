@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# symbolically link a file or directory, being careful about clobbering existing file objects
+# If the destination is a symbolic link already, it is clobbered
+# If the destination is a file object, user is queried
+
+[ "${HOME}" == "" ] && echo "Environment variable HOME is not defined, abort!" && exit -1
+[ "${PWD}" == "" ] && echo "Environment variable PWD is not defined, abort!" && exit -1
+[ ! -e "${PWD}/scripts/safe_link" ] && echo "Script must be run at root of project, abort!" && exit -1
+[ $# != 2 ] && echo "Usage safe_link <source> <destination>" && exit -1
+src=$1
+dest=$2
+[ ! -e "${src}" ] && echo "source file \"${src}\" doesn't exist" && exit -1
+
+if [ -e "$dest" ]; then
+	if [[ ! -h "$dest" && -s "$dest" ]]; then
+		echo "\"${dest}\" exists, remote it to proceed" 
+		exit -1
+	fi
+fi
+ln -fs "$src" "$dest"
+

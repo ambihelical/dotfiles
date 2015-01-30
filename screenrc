@@ -1,0 +1,13 @@
+
+# kill startup message
+startup_message off
+
+# define a bigger scrollback, default is 100 lines
+defscrollback 1024
+
+# remap CTRL-A to CTRL-]
+#escape ^]]
+
+# status bar
+hardstatus on
+hardstatus alwayslastline "%{rk}%H %{gk}%c %{yk}%M%d %{wk}%?%-Lw%?%{bw}%n*%f %t%?(%u)%?%{wk}%?%+Lw%?"
