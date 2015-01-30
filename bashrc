@@ -14,7 +14,6 @@ darwin*)
 esac
 
 # locations of things
-[ -d ~/extern/nuttx-code ] && export NUTTX_ROOT=~/extern/nuttx-code         # nuttx development
 [ -d ~/extern/ChibiOS-RT ] && export CHIBIOS=~/extern/ChibiOS-RT            # chibios development
 
 # setup path. These are in reverse order of how they appear in the PATH value. 
@@ -22,8 +21,8 @@ esac
 [ -d ~/extern/gccarm-dev/bin ] && PATH=~/extern/gccarm-dev/bin:"${PATH}"    # arm gcc cross compiler
 [ -d /usr/lib/ccache ] && PATH=/usr/lib/ccache:"${PATH}"                    # compile cache
 [ -d ~/local/bin ] && PATH=~/local/bin:"${PATH}"                            # locally installed execs
-[ -d ~/dev/bin ] && PATH=~/dev/bin:"${PATH}"                                # my utilities
-[ -d ~/dev/bin/${OSTYPE} ] && PATH=~/dev/bin/${OSTYPE}:"${PATH}"            # my utilities, os specific
+[ -d ~/bin ] && PATH=~/bin:"${PATH}"                                        # my utilities
+[ -d ~/bin/${OSTYPE} ] && PATH=~/bin/${OSTYPE}:"${PATH}"                    # my utilities, os specific
 
 
 # If not running interactively, don't do anything

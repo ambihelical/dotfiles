@@ -1,0 +1,24 @@
+[alias]
+	st = status
+	ci = commit
+	lo = log --shortstat --relative-date
+	di = diff --color
+	dc = diff --color --cached
+	unadd = rm --cached
+	glog = log --pretty=format:'%h : %s' --graph
+	lg = log --graph --all --pretty=format:'%Cred%h%Creset - %Cgreen(%cr)%Creset %s%C(yellow)%d%Creset' --abbrev-commit --date=relative
+	gdiff = diff --stat
+[color]
+	status = true
+	ui = auto
+[clean]
+	requireForce = true
+[user]
+	email = ergosys@gmail.com
+	name = ergosys
+[github]
+	user = ambihelical
+[core]
+	excludesfile = ~/.gitignore
+[url "ssh://pi@pi1/home/pi/dev"]
+	insteadOf = pi

@@ -1,0 +1,27 @@
+#### xcode specific files
+*.pbxuser
+*.ext
+*.mode1v3
+*.perspectivev3
+xcuserdata/
+
+#### autotools specific files
+*.sym
+Makefile.in
+config.h.in
+autom4te.cache/
+build-aux/
+configure
+
+#### build files
+*.obj
+*.o
+*.pyo
+*.pyc
+
+#### OSX finder crap
+.DS_Store
+
+#### git
+*.orig
+*.rej

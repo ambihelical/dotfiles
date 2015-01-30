@@ -2,9 +2,9 @@
 LN = scripts/safe_link
 BASH_FILES = ~/.bashrc ~/.bash_profile
 INPUT_FILES = ~/.Xmodmap ~/.inputrc
-APP_FILES = ~/.screenrc
+APP_FILES = ~/local ~/.screenrc ~/.gitconfig  ~/.gitignore ~/bin
 
-all: ${BASH_FILES} ${INPUT_FILES}
+all: ${APP_FILES} ${BASH_FILES} ${INPUT_FILES}
 
 ~/.bashrc: ${PWD}/bashrc
 	${LN} $< $@
@@ -20,3 +20,16 @@ all: ${BASH_FILES} ${INPUT_FILES}
 
 ~/.screenrc: ${PWD}/screenrc
 	${LN} $< $@
+
+~/local: ~/.local
+	${LN} $< $@
+
+~/.gitconfig: ${PWD}/gitconfig
+	${LN} $< $@
+
+~/.gitignore: ${PWD}/gitignore
+	${LN} $< $@
+
+~/bin: ${PWD}/bin
+	${LN} $< $@
+
