@@ -4,7 +4,7 @@ BASH_FILES = ~/.bashrc ~/.bash_profile ~/.inputrc
 DIR_FILES = ~/bin ~/local
 APP_FILES = ~/.screenrc 
 SCM_FILES = ~/.gitconfig  ~/.gitignore
-WM_FILES = ~/.xsession ~/.Xmodmap
+WM_FILES = ~/.xsession ~/.Xmodmap ~/.i3
 VIM_FILES = ~/.vimrc
 
 .PHONY: help base dev i3 all
@@ -40,6 +40,12 @@ all: base dev i3
 ~/.Xmodmap: ${PWD}/xmodmap
 	${LN} $< $@
 
+~/.xsession: ${PWD}/xsession
+	${LN} $< $@
+
+~/.i3: ${PWD}/i3dir
+	${LN} $< $@
+
 ~/.screenrc: ${PWD}/screenrc
 	${LN} $< $@
 
@@ -58,7 +64,5 @@ all: base dev i3
 ~/.vimrc: ${PWD}/vimrc
 	${LN} $< $@
 
-~/.xsession: ${PWD}/xsession
-	${LN} $< $@
 
 
