@@ -80,8 +80,6 @@ endif
 """""""""""""""""""""" Plugin Options """""""""""""""""""""""
 " set up pathogen
 call pathogen#infect()
-execute ":Helptags"
-
 
 "Options for NERDTree
 let NERDTreeDirArrows=1
