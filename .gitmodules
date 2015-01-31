@@ -1,0 +1,15 @@
+[submodule "vimdir/bundle/a.vim"]
+	path = vimdir/bundle/a.vim
+	url = https://github.com/vim-scripts/a.vim.git
+[submodule "vimdir/bundle/bufexplorer"]
+	path = vimdir/bundle/bufexplorer
+	url = https://github.com/jlanzarotta/bufexplorer.git
+[submodule "vimdir/bundle/nerdtree"]
+	path = vimdir/bundle/nerdtree
+	url = https://github.com/scrooloose/nerdtree.git
+[submodule "vimdir/bundle/vim-pathogen"]
+	path = vimdir/bundle/vim-pathogen
+	url = https://github.com/tpope/vim-pathogen.git
+[submodule "vimdir/bundle/bufmru.vim"]
+	path = vimdir/bundle/bufmru.vim
+	url = https://github.com/vim-scripts/bufmru.vim.git
