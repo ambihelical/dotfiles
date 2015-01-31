@@ -9,7 +9,7 @@ SCM_FILES = ~/.gitconfig  ~/.gitignore
 WM_FILES = ~/.xsession ~/.Xmodmap ~/.i3  ${CFG}/i3status/config
 VIM_FILES = ~/.vimrc ~/.vim
 
-.PHONY: help base dev i3 all
+.PHONY: help base dev i3 all defaults
 
 help:
 	@echo "The following targets can be used"
@@ -28,7 +28,11 @@ dev: ${VIM_FILES} ${APP_FILES} ${SCM_FILES}
 i3: ${WM_FILES}
 	@echo "i3 configured"
 
-all: base dev i3
+all: base dev i3 defaults
+
+# fix some annoying default settings
+defaults:
+	xdg-mime default pcmanfm.desktop inode/directory
 
 ~/.bashrc: ${PWD}/bashrc
 	${LN} $< $@
