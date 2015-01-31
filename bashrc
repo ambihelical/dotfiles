@@ -25,7 +25,7 @@ esac
 [ -d ~/bin/${OSTYPE} ] && PATH=~/bin/${OSTYPE}:"${PATH}"                    # my utilities, os specific
 
 
-# If not running interactively, don't do anything
+# If not running interactively, don't do anything more
 [ -z "$PS1" ] && return
 
 ################ Interactive Portion ###############
@@ -44,14 +44,8 @@ gprompt() {
 	echo $out
 }
 
-# cd using pattern
-g() { cd $(flexpath $*); }
-
 # add CWD to path
 PATH="${PATH}":.
-
-# add common dirs to CDPATH
-# CDPATH=.:~/dev   # more annoying than useful
 
 # be able to find our locally built libraries
 [ -d ~/local/lib ] && export LD_LIBRARY_PATH=~/local/lib
@@ -124,26 +118,15 @@ xterm*|rxvt*)
     ;;
 *)
     ;;
-
 esac
 
 ##### Aliases & Bindings #####
 
-alias x=xb
-alias b='pmbuild'
 alias m="make -k"
-alias gi=git
-
-# typo handlers:
 alias cd..="cd .."
 alias ls-x="ls -x"
 
 bind Space:magic-space      # expand !$,!^,!*,!!,etc on spacebar
-
-# old stuff -> maybe useful in future?
-#alias gnuplot="(export PAGER=more; gnuplot)"
-
-
 
 ##### OS Specific aliases #####
 
