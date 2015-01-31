@@ -186,8 +186,8 @@ augroup vimrc
 	autocmd BufRead,BufNewFile *.ino set filetype=cpp     " arduino files
 	autocmd FileType cpp set comments=:///,://      " handle doxygen comments better
 	autocmd FileType cpp,c set list                   " always show trailing spaces
-	autocmd VimLeavePre * call Save_session()         " save current session
-	autocmd VimEnter * call Load_session()         " load previously saved session
+"	autocmd VimLeavePre * call Save_session()         " save current session
+"	autocmd VimEnter * call Load_session()         " load previously saved session
 
 	" executing current file
 	autocmd FileType ruby map <buffer> <S-F7> :!ruby %<CR>
@@ -205,24 +205,24 @@ endif  " autocmds
 """""""""""""""""""""""" Functions """"""""""""""""""""""""""
 
 " Load previous session, also load any files specified
-if 0 == exists("*Load_session")  " can't load this while it is running
-function! Load_session()
-   let s:vim_session_path = $HOME . "/.cache/vim/sessions" . getcwd()
-   if (argc() == 0) && filereadable(s:vim_session_path . "/session")
-     execute ":source " . s:vim_session_path . "/session"
-   endif
-endfunction
-endif
-
-if 0 == exists("*Save_session")  " can't load this while it is running
-function! Save_session()
-   if filewritable(s:vim_session_path) == 0
-     call mkdir(s:vim_session_path, "p")
-   endif
-   execute ":set viminfo='20,<50,/25,h,n" . s:vim_session_path . "/viminfo"
-   execute ":mks! " . s:vim_session_path . "/session"
-endfunction
-endif
+"if 0 == exists("*Load_session")  " can't load this while it is running
+"function! Load_session()
+"   let s:vim_session_path = $HOME . "/.cache/vim/sessions" . getcwd()
+"   if (argc() == 0) && filereadable(s:vim_session_path . "/session")
+"     execute ":source " . s:vim_session_path . "/session"
+"   endif
+"endfunction
+"endif
+"
+"if 0 == exists("*Save_session")  " can't load this while it is running
+"function! Save_session()
+"   if filewritable(s:vim_session_path) == 0
+"     call mkdir(s:vim_session_path, "p")
+"   endif
+"   execute ":set viminfo='20,<50,/25,h,n" . s:vim_session_path . "/viminfo"
+"   execute ":mks! " . s:vim_session_path . "/session"
+"endfunction
+"endif
 
 function! Tag()
     execute ":tag " . @"
