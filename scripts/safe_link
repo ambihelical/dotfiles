@@ -18,6 +18,5 @@ if [ -e "$dest" ]; then
 		exit -1
 	fi
 fi
-rm -f "$dest"
-ln -fs "$src" "$dest"
+ln -nfs "$src" "$dest"
 
