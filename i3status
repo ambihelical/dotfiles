@@ -16,6 +16,11 @@ order += "wireless wlan0"
 order += "ethernet eth2"
 order += "battery 0"
 order += "load"
+order += "cpu_usage"
+order += "cpu_temperature 0"
+order += "cpu_temperature 1"
+order += "cpu_temperature 2"
+order += "cpu_temperature 3"
 order += "volume master"
 order += "tztime local"
 
@@ -52,4 +57,32 @@ volume master {
 	device = "default"
 	mixer = "Master"
 	mixer_idx = 0
+}
+
+cpu_usage {
+	format = "%usage "
+}
+ 
+cpu_temperature 0 {
+	format = "%degrees°"
+	path = "/sys/devices/platform/coretemp.0/temp2_input"
+	max_threshold = 95
+}
+ 
+cpu_temperature 1 {
+	format = "%degrees°"
+	path = "/sys/devices/platform/coretemp.0/temp3_input"
+	max_threshold = 95
+}
+ 
+cpu_temperature 2 {
+	format = "%degrees°"
+	path = "/sys/devices/platform/coretemp.0/temp4_input"
+	max_threshold = 95
+}
+ 
+cpu_temperature 3 {
+	format = "%degrees° "
+	path = "/sys/devices/platform/coretemp.0/temp5_input"
+	max_threshold = 95
 }
