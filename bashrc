@@ -13,6 +13,13 @@ darwin*)
     ;;
 esac
 
+# set XDG dirs to their defaults.  Not strictly necessary for cache, config and data, but 
+# set in case apps are poorly written.
+export XDG_CACHE_HOME=~/.cache
+export XDG_CONFIG_HOME=~/.config
+export XDG_DATA_HOME=~/.local/share
+[ ! -d $XDG_DATA_HOME ] && mkdir -p $XDG_DATA_HOME
+
 # locations of things
 [ -d ~/extern/ChibiOS-RT ] && export CHIBIOS=~/extern/ChibiOS-RT            # chibios development
 
