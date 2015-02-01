@@ -159,10 +159,10 @@ client.urgent           #C10004 #900000 #ffffff #900000
 workspace_auto_back_and_forth yes
 
 # startup programs
-exec pithos
-exec nm-applet
-exec dropbox start -i   # note: must use .deb from dropbox.com
-exec clipit
+exec --no-startup-id pithos
+exec --no-startup-id nm-applet
+exec --no-startup-id dropbox start -i   # note: must use .deb from dropbox.com
+exec --no-startup-id clipit
 exec --no-startup-id xset dpms 1800   # sleep monitor time, seconds
 
 # some frequently used programs
