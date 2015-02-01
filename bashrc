@@ -132,6 +132,7 @@ esac
 alias m="make -k"
 alias cd..="cd .."
 alias ls-x="ls -x"
+alias ack='ack-grep -k'
 
 bind Space:magic-space      # expand !$,!^,!*,!!,etc on spacebar
 
@@ -139,7 +140,6 @@ bind Space:magic-space      # expand !$,!^,!*,!!,etc on spacebar
 
 case "$OSTYPE" in
 linux-gnuea*)  # raspbian
-    alias ack='ack-grep -a'
     alias ap='aptitude'
     ;;
 linux*) 
@@ -163,7 +163,6 @@ linux*)
     say() { echo "(audio_mode 'async)(SayText \"$*\")" | festival --pipe; }
     alias vi='gvim -geometry 120x60-0 2>/dev/null'
     alias lyx='lyx -geometry 800x1075-15+0'
-    alias ack='ack-grep -a'
     alias ap='aptitude'
     alias gless=gmore
     # allow core dumps
