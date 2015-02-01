@@ -2,11 +2,6 @@ if filereadable("$VIMRUNTIME/debian.vim")
   source $VIMRUNTIME/debian.vim
 endif
 
-" Except for ~/.vimrc, these make vim XDG compatible 
-set backupdir=~/.cache/vim,~/,/tmp   " dirs to use for backup files
-set directory=~/.cache/vim//         " where to put .swp files (// makes unique name)
-set viminfo+=n~/.cache/vim/viminfo   " where to put viminfo
-set runtimepath=~/.config/vim,~/.config/vim/after,$VIM,$VIMRUNTIME
 set nocompatible              " always use vim extensions
 behave xterm                  " behavior compatible with xterm
 set visualbell                " no noise
@@ -55,6 +50,12 @@ hi SpecialKey ctermfg=7 guifg=LightGray  " colors for listchars nbsp,tab,trail
 "set autochdir                  " change to directory of current buffer
 filetype plugin indent on      " turn on filetype plugins and indentation
 set guioptions-=T              " remove the mostly useless toolbar
+
+" Except for ~/.vimrc, these make vim XDG compatible 
+set backupdir=~/.cache/vim,~/,/tmp   " dirs to use for backup files
+set directory=~/.cache/vim//         " where to put .swp files (// makes unique name)
+set viminfo+=n~/.cache/vim/viminfo   " where to put viminfo
+set runtimepath=~/.config/vim,~/.config/vim/after,$VIM,$VIMRUNTIME
 
 " fix backspace under cygwin
 if &term == "rxvt"
