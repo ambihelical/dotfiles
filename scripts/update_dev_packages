@@ -27,11 +27,4 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
   p="$p python-setuptools python3-setuptools"
   apt-get --quiet --yes --no-install-recommends install $p
 elif [ "${OSTYPE:0:6}" == 'darwin' ]; then 
-  port selfupdate
-  p="$p coreutils git-core +bash_completion"
-  p="$p wget unison ctags"
-  p="$p texlive-latex texlive-latex-recommended texlive-latex-extra p5-text-multimarkdown"
-  p="$p highlight p5-app-ack grep +nls"
-# lesspipe
-  port install -p $p 
 fi
