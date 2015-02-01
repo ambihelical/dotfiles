@@ -5,7 +5,7 @@ CFG = ~/.config
 BASH_FILES = ~/.bashrc ~/.bash_profile ~/.inputrc
 DIR_FILES = ~/bin ~/local
 APP_FILES = ~/.screenrc 
-SCM_FILES = ~/.gitconfig  ~/.gitignore
+SCM_FILES = ${CFG}/git/config  ${CFG}/git/ignore
 WM_FILES = ~/.xsession ~/.Xmodmap ${CFG}/i3/config ${CFG}/i3status/config
 VIM_FILES = ~/.vimrc ${CFG}/vim
 
@@ -63,10 +63,12 @@ ${CFG}/i3status/config: ${PWD}/i3status
 ~/local: ~/.local
 	${LN} $< $@
 
-~/.gitconfig: ${PWD}/gitconfig
+${CFG}/git/config: ${PWD}/gitconfig
+	mkdir -p $(dir $@)
 	${LN} $< $@
 
-~/.gitignore: ${PWD}/gitignore
+${CFG}/git/ignore: ${PWD}/gitignore
+	mkdir -p $(dir $@)
 	${LN} $< $@
 
 ~/bin: ${PWD}/bin
