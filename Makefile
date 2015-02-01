@@ -13,11 +13,12 @@ VIM_FILES = ~/.vimrc ${CFG}/vim
 
 help:
 	@echo "The following targets can be used"
-	@echo "   help - what you are seeing now"
-	@echo "   base - bash, directories, etc"
-	@echo "   dev  - git, screen, vim"
-	@echo "   i3   - i3 configuration"
-	@echo "   all  - all of the above"
+	@echo "   help     - what you are seeing now"
+	@echo "   base     - bash, directories, etc"
+	@echo "   dev      - git, screen, vim"
+	@echo "   defaults - override system defaults"
+	@echo "   i3       - i3 configuration"
+	@echo "   all      - all of the above"
 
 base: ${BASH_FILES} ${DIR_FILES} 
 	@echo "base configured"
@@ -28,7 +29,6 @@ dev: ${VIM_FILES} ${APP_FILES} ${SCM_FILES}
 i3: ${WM_FILES}
 	@echo "i3 configured"
 
-all: base dev i3 defaults
 
 # fix some annoying default settings
 defaults:
@@ -37,6 +37,8 @@ defaults:
 	xdg-mime default chromium.desktop x-scheme-handler/https
 	xdg-mime default chromium.desktop text/html
 	xdg-mime default gvim.desktop `grep '^text/*' /usr/share/mime/types`
+
+all: base dev i3 defaults
 
 ~/.bashrc: ${PWD}/bashrc
 	${LN} $< $@

@@ -1,13 +1,20 @@
-This is my repository used to set up new Linux home directories. This includes
-"dot" files, but also a bit more.  This is not intended to be used by anyone
-else but me, but it might be a useful starting place for someone wanting
+Introduction
+------------
+
+This is my repository used to set up new home directories. This includes "dot"
+files, but also some useful configuration.  This is not intended to be used by
+anyone else but me, but it might be a useful starting place for someone wanting
 something similar for themselves.  It is also a work in progress.
 
-I like to keep all my git repositories together in a certain directory, so
-rather than setting up a git repository containing the home directory dot files
-directly, this repository can be elsewhere.  A Makefile is used to make sure
-that the appropriate dot files in the home directory are symbolically linked to
-the appropriate files in the repository. 
+There is a Makefile that drives everything. Type `make` to get help on the
+available targets.  There are also separate scripts in the directory scripts
+for installing packages. These can take some time to run, so they are separate.
+In theory these can be run at any time, but it is possible that a package
+installation will overwrite a configuration file, so it is best to run these
+scripts before running make.
+
+A note about submodules
+-----------------------
 
 Git submodules are used for vim plugins. Ideally, you cloned this repository like this:
 
@@ -23,5 +30,4 @@ To refresh the plugins with the latest, just use:
 
 	git submodule update
 
-There is a Makefile that drives everything. Type `make` to get help on the available targets. 
 
