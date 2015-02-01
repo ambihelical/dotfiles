@@ -4,14 +4,17 @@
 # 
 # Includes some common software development packages, other 
 # projects should have their own script as needed
+if [[ $EUID -ne 0 ]]; then
+	echo "This script must be run with root privilegs" 1>&2
+	exit 1
+fi
 
 p=""
 if [ "${OSTYPE:0:10}" == 'linux-gnue' ]; then
   p="$p build-essential ccache"
   p="$p libboost-all-dev"
   p="$p autoconf automake libtool"
-  p="$p python-dev python-setuptools python-serial python-daemon"
-  p="$p python3-dev python3-setuptools python3-serial"
+  p="$p python3-dev "
   apt-get --quiet --yes --no-install-recommends install $p
 elif [ "${OSTYPE:0:5}" == 'linux' ]; then 
   p="$p rdoc ri"
@@ -23,8 +26,12 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
   p="$p libboost-all-dev libboost-dbg libboost-doc libgtest-dev"
   p="$p qt-sdk"
   p="$p sqlite3 libsqlite3-dev sqlite3-doc"
-  p="$p python3-dev python3-serial"
-  p="$p python-setuptools python3-setuptools"
+  p="$p python3-dev"
   apt-get --quiet --yes --no-install-recommends install $p
 elif [ "${OSTYPE:0:6}" == 'darwin' ]; then 
+	echo "nothing to do here"
 fi
+
+# install some python stuff
+# for now assume pip3 on all platforms
+pip3 install --upgrade numpy ipython setuptools pyserial

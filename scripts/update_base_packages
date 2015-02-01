@@ -6,6 +6,11 @@ a
 # Includes some common software development packages, other 
 # projects should have their own script as needed
 
+if [[ $EUID -ne 0 ]]; then
+	echo "This script must be run with root privilegs" 1>&2
+	exit 1
+fi
+
 p=""
 if [ "${OSTYPE:0:10}" == 'linux-gnue' ]; then
   p="$p ack-grep autojump htop screen"
@@ -30,3 +35,7 @@ elif [ "${OSTYPE:0:6}" == 'darwin' ]; then
 # lesspipe
   port install -p $p 
 fi
+
+# install some python stuff
+# for now assume pip on all platforms
+pip3 install i3pystatus
