@@ -7,7 +7,7 @@ DIR_FILES = ~/bin ~/local
 APP_FILES = ~/.screenrc 
 SCM_FILES = ~/.gitconfig  ~/.gitignore
 WM_FILES = ~/.xsession ~/.Xmodmap ${CFG}/i3/config ${CFG}/i3status/config
-VIM_FILES = ~/.vimrc ~/.vim
+VIM_FILES = ~/.vimrc ${CFG}/vim
 
 .PHONY: help base dev i3 all defaults
 
@@ -75,7 +75,7 @@ ${CFG}/i3status/config: ${PWD}/i3status
 ~/.vimrc: ${PWD}/vimrc
 	${LN} $< $@
 
-~/.vim: ${PWD}/vimdir
+${CFG}/vim: ${PWD}/vimdir
 	${LN} $< $@
 
 

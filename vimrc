@@ -1,13 +1,12 @@
-
-" load pathogen (bundle loader)
-runtime bundle/vim-pathogen/autoload/pathogen.vim
-
-"""""""""""""""""""""""" Settings """""""""""""""""""""""""""
-
 if filereadable("$VIMRUNTIME/debian.vim")
   source $VIMRUNTIME/debian.vim
 endif
 
+" Except for ~/.vimrc, these make vim XDG compatible 
+set backupdir=~/.cache/vim,~/,/tmp   " dirs to use for backup files
+set directory=~/.cache/vim//         " where to put .swp files (// makes unique name)
+set viminfo+=n~/.cache/vim/viminfo   " where to put viminfo
+set runtimepath=~/.config/vim,~/.config/vim/after,$VIM,$VIMRUNTIME
 set nocompatible              " always use vim extensions
 behave xterm                  " behavior compatible with xterm
 set visualbell                " no noise
@@ -25,8 +24,6 @@ set backup                    " delete old backup file
 set makeprg=run_make           " command to use for make
 set makeef=~/.cache/vim/vim##.err   " file to use for make errors
 set errorformat^=%-GIn\ file\ included\ from\ %.%#
-set backupdir=~/.cache/vim    " dir to use for backup files
-set directory=~/.cache/vim//  " where to put .swp files (// makes unique name)
 set hidden                    " allow hidden bufs to be modified w/o save required
 set ignorecase                " ignore case in searches
 set smartcase                 " .. unless search term has upper case
@@ -42,17 +39,15 @@ set cmdheight=3               " 3 line command area
 set shortmess=at              " shorten displayed text
 set scrolloff=5               " minimum # lines to keep above and below cursor
 set mousemodel=popup          " right mouse clicks pops up a menu
-set fo+=n                     " recognize lists when formatting text
-set nosm                      " don't show matching brackets
-set nosol                     " keep current column if possible
+set formatoptions+=n          " recognize lists when formatting text
+set noshowmatch               " don't show matching brackets
+set nostartofline             " keep current column if possible
 syntax on                     " enable syntax highlighting
 set wildmenu                  " enhanced command line completion (use TAB)
 set wildmode=list:longest,list:full " what to do in wild mode
 set wildignore+=*/.git/*,*/.hg/*,*/.dep/*,*.o,*.a           " file patterns to ignore in wild mode
 " session information saved
 set sessionoptions=winpos,resize,winsize,slash,folds,globals,tabpages,localoptions
-" viminfo: stuff remembered between runs
-" set viminfo='20,<50,/25,h,n~/.cache/vim/viminfo
 "let mapleader=','             " use , for <leader> sequences
 set listchars=trail:·,tab:▹\ ,nbsp:·  " show trailing & nb spaces as a dot, tabs as arrow
 set list                       " show special characters as defined in listchars
@@ -79,6 +74,7 @@ endif
 
 """""""""""""""""""""" Plugin Options """""""""""""""""""""""
 " set up pathogen
+runtime bundle/vim-pathogen/autoload/pathogen.vim
 call pathogen#infect()
 
 "Options for NERDTree
