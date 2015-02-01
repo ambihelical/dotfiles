@@ -13,12 +13,11 @@
 	ui = auto
 [clean]
 	requireForce = true
-[user]
-	email = ergosys@gmail.com
-	name = ergosys
 [github]
 	user = ambihelical
 [core]
 	excludesfile = ~/.gitignore
 [url "ssh://pi@pi1/home/pi/dev"]
 	insteadOf = pi
+[user]
+	email = ambihelical@users.noreply.github.com
