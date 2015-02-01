@@ -1,0 +1,32 @@
+#!/bin/bash
+# 
+# Make sure some system packages are present
+# Development packages are in "update_dev_packages"
+a
+# Includes some common software development packages, other 
+# projects should have their own script as needed
+
+p=""
+if [ "${OSTYPE:0:10}" == 'linux-gnue' ]; then
+  p="$p ack-grep autojump htop screen"
+  apt-get --quiet --yes --no-install-recommends install $p
+elif [ "${OSTYPE:0:5}" == 'linux' ]; then 
+  p="$p ack-grep autojump htop screen unzip"
+  p="$p ttf-mscorefonts-installer otf-stix unifont"
+  p="$p texlive texinfo texlive-extra-utils"
+  p="$p openssh-server curl wget rcconf"
+  p="$p git-core gitk git-doc git-gui mercurial subversion"
+  p="$p vim-gnome exuberant-ctags gnome-terminal pcmanfm"
+  p="$p graphviz libtiff-tools imagemagick"
+  p="$p python3 python3-gi ruby"
+  p="$p clipit pithos liferea chromium i3"
+  apt-get --quiet --yes --no-install-recommends install $p
+elif [ "${OSTYPE:0:6}" == 'darwin' ]; then 
+  port selfupdate
+  p="$p coreutils git-core +bash_completion"
+  p="$p wget unison ctags"
+  p="$p texlive-latex texlive-latex-recommended texlive-latex-extra p5-text-multimarkdown"
+  p="$p highlight p5-app-ack grep +nls"
+# lesspipe
+  port install -p $p 
+fi
