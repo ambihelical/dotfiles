@@ -18,6 +18,7 @@ configure
 *.o
 *.pyo
 *.pyc
+__pycache__
 
 #### OSX finder crap
 .DS_Store

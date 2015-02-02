@@ -16,7 +16,7 @@
 [github]
 	user = ambihelical
 [core]
-	excludesfile = ~/.gitignore
+	excludesfile = ~/.config/git/ignore
 [url "ssh://pi@pi1/home/pi/dev"]
 	insteadOf = pi
 [user]
