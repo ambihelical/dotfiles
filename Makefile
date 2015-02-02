@@ -1,13 +1,14 @@
 
 LN = scripts/safe_link
 CFG = ~/.config
+CACHE=~/.cache
 
 BASH_FILES = ~/.bashrc ~/.bash_profile ~/.inputrc
 DIR_FILES = ~/bin ~/local
 APP_FILES = ~/.screenrc 
 SCM_FILES = ${CFG}/git/config  ${CFG}/git/ignore
 WM_FILES = ~/.xsession ~/.Xmodmap ${CFG}/i3/config ${CFG}/i3status/config
-VIM_FILES = ~/.vimrc ${CFG}/vim
+VIM_FILES = ~/.vimrc ${CFG}/vim  ${CACHE}/vim
 
 .PHONY: help base dev i3 all defaults
 
@@ -85,5 +86,8 @@ ${CFG}/git/ignore: ${PWD}/gitignore
 
 ${CFG}/vim: ${PWD}/vimdir
 	${LN} $< $@
+
+${CACHE}/vim:
+	mkdir =p $@
 
 
