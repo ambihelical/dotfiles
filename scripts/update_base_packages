@@ -24,6 +24,7 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
   p="$p graphviz libtiff-tools imagemagick"
   p="$p python3 python3-gi ruby"
   p="$p clipit pithos liferea chromium i3"
+  p="$p libiw-dev"
   apt-get --quiet --yes --no-install-recommends install $p
 elif [ "${OSTYPE:0:6}" == 'darwin' ]; then 
   port selfupdate
@@ -37,4 +38,4 @@ fi
 
 # install some python stuff
 # for now assume pip on all platforms
-pip3 install i3pystatus
+pip3 install --upgrade i3pystatus netifaces colour psutil basiciw
