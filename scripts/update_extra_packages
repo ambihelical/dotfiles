@@ -1,9 +1,7 @@
 #!/bin/bash
 # 
-# Make sure some system packages are present. These are only the 
-# most basic packages needed to set up a basic system, plus a few
-# nice-to-haves.
-
+# Extra packages needed only for personal machine
+#
 if [[ $EUID -ne 0 ]]; then
 	echo "This script must be run with root privileges" 1>&2
 	exit 1
@@ -14,19 +12,19 @@ if [ "${OSTYPE:0:10}" == 'linux-gnue' ]; then
   p="$p ack-grep autojump htop screen"
   apt-get --quiet --yes --no-install-recommends install $p
 elif [ "${OSTYPE:0:5}" == 'linux' ]; then 
-  p="$p aptitude python3-pip"
-  p="$p ack-grep autojump htop screen unzip"
-  p="$p curl wget"
-  p="$p git-core gitk git-doc git-gui"
-  p="$p vim-gnome exuberant-ctags gnome-terminal pcmanfm"
-  p="$p python3 python3-gi python3-dev"
-  p="$p clipit pithos i3"
-  p="$p aptitude htop screen unzip"
-  p="$p libiw-dev"
+  p="$p ttf-mscorefonts-installer otf-stix unifont"
+  p="$p texlive texinfo texlive-extra-utils"
+  p="$p openssh-server rcconf"
+  p="$p git-gui mercurial subversion"
+  p="$p graphviz libtiff-tools imagemagick"
+  p="$p ruby"
+  p="$p liferea"
   apt-get --quiet --yes --no-install-recommends install $p
 elif [ "${OSTYPE:0:6}" == 'darwin' ]; then 
   port selfupdate
+  p="$p coreutils git-core +bash_completion"
   p="$p wget unison ctags"
+  p="$p texlive-latex texlive-latex-recommended texlive-latex-extra p5-text-multimarkdown"
   p="$p highlight p5-app-ack grep +nls"
 # lesspipe
   port install -p $p 

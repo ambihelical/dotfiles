@@ -18,15 +18,11 @@ if [ "${OSTYPE:0:10}" == 'linux-gnue' ]; then
   apt-get --quiet --yes --no-install-recommends install $p
 elif [ "${OSTYPE:0:5}" == 'linux' ]; then 
   p="$p rdoc ri"
-  p="$p scons cmake-gui build-essential ccache" 
+  p="$p cmake-gui build-essential ccache" 
   p="$p manpages-dev manpages-posix-dev doxygen"
   p="$p gcc-doc glibc-doc"
   p="$p gcc-multilib libgmp-dev libmpc-dev libmpfr-dev ppl-dev libcloog-ppl-dev"         # gcc cross compiler support
   p="$p autoconf automake libtool gettext intltool"
-  p="$p libboost-all-dev libboost-dbg libboost-doc libgtest-dev"
-  p="$p qt-sdk"
-  p="$p sqlite3 libsqlite3-dev sqlite3-doc"
-  p="$p python3-dev"
   apt-get --quiet --yes --no-install-recommends install $p
 elif [ "${OSTYPE:0:6}" == 'darwin' ]; then 
 	echo "nothing to do here"
