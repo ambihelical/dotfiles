@@ -1,6 +1,8 @@
 [alias]
 	st = status
 	ci = commit
+	cia = commit --amend
+	co = checkout
 	lo = log --shortstat --relative-date
 	di = diff --color
 	dc = diff --color --cached
@@ -11,13 +13,31 @@
 [color]
 	status = true
 	ui = auto
+	diff = auto
+	branch = auto
+	status = auto
+[color "branch"]
+	current = red
+	local = yellow
+	remote = green
+[color "diff"]
+	meta = yellow bold
+	frag = magenta bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
+[color "status"]
+	added = yellow
+	changed = green
+	untracked = cyan
+[gc]
+	pruneexpire = 90 days
+	auto = 0
 [clean]
 	requireForce = true
 [github]
 	user = ambihelical
 [core]
 	excludesfile = ~/.config/git/ignore
-[url "ssh://pi@pi1/home/pi/dev"]
-	insteadOf = pi
 [user]
 	email = ambihelical@users.noreply.github.com
