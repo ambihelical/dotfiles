@@ -5,7 +5,7 @@ import subprocess
 from i3pystatus import Status
 
 status = Status(standalone=True)
-status.register("clock", format = "%a %d %b %-I:%M %p",)
+status.register("clock", format = "%a %-d %b %-I:%M %p",)
 status.register("pulseaudio", format="{volume}%",)
 status.register("load")
 status.register("battery",
