@@ -29,7 +29,3 @@ elif [ "${OSTYPE:0:6}" == 'darwin' ]; then
 # lesspipe
   port install -p $p 
 fi
-
-# install some python stuff
-# for now assume pip on all platforms
-pip3 install --upgrade i3pystatus netifaces colour psutil basiciw
