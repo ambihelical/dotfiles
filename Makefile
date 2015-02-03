@@ -7,7 +7,7 @@ BASH_FILES = ~/.bashrc ~/.bash_profile ~/.inputrc
 DIR_FILES = ~/bin ~/local
 APP_FILES = ~/.screenrc 
 SCM_FILES = ${CFG}/git/config  ${CFG}/git/ignore
-WM_FILES = ~/.xsession ~/.Xmodmap ${CFG}/i3/config ${CFG}/i3status/config
+WM_FILES = ~/.xsession ~/.Xmodmap ${CFG}/i3/config ${CFG}/i3status/config ${CFG}/i3/status.py
 VIM_FILES = ~/.vimrc ${CFG}/vim  ${CACHE}/vim
 
 .PHONY: help base dev i3 all defaults
@@ -61,6 +61,10 @@ ${CFG}/i3/config: ${PWD}/i3config
 	${LN} $< $@
 
 ${CFG}/i3status/config: ${PWD}/i3status
+	mkdir -p $(dir $@)
+	${LN} $< $@
+
+${CFG}/i3/status.py: ${PWD}/i3status.py
 	mkdir -p $(dir $@)
 	${LN} $< $@
 
