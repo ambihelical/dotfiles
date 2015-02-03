@@ -16,7 +16,7 @@ if [ "${OSTYPE:0:10}" == 'linux-gnue' ]; then
 elif [ "${OSTYPE:0:5}" == 'linux' ]; then 
   p="$p aptitude python3-pip"
   p="$p ack-grep autojump htop screen unzip"
-  p="$p curl wget"
+  p="$p curl wget suckless-tools"
   p="$p git-core gitk git-doc git-gui"
   p="$p vim-gnome exuberant-ctags gnome-terminal pcmanfm"
   p="$p python3 python3-gi python3-dev"
