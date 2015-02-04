@@ -20,7 +20,7 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
   p="$p git-core gitk git-doc git-gui"
   p="$p vim-gnome exuberant-ctags gnome-terminal pcmanfm"
   p="$p python3 python3-gi python3-dev"
-  p="$p clipit pithos i3"
+  p="$p clipit pithos i3 i3lock"
   p="$p aptitude htop screen unzip"
   p="$p libiw-dev"
   apt-get --quiet --yes --no-install-recommends install $p
