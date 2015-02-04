@@ -167,7 +167,6 @@ bindsym $mod+minus scratchpad show
 
 assign [class="Pithos"] 4
 assign [class="Pidgin"] 4
-assign [class="Chromium-browser"] 3
 
 # startup programs
 exec --no-startup-id pithos
@@ -179,6 +178,7 @@ exec --no-startup-id xset dpms 3600   # sleep monitor time, seconds
 
 # some frequently used programs
 bindsym $mod+m exec pcmanfm
+bindsym $mod+b exec chromium-browser
 
 # power control (stolen from http://moparx.com/configs/i3/)
 # Add a small delay to prevent suspend races
