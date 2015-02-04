@@ -164,7 +164,7 @@ exec --no-startup-id pithos
 exec --no-startup-id nm-applet
 exec --no-startup-id dropbox start -i   # note: must use .deb from dropbox.com
 exec --no-startup-id clipit
-exec --no-startup-id xset dpms 1800   # sleep monitor time, seconds
+exec --no-startup-id xset dpms 3600   # sleep monitor time, seconds
 
 # some frequently used programs
 bindsym $mod+m exec pcmanfm
