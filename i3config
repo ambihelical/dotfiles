@@ -191,7 +191,7 @@ bindsym $mod+b exec chromium-browser
 # username hostname = (root) NOPASSWD: /sbin/reboot
 # username hostname = (root) NOPASSWD: /sbin/poweroff
 
-set $Locker i3lock -i ~/.config/i3/background.png && sleep 1 
+set $Locker i3lock -t -i ~/.config/i3/background.png && sleep 1 
 #set $Locker i3lock
 
 set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
