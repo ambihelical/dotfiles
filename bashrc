@@ -37,6 +37,17 @@ export XDG_DATA_HOME=~/.local/share
 
 ################ Interactive Portion ###############
 
+# create ssh agent if needed and add private key identities
+export SSH_AGENT_PID=`pgrep -o -u $USER ssh-agent`
+if [ "$SSH_AGENT_PID" != '' ]; then
+	export SSH_AUTH_SOCK="$(\ls $(find /tmp -type d -uid $(id -u) -name 'ssh-*' 2>/dev/null | head -n 1)/agent.*)"
+	echo "using existing ssh-agent $SSH_AGENT_PID on $SSH_AUTH_SOCK"
+else
+	eval `ssh-agent`
+	echo "created new ssh-agent"
+	ssh-add
+fi
+
 [ -e /usr/share/autojump/autojump.sh ] && . /usr/share/autojump/autojump.sh
 
 # return git root directory
