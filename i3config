@@ -178,7 +178,7 @@ exec --no-startup-id xset dpms 3600   # sleep monitor time, seconds
 
 # some frequently used programs
 bindsym $mod+m exec pcmanfm
-bindsym $mod+b exec chromium-browser
+bindsym $mod+b exec chromium-browser || chromium
 
 # power control (stolen from http://moparx.com/configs/i3/)
 # Add a small delay to prevent suspend races
