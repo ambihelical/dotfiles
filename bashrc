@@ -62,6 +62,23 @@ gprompt() {
 	echo $out
 }
 
+# echo only the last N characters of the string provided, using an ellipsis to 
+# indicate it was truncated.  Strings shorter than N are unmolested. 
+# $1 - string to echo 
+# $2 - maximum length (default is 5)
+# 
+# Todo: use "locale charmap" to detect non-UTF8 terminal, and substitute
+# an ascii string instead of ellipsis character
+#
+trim() {
+	local path=${1/${HOME}/\~}    # show ~ for home dir
+	local maxlen=${2:-5}
+	if [ ${#path} -gt $maxlen ]; then
+		path="…${path:1-${maxlen}:${maxlen}}"
+	fi
+	echo $path
+}
+
 # add CWD to path
 PATH="${PATH}":.
 
@@ -125,7 +142,7 @@ elif [ -f /opt/local/etc/bash_completion ]; then
 fi
 
 # primary prompt. Color only when ECMA-48 capable terminal
-PS1='\[\033[01;32m\]\u@\h\[\033[00m\]$(gprompt):\[\033[01;34m\]\w\[\033[00m\]\$ '
+PS1='\[\033[01;32m\]$(trim \u)@$(trim \h)\[\033[00m\]$(gprompt):\[\033[01;34m\]\w\[\033[00m\]\$ '
 [ "$ecma" != "1" ] && PS1='\u@\h$(gprompt):\w\$ '
 PROMPT_DIRTRIM=2
 
