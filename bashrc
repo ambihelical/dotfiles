@@ -74,7 +74,8 @@ trim() {
 	local path=${1/${HOME}/\~}    # show ~ for home dir
 	local maxlen=${2:-5}
 	if [ ${#path} -gt $maxlen ]; then
-		path="…${path:1-${maxlen}:${maxlen}}"
+		#path="…${path:1-${maxlen}:${maxlen}}" # show last maxlen characters
+		path="${path:0:${maxlen}-1}…"  # show first maxlen characters
 	fi
 	echo $path
 }
