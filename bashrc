@@ -50,17 +50,6 @@ fi
 
 [ -e /usr/share/autojump/autojump.sh ] && . /usr/share/autojump/autojump.sh
 
-# return git root directory
-gprompt() {
-	local out=
-	local binfo=$(__git_ps1 "%s")
-	if [[ -n $binfo ]]; then
-		local rdir=$(git rev-parse --show-toplevel 2>/dev/null)
-		local rbase=${rdir##*/}
-		out=":(${rbase}@${binfo})"
-	fi
-	echo $out
-}
 
 # echo only the last N characters of the string provided, using an ellipsis to 
 # indicate it was truncated.  Strings shorter than N are unmolested. 
@@ -70,14 +59,42 @@ gprompt() {
 # Todo: use "locale charmap" to detect non-UTF8 terminal, and substitute
 # an ascii string instead of ellipsis character
 #
-trim() {
+truncl() {
 	local path=${1/${HOME}/\~}    # show ~ for home dir
 	local maxlen=${2:-5}
 	if [ ${#path} -gt $maxlen ]; then
-		#path="…${path:1-${maxlen}:${maxlen}}" # show last maxlen characters
+		path="…${path:1-${maxlen}:${maxlen}}" # show last maxlen characters
+	fi
+	echo $path
+}
+
+# echo only the first N characters of the string provided, using an ellipsis to 
+# indicate it was truncated.  Strings shorter than N are unmolested. 
+# $1 - string to echo 
+# $2 - maximum length (default is 5)
+# 
+# Todo: use "locale charmap" to detect non-UTF8 terminal, and substitute
+# an ascii string instead of ellipsis character
+#
+truncr() {
+	local path=${1/${HOME}/\~}    # show ~ for home dir
+	local maxlen=${2:-5}
+	if [ ${#path} -gt $maxlen ]; then
 		path="${path:0:${maxlen}-1}…"  # show first maxlen characters
 	fi
 	echo $path
+}
+
+# return git root directory
+gprompt() {
+	local out=
+	local binfo=$(__git_ps1 "%s")
+	if [[ -n $binfo ]]; then
+		local rdir=$(git rev-parse --show-toplevel 2>/dev/null)
+		local rbase=${rdir##*/}
+		out=":($(truncl $rbase 10)@$(truncl $binfo 10))"
+	fi
+	echo $out
 }
 
 # add CWD to path
@@ -143,7 +160,7 @@ elif [ -f /opt/local/etc/bash_completion ]; then
 fi
 
 # primary prompt. Color only when ECMA-48 capable terminal
-PS1='\[\033[01;32m\]$(trim \u)@$(trim \h)\[\033[00m\]$(gprompt):\[\033[01;34m\]\w\[\033[00m\]\$ '
+PS1='\[\033[01;32m\]$(truncr \u)@$(truncr \h)\[\033[00m\]$(gprompt):\[\033[01;34m\]\w\[\033[00m\]\$ '
 [ "$ecma" != "1" ] && PS1='\u@\h$(gprompt):\w\$ '
 PROMPT_DIRTRIM=2
 
