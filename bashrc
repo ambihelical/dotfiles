@@ -98,7 +98,7 @@ gprompt() {
 }
 
 # add CWD to path
-PATH="${PATH}":.
+#PATH="${PATH}":.
 
 # be able to find our locally built libraries
 [ -d ~/local/lib ] && export LD_LIBRARY_PATH=~/local/lib
