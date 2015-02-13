@@ -16,7 +16,7 @@ set autoindent                " automatically indent
 set writebackup               " backup current file
 set backup                    " delete old backup file
 "set makeprg=xcodebuild\ -activeconfiguration       " command to use for make
-set makeprg=run_make           " command to use for make
+"set makeprg=run_make           " command to use for make
 set makeef=~/.cache/vim/vim##.err   " file to use for make errors
 set errorformat^=%-GIn\ file\ included\ from\ %.%#
 set hidden                    " allow hidden bufs to be modified w/o save required
@@ -131,6 +131,9 @@ let g:loaded_netrwPlugin = 1
 " turn off c curly brace errors so c++0x lambdas aren't bleeding red
 let c_no_curly_error = 1
 
+" plantuml
+let g:plantuml_executable_script = 'java -jar ~/local/lib/plantuml.jar'
+
 """""""""""""""""""""""" Mappings """""""""""""""""""""""""""
 
 map __ 
@@ -185,11 +188,12 @@ augroup vimrc
 "	autocmd VimEnter * call Load_session()         " load previously saved session
 
 	" executing current file
-	autocmd FileType ruby map <buffer> <S-F7> :!ruby %<CR>
-	autocmd FileType lua map <buffer> <S-F7> :!lua %<CR>
-	autocmd FileType cpp map <buffer> <S-F7> :!g++ -Wall -Wextra -std=c++11 % && ./a.out<CR>
-	autocmd FileType python map <buffer> <S-F7> :!python %<CR>
-	autocmd FileType sql map <buffer> <S-F7> :!sqlite3 < %<CR>
+	autocmd FileType cpp let &l:makeprg="g++ -Wall -Wextra -std=c++11 ". expand("%") . " && ./a.out"
+	autocmd FileType ruby let &l:makeprg="ruby ".expand("%")
+	autocmd FileType lua let &l:makeprg="lua ".expand("%")
+	autocmd FileType python let &l:makeprg="python ".expand("%")
+	autocmd FileType sql let &l:makeprg="sqlite3 ".expand("%")
+	autocmd FileType ruby let &l:makeprg="ruby ".expand("%")
 
 	" tabstops
 	autocmd FileType python setl expandtab shiftwidth=4 softtabstop=4

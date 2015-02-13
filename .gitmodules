@@ -17,3 +17,6 @@
 	path = vimdir/bundle/taglist.vim
 	url = https://github.com/vim-scripts/taglist.vim.git
 	ignore = dirty
+[submodule "vimdir/bundle/plantuml-syntax"]
+	path = vimdir/bundle/plantuml-syntax
+	url = https://github.com/aklt/plantuml-syntax.git
