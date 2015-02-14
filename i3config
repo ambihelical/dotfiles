@@ -167,7 +167,7 @@ assign [class="Pidgin"] 4
 # startup programs
 exec --no-startup-id pithos
 exec --no-startup-id empathy
-exec --no-startup-id thunderbird
+#exec --no-startup-id thunderbird
 exec --no-startup-id nm-applet
 exec --no-startup-id dropbox start -i   # note: must use .deb from dropbox.com
 exec --no-startup-id clipit
