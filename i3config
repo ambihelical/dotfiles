@@ -146,10 +146,6 @@ bar {
 	tray_output primary
 }
 
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 1 -- +5% && killall -SIGUSR1 i3status
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 1 -- -5% && killall -SIGUSR1 i3status
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 1 toggle
-
 # class                 border  backgr  text    indicator
 client.focused          #3F8AC2 #096BAA #00BAA7 #00DA8E
 client.focused_inactive #333333 #5F676A #ffffff #484e50
@@ -170,7 +166,7 @@ assign [class="Pidgin"] 4
 
 # startup programs
 exec --no-startup-id pithos
-exec --no-startup-id pidgin
+exec --no-startup-id empathy
 exec --no-startup-id thunderbird
 exec --no-startup-id nm-applet
 exec --no-startup-id dropbox start -i   # note: must use .deb from dropbox.com
@@ -178,9 +174,20 @@ exec --no-startup-id clipit
 exec --no-startup-id xset dpms 0 3600 4200   # suspend at 1h, off 10 minutes later
 exec --no-startup-id gnome-settings-daemon   # bring over gnome settings
 
-# some frequently used programs
+# convenient key bindings
 bindsym $mod+m exec pcmanfm
-bindsym $mod+b exec chromium-browser || chromium
+bindsym XF86Explorer exec pcmanfm
+bindsym $mod+b exec chromium-browser || chromium || firefox
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 1 -- +5% && killall -SIGUSR1 i3status
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 1 -- -5% && killall -SIGUSR1 i3status
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 1 toggle
+bindsym $mod+equal exec gnome-calculator
+bindsym XF86Calculator exec gnome-calculator
+for_window [class="Gcalctool"] floating enable
+
+bindsym XF86Mail [class="Mail"] focus
+bindsym XF86Tools [class="Pithos"] focus
+bindsym XF86HomePage [class="Chromium"] focus
 
 # power control (stolen from http://moparx.com/configs/i3/)
 # Add a small delay to prevent suspend races
