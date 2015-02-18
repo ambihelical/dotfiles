@@ -132,7 +132,7 @@ let g:loaded_netrwPlugin = 1
 let c_no_curly_error = 1
 
 " plantuml
-let g:plantuml_executable_script = 'java -jar ~/local/lib/plantuml.jar'
+let g:plantuml_executable_script = 'java -jar ~/local/share/java/plantuml.jar'
 
 """""""""""""""""""""""" Mappings """""""""""""""""""""""""""
 
