@@ -41,3 +41,4 @@
 	excludesfile = ~/.config/git/ignore
 [user]
 	email = ambihelical@users.noreply.github.com
+	name = ambihelical
