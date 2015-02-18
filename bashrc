@@ -178,7 +178,7 @@ esac
 alias m="make -k"
 alias cd..="cd .."
 alias ls-x="ls -x"
-alias ack='ack-grep'
+alias ack='mark && ack-grep'
 
 bind Space:magic-space      # expand !$,!^,!*,!!,etc on spacebar
 
