@@ -42,7 +42,7 @@ set wildmenu                  " enhanced command line completion (use TAB)
 set wildmode=list:longest,list:full " what to do in wild mode
 set wildignore+=*/.git/*,*/.hg/*,*/.dep/*,*.o,*.a           " file patterns to ignore in wild mode
 " session information saved
-set sessionoptions=winpos,resize,winsize,slash,folds,globals,tabpages,localoptions
+set sessionoptions=winpos,resize,winsize,slash,folds,globals,tabpages,localoptions,buffers
 "let mapleader=','             " use , for <leader> sequences
 set listchars=trail:·,tab:▹\ ,nbsp:·  " show trailing & nb spaces as a dot, tabs as arrow
 set list                       " show special characters as defined in listchars
