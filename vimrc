@@ -15,6 +15,7 @@ set autoindent                " automatically indent
 "set copyindent                " .. and copy indent structure of existing line
 set writebackup               " backup current file
 set backup                    " delete old backup file
+set grepprg=ack-grep          " use ack for grepping
 "set makeprg=xcodebuild\ -activeconfiguration       " command to use for make
 "set makeprg=run_make           " command to use for make
 set makeef=~/.cache/vim/vim##.err   " file to use for make errors
