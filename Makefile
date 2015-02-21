@@ -5,10 +5,12 @@ CACHE=~/.cache
 
 BASH_FILES = ~/.bashrc ~/.bash_profile ~/.inputrc
 DIR_FILES = ~/bin ~/local
-APP_FILES = ~/.screenrc 
+APP_FILES = ~/.screenrc
 SCM_FILES = ${CFG}/git/config  ${CFG}/git/ignore
 WM_FILES = ~/.xsession ~/.Xmodmap ${CFG}/i3/config ${CFG}/i3status/config ${CFG}/i3/status.py
 VIM_FILES = ~/.vimrc ${CFG}/vim  ${CACHE}/vim
+BIN_FILES=$(foreach bin,$(notdir $(wildcard ${PWD}/bin/*)),~/bin/${bin})
+
 
 .PHONY: help base dev i3 all defaults
 
@@ -21,7 +23,7 @@ help:
 	@echo "   i3       - i3 configuration"
 	@echo "   all      - all of the above"
 
-base: ${BASH_FILES} ${DIR_FILES} 
+base: ${BASH_FILES} ${DIR_FILES} ${BIN_FILES}
 	@echo "base configured"
 
 dev: ${VIM_FILES} ${APP_FILES} ${SCM_FILES}
@@ -82,8 +84,9 @@ ${CFG}/git/ignore: ${PWD}/gitignore
 	mkdir -p $(dir $@)
 	${LN} $< $@
 
-~/bin: ${PWD}/bin
-	${LN} $< $@
+~/bin:
+	mkdir -p ~/bin
+
 
 ~/.vimrc: ${PWD}/vimrc
 	${LN} $< $@
@@ -94,4 +97,7 @@ ${CFG}/vim: ${PWD}/vimdir
 ${CACHE}/vim:
 	mkdir =p $@
 
+# files in bin directory
+~/bin/% : ${PWD}/bin/%
+	${LN} $< $@
 
