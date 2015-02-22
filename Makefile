@@ -5,7 +5,7 @@ CACHE=~/.cache
 
 BASH_FILES = ~/.bashrc ~/.bash_profile ~/.inputrc
 DIR_FILES = ~/bin ~/local
-APP_FILES = ~/.screenrc
+APP_FILES = ~/.screenrc ${CFG}/ack/config
 SCM_FILES = ${CFG}/git/config  ${CFG}/git/ignore
 WM_FILES = ~/.xsession ~/.Xmodmap ${CFG}/i3/config ${CFG}/i3status/config ${CFG}/i3/status.py
 VIM_FILES = ~/.vimrc ${CFG}/vim  ${CACHE}/vim

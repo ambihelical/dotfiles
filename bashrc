@@ -31,6 +31,8 @@ export XDG_DATA_HOME=~/.local/share
 [ -d ~/bin ] && PATH=~/bin:"${PATH}"                                        # my utilities
 [ -d ~/bin/${OSTYPE} ] && PATH=~/bin/${OSTYPE}:"${PATH}"                    # my utilities, os specific
 
+export ACKRC=~/.config/ack/config
+
 
 # If not running interactively, don't do anything more
 [ -z "$PS1" ] && return
