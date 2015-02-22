@@ -33,7 +33,6 @@ export XDG_DATA_HOME=~/.local/share
 
 export ACKRC=~/.config/ack/config
 
-
 # If not running interactively, don't do anything more
 [ -z "$PS1" ] && return
 
@@ -180,8 +179,6 @@ esac
 alias m="make -k"
 alias cd..="cd .."
 alias ls-x="ls -x"
-# Add some options to ack, eventually should put this in config file
-export ACK_OPTIONS='--ignore-file=match:/\.d$/'
 alias ack='mark && ack-grep'
 
 bind Space:magic-space      # expand !$,!^,!*,!!,etc on spacebar
