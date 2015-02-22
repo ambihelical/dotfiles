@@ -14,7 +14,6 @@ type java &> /dev/null || echo "Please install default-jre" && have_apps=0
 TMP=$(mktemp -d 2>/dev/null || mktemp -d -t 'plant2uml')   #unix.stackexchange.com question 30091
 SRC=$*
 if [[ ${have_apps} ]]; then
-	echo ${TMP}
 	java -jar $JAR -tsvg -o${TMP} ${SRC}
 	OUT=""
 	for src in ${SRC}; do
