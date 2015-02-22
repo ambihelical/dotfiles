@@ -195,6 +195,8 @@ augroup vimrc
 	autocmd FileType python let &l:makeprg="python ".expand("%")
 	autocmd FileType sql let &l:makeprg="sqlite3 ".expand("%")
 	autocmd FileType ruby let &l:makeprg="ruby ".expand("%")
+	autocmd FileType bash let &l:makeprg="bash ".expand("%")
+	autocmd FileType sh let &l:makeprg="bash ".expand("%")
 	autocmd Filetype plantuml let &l:makeprg=g:plantuml_executable_script." ".fnameescape(expand("%"))
 
 	" tabstops
