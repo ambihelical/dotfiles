@@ -6,9 +6,10 @@ CACHE=~/.cache
 BASH_FILES = ~/.bashrc ~/.bash_profile ~/.inputrc
 DIR_FILES = ~/bin ~/local
 APP_FILES = ~/.screenrc ${CFG}/ack/config
-SCM_FILES = ${CFG}/git/config  ${CFG}/git/ignore
-WM_FILES = ~/.xsession ~/.Xmodmap ${CFG}/i3/config ${CFG}/i3status/config ${CFG}/i3/status.py
+GIT_FILES = ${CFG}/git/config  ${CFG}/git/ignore
+I3_FILES = ${CFG}/i3/config ${CFG}/i3status/config ${CFG}/i3/status.py
 VIM_FILES = ~/.vimrc ${CFG}/vim  ${CACHE}/vim
+BAREX_FILES = ~/.xsession ~/.Xmodmap
 BIN_FILES=$(foreach bin,$(notdir $(wildcard ${PWD}/bin/*)),~/bin/${bin})
 
 
@@ -16,22 +17,25 @@ BIN_FILES=$(foreach bin,$(notdir $(wildcard ${PWD}/bin/*)),~/bin/${bin})
 
 help:
 	@echo "The following targets can be used"
-	@echo "   help     - what you are seeing now"
-	@echo "   base     - bash, directories, etc"
-	@echo "   dev      - git, screen, vim"
-	@echo "   defaults - override system defaults"
-	@echo "   i3       - i3 configuration"
-	@echo "   all      - all of the above"
+	@echo "   base       - bash, directories, utils, etc"
+	@echo "   dev        - git, vim, screen, ack"
+	@echo "   defaults   - override system defaults"
+	@echo "   i3         - i3 configuration"
+	@echo "   all        - all of the above"
+	@echo "Special:"
+	@echo "   help       - what you are seeing now"
+	@echo "   barex      - install .xsession, .Xmodmap"
 
 base: ${BASH_FILES} ${DIR_FILES} ${BIN_FILES}
 	@echo "base configured"
 
-dev: ${VIM_FILES} ${APP_FILES} ${SCM_FILES}
+dev: ${VIM_FILES} ${APP_FILES} ${GIT_FILES}
 	@echo "dev configured"
 
-i3: ${WM_FILES}
+i3: ${I3_FILES}
 	@echo "i3 configured"
 
+barex: ${BAREX_FILES}
 
 # fix some annoying default settings
 defaults:
