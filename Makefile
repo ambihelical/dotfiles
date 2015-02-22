@@ -70,4 +70,4 @@ ${CFG}/%: ${PWD}/%
 	${LN} $< $@
 
 ${CACHE}/%:
-	mkdir =p $@
+	mkdir -p $@
