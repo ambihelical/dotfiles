@@ -43,61 +43,31 @@ defaults:
 
 all: base dev i3 defaults
 
-~/.bashrc: ${PWD}/bashrc
-	${LN} $< $@
-
 ~/.bash_profile: ${PWD}/bashrc
-	${LN} $< $@
-
-~/.inputrc: ${PWD}/inputrc
-	${LN} $< $@
-
-~/.Xmodmap: ${PWD}/xmodmap
-	${LN} $< $@
-
-~/.xsession: ${PWD}/xsession
-	${LN} $< $@
-
-${CFG}/i3/config: ${PWD}/i3config
-	mkdir -p $(dir $@)
-	${LN} $< $@
-
-${CFG}/i3status/config: ${PWD}/i3status
-	mkdir -p $(dir $@)
-	${LN} $< $@
-
-${CFG}/i3/status.py: ${PWD}/i3status.py
-	mkdir -p $(dir $@)
-	${LN} $< $@
-
-~/.screenrc: ${PWD}/screenrc
 	${LN} $< $@
 
 ~/local: ~/.local
 	${LN} $< $@
 
-${CFG}/git/config: ${PWD}/gitconfig
-	mkdir -p $(dir $@)
-	${LN} $< $@
-
-${CFG}/git/ignore: ${PWD}/gitignore
-	mkdir -p $(dir $@)
-	${LN} $< $@
-
 ~/bin:
 	mkdir -p ~/bin
 
-
-~/.vimrc: ${PWD}/vimrc
-	${LN} $< $@
-
 ${CFG}/vim: ${PWD}/vimdir
 	${LN} $< $@
-
-${CACHE}/vim:
-	mkdir =p $@
 
 # files in bin directory
 ~/bin/% : ${PWD}/bin/%
 	${LN} $< $@
 
+# ~/.xxx with simple name map 
+~/.% : ${PWD}/%
+	${LN} $< $@
+
+# ~/.config/app/file
+# link from ${PWD}/app/file
+${CFG}/%: ${PWD}/%
+	mkdir -p $(dir $@)
+	${LN} $< $@
+
+${CACHE}/%:
+	mkdir =p $@
