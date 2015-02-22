@@ -17,7 +17,6 @@ set writebackup               " backup current file
 set backup                    " delete old backup file
 set grepprg=ack-grep          " use ack for grepping
 "set makeprg=xcodebuild\ -activeconfiguration       " command to use for make
-"set makeprg=run_make           " command to use for make
 set makeef=~/.cache/vim/vim##.err   " file to use for make errors
 set errorformat^=%-GIn\ file\ included\ from\ %.%#
 set hidden                    " allow hidden bufs to be modified w/o save required
@@ -159,7 +158,6 @@ map <F9> <CR>
 map <S-F9> W<CR>
 map <F8> :cn<CR>
 map <S-F8> :cp<CR>
-" S-F7 mapped differently for each filetype
 map <F7> :make<CR>
 map <F6> yw:call Tag()<CR>
 map <F6> yw:call Tag()<CR>
