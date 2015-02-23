@@ -97,9 +97,11 @@ truncr() {
 truncm() {
 	local str=$1
 	local maxlen=${2:-5}
-	if [ ${#str} -gt $maxlen ]; then
-		local mid=${maxlen}/2
-		str=${str:0:$mid-1}…${str:${#str}-${mid}:${mid}}
+	local len=${#str}
+	if [ ${len} -gt ${maxlen} ]; then
+		local mid1=$((${maxlen}/2))
+		local mid2=$(((${maxlen}+1)/2-1))
+		str=${str:0:$mid1}…${str:${len}-${mid2}}
 	fi
 	echo $str
 }
