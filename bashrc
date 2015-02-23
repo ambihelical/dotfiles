@@ -86,6 +86,29 @@ truncr() {
 	echo $path
 }
 
+# echo only the outside N characters of the string provided, using an ellipsis to 
+# indicate removed characters.  Strings shorter than N are unmolested. 
+# $1 - string to echo 
+# $2 - maximum length (default is 5)
+# 
+# Todo: use "locale charmap" to detect non-UTF8 terminal, and substitute
+# an ascii string instead of ellipsis character
+#
+truncm() {
+	local str=$1
+	local maxlen=${2:-5}
+	if [ ${#str} -gt $maxlen ]; then
+		local mid=${maxlen}/2
+		str=${str:0:$mid-1}…${str:${#str}-${mid}:${mid}}
+	fi
+	echo $str
+}
+
+# if input string starts with home directory, substitute ~
+tilde() {
+	echo ${1/${HOME}/\~}
+}
+
 # return git root directory
 gprompt() {
 	local out=
@@ -93,7 +116,7 @@ gprompt() {
 	if [[ -n $binfo ]]; then
 		local rdir=$(git rev-parse --show-toplevel 2>/dev/null)
 		local rbase=${rdir##*/}
-		out=":($(truncl $rbase 10)@$(truncl $binfo 10))"
+		out=":($(truncm $rbase 10)@$(truncm $binfo 10))"
 	fi
 	echo $out
 }
@@ -161,14 +184,13 @@ elif [ -f /opt/local/etc/bash_completion ]; then
 fi
 
 # primary prompt. Color only when ECMA-48 capable terminal
-PS1='\[\033[01;32m\]$(truncr \u)@$(truncr \h)\[\033[00m\]$(gprompt):\[\033[01;34m\]\w\[\033[00m\]\$ '
-[ "$ecma" != "1" ] && PS1='\u@\h$(gprompt):\w\$ '
-PROMPT_DIRTRIM=2
+PS1='\[\033[01;32m\]$(truncm \u)@$(truncm \h)\[\033[00m\]$(gprompt):\[\033[01;34m\]$(truncm $(tilde \w) 20)\[\033[00m\]\$ '
+[ "$ecma" != "1" ] && PS1='\u@\h$(gprompt):\w\$ ' && PROMPT_DIRTRIM=2
 
 case "$TERM" in
 xterm*|rxvt*)
    # set window title
-    PROMPT_COMMAND=$PROMPT_COMMAND';echo -ne "\033]0; [${HOSTNAME}] ${PWD/$HOME/~}\007"'
+	PROMPT_COMMAND=$PROMPT_COMMAND';echo -ne "\033]0; [${HOSTNAME}] $(tilde $PWD)\007"'
     ;;
 *)
     ;;
