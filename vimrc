@@ -142,7 +142,6 @@ map _h :nohlsearch<CR>
 map _/ :'a,.s/^[^\/]/\/\//g<CR>
 map _? :'a,.s/^\/\///g<CR>
 map _s :%s/\s*$//<CR>:nohlsearch<CR>
-map  }
 map <C-J> <C-e>j
 map <C-K> <C-y>k
 map <C-X> :bdelete<CR>
@@ -150,18 +149,16 @@ map <C-TAB> :tabn<CR>
 map <C-S-TAB> :tabp<CR>
 map <C-T> :tabnew<CR>
 map <C-F12> :call Print()<CR>
-map <F11> :ptn<CR>
-map <S-F11> :ptp<CR>
+map <F11> <CR>
+map <S-F11> W<CR>
 map <F10> :bnext<CR>
 map <S-F10> :bprevious<CR>
-map <F9> <CR>
-map <S-F9> W<CR>
+map <F9> :tn<CR>
+map <S-F9> :tp<CR>
 map <F8> :cn<CR>
 map <S-F8> :cp<CR>
 map <F7> :make<CR>
-map <F6> yw:call Tag()<CR>
-map <F6> yw:call Tag()<CR>
-map <S-F6> }P
+map <F6> <C-]>
 map <F5> :A<CR>
 map <S-F5> :AN<CR>
 map <f4> :NERDTreeToggle<CR>
@@ -224,10 +221,6 @@ endif  " autocmds
 "   execute ":mks! " . s:vim_session_path . "/session"
 "endfunction
 "endif
-
-function! Tag()
-    execute ":tag " . @"
-endfunction
 
 function! Print()
   let path = bufname("%")
