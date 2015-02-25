@@ -4,7 +4,6 @@ if [ $# -lt 1 ]; then
 	echo "Usage: plant2pdf a.uml [ b.uml ... ] > output.pdf"
 	exit -1
 fi
-FILES=
 JAR=~/.local/share/java/plantuml.jar
 have_apps=1
 type rsvg-convert &> /dev/null || echo "Please install librsvg2-bin" && have_apps=0
@@ -12,15 +11,17 @@ type java &> /dev/null || echo "Please install default-jre" && have_apps=0
 [ -e ${JAR} ] || echo "Please download plantuml.jar to ~/.local/share/java" && have_apps=0
 
 TMP=$(mktemp -d 2>/dev/null || mktemp -d -t 'plant2uml')   #unix.stackexchange.com question 30091
-SRC=$*
 if [[ ${have_apps} ]]; then
+	SRC=$*
 	java -jar $JAR -tsvg -o${TMP} ${SRC}
 	OUT=""
 	for src in ${SRC}; do
 		base=${src##*/}
-		OUT+=" ${TMP}/${base%.*}.svg"
+		for sub in "${TMP}/${base%.*}"*.svg; do
+			OUT+=" ${sub}"
+		done
 	done
-	rsvg-convert -f pdf ${OUT}
+	rsvg-convert --format pdf --keep-aspect-ratio ${OUT}
 	rm -f ${TMP}/*
 	rmdir ${TMP}
 fi
