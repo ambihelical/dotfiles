@@ -144,7 +144,7 @@ map _? :'a,.s/^\/\///g<CR>
 map _s :%s/\s*$//<CR>:nohlsearch<CR>
 map <C-J> <C-e>j
 map <C-K> <C-y>k
-map <C-X> :bdelete<CR>
+map <C-X> :BD<CR>
 map <C-TAB> :tabn<CR>
 map <C-S-TAB> :tabp<CR>
 map <C-T> :tabnew<CR>
@@ -227,4 +227,3 @@ function! Print()
   let fn = substitute(path, " ", "\\\\ ", "")
   execute ":!a2ps --columns=2 --portrait -Phplj --underlay='UNCONFIRMED' " . fn
 endfunction
-
