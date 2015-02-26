@@ -1,0 +1,61 @@
+
+# i3
+
+<mod4> Return 	      New Terminal
+<mod4> Q             Kill window
+<mod4> d             Dmenu (applications with .desktop files)
+<mod4> D             Dmenu
+<mod4> [ijkl]        Move focus  (or use arrow keys)
+<mod4> [IJKL]        Move focused window (or use arrow keys + shift)
+<mod4> v             Set split to vertical
+<mod4> V             Set split to horizontal
+<mod4> e             Toggle split mode
+<mod4> f             Fullscreen
+<mod4> s             Stacking layout
+<mod4> w             Tabbed layout
+<mod4> sp            Switch focus between tiled /floating
+<mod4> sh + sp       Toggle tiled/floating
+<mod4> a             Focus parent
+<mod4> #             Switch to workspace #
+<mod4> sh + #        Move window to workspace #
+<mod4> C             Reload config file
+<mod4> R             Restart
+<mod4> E             Exit (w/ nagbar)
+<mod4> r             Resize menu
+<mod4> -             Show scratchpad
+<mod4> _             Move to scratchpad
+<mod4> m             File manager
+<mod4> b             Web browser
+<mod4> =             Calculator
+<mod4> <bs>          System menu
+
+# Vim
+
+__                   Switch to alternate file
+_q                   Quote from 'a' mark
+_/                   // comment from 'a' mark
+_?                   Remove // commenting from 'a' mark
+_h                   Turn off highlighting
+_s                   Remove trailing whitespace
+<ctrl> j             Shift text up one line
+<ctrl> k             Shift text down one line
+<ctrl> x             Close current buffer
+<ctrl><tab>          Next tab
+<ctrl><shift><tab>   Prev tab
+<ctrl> t             New tab
+<F2>                 Tags List (toggle)
+<F3>                 BufExplorer
+<F4>                 NerdTree (toggle)
+<F5>                 Alternate
+<F6>                 Look up word as tag
+<F7>                 Make
+<F8>                 Next Error
+<shift><F8>          Previous Error
+<F9>                 Next Tag
+<shift><F9>          Prev Tag
+<F10>                Next Buffer
+<shift><F10>         Previous Buffer
+<F11>                Next Window
+<shift><F11>         Previous Window
+<ctrl><F12>          Print
+
