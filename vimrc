@@ -180,6 +180,7 @@ augroup vimrc
 	autocmd BufRead,BufNewFile *.ino set filetype=cpp     " arduino files
 	autocmd FileType cpp set comments=:///,://      " handle doxygen comments better
 	autocmd FileType cpp,c set list                   " always show trailing spaces
+	autocmd SwapExists * let v:swapchoice = "o"       " always open ro when swap file exists
 "	autocmd VimLeavePre * call Save_session()         " save current session
 "	autocmd VimEnter * call Load_session()         " load previously saved session
 
