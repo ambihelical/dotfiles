@@ -186,6 +186,7 @@ bindsym XF86Calculator exec qalculate || gnome-calculator
 for_window [class="Gcalctool"] floating enable
 for_window [class="Qalculate"] floating enable
 for_window [class="Update-manager"] floating enable
+for_window [class="MintUpdate.py"] floating enable
 bindsym XF86Mail [class="Thunderbird"] focus
 bindsym XF86Tools [class="Pithos"] focus
 bindsym XF86HomePage [class="Chromium"] focus
