@@ -181,8 +181,7 @@ augroup vimrc
 	autocmd FileType cpp set comments=:///,://      " handle doxygen comments better
 	autocmd FileType cpp,c set list                   " always show trailing spaces
 	autocmd SwapExists * let v:swapchoice = "o"       " always open ro when swap file exists
-"	autocmd VimLeavePre * call Save_session()         " save current session
-"	autocmd VimEnter * call Load_session()         " load previously saved session
+	autocmd VimLeavePre * call Resave_session()       " save current session if previously done
 
 	" executing current file
 	autocmd FileType cpp let &l:makeprg="g++ -Wall -Wextra -std=c++11 ". expand("%") . " && ./a.out"
@@ -203,25 +202,15 @@ endif  " autocmds
 
 """""""""""""""""""""""" Functions """"""""""""""""""""""""""
 
-" Load previous session, also load any files specified
-"if 0 == exists("*Load_session")  " can't load this while it is running
-"function! Load_session()
-"   let s:vim_session_path = $HOME . "/.cache/vim/sessions" . getcwd()
-"   if (argc() == 0) && filereadable(s:vim_session_path . "/session")
-"     execute ":source " . s:vim_session_path . "/session"
-"   endif
-"endfunction
-"endif
-"
-"if 0 == exists("*Save_session")  " can't load this while it is running
-"function! Save_session()
-"   if filewritable(s:vim_session_path) == 0
-"     call mkdir(s:vim_session_path, "p")
-"   endif
-"   execute ":set viminfo='20,<50,/25,h,n" . s:vim_session_path . "/viminfo"
-"   execute ":mks! " . s:vim_session_path . "/session"
-"endfunction
-"endif
+" Save session if session.vim exists in cwd.
+if 0 == exists("*Resave_session")  " can't load this while it is running
+function! Resave_session()
+   let s:vim_session_path = getcwd() . "/session.vim"
+   if filereadable(s:vim_session_path)
+   	execute ":mks! " . s:vim_session_path
+   endif
+endfunction
+endif
 
 function! Print()
   let path = bufname("%")
