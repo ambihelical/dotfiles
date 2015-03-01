@@ -51,41 +51,6 @@ fi
 
 [ -e /usr/share/autojump/autojump.sh ] && . /usr/share/autojump/autojump.sh
 
-
-# echo only the last N characters of the string provided, using an ellipsis to 
-# indicate it was truncated.  Strings shorter than N are unmolested. 
-# $1 - string to echo 
-# $2 - maximum length (default is 5)
-# 
-# Todo: use "locale charmap" to detect non-UTF8 terminal, and substitute
-# an ascii string instead of ellipsis character
-#
-truncl() {
-	local path=${1/${HOME}/\~}    # show ~ for home dir
-	local maxlen=${2:-5}
-	if [ ${#path} -gt $maxlen ]; then
-		path="…${path:1-${maxlen}:${maxlen}}" # show last maxlen characters
-	fi
-	echo $path
-}
-
-# echo only the first N characters of the string provided, using an ellipsis to 
-# indicate it was truncated.  Strings shorter than N are unmolested. 
-# $1 - string to echo 
-# $2 - maximum length (default is 5)
-# 
-# Todo: use "locale charmap" to detect non-UTF8 terminal, and substitute
-# an ascii string instead of ellipsis character
-#
-truncr() {
-	local path=${1/${HOME}/\~}    # show ~ for home dir
-	local maxlen=${2:-5}
-	if [ ${#path} -gt $maxlen ]; then
-		path="${path:0:${maxlen}-1}…"  # show first maxlen characters
-	fi
-	echo $path
-}
-
 # echo only the outside N characters of the string provided, using an ellipsis to 
 # indicate removed characters.  Strings shorter than N are unmolested. 
 # $1 - string to echo 
@@ -122,9 +87,6 @@ gprompt() {
 	fi
 	echo $out
 }
-
-# add CWD to path
-#PATH="${PATH}":.
 
 # be able to find our locally built libraries
 [ -d ~/local/lib ] && export LD_LIBRARY_PATH=~/local/lib
