@@ -54,3 +54,8 @@
     appname = "Spotify"
     summary = "*"
     format = ""
+
+[ignore]
+    appname = "Pithos"
+    summary = "*"
+    format = ""
