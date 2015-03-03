@@ -39,11 +39,11 @@ barex: ${BAREX_FILES}
 
 # fix some annoying default settings
 defaults:
+	xdg-mime default gvim.desktop `grep '^text/*' /usr/share/mime/types`
 	xdg-mime default pcmanfm.desktop inode/directory
 	xdg-mime default chromium.desktop x-scheme-handler/http
 	xdg-mime default chromium.desktop x-scheme-handler/https
 	xdg-mime default chromium.desktop text/html
-	xdg-mime default gvim.desktop `grep '^text/*' /usr/share/mime/types`
 
 all: base dev i3 defaults
 
