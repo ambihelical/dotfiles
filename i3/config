@@ -192,6 +192,8 @@ bindsym XF86Mail [class="Thunderbird"] focus
 bindsym XF86Tools [class="Pithos"] focus
 bindsym XF86HomePage [class="Chromium"] focus
 
+# Fixing hibernate problems: http://blog.roland-kluge.de/?p=793
+#                            http://askubuntu.com/q/1792
 set $Suspend    dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Suspend
 set $Hibernate  dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Hibernate
 set $Restart    dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Restart
