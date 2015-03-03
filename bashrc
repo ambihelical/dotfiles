@@ -79,11 +79,18 @@ tilde() {
 # return git root directory
 gprompt() {
 	local out=
-	local binfo=$(__git_ps1 "%s")
-	if [[ -n $binfo ]]; then
+	local branch=$(__git_ps1 "%s")
+	# shorten certain personal branch conventions
+	for pat in "personal/${USER}" "personal/"; do
+		if [[ ${branch} =~ ^${pat} ]]; then
+			branch=${branch/${pat}/\~}
+			break
+		fi
+	done
+	if [[ -n $branch ]]; then
 		local rdir=$(git rev-parse --show-toplevel 2>/dev/null)
 		local rbase=${rdir##*/}
-		out=":($(truncm $rbase 10)@$(truncm $binfo 10))"
+		out=":($(truncm $rbase 8)@$(truncm $branch 15))"
 	fi
 	echo $out
 }
