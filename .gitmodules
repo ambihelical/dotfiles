@@ -23,3 +23,6 @@
 [submodule "vimdir/bundle/bufkill.vim"]
 	path = vimdir/bundle/bufkill.vim
 	url = https://github.com/vim-scripts/bufkill.vim.git
+[submodule "vimdir/bundle/argtextobj.vim"]
+	path = vimdir/bundle/argtextobj.vim
+	url = https://github.com/vim-scripts/argtextobj.vim.git
