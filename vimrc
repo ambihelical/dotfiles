@@ -184,7 +184,8 @@ augroup vimrc
 	autocmd VimLeavePre * call Resave_session()       " save current session if previously done
 
 	" executing current file
-	autocmd FileType cpp let &l:makeprg="g++ -Wall -Wextra -std=c++11 ". expand("%") . " && ./a.out"
+	"following interferes with normal make
+	"autocmd FileType cpp let &l:makeprg="g++ -Wall -Wextra -std=c++11 ". expand("%") . " && ./a.out"
 	autocmd FileType ruby let &l:makeprg="ruby ".expand("%")
 	autocmd FileType lua let &l:makeprg="lua ".expand("%")
 	autocmd FileType python let &l:makeprg="python ".expand("%")
