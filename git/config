@@ -42,3 +42,8 @@
 [user]
 	email = ambihelical@users.noreply.github.com
 	name = ambihelical
+[merge]
+  conflictstyle = diff3
+  tool = mymeld
+[mergetool "mymeld"]
+  cmd = meld --auto-merge --output $MERGED $LOCAL $BASE $REMOTE --diff $BASE $LOCAL --diff $BASE $REMOTE
