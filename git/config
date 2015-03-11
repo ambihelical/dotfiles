@@ -3,6 +3,7 @@
 	ci = commit
 	cia = commit --amend
 	co = checkout
+	br = branch
 	lo = log --shortstat --relative-date
 	di = diff --color
 	dc = diff --color --cached
@@ -47,3 +48,5 @@
   tool = mymeld
 [mergetool "mymeld"]
   cmd = meld --auto-merge --output $MERGED $LOCAL $BASE $REMOTE --diff $BASE $LOCAL --diff $BASE $REMOTE
+[push]
+	default = simple
