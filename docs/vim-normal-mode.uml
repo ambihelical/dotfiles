@@ -1,0 +1,146 @@
+@startuml
+
+state "Normal Mode" as NormalMode {
+
+OpCount -right-> Operator
+Operator -right->  MotionCount
+MotionCount -down-> Modifier
+MotionCount -right-> Motion
+Modifier -right-> Object
+
+state Operator: **d**      delete
+state Operator: **y**      yank
+state Operator: **c**      change
+state Operator: **g~ **   swap case
+state Operator: **gu**    make lowercase
+state Operator: **gU**    make uppercase
+state Operator: !//cmd// filter through shell cmd
+state Operator: **=**      filter through indenting
+state Operator: **gq**    text format
+state Operator: **g?**     rot13
+state Operator: **>**      shift right
+state Operator: **<**      shift left
+state Operator: **zf**     define fold
+state Operator: **g@**   call function set with **operatorfunc**
+
+
+state "Motion Count" as MotionCount {
+	state "digit" as modigits
+	modigits --> modigits: 0-9
+}
+
+state "Overall Count" as OpCount {
+	state "digit" as opdigits
+	opdigits --> opdigits: 0-9
+}
+
+state Motion: --Character--
+state Motion: **h**             //count// characters to left
+state Motion: **l**              //count// characters to right
+state Motion: **0**              first character of line
+state Motion: **g0**            first character of screen line
+state Motion: **^**             first non-blank character of line
+state Motion: **g^**            first non-blank character of screen line
+state Motion: **$**             end of line
+state Motion: **g$**            end of screen line
+state Motion: **|**              //count// column
+state Motion: **g_**            last nonblank character and //count// lines down
+state Motion: **f** //ch//         find character ch to right, include ch
+state Motion: **F** //ch//         find character ch to left, include ch
+state Motion: **t** //ch//         find character ch to right, don't inlude ch
+state Motion: **T** //ch//         find character ch to left, don't inlude ch
+state Motion: **;**                Repeat last f, t, F or T
+state Motion: **,**                Repeat last f, t, F or T in opposite direction
+
+
+state Motion: --Word--
+state Motion: **w**             forward //count// words, position at beginning 
+state Motion: **W**             forward //count// WORDs, position at beginning
+state Motion: **b**             backward //count// words, position at beginning
+state Motion: **B**             backward //count// WORDs, position at beginning
+state Motion: **e**             forward //count// word, position at end
+state Motion: **E**             forward //count// WORDs, position at end
+state Motion: **ge**            backward //count// word, position at end
+state Motion: **gE**            backward //count// WORD, position at end
+
+state Motion: --Objects--
+state Motion: **(**             sentence back
+state Motion: **)**             sentence forward
+state Motion: **{**             paragraph back
+state Motion: **}**             paragraph forward
+
+state Motion: **%**            matching delimiter under cursor (no count)
+
+state Motion: **])**            next unmatched (
+state Motion: **]}**           next unmatched {
+state Motion: **]#**           next unmatched #if or #endif
+state Motion: **]*** or **]/**    next end of /* */ comment
+state Motion: **]m**           next method start
+state Motion: **]M**           next method end
+state Motion: **]]**             section forward or next { in first column
+state Motion: **][**             section forward or next } in first column
+
+state Motion: **[(**            previous unmatched (
+state Motion: **[{**           previous unmatched {
+state Motion: **[#**           previous unmatched #if or #else
+state Motion: **[*** or **[/**    go to previous start of /* */ comment
+state Motion: **[m**           previous method start
+state Motion: **[M**           previous method end
+state Motion: **[[**             section back or previous { in first column
+state Motion: **[]**             section back or previous } in first column
+
+
+
+state Motion: --Line Relative--
+state Motion: **k**             //count// lines up
+state Motion: **gk**           //count// display lines up
+state Motion: **-**             //count// display lines up, on the first non-blank character
+state Motion: **j**             //count// lines down
+state Motion: **gj**           //count// display lines down
+state Motion: **+**            //count// display lines down, on the first non-blank character
+state Motion: **_**             //count//-1 display lines down, on the first non-blank character
+state Motion: **gn**             next search search pattern match
+state Motion: **g;**             //count// older position in change list
+state Motion: **g,**             //count// newer position in change list
+
+
+state Motion: --Line Absolute--
+state Motion: **G**            go to file line //count// (default last line), on first non-blank character
+state Motion: **H**            go to line //count// from top of window, on first non-blank character
+state Motion: **L**             go to line //count// from bottom of window, on first non-blank character
+state Motion: **M**            go to middle of window, on first non-blank character
+state Motion: **gg**           go to line //count// (default first line), on first non-blank character
+state Motion: **go**           go to byte //count// in buffer 
+state Motion: **%**            go to //count// percentage in file, on first non-blank character
+
+
+state Motion: --Marks--
+state Motion: **g'** //m//         to mark //m// (jumplist unaffected)
+state Motion: **'** //m//          to the mark //m//
+state Motion: **]'**            next //count// lowercase mark below cursor on first non-blank character
+state Motion: **]`**            next //count// lowercase mark below cursor
+state Motion: **['**            previous //count// lowercase mark above cursor on first non-blank character
+state Motion: **[`**            previous //count// lowercase mark above cursor
+
+
+state Modifier: **a**            an object   
+state Modifier: **i**            in object
+
+state Object: **w**                  word
+state Object: **W**                 WORD
+state Object: **s**                  sentence
+state Object: **p**                  paragraph
+state Object: **[** or **]**              [] block
+state Object: **(** or **)** or **b**      () block
+state Object: **{** or **}** or **B**    {} block
+state Object: **<** or **>**          <> block
+state Object: **"** or **'** or **`**      quoted string
+state Object: **t**                   XML/HTML tag
+state Object: **a**                  argument [textargobj.vim]
+
+}
+legend 
+word is a keyword type word
+WORD are strictly space seperated
+endlegend
+@enduml
