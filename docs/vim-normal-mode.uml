@@ -8,13 +8,16 @@ MotionCount -down-> Modifier
 MotionCount -right-> Motion
 Modifier -right-> Object
 
+state Operator: Repeat to operate on current line only\n and for this case motion is not used
+state Operator: =====
+
 state Operator: **d**      delete
 state Operator: **y**      yank
 state Operator: **c**      change
 state Operator: **g~ **   swap case
 state Operator: **gu**    make lowercase
 state Operator: **gU**    make uppercase
-state Operator: !//cmd// filter through shell cmd
+state Operator: **!**     filter through shell cmd
 state Operator: **=**      filter through indenting
 state Operator: **gq**    text format
 state Operator: **g?**     rot13
@@ -22,7 +25,6 @@ state Operator: **>**      shift right
 state Operator: **<**      shift left
 state Operator: **zf**     define fold
 state Operator: **g@**   call function set with **operatorfunc**
-
 
 state "Motion Count" as MotionCount {
 	state "digit" as modigits
