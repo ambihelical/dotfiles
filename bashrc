@@ -82,15 +82,17 @@ gprompt() {
 	local branch=$(__git_ps1 "%s")
 	# shorten certain personal branch conventions
 	for pat in "personal/${USER}" "personal/"; do
-		if [[ ${branch} =~ ^${pat} ]]; then
+		if [[ "${branch}" =~ ^${pat} ]]; then
 			branch=${branch/${pat}/\~}
 			break
 		fi
 	done
-	if [[ -n $branch ]]; then
+	if [[ -n "${branch}" ]]; then
 		local rdir=$(git rev-parse --show-toplevel 2>/dev/null)
 		local rbase=${rdir##*/}
-		out=":($(truncm $rbase 8)@$(truncm $branch 15))"
+		local tbase=$(truncm "$rbase" 8)
+		local tbranch=$(truncm "$branch" 15)
+		out=":${tbase}@${tbranch}"
 	fi
 	echo $out
 }
