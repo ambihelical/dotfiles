@@ -8,7 +8,7 @@ MotionCount -down-> Modifier
 MotionCount -right-> Motion
 Modifier -right-> Object
 
-state Operator: Repeat to operate on current line only\n and for this case motion is not used
+state Operator: Repeat to operate on current line only and for this case motion is not used\nFor the g operators, the second g can be omitted (e.g. guu instead of gugu)
 state Operator: =====
 
 state Operator: **d**      delete
