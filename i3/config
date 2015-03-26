@@ -176,7 +176,7 @@ exec --no-startup-id gnome-settings-daemon   # bring over gnome settings
 exec --no-startup-id xset -b
 
 # convenient key bindings
-bindsym $mod+m exec pcmanfm
+bindsym $mod+slash exec pcmanfm
 bindsym $mod+b exec chromium-browser || chromium || firefox
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 1 -- +5% && killall -SIGUSR1 i3status
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 1 -- -5% && killall -SIGUSR1 i3status
@@ -192,6 +192,8 @@ bindsym Shift+XF86Mail [class="Empathy"] focus
 bindsym XF86Tools [class="Pithos"] focus
 bindsym XF86HomePage [class="Chromium"] focus
 bindsym XF86Explorer [class="Pcmanfm"] focus
+bindsym $mod+m exec i3-input -F 'mark %s' -l 1 -P 'Mark: '
+bindsym $mod+g exec i3-input -F '[con_mark="%s"] focus' -l 1 -P 'Go to: '
 
 # Fixing hibernate problems: http://blog.roland-kluge.de/?p=793
 #                            http://askubuntu.com/q/1792
