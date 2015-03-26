@@ -24,7 +24,9 @@
 <mod4> r             Resize menu
 <mod4> -             Show scratchpad
 <mod4> _             Move to scratchpad
-<mod4> m             File manager
+<mod4> /             File manager
+<mod4> m             Set mark
+<mod4> g             Goto mark
 <mod4> b             Web browser
 <mod4> =             Calculator
 <mod4> <bs>          System menu
