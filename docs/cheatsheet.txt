@@ -8,16 +8,16 @@
 <mod4> [ijkl]        Move focus  (or use arrow keys)
 <mod4> [IJKL]        Move focused window (or use arrow keys + shift)
 <mod4> v             Set split to vertical
-<mod4> V             Set split to horizontal
+<mod4> z             Set split to horizontal
 <mod4> e             Toggle split mode
 <mod4> f             Fullscreen
 <mod4> s             Stacking layout
-<mod4> w             Tabbed layout
+<mod4> t             Tabbed layout
 <mod4> sp            Switch focus between tiled /floating
 <mod4> sh + sp       Toggle tiled/floating
-<mod4> a             Focus parent
-<mod4> #             Switch to workspace #
-<mod4> sh + #        Move window to workspace #
+<mod4> p             Focus parent
+<mod4> <#>           Switch to workspace #
+<mod4> sh + <#>      Move window to workspace #
 <mod4> C             Reload config file
 <mod4> R             Restart
 <mod4> E             Exit (w/ nagbar)
@@ -27,6 +27,7 @@
 <mod4> /             File manager
 <mod4> m             Set mark
 <mod4> g             Goto mark
+<mod4> w             Set workspace name
 <mod4> b             Web browser
 <mod4> =             Calculator
 <mod4> <bs>          System menu
