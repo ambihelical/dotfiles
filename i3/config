@@ -43,7 +43,6 @@ bindsym $mod+j focus down
 bindsym $mod+k focus up
 bindsym $mod+l focus right
 
-# alternatively, you can use the cursor keys:
 bindsym $mod+Left focus left
 bindsym $mod+Down focus down
 bindsym $mod+Up focus up
@@ -56,7 +55,6 @@ bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
 bindsym $mod+p focus parent
 
-# alternatively, you can use the cursor keys:
 bindsym $mod+Shift+Left move left
 bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Up move up
@@ -178,7 +176,7 @@ assign [class="Pidgin"] 4
 # startup programs
 exec --no-startup-id pithos
 exec --no-startup-id empathy
-#exec --no-startup-id thunderbird
+exec --no-startup-id thunderbird
 exec --no-startup-id nm-applet
 exec --no-startup-id dropbox start -i   # note: must use .deb from dropbox.com
 exec --no-startup-id clipit
