@@ -6,7 +6,11 @@
 <mod4> d             Dmenu (applications with .desktop files)
 <mod4> D             Dmenu
 <mod4> [ijkl]        Move focus  (or use arrow keys)
-<mod4> [IJKL]        Move focused window (or use arrow keys + shift)
+<mod4> p             Focus parent
+<mod4> <#>           Switch to workspace #
+<mod4> [IJKL]        Move window (or use arrow keys + shift)
+<mod4> P             Move to parent
+<mod4> sh + <#>      Move window to workspace #
 <mod4> v             Set split to vertical
 <mod4> z             Set split to horizontal
 <mod4> e             Toggle split mode
@@ -15,9 +19,6 @@
 <mod4> t             Tabbed layout
 <mod4> sp            Switch focus between tiled /floating
 <mod4> sh + sp       Toggle tiled/floating
-<mod4> p             Focus parent
-<mod4> <#>           Switch to workspace #
-<mod4> sh + <#>      Move window to workspace #
 <mod4> C             Reload config file
 <mod4> R             Restart
 <mod4> E             Exit (w/ nagbar)
