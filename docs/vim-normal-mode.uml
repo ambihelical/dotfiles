@@ -125,8 +125,8 @@ state Motion: **['**            previous //count// lowercase mark above cursor o
 state Motion: **[`**            previous //count// lowercase mark above cursor
 
 
-state Modifier: **a**            an object   
-state Modifier: **i**            in object
+state Modifier: **a**            around object   
+state Modifier: **i**            inside object
 
 state Object: **w**                  word
 state Object: **W**                 WORD
