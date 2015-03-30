@@ -43,7 +43,6 @@ set wildmode=list:longest,list:full " what to do in wild mode
 set wildignore+=*/.git/*,*/.hg/*,*/.dep/*,*.o,*.a           " file patterns to ignore in wild mode
 " session information saved
 set sessionoptions=winpos,resize,winsize,slash,folds,globals,tabpages,localoptions,buffers
-"let mapleader=','             " use , for <leader> sequences
 set listchars=trail:·,tab:▹\ ,nbsp:·  " show trailing & nb spaces as a dot, tabs as arrow
 set list                       " show special characters as defined in listchars
 hi SpecialKey ctermfg=7 guifg=LightGray  " colors for listchars nbsp,tab,trail
@@ -136,14 +135,37 @@ let g:plantuml_executable_script = 'java -jar ~/local/share/java/plantuml.jar'
 
 """""""""""""""""""""""" Mappings """""""""""""""""""""""""""
 
-map __ 
-map _q a"<ESC>'ai"<ESC>
-map _h :nohlsearch<CR>
-map _/ :'a,.s/^[^\/]/\/\//g<CR>
-map _? :'a,.s/^\/\///g<CR>
-map _s :%s/\s*$//<CR>:nohlsearch<CR>
-map <C-J> <C-e>j
-map <C-K> <C-y>k
+let mapleader=','                              " use , for <leader> sequences
+
+" allow ; for : commands
+nnoremap ; :
+
+" use perl style regex in normal mode and visual mode
+nnoremap / /\v
+vnoremap / /\v
+
+" turn off search highlighting
+nnoremap <leader><space> :nohlsearch<CR>
+
+" switch to previous buffer
+nnoremap <leader>, 
+
+"remove trailing spaces
+nnoremap <leader>w :%s/\s+$//<CR>:nohlsearch<CR>
+
+" make j,k traverse screen lines
+nnoremap j gj
+nnoremap k gk
+
+" scroll window instead of cursor
+nmap <C-J> <C-e>j
+nmap <C-K> <C-y>k
+
+" Quickly edit/reload the vimrc file
+nmap <silent> <leader>ve :e $MYVIMRC<CR>       " edit this file
+nmap <silent> <leader>vs :so $MYVIMRC<CR>      " reread this file
+
+
 map <C-X> :BD<CR>
 map <C-TAB> :tabn<CR>
 map <C-S-TAB> :tabp<CR>

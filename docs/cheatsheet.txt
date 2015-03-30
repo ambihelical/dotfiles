@@ -35,12 +35,13 @@
 
 # Vim
 
-__                   Switch to alternate file
-_q                   Quote from 'a' mark
-_/                   // comment from 'a' mark
-_?                   Remove // commenting from 'a' mark
-_h                   Turn off highlighting
-_s                   Remove trailing whitespace
+<leader> mappings
+  ,                    Edit previous buffer 
+  w                    Remove whitespace
+  <space>              Turn off highlighting
+  ve                   Edit vimrc
+  vs                   Source vimrc
+
 <ctrl> j             Shift text up one line
 <ctrl> k             Shift text down one line
 <ctrl> x             Close current buffer
