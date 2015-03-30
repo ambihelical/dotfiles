@@ -140,7 +140,7 @@ let g:plantuml_executable_script = 'java -jar ~/local/share/java/plantuml.jar'
 
 """""""""""""""""""""""" Mappings """""""""""""""""""""""""""
 
-let mapleader=','                              " use , for <leader> sequences
+let mapleader="\<space>"               " set character for <leader> sequences
 
 " allow ; for : commands
 nnoremap ; :
@@ -149,17 +149,8 @@ nnoremap ; :
 nnoremap / /\v
 vnoremap / /\v
 
-" turn off search highlighting
-nnoremap <leader><space> :nohlsearch<CR>
-
 " switch to previous buffer
-nnoremap <leader>, 
-
-" toggle relative numbers
-nnoremap <leader># :set relativenumber!<CR>
-
-"remove trailing spaces
-nnoremap <leader>w :%s/\s+$//<CR>:nohlsearch<CR>
+nnoremap <TAB> 
 
 " make j,k traverse screen lines
 nnoremap j gj
@@ -169,9 +160,18 @@ nnoremap k gk
 nmap <C-J> <C-e>j
 nmap <C-K> <C-y>k
 
+" turn off search highlighting
+nnoremap <leader><space> :nohlsearch<CR>
+
+" toggle relative numbers
+nnoremap <leader># :set relativenumber!<CR>
+
+"remove trailing spaces
+nnoremap <leader>w :%s/\s+$//<CR>:nohlsearch<CR>
+
 " Quickly edit/reload the vimrc file
-nmap <silent> <leader>ve :e $MYVIMRC<CR>       " edit this file
-nmap <silent> <leader>vs :so $MYVIMRC<CR>      " reread this file
+nmap <silent> <leader>ve :e $MYVIMRC<CR>
+nmap <silent> <leader>vs :so $MYVIMRC<CR>
 
 
 map <C-X> :BD<CR>
