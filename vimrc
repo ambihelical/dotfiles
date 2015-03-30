@@ -40,6 +40,7 @@ set formatoptions+=n          " recognize lists when formatting text
 set noshowmatch               " don't show matching brackets
 set nostartofline             " keep current column if possible
 set undofile                  " use persistant undo
+set fillchars+=vert:\         " use black for vertical split
 syntax on                     " enable syntax highlighting
 set wildmenu                  " enhanced command line completion (use TAB)
 set wildmode=list:longest,list:full " what to do in wild mode
