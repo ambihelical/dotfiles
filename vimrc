@@ -164,10 +164,6 @@ map <S-F5> :AN<CR>
 map <f4> :NERDTreeToggle<CR>
 map <F3> :BufExplorer<CR>
 map <F2> :TlistToggle<CR>
-map <S-F1> :help cheats<CR>
-
-" This is needed to handle windows bizaarness during input
-"imap  <BS>
 
 
 """""""""""""""""""""" AutoCommands """"""""""""""""""""""""""
