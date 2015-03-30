@@ -3,6 +3,8 @@ if filereadable("$VIMRUNTIME/debian.vim")
 endif
 
 set nocompatible              " always use vim extensions
+set modelines=0               " modelines have security risks, 0 == disabled
+set encoding=utf-8            " always utf8
 behave xterm                  " behavior compatible with xterm
 set visualbell                " no noise
 set selectmode=mouse          " enable mouse select
@@ -37,6 +39,7 @@ set mousemodel=popup          " right mouse clicks pops up a menu
 set formatoptions+=n          " recognize lists when formatting text
 set noshowmatch               " don't show matching brackets
 set nostartofline             " keep current column if possible
+set undofile                  " use persistant undo
 syntax on                     " enable syntax highlighting
 set wildmenu                  " enhanced command line completion (use TAB)
 set wildmode=list:longest,list:full " what to do in wild mode
@@ -52,6 +55,7 @@ set guioptions-=T              " remove the mostly useless toolbar
 
 " Except for ~/.vimrc, these make vim XDG compatible 
 set backupdir=~/.cache/vim,~/,/tmp   " dirs to use for backup files
+set undodir=~/.cache/vim,~/,/tmp     " dirs to use for undo files
 set directory=~/.cache/vim//         " where to put .swp files (// makes unique name)
 set viminfo+=n~/.cache/vim/viminfo   " where to put viminfo
 set runtimepath=~/.config/vim,~/.config/vim/after,$VIM,$VIMRUNTIME
@@ -76,6 +80,7 @@ endif
 " set up pathogen
 runtime bundle/vim-pathogen/autoload/pathogen.vim
 call pathogen#infect()
+call pathogen#helptags()
 
 "Options for NERDTree
 let NERDTreeDirArrows=1
