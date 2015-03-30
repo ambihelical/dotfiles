@@ -25,6 +25,7 @@ state Operator: **>**      shift right
 state Operator: **<**      shift left
 state Operator: **zf**     define fold
 state Operator: **g@**   call function set with **operatorfunc**
+state Operator: **gc**     comment [tcomment bundle]
 
 state "Motion Count" as MotionCount {
 	state "digit" as modigits
