@@ -26,3 +26,6 @@
 [submodule "vimdir/bundle/argtextobj.vim"]
 	path = vimdir/bundle/argtextobj.vim
 	url = https://github.com/vim-scripts/argtextobj.vim.git
+[submodule "vimdir/bundle/tcomment_vim"]
+	path = vimdir/bundle/tcomment_vim
+	url = https://github.com/tomtom/tcomment_vim.git
