@@ -150,6 +150,9 @@ nnoremap <leader><space> :nohlsearch<CR>
 " switch to previous buffer
 nnoremap <leader>, 
 
+" toggle relative numbers
+nnoremap <leader># :set relativenumber!<CR>
+
 "remove trailing spaces
 nnoremap <leader>w :%s/\s+$//<CR>:nohlsearch<CR>
 

@@ -41,6 +41,7 @@
   <space>              Turn off highlighting
   ve                   Edit vimrc
   vs                   Source vimrc
+  #                    Toggle relative numbering
 
 <ctrl> j             Shift text up one line
 <ctrl> k             Shift text down one line
