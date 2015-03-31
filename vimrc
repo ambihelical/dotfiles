@@ -141,7 +141,7 @@ let g:plantuml_executable_script = 'java -jar ~/local/share/java/plantuml.jar'
 
 """""""""""""""""""""""" Mappings """""""""""""""""""""""""""
 
-let mapleader="\<space>"               " set character for <leader> sequences
+let mapleader=","               " set character for <leader> sequences
 
 " allow ; for : commands
 nnoremap ; :
