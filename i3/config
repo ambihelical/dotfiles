@@ -185,7 +185,7 @@ exec --no-startup-id gnome-settings-daemon   # bring over gnome settings
 exec --no-startup-id xset -b
 
 # convenient key bindings
-bindsym $mod+slash exec pcmanfm
+bindsym $mod+slash exec nemo --no-desktop || pcmanfm || nautilus --no-desktop
 bindsym $mod+b exec chromium-browser || chromium || firefox
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 1 -- +5% && killall -SIGUSR1 i3status
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 1 -- -5% && killall -SIGUSR1 i3status
