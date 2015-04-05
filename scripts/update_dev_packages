@@ -23,10 +23,10 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
   p="$p gcc-doc glibc-doc"
   p="$p gcc-multilib libgmp-dev libmpc-dev libmpfr-dev ppl-dev libcloog-ppl-dev"         # gcc cross compiler support
   p="$p autoconf automake libtool gettext intltool"
-  p="$p meld"
+  p="$p meld git-gui mercurial subversion"
   apt-get --quiet --yes --no-install-recommends install $p
 elif [ "${OSTYPE:0:6}" == 'darwin' ]; then 
-	echo "nothing to do here"
+  p="$p coreutils git-core +bash_completion"
 fi
 
 # install some python stuff
