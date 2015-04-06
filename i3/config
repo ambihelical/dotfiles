@@ -170,13 +170,13 @@ bindsym $mod+minus scratchpad show
 
 # assignments
 
-assign [class="Pithos"] 4
-assign [class="Pidgin"] 4
+assign [class="Pithos"] 10:Admin
+assign [class="Pidgin"] 9:IM
 
 # startup programs
+exec --no-startup-id thunderbird
 exec --no-startup-id pithos
 exec --no-startup-id empathy
-exec --no-startup-id thunderbird
 exec --no-startup-id nm-applet
 exec --no-startup-id dropbox start -i   # note: must use .deb from dropbox.com
 exec --no-startup-id clipit
@@ -197,7 +197,7 @@ for_window [class="Qalculate"] floating enable
 for_window [class="Update-manager"] floating enable
 for_window [class="MintUpdate.py"] floating enable
 bindsym XF86Mail [class="Thunderbird"] focus
-bindsym Shift+XF86Mail [class="Empathy"] focus
+bindsym Shift+XF86Mail [class="Pidgin"] focus
 bindsym XF86Tools [class="Pithos"] focus
 bindsym XF86HomePage [class="Chromium"] focus
 bindsym XF86Explorer [class="Pcmanfm"] focus
