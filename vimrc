@@ -47,9 +47,9 @@ set wildmode=list:longest,list:full " what to do in wild mode
 set wildignore+=*/.git/*,*/.hg/*,*/.dep/*,*.o,*.a           " file patterns to ignore in wild mode
 " session information saved
 set sessionoptions=winpos,resize,winsize,slash,folds,globals,tabpages,localoptions,buffers
-set listchars=trail:·,tab:▹\ ,nbsp:·  " show trailing & nb spaces as a dot, tabs as arrow
+set listchars=nbsp:·,tab:▹\           " nbsp as dot, tabs as arrow
 set list                       " show special characters as defined in listchars
-hi SpecialKey ctermfg=7 guifg=LightGray  " colors for listchars nbsp,tab,trail
+hi SpecialKey ctermfg=7 guifg=LightGray  " colors for listchars
 "set autochdir                  " change to directory of current buffer
 filetype plugin indent on      " turn on filetype plugins and indentation
 set guioptions-=T              " remove the mostly useless toolbar
@@ -82,6 +82,11 @@ endif
 runtime bundle/vim-pathogen/autoload/pathogen.vim
 call pathogen#infect()
 call pathogen#helptags()
+
+" show spacing errors in various languages
+let c_space_errors=1
+let python_space_errors=1 
+let ruby_space_errors=1 
 
 "Options for NERDTree
 let NERDTreeDirArrows=1
