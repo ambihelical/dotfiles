@@ -229,7 +229,13 @@ augroup vimrc
 
 	" tabstops
 	autocmd FileType python setl expandtab shiftwidth=4 softtabstop=4
+
+	" possibly helps performance issue due to syntax highlighting
+	if version >= 702
+	  autocmd BufWinLeave * call clearmatches()
+	endif
 augroup END
+
 
 endif  " autocmds
 
