@@ -14,7 +14,7 @@ dest=$2
 
 if [ -e "$dest" ]; then
 	if [[ ! -h "$dest" && -s "$dest" ]]; then
-		echo "\"${dest}\" exists, remote it to proceed" 
+		echo "\"${dest}\" exists, remove it to proceed" 
 		exit -1
 	fi
 fi
