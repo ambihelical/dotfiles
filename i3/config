@@ -213,6 +213,7 @@ exec --no-startup-id dropbox start -i   # note: must use .deb from dropbox.com
 exec --no-startup-id clipit
 exec --no-startup-id xset dpms 0 3600 4200   # suspend at 1h, off 10 minutes later
 exec --no-startup-id gnome-settings-daemon   # bring over gnome settings
+exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 || /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1  # gui authentication
 exec --no-startup-id xset -b
 
 # convenient key bindings
