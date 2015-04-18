@@ -45,6 +45,25 @@ defaults:
 	xdg-mime default chromium.desktop x-scheme-handler/https
 	xdg-mime default chromium.desktop text/html
 	gsettings set org.nemo.desktop show-desktop-icons false
+	gsettings set org.nemo.preferences show-full-path-titles true
+	gsettings set org.nemo.preferences start-with-dual-pane true
+	gsettings set org.nemo.preferences enable-delete true
+	gsettings set org.nemo.preferences default-folder-viewer list-view
+	gsettings set org.nemo.preferences show-hidden-files false
+	gsettings set org.nemo.preferences confirm-trash false
+	gsettings set org.nemo.preferences default-sort-order mtime
+	gsettings set org.nemo.preferences default-sort-in-reverse-order true
+	gsettings set org.nemo.preferences ignore-view-metadata true
+	gsettings set org.nemo.preferences desktop-is-home-dir true
+	gsettings set org.nemo.preferences show-image-thumbnails 'never'
+	gsettings set org.nemo.preferences show-advanced-permissions true
+	gsettings set org.nemo.preferences size-prefixes base-2
+	gsettings set org.gnome.libgnomekbd.keyboard options "['caps\tcaps:super', 'Compose key\tcompose:rwin', 'altwin\taltwin:ctrl_win']"
+	gsettings set org.cinnamon.settings-daemon.plugins.xsettings hinting full
+	gsettings set org.cinnamon.desktop.media-handling autorun-never true
+	gsettings set org.gnome.settings-daemon.plugins.xsettings hinting full
+	gsettings set org.gnome.desktop.media-handling autorun-never true
+
 
 all: base dev i3 defaults
 
