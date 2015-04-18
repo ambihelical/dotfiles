@@ -60,11 +60,20 @@ defaults:
 	gsettings set org.nemo.preferences show-advanced-permissions true
 	gsettings set org.nemo.preferences size-prefixes base-2
 	gsettings set org.gnome.libgnomekbd.keyboard options "['caps\tcaps:super', 'Compose key\tcompose:rwin', 'altwin\taltwin:ctrl_win']"
-	gsettings set org.cinnamon.settings-daemon.plugins.xsettings hinting full
-	gsettings set org.cinnamon.desktop.media-handling autorun-never true
 	gsettings set org.gnome.settings-daemon.plugins.xsettings hinting full
 	gsettings set org.gnome.desktop.media-handling autorun-never true
-
+	gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout 3600
+	gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type suspend
+	gsettings set org.gnome.settings-daemon.plugins.power sleep-display-battery 120 
+	gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-timeout 1800
+	gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type suspend
+	gsettings set org.cinnamon.settings-daemon.plugins.xsettings hinting full
+	gsettings set org.cinnamon.desktop.media-handling autorun-never true
+	gsettings set org.cinnamon.settings-daemon.plugins.power sleep-inactive-ac-timeout 3600
+	gsettings set org.cinnamon.settings-daemon.plugins.power sleep-inactive-ac-type suspend
+	gsettings set org.cinnamon.settings-daemon.plugins.power sleep-display-battery 120 
+	gsettings set org.cinnamon.settings-daemon.plugins.power sleep-inactive-battery-timeout 1800
+	gsettings set org.cinnamon.settings-daemon.plugins.power sleep-inactive-ac-type suspend
 
 all: base dev i3 defaults
 
