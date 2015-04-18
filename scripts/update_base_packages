@@ -14,6 +14,7 @@ if [ "${OSTYPE:0:10}" == 'linux-gnue' ]; then
   p="$p ack-grep autojump htop screen"
   apt-get --quiet --yes --no-install-recommends install $p
 elif [ "${OSTYPE:0:5}" == 'linux' ]; then 
+  p="$p ttf-mscorefonts-installer otf-stix unifont"
   p="$p aptitude python3-pip"
   p="$p ack-grep autojump htop screen unzip"
   p="$p curl wget suckless-tools"
@@ -23,7 +24,7 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
   p="$p clipit pithos i3 i3lock qalculate"
   p="$p aptitude htop screen unzip"
   p="$p nemo nemo-fileroller a2ps"
-  p="$p libiw-dev"
+  p="$p libiw-dev chromium-browser"
   apt-get --quiet --yes --no-install-recommends install $p
 elif [ "${OSTYPE:0:6}" == 'darwin' ]; then 
   port selfupdate
