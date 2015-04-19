@@ -170,8 +170,8 @@ PS1='\[\033[01;32m\]$(truncm \u)@$(truncm \h)\[\033[00m\]$(gprompt):\[\033[01;34
 
 case "$TERM" in
 xterm*|rxvt*)
-   # set window title
-	PROMPT_COMMAND=$PROMPT_COMMAND';echo -ne "\033]0; [${HOSTNAME}] $(tilde $PWD)\007"'
+	# set window title (can override with environment variable TITLE)
+	PROMPT_COMMAND='DEFTITLE="[${USER}@${HOSTNAME}] $(tilde $PWD)";echo -ne "\033]0;${TITLE:-$DEFTITLE}\007"'
     ;;
 *)
     ;;
