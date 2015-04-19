@@ -42,7 +42,7 @@ barex: ${BAREX_FILES}
 defaults:
 	find ~ -maxdepth 1 \( -name Desktop -o -name Music -o -name Pictures -o -name Templates -o -name Videos -o -name Public \) -exec rmdir --ignore-fail-on-non-empty {} \;
 	-xdg-mime default gvim.desktop `grep '^text/*' /usr/share/mime/types`
-	-xdg-mime default nemo.desktop inode/directory
+	-xdg-mime default nemo.desktop inode/directory application/x-gnome-saved-search
 	-xdg-mime default chromium.desktop x-scheme-handler/http
 	-xdg-mime default chromium.desktop x-scheme-handler/https
 	-xdg-mime default chromium.desktop text/html
