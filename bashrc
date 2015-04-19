@@ -195,7 +195,7 @@ linux-gnuea*)  # raspbian
 linux*) 
     export DISPLAY=:0.0   # set display for X
     alias open=gnome-open
-    gterm() { gnome-terminal --window-with-profile=man-small --geometry 80x200-0-0 --title="$1: $2" --command "$1 $2"; }
+    gterm() { urxvt -geometry 80x200-0-0 -title "$1: $2" -e sh -c "$1 $2"; }
     gman() { gterm man $1 & }
     ginfo() { gterm info $1 & }
     gtail() { gterm less $1 & }
