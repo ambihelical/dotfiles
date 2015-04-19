@@ -27,6 +27,7 @@ help:
 	@echo "   barex      - install .xsession, .Xmodmap"
 
 base: ${BASH_FILES} ${DIR_FILES} ${BIN_FILES}
+	@rm -f ~/.profile   # bash doesn't need it
 	@echo "base configured"
 
 dev: ${VIM_FILES} ${APP_FILES} ${GIT_FILES}
