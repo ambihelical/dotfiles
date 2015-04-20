@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Update any repositories needed for most recent versions of some packages
+
+if [[ $EUID -ne 0 ]]; then
+	echo "This script must be run with root privilegs" 1>&2
+	exit 1
+fi
+
+add-apt-repository --yes ppa:pithos/ppa
+
+apt-get update
+

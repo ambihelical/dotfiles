@@ -25,17 +25,14 @@ font pango:Ubuntu Mono Bold 12
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Return exec urxvt || i3-sensible-terminal
 
 # kill focused window
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+Shift+d exec dmenu_run
-# There also is the (new) i3-dmenu-desktop which only displays applications
-# shipping a .desktop file. It is a wrapper around dmenu, so you need that
-# installed.
-bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
+bindsym $mod+Shift+d exec --no-startup-id dmenu_run
+bindsym $mod+d exec i3-dmenu-desktop
 
 # change focus
 bindsym $mod+h focus left
@@ -144,6 +141,28 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
+#solarized colors
+set $yellow  #b58900
+set $orange  #cb4b16
+set $red     #dc322f
+set $magenta #d33682
+set $violet  #6c71c4
+set $blue    #268bd2
+set $cyan    #2aa198
+set $green   #859900
+# dark gray to light gray
+set $dark3   #002b36
+set $dark2   #073642
+set $dark1   #586e75
+set $dark0   #657b83
+set $lite0   #839496
+set $lite1   #93a1a1
+set $lite2   #eee8d5
+set $lite3   #fdf6e3
+
+set $black   #000000
+set $white   #ffffff
+
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
@@ -151,19 +170,21 @@ bar {
 	workspace_buttons yes
 	tray_output primary
 	colors {
-		# solarized
-		background #073642
-		statusline #eee8d5
-		focused_workspace #cb4b16 #cb4b16 #eee8d5
-		active_workspace #cb4b16 #cb4b16 #eee8d5
-		inactive_workspace #b58900 #b58900 #eee8d5
-   }
+		background $dark1
+		statusline $lite2
+		# class            border   backgr   text
+		focused_workspace  $cyan    $cyan    $lite3
+		active_workspace   $blue    $blue    $lite3
+		inactive_workspace $dark3   $dark1   $lite2
+		urgent_workspace   $cyan    $red	    $lite3
+	}
 }
 
 # class                 border  backgr  text    indicator
-client.focused          #859900 #268bd2 #fdf6e3 #2e9ef4
-client.focused_inactive #268bd2 #268bd2 #fdf6e3 #484e50
-client.unfocused        #333333 #93a1a1 #fdf6e3 #292d2e
+client.focused          $cyan   $cyan   $lite3  $violet
+client.focused_inactive $blue   $blue   $lite3  $violet
+client.unfocused        $dark3  $dark1  $lite2  $violet
+client.urgent           $red    $red    $dark2  $red
 
 # repeat workplace command to go back
 workspace_auto_back_and_forth yes
@@ -181,15 +202,14 @@ assign [class="Pithos"] 10:Admin
 assign [class="Pidgin"] 9:IM
 
 # startup programs
-exec --no-startup-id thunderbird
-exec --no-startup-id pithos
-exec --no-startup-id empathy
+exec --no-startup-id cinnamon-settings-daemon || gnome-settings-daemon   # bring over desktop settings
+exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 || /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1  # gui authentication
 exec --no-startup-id nm-applet
 exec --no-startup-id dropbox start -i   # note: must use .deb from dropbox.com
 exec --no-startup-id clipit
-exec --no-startup-id xset dpms 0 3600 4200   # suspend at 1h, off 10 minutes later
-exec --no-startup-id gnome-settings-daemon   # bring over gnome settings
-exec --no-startup-id xset -b
+exec --no-startup-id mintupdate-launcher
+exec --no-startup-id pithos
+exec --no-startup-id thunderbird
 
 # convenient key bindings
 bindsym $mod+slash exec nemo --no-desktop || pcmanfm || nautilus --no-desktop

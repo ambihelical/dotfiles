@@ -19,6 +19,8 @@ export XDG_CACHE_HOME=~/.cache
 export XDG_CONFIG_HOME=~/.config
 export XDG_DATA_HOME=~/.local/share
 [ ! -d $XDG_DATA_HOME ] && mkdir -p $XDG_DATA_HOME
+[ ! -d $XDG_CACHE_HOME ] && mkdir -p $XDG_CACHE_HOME
+[ ! -d $XDG_CONFIG_HOME ] && mkdir -p $XDG_CONFIG_HOME
 
 # locations of things
 [ -d ~/extern/ChibiOS-RT ] && export CHIBIOS=~/extern/ChibiOS-RT            # chibios development
@@ -31,7 +33,7 @@ export XDG_DATA_HOME=~/.local/share
 [ -d ~/bin ] && PATH=~/bin:"${PATH}"                                        # my utilities
 [ -d ~/bin/${OSTYPE} ] && PATH=~/bin/${OSTYPE}:"${PATH}"                    # my utilities, os specific
 
-export ACKRC=~/.config/ack/config
+export ACKRC=${XDG_CONFIG_HOME}/ack/config
 
 # If not running interactively, don't do anything more
 [ -z "$PS1" ] && return
@@ -104,11 +106,17 @@ gprompt() {
 export EDITOR=vim
 set -o vi
 
-# History control
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-# shopt: append to the history file, don't overwrite it
+# bash history control
+# ignore dups, append, increase size, put history in xdg dir
 export HISTCONTROL=ignoreboth
+export HISTSIZE=2000
 shopt -s histappend
+export HISTFILE=${XDG_CACHE_HOME}/bash/history
+[ ! -d ${XDG_CACHE_HOME}/bash ] && mkdir -p ${XDG_CACHE_HOME}/bash
+
+# store less history in xdg dir
+export LESSHISTFILE=${XDG_CACHE_HOME}/less/history
+[ ! -d ${XDG_CACHE_HOME}/less ] && mkdir -p ${XDG_CACHE_HOME}/less
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -162,8 +170,8 @@ PS1='\[\033[01;32m\]$(truncm \u)@$(truncm \h)\[\033[00m\]$(gprompt):\[\033[01;34
 
 case "$TERM" in
 xterm*|rxvt*)
-   # set window title
-	PROMPT_COMMAND=$PROMPT_COMMAND';echo -ne "\033]0; [${HOSTNAME}] $(tilde $PWD)\007"'
+	# set window title (can override with environment variable TITLE)
+	PROMPT_COMMAND='DEFTITLE="[${USER}@${HOSTNAME}] $(tilde $PWD)";echo -ne "\033]0;${TITLE:-$DEFTITLE}\007"'
     ;;
 *)
     ;;
@@ -187,7 +195,7 @@ linux-gnuea*)  # raspbian
 linux*) 
     export DISPLAY=:0.0   # set display for X
     alias open=gnome-open
-    gterm() { gnome-terminal --window-with-profile=man-small --geometry 80x200-0-0 --title="$1: $2" --command "$1 $2"; }
+    gterm() { urxvt -geometry 80x200-0-0 -title "$1: $2" -e sh -c "$1 $2"; }
     gman() { gterm man $1 & }
     ginfo() { gterm info $1 & }
     gtail() { gterm less $1 & }
