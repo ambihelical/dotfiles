@@ -205,7 +205,7 @@ assign [class="Pidgin"] 9:IM
 exec --no-startup-id cinnamon-settings-daemon || gnome-settings-daemon   # bring over desktop settings
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 || /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1  # gui authentication
 exec --no-startup-id nm-applet
-exec --no-startup-id dropbox start -i   # note: must use .deb from dropbox.com
+exec --no-startup-id dropbox start -i
 exec --no-startup-id clipit
 exec --no-startup-id mintupdate-launcher
 exec --no-startup-id pithos
