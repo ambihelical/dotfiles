@@ -74,6 +74,7 @@ defaults:
 	-gsettings set org.cinnamon.settings-daemon.plugins.power sleep-inactive-ac-timeout 3600
 	-gsettings set org.cinnamon.settings-daemon.plugins.power sleep-inactive-ac-type suspend
 	-gsettings set org.cinnamon.settings-daemon.plugins.power sleep-display-battery 120 
+	-gsettings set org.cinnamon.settings-daemon.plugins.power sleep-display-ac 3600
 	-gsettings set org.cinnamon.settings-daemon.plugins.power sleep-inactive-battery-timeout 1800
 	-gsettings set org.cinnamon.settings-daemon.plugins.power sleep-inactive-ac-type suspend
 
