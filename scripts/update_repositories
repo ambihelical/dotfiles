@@ -7,7 +7,15 @@ if [[ $EUID -ne 0 ]]; then
 	exit 1
 fi
 
+# Mint or Ubuntu
 add-apt-repository --yes ppa:pithos/ppa
+
+# Ubuntu-only repos
+if hash lsb_release 2> /dev/null; then
+	if [[ "$(lsb_release -ds)" =~ "Ubuntu" ]]; then
+		add-apt-repository --yes ppa:webupd8team/nemo
+	fi
+fi
 
 apt-get update
 
