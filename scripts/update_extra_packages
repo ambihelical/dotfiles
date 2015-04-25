@@ -12,11 +12,8 @@ if [ "${OSTYPE:0:10}" == 'linux-gnue' ]; then
   p="$p ack-grep autojump htop screen"
   apt-get --quiet --yes --no-install-recommends install $p
 elif [ "${OSTYPE:0:5}" == 'linux' ]; then 
-  p="$p ttf-mscorefonts-installer otf-stix unifont"
   p="$p texlive texinfo texlive-extra-utils"
-  p="$p openssh-server rcconf"
   p="$p graphviz libtiff-tools imagemagick"
-  p="$p ruby"
   p="$p liferea"
   apt-get --quiet --yes --no-install-recommends install $p
 elif [ "${OSTYPE:0:6}" == 'darwin' ]; then 
