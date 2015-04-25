@@ -4,6 +4,7 @@
 	cia = commit --amend
 	co = checkout
 	br = branch
+	sm = submodule
 	lo = log --shortstat --relative-date
 	di = diff --color
 	dc = diff --color --cached
