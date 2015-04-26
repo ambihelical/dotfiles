@@ -26,3 +26,7 @@ __pycache__
 #### git
 *.orig
 *.rej
+
+
+#### tags
+tags
