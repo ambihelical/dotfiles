@@ -16,14 +16,13 @@ if [ "${OSTYPE:0:10}" == 'linux-gnue' ]; then
 elif [ "${OSTYPE:0:5}" == 'linux' ]; then 
   apt-get --quiet --yes purge mono-runtime firefox firefox-locale-en
   p="$p ttf-mscorefonts-installer otf-stix unifont"
-  p="$p aptitude python3-pip gparted"
+  p="$p python3-pip gparted"
   p="$p ack-grep autojump htop screen unzip"
   p="$p curl wget suckless-tools"
   p="$p git-core gitk git-doc git-gui"
   p="$p vim-gnome exuberant-ctags rxvt-unicode-256color"
   p="$p python3 python3-gi python3-dev"
   p="$p clipit pithos i3 i3lock qalculate"
-  p="$p aptitude htop screen unzip"
   p="$p nemo nemo-fileroller nemo-dropbox a2ps"
   p="$p libiw-dev chromium-browser"
   apt-get --quiet --yes --no-install-recommends install $p
