@@ -154,10 +154,6 @@ let mapleader="\<Space>"               " set character for <leader> sequences
 " allow ; for : commands
 nnoremap ; :
 
-" use perl style regex in normal mode and visual mode
-nnoremap / /\v
-vnoremap / /\v
-
 " switch to previous buffer
 nnoremap <TAB> 
 
