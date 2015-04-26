@@ -182,6 +182,17 @@ nnoremap <leader>w :%s/\s+$//<CR>:nohlsearch<CR>
 nmap <silent> <leader>ve :e $MYVIMRC<CR>
 nmap <silent> <leader>vs :so $MYVIMRC<CR>
 
+" Copy to system clipboard
+vmap <Leader>y "+y
+
+" Cut to system clipboard
+vmap <Leader>d "+d
+
+" Paste from system clipboard
+nmap <Leader>p "+p
+nmap <Leader>P "+P
+vmap <Leader>p "+p
+vmap <Leader>P "+P
 
 map <C-X> :BD<CR>
 map <C-TAB> :tabn<CR>
