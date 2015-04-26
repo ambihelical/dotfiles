@@ -88,6 +88,9 @@ let c_space_errors=1
 let python_space_errors=1 
 let ruby_space_errors=1 
 
+" Options for bufmru
+let g:bufmru_switchkey = "<CR>"
+
 "Options for NERDTree
 let NERDTreeDirArrows=1
 let NERDTreeIgnore=['.o$[[file]]','.a$[[file]]','autom4te.cache','Makefile.in$','Makefile$']
@@ -146,7 +149,7 @@ let g:plantuml_executable_script = 'java -jar ~/local/share/java/plantuml.jar'
 
 """""""""""""""""""""""" Mappings """""""""""""""""""""""""""
 
-let mapleader=","               " set character for <leader> sequences
+let mapleader="\<Space>"               " set character for <leader> sequences
 
 " allow ; for : commands
 nnoremap ; :
@@ -167,7 +170,7 @@ nmap <C-J> <C-e>j
 nmap <C-K> <C-y>k
 
 " turn off search highlighting
-nnoremap <leader><space> :nohlsearch<CR>
+nnoremap <leader>/ :nohlsearch<CR>
 
 " toggle relative numbers
 nnoremap <leader># :set relativenumber!<CR>
