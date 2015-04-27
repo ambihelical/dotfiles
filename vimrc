@@ -114,23 +114,6 @@ if has("macunix")
   let loaded_matchparen=1
 endif
 
-
-" Options for tag list add-on
-let Tlist_Show_One_File=1
-"let Tlist_Inc_Winwidth=0
-let Tlist_Use_SingleClick=1
-"let Tlist_GainFocus_On_ToggleOpen=1
-"let Tlist_Close_On_Select=1
-let Tlist_WinWidth=20
-let Tlist_Auto_Open=0
-let Tlist_Use_Right_Window=1
-let Tlist_Compact_Format=1
-let Tlist_Display_Tag_Scope=0
-let Tlist_Enable_Fold_Column=0
-"let Tlist_Display_Prototype=1
-"let Tlist_File_Fold_Auto_Close=1
-let Tlist_Exit_OnlyWindow = 1
-
 " Options for buffer browser
 let g:bufExplorerSplitVertical='v'       " Split vertically.
 let g:bufExplorerUseCurrentWindow=1          " Open using current window.
@@ -212,7 +195,8 @@ map <F5> :A<CR>
 map <S-F5> :AN<CR>
 map <f4> :NERDTreeToggle<CR>
 map <F3> :BufExplorer<CR>
-map <F2> :TlistToggle<CR>
+"map <F2> :TlistToggle<CR>
+map <F2> :TagbarToggle<CR>
 
 
 """""""""""""""""""""" AutoCommands """"""""""""""""""""""""""
