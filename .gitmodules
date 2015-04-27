@@ -38,3 +38,12 @@
 [submodule "vimdir/bundle/vim-gitgutter"]
 	path = vimdir/bundle/vim-gitgutter
 	url = https://github.com/airblade/vim-gitgutter.git
+[submodule "vimdir/bundle/tagbar"]
+	path = vimdir/bundle/tagbar
+	url = https://github.com/majutsushi/tagbar.git
+[submodule "vimdir/bundle/ctrlp.vim"]
+	path = vimdir/bundle/ctrlp.vim
+	url = https://github.com/kien/ctrlp.vim.git
+[submodule "vimdir/bundle/vim-fugitive"]
+	path = vimdir/bundle/vim-fugitive
+	url = https://github.com/tpope/vim-fugitive.git
