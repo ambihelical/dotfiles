@@ -61,6 +61,9 @@ set directory=~/.cache/vim//         " where to put .swp files (// makes unique 
 set viminfo+=n~/.cache/vim/viminfo   " where to put viminfo
 set runtimepath=~/.config/vim,~/.config/vim/after,$VIM,$VIMRUNTIME
 
+" use fugitive in status line
+set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
+
 " fix backspace under cygwin
 if &term == "rxvt"
    set t_kb=
