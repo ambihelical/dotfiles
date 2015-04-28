@@ -94,6 +94,12 @@ let ruby_space_errors=1
 " Options for bufmru
 let g:bufmru_switchkey = "<CR>"
 
+" Options for tagbar
+let g:tagbar_compact = 1
+let g:tagbar_singleclick = 1
+
+
+
 "Options for NERDTree
 let NERDTreeDirArrows=1
 let NERDTreeIgnore=['.o$[[file]]','.a$[[file]]','autom4te.cache','Makefile.in$','Makefile$']
