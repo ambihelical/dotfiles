@@ -164,7 +164,7 @@ nnoremap <leader>/ :nohlsearch<CR>
 nnoremap <leader># :set relativenumber!<CR>
 
 "remove trailing spaces
-nnoremap <leader>w :%s/\s+$//<CR>:nohlsearch<CR>
+nnoremap <leader>w :%s/\s*$//<CR>:nohlsearch<CR>
 
 " Quickly edit/reload the vimrc file
 nmap <silent> <leader>ve :e $MYVIMRC<CR>
