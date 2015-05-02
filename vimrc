@@ -70,6 +70,11 @@ if &term == "rxvt"
    fixdel
 endif
 
+" 256 color support if possible
+if $TERM == "xterm-256color" || $TERM == "screen-256color" || $COLORTERM == "gnome-terminal"
+  set t_Co=256
+endif
+
 " set font for gvim
 if has("macunix")
   set guifont=DejaVu_Sans_Mono:h12
