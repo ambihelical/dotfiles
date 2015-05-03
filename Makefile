@@ -3,9 +3,9 @@ LN = scripts/safe_link
 CFG = ~/.config
 CACHE=~/.cache
 
-BASH_FILES = ~/.bashrc ~/.bash_profile ~/.inputrc
+SHELL_FILES = ~/.bashrc ~/.bash_profile ${CFG}/readline ~/.profile
 DIR_FILES = ~/bin ~/local
-APP_FILES = ~/.screenrc ${CFG}/ack/config ~/.Xresources
+APP_FILES = ${CFG}/screen ${CFG}/ack ~/.Xresources
 GIT_FILES = ${CFG}/git/config  ${CFG}/git/ignore
 I3_FILES = ${CFG}/i3/config ${CFG}/i3status/config ${CFG}/i3/status.py ${CFG}/dunst/dunstrc
 VIM_FILES = ~/.vimrc ${CFG}/vim  ${CACHE}/vim
@@ -26,8 +26,7 @@ help:
 	@echo "   help       - what you are seeing now"
 	@echo "   barex      - install .xsession, .Xmodmap"
 
-base: ${BASH_FILES} ${DIR_FILES} ${BIN_FILES}
-	@rm -f ~/.profile   # bash doesn't need it
+base: ${SHELL_FILES} ${DIR_FILES} ${BIN_FILES}
 	@echo "base configured"
 
 dev: ${VIM_FILES} ${APP_FILES} ${GIT_FILES}

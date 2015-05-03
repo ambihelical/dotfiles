@@ -1,6 +1,7 @@
 # vim:ft=zsh
 
-#umask 007   # disallow others access
+# include sh/dash profile
+[ -e ${HOME}/.profile ] && source ${HOME}/.profile
 
 case "$OSTYPE" in
 linux*)
@@ -13,17 +14,6 @@ darwin*)
     ;;
 esac
 
-# set XDG dirs to their defaults.  Not strictly necessary for cache, config and data, but 
-# set in case apps are poorly written.
-export XDG_CACHE_HOME=~/.cache
-export XDG_CONFIG_HOME=~/.config
-export XDG_DATA_HOME=~/.local/share
-[ ! -d $XDG_DATA_HOME ] && mkdir -p $XDG_DATA_HOME
-[ ! -d $XDG_CACHE_HOME ] && mkdir -p $XDG_CACHE_HOME
-[ ! -d $XDG_CONFIG_HOME ] && mkdir -p $XDG_CONFIG_HOME
-
-# locations of things
-[ -d ~/extern/ChibiOS-RT ] && export CHIBIOS=~/extern/ChibiOS-RT            # chibios development
 
 # setup path. These are in reverse order of how they appear in the PATH value. 
 
@@ -33,7 +23,12 @@ export XDG_DATA_HOME=~/.local/share
 [ -d ~/bin ] && PATH=~/bin:"${PATH}"                                        # my utilities
 [ -d ~/bin/${OSTYPE} ] && PATH=~/bin/${OSTYPE}:"${PATH}"                    # my utilities, os specific
 
-export ACKRC=${XDG_CONFIG_HOME}/ack/config
+# ccache config
+export CCACHE_DIR=${XDG_CACHE_HOME}/ccache
+[ -d ${CCACHE_DIR} ] || mkdir -p ${CCACHE_DIR}
+
+export ACKRC=${XDG_CONFIG_HOME}/ack
+[ -d ~/extern/ChibiOS-RT ] && export CHIBIOS=~/extern/ChibiOS-RT            # chibios development
 
 # If not running interactively, don't do anything more
 [ -z "$PS1" ] && return
@@ -78,7 +73,7 @@ tilde() {
 	echo ${1/${HOME}/\~}
 }
 
-# return git root directory
+# echo git project:branch 
 gprompt() {
 	local out=
 	local branch=$(__git_ps1 "%s")
@@ -111,12 +106,22 @@ set -o vi
 export HISTCONTROL=ignoreboth
 export HISTSIZE=2000
 shopt -s histappend
+
+#### Store various files in XDG directories
+
+# bash history
 export HISTFILE=${XDG_CACHE_HOME}/bash/history
 [ ! -d ${XDG_CACHE_HOME}/bash ] && mkdir -p ${XDG_CACHE_HOME}/bash
 
-# store less history in xdg dir
+# less history
 export LESSHISTFILE=${XDG_CACHE_HOME}/less/history
 [ ! -d ${XDG_CACHE_HOME}/less ] && mkdir -p ${XDG_CACHE_HOME}/less
+
+# readline config
+export INPUTRC=${XDG_CONFIG_HOME}/readline
+
+# screen config
+export SCREENRC=${XDG_CONFIG_HOME}/screen
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
