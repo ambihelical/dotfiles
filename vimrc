@@ -44,7 +44,7 @@ set fillchars+=vert:\         " use black for vertical split
 syntax on                     " enable syntax highlighting
 set wildmenu                  " enhanced command line completion (use TAB)
 set wildmode=list:longest,list:full " what to do in wild mode
-set wildignore+=*/.git/*,*/.hg/*,*/.dep/*,*.o,*.a           " file patterns to ignore in wild mode
+set wildignore+=*/.git/*,*/.hg/*,*/.dep/*,*/.svn/*,*.o,*.a           " file patterns to ignore in wild mode
 " session information saved
 set sessionoptions=winpos,resize,winsize,slash,folds,globals,tabpages,localoptions,buffers
 set listchars=nbsp:·,tab:▹\           " nbsp as dot, tabs as arrow
@@ -110,12 +110,11 @@ let NERDTreeDirArrows=1
 let NERDTreeIgnore=['.o$[[file]]','.a$[[file]]','autom4te.cache','Makefile.in$','Makefile$']
 
 " Options for ctrlp
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_working_path_mode = 2
-let g:ctrlp_match_window_reversed = 0
-let g:ctrlp_cache_dir = $HOME.'/.cache/ctrlp'
-let g:ctrlp_dotfiles = 0
-let g:ctrlp_user_command = ['.git/', 'cd %s && git ls-files -c']
+let g:ctrlp_user_command = { 'types': {
+			\ 1: ['.git', 'cd %s && git ls-files'],
+			\ 2: ['.hg', 'hg --cwd %s locate -I .'],
+			\ },
+			\ 'fallback': 'find %s -type f' }
 
 " ignore lines that don't match any patterns defined for gcc
 let g:compiler_gcc_ignore_unmatched_lines=1
@@ -174,6 +173,11 @@ nnoremap <leader>w :%s/\s*$//<CR>:nohlsearch<CR>
 " Quickly edit/reload the vimrc file
 nmap <silent> <leader>ve :e $MYVIMRC<CR>
 nmap <silent> <leader>vs :so $MYVIMRC<CR>
+
+" ctrl-p searches
+nmap <leader>b :CtrlPBuffer<CR>
+nmap <leader>f :CtrlP<CR>
+nmap <leader>r :CtrlPMRU<CR>
 
 " Copy to system clipboard
 vmap <Leader>y "+y
