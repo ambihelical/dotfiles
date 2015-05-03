@@ -12,9 +12,16 @@ src=$1
 dest=$2
 [ ! -e "${src}" ] && echo "source file \"${src}\" doesn't exist" && exit -1
 
-if [ -e "$dest" ]; then
-	if [[ ! -h "$dest" && -s "$dest" ]]; then
+# test for existing non-symlink destination
+if [[ -e "$dest" && ! -h "$dest" ]]; then
+	# not zero sized
+	if [[ -s "$dest" ]]; then
 		echo "\"${dest}\" exists, remove it to proceed" 
+		exit -1
+	fi
+	# directory
+	if [[ -d "$dest" ]]; then
+		echo "\"${dest}\" is directory, remove it to proceed" 
 		exit -1
 	fi
 fi
