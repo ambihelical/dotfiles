@@ -7,60 +7,69 @@
 # If the above line is not correctly displayed, fix your editor first!
 
 general {
-        colors = true
-        interval = 5
+	output_format = "i3bar"
+	colors = true
+	interval = 5
 }
 
 order += "disk /"
+order += "disk /home"
+order += "ethernet eth0"
+order += "ethernet eth1"
 order += "wireless wlan0"
-order += "ethernet eth2"
-order += "battery 0"
-order += "load"
 order += "cpu_usage"
 order += "cpu_temperature 0"
 order += "cpu_temperature 1"
 order += "cpu_temperature 2"
 order += "cpu_temperature 3"
 order += "volume master"
-order += "tztime local"
+order += "time"
 
 wireless wlan0 {
-        format_up = "W: (%quality at %essid) %ip"
-        format_down = "W: down"
+        format_up = "wlan0: (%quality at %essid) %ip"
+        format_down = ""
 }
 
-ethernet eth2 {
-        # if you use %speed, i3status requires root privileges
-        format_up = "E: %ip (%speed)"
-        format_down = "E: down"
+ethernet eth0 {
+        format_up = "eth0: %ip"
+        format_down = ""
+}
+ethernet eth1 {
+        format_up = "eth1: %ip"
+        format_down = ""
 }
 
 battery 0 {
-        format = "%status %percentage %remaining"
+         format = "%status %percentage %remaining"
 }
 
-tztime local {
-        #format = "%Y-%m-%d %H:%M:%S"
-        format = "%a %d %b %-I:%M %p"
+time {
+	format = "%a %d %b %-I:%M %p"
+	on_click 1 = "exec gsimplecal"
 }
 
-load {
-        format = "%1min"
-}
 
 disk "/" {
-        format = "%free"
+        format = "/: %free"
+}
+disk "/home" {
+        format = "/home: %free"
+		  format_not_mounted: ""
 }
 
 volume master {
-	format = "Vol %volume"
+	format = "Vol: %volume"
 	device = "default"
 	mixer = "Master"
 	mixer_idx = 0
 }
 
 cpu_usage {
-	format = "%usage "
+	format = "CPUs: %usage"
+}
+
+load {
+        format = "%1min"
 }
  
 cpu_temperature 0 {
@@ -82,7 +91,7 @@ cpu_temperature 2 {
 }
  
 cpu_temperature 3 {
-	format = "%degrees° "
+	format = "%degrees°"
 	path = "/sys/devices/platform/coretemp.0/temp5_input"
 	max_threshold = 95
 }

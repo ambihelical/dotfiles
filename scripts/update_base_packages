@@ -22,7 +22,7 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
   p="$p git-core gitk git-doc git-gui"
   p="$p vim-gnome exuberant-ctags rxvt-unicode-256color"
   p="$p python3 python3-gi python3-dev"
-  p="$p clipit pithos i3 i3lock qalculate"
+  p="$p clipit pithos i3 i3lock i3status qalculate gsimplecal"
   p="$p nemo nemo-fileroller nemo-dropbox a2ps"
   p="$p libiw-dev chromium-browser"
   apt-get --quiet --yes --no-install-recommends install $p
@@ -36,4 +36,4 @@ fi
 
 # install some python stuff
 # for now assume pip on all platforms
-pip3 install --upgrade i3pystatus netifaces colour psutil basiciw
+pip3 install --upgrade py3status netifaces colour psutil basiciw
