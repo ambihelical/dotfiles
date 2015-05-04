@@ -17,11 +17,6 @@ order += "disk /home"
 order += "ethernet eth0"
 order += "ethernet eth1"
 order += "wireless wlan0"
-order += "cpu_usage"
-order += "cpu_temperature 0"
-order += "cpu_temperature 1"
-order += "cpu_temperature 2"
-order += "cpu_temperature 3"
 order += "volume master"
 order += "time"
 
@@ -47,7 +42,6 @@ time {
 	format = "%a %d %b %-I:%M %p"
 	on_click 1 = "exec gsimplecal"
 }
-
 
 disk "/" {
         format = "/: %free"
