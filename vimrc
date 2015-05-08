@@ -93,7 +93,7 @@ call pathogen#helptags()
 
 " show spacing errors in various languages
 let c_space_errors=1
-let python_space_errors=1 
+let python_space_error_highlight = 1
 let ruby_space_errors=1 
 
 " Options for bufmru
