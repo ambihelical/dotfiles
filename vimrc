@@ -155,8 +155,8 @@ nnoremap j gj
 nnoremap k gk
 
 " scroll window instead of cursor
-nmap <C-J> <C-e>j
-nmap <C-K> <C-y>k
+nnoremap <C-J> <C-e>j
+nnoremap <C-K> <C-y>k
 
 " turn off search highlighting
 nnoremap <leader>/ :nohlsearch<CR>
@@ -166,6 +166,9 @@ nnoremap <leader># :set relativenumber!<CR>
 
 "remove trailing spaces
 nnoremap <leader>w :%s/\s*$//<CR>:nohlsearch<CR>
+
+" Save current buffer
+nnoremap <leader>s :w!<CR>
 
 " Quickly edit/reload the vimrc file
 nmap <silent> <leader>ve :e $MYVIMRC<CR>
@@ -187,6 +190,15 @@ nmap <Leader>p "+p
 nmap <Leader>P "+P
 vmap <Leader>p "+p
 vmap <Leader>P "+P
+
+" Next, previous jump
+" Consistant -> g; g, are next,previous change
+"                ; , are next,previous f/F/t/T
+nnoremap <leader>; <C-O>
+nnoremap <leader>, <C-I>
+
+" Easier window commands
+nmap <leader>w <C-W>
 
 map <C-X> :BD<CR>
 map <C-TAB> :tabn<CR>
