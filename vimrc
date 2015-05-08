@@ -179,6 +179,9 @@ nmap <leader>b :CtrlPBuffer<CR>
 nmap <leader>f :CtrlP<CR>
 nmap <leader>r :CtrlPMRU<CR>
 
+" fugitive mappings
+nnoremap <leader>gb :Gblame<CR>
+
 " Copy to system clipboard
 vmap <Leader>y "+y
 
