@@ -147,9 +147,6 @@ let g:plantuml_executable_script = 'java -jar ~/local/share/java/plantuml.jar'
 
 let mapleader="\<Space>"               " set character for <leader> sequences
 
-" allow ; for : commands
-nnoremap ; :
-
 " switch to previous buffer
 nnoremap <TAB> 
 
