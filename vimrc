@@ -115,6 +115,7 @@ let g:ctrlp_user_command = { 'types': {
 			\ 2: ['.hg', 'hg --cwd %s locate -I .'],
 			\ },
 			\ 'fallback': 'find %s -type f' }
+let g:ctrlp_match_window = 'order:ttb,bottom'
 
 " ignore lines that don't match any patterns defined for gcc
 let g:compiler_gcc_ignore_unmatched_lines=1
