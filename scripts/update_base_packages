@@ -15,7 +15,7 @@ if [ "${OSTYPE:0:10}" == 'linux-gnue' ]; then
   apt-get --quiet --yes --no-install-recommends install $p
 elif [ "${OSTYPE:0:5}" == 'linux' ]; then 
   apt-get --quiet --yes purge mono-runtime firefox firefox-locale-en
-  p="$p ttf-mscorefonts-installer otf-stix unifont"
+  p="$p ttf-mscorefonts-installer otf-stix unifont ttf-ancient-fonts"
   p="$p python3-pip gparted"
   p="$p ack-grep autojump htop screen unzip"
   p="$p curl wget suckless-tools tree"
