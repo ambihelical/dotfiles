@@ -18,7 +18,7 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
   p="$p ttf-mscorefonts-installer otf-stix unifont"
   p="$p python3-pip gparted"
   p="$p ack-grep autojump htop screen unzip"
-  p="$p curl wget suckless-tools"
+  p="$p curl wget suckless-tools tree"
   p="$p git-core gitk git-doc git-gui"
   p="$p vim-gnome exuberant-ctags rxvt-unicode-256color"
   p="$p python3 python3-gi python3-dev"
