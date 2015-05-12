@@ -173,10 +173,15 @@ fi
 PS1='\[\033[01;32m\]$(truncm \u)@$(truncm \h)\[\033[00m\]$(gprompt):\[\033[01;34m\]$(truncm $(tilde \w) 20)\[\033[00m\]\$ '
 [ "$ecma" != "1" ] && PS1='\u@\h$(gprompt):\w\$ ' && PROMPT_DIRTRIM=2
 
+window_title() {
+	local def_title="[${USER}@${HOSTNAME}] $(tilde $PWD)"
+	echo -ne "\033]0;${TITLE:-${def_title}}\007"
+}
+
 case "$TERM" in
 xterm*|rxvt*)
 	# set window title (can override with environment variable TITLE)
-	PROMPT_COMMAND='DEFTITLE="[${USER}@${HOSTNAME}] $(tilde $PWD)";echo -ne "\033]0;${TITLE:-$DEFTITLE}\007"'
+	PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND ;}window_title"
     ;;
 *)
     ;;
