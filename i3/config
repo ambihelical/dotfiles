@@ -233,6 +233,10 @@ bindsym $mod+m exec i3-input -F 'mark %s' -l 1 -P 'Mark: '
 bindsym $mod+g exec i3-input -F '[con_mark="%s"] focus' -l 1 -P 'Go to: '
 bindsym $mod+w exec i3-input -F 'rename workspace to "%s"' -P 'Workspace name: '
 
+# edit current selection or clipboard in gvim
+bindsym $mod+apostrophe exec --no-startup-id xclip -o | gvim -
+bindsym $mod+Shift+apostrophe exec --no-startup-id xclip -selection c -o | gvim -
+
 # Fixing hibernate problems: http://blog.roland-kluge.de/?p=793
 #                            http://askubuntu.com/q/1792
 set $Suspend    dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Suspend
