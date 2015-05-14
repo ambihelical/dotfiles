@@ -204,6 +204,9 @@ nnoremap <leader>, <C-I>
 " Easier window commands
 nmap <leader>w <C-W>
 
+" write file using sudo
+cmap w!! w !sudo tee % >/dev/null
+
 map <C-X> :BD<CR>
 map <C-TAB> :tabn<CR>
 map <C-S-TAB> :tabp<CR>
