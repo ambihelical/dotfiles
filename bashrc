@@ -194,7 +194,7 @@ alias cd..="cd .."
 alias ls-x="ls -x"
 alias ack='mark && ack-grep'
 
-bind Space:magic-space      # expand !$,!^,!*,!!,etc on spacebar
+#bind Space:magic-space      # expand !$,!^,!*,!!,etc on spacebar
 
 ##### OS Specific aliases #####
 
