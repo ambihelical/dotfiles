@@ -160,6 +160,9 @@ nnoremap <TAB> 
 nnoremap j gj
 nnoremap k gk
 
+" Let . apply to all lines in visual mode 
+vnoremap . :norm.<CR>
+
 " scroll window instead of cursor
 nnoremap <C-J> <C-e>j
 nnoremap <C-K> <C-y>k
