@@ -202,6 +202,10 @@ vmap <Leader>P "+P
 nnoremap <leader>; <C-O>
 nnoremap <leader>, <C-I>
 
+" Increment/Decrement number
+nnoremap <leader>= <C-A>
+nnoremap <leader>- <C-X>
+
 " Turn spell check on and off
 nnoremap <leader>ss :set spell!<CR>
 
