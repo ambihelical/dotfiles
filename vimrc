@@ -56,6 +56,8 @@ hi SpecialKey ctermfg=7 guifg=LightGray  " colors for listchars
 "set autochdir                  " change to directory of current buffer
 filetype plugin indent on      " turn on filetype plugins and indentation
 set guioptions-=T              " remove the mostly useless toolbar
+set spelllang=en_us            " set spelling language
+set nospell                    " turn spell off by default
 
 " Except for ~/.vimrc, these make vim XDG compatible 
 set backupdir=~/.cache/vim,~/,/tmp   " dirs to use for backup files
@@ -199,6 +201,12 @@ vmap <Leader>P "+P
 " Mnemonic ->    g; g, are next older, next newer change
 nnoremap <leader>; <C-O>
 nnoremap <leader>, <C-I>
+
+" Turn spell check on and off
+nnoremap <leader>ss :set spell!<CR>
+
+" fix spelling error
+nnoremap <leader>sf 1z=
 
 " Easier window commands
 nmap <leader>w <C-W>
