@@ -12,6 +12,10 @@
 	glog = log --pretty=format:'%h : %s' --graph
 	lg = log --graph --all --pretty=format:'%Cred%h%Creset - %Cgreen(%cr)%Creset %s%C(yellow)%d%Creset' --abbrev-commit --date=relative
 	gdiff = diff --stat
+	rbi = rebase -i
+	rbc = rebase --continue
+	rba = rebase --abort
+
 [color]
 	status = true
 	ui = auto
