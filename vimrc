@@ -188,6 +188,12 @@ nmap <leader>r :CtrlPMRU<CR>
 " fugitive mappings
 nnoremap <leader>gb :Gblame<CR>
 
+" Define clipboard and primary register aliases
+" for easier typing (compose with y,d or p)
+nnoremap <leader>c "+
+nnoremap <leader>m "*
+
+" POSSIBLY REMOVE THESE: 
 " Copy to system clipboard
 vmap <Leader>y "+y
 
