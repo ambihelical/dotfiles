@@ -50,7 +50,7 @@ set wildmode=list:longest,list:full " what to do in wild mode
 set wildignore+=*/.git/*,*/.hg/*,*/.dep/*,*/.svn/*,*.o,*.a           " file patterns to ignore in wild mode
 " session information saved
 set sessionoptions=winpos,resize,winsize,slash,folds,globals,tabpages,localoptions,buffers
-set listchars=nbsp:·,tab:▹\           " nbsp as dot, tabs as arrow
+set listchars=nbsp:·,tab:▹\    " nbsp as dot, tabs as arrow
 set list                       " show special characters as defined in listchars
 hi SpecialKey ctermfg=7 guifg=LightGray  " colors for listchars
 "set autochdir                  " change to directory of current buffer
@@ -169,10 +169,7 @@ nnoremap <leader>/ :nohlsearch<CR>
 nnoremap <leader># :set relativenumber!<CR>
 
 "remove trailing spaces
-nnoremap <leader>w :%s/\s*$//<CR>:nohlsearch<CR>
-
-" Save current buffer
-nnoremap <leader>s :w!<CR>
+nnoremap <leader>rs :%s/\s*$//<CR>:nohlsearch<CR>
 
 " Quickly edit/reload the vimrc file
 nmap <silent> <leader>ve :e $MYVIMRC<CR>
@@ -198,9 +195,8 @@ nmap <Leader>P "+P
 vmap <Leader>p "+p
 vmap <Leader>P "+P
 
-" Next, previous jump
-" Consistant -> g; g, are next,previous change
-"                ; , are next,previous f/F/t/T
+" Next older, next newer jump
+" Mnemonic ->    g; g, are next older, next newer change
 nnoremap <leader>; <C-O>
 nnoremap <leader>, <C-I>
 
@@ -208,28 +204,32 @@ nnoremap <leader>, <C-I>
 nmap <leader>w <C-W>
 
 " write file using sudo
-cmap w!! w !sudo tee % >/dev/null
+cnoremap w!! w !sudo tee % >/dev/null
 
 map <C-X> :BD<CR>
-map <C-TAB> :tabn<CR>
-map <C-S-TAB> :tabp<CR>
-map <C-T> :tabnew<CR>
 map <C-F12> :call Print()<CR>
-map <F11> <CR>
-map <S-F11> W<CR>
-map <F10> :bnext<CR>
-map <S-F10> :bprevious<CR>
+
+" Next, prev tag
 map <F9> :tn<CR>
 map <S-F9> :tp<CR>
+
+" Next, prev error
 map <F8> :cn<CR>
 map <S-F8> :cp<CR>
+
+" run make
 map <F7> :make<CR>
+
+" Look up tag
 map <F6> <C-]>
+
+" Alternate file
 map <F5> :A<CR>
 map <S-F5> :AN<CR>
-map <f4> :NERDTreeToggle<CR>
+
+" Various plugin windows
+map <F4> :NERDTreeToggle<CR>
 map <F3> :BufExplorer<CR>
-"map <F2> :TlistToggle<CR>
 map <F2> :TagbarToggle<CR>
 
 
