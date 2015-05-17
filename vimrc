@@ -37,6 +37,9 @@ set shortmess=at              " shorten displayed text
 set scrolloff=5               " minimum # lines to keep above and below cursor
 set mousemodel=popup          " right mouse clicks pops up a menu
 set formatoptions+=n          " recognize lists when formatting text
+set formatoptions+=q          " recognize comments when formatting text
+set formatoptions+=r          " automatically insert comment leader after <enter>
+set formatoptions+=2          " for text, use indent of second line for remaining lines
 set noshowmatch               " don't show matching brackets
 set nostartofline             " keep current column if possible
 set undofile                  " use persistant undo
