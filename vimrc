@@ -252,6 +252,7 @@ augroup vimrc
 	autocmd FileType cpp,c set list                   " always show trailing spaces
 	autocmd SwapExists * let v:swapchoice = "o"       " always open ro when swap file exists
 	autocmd VimLeavePre * call Resave_session()       " save current session if previously done
+	autocmd FocusLost * :wa                           " save all buffers on focus lost
 
 	" executing current file
 	"following interferes with normal make
