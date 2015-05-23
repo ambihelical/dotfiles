@@ -176,8 +176,8 @@ nnoremap <leader># :set relativenumber!<CR>
 nnoremap <leader>rs :%s/\s*$//<CR>:nohlsearch<CR>
 
 " Quickly edit/reload the vimrc file
-nmap <silent> <leader>ve :e $MYVIMRC<CR>
-nmap <silent> <leader>vs :so $MYVIMRC<CR>
+nmap <silent> <leader>ev :e $MYVIMRC<CR>
+nmap <silent> <leader>rv :so $MYVIMRC<CR>
 
 " ctrl-p searches
 nmap <leader>b :CtrlPBuffer<CR>
