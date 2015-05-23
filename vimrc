@@ -193,19 +193,6 @@ nnoremap <leader>gb :Gblame<CR>
 nnoremap <leader>c "+
 nnoremap <leader>m "*
 
-" POSSIBLY REMOVE THESE: 
-" Copy to system clipboard
-vmap <Leader>y "+y
-
-" Cut to system clipboard
-vmap <Leader>d "+d
-
-" Paste from system clipboard
-nmap <Leader>p "+p
-nmap <Leader>P "+P
-vmap <Leader>p "+p
-vmap <Leader>P "+P
-
 " Next older, next newer jump
 " Mnemonic ->    g; g, are next older, next newer change
 nnoremap <leader>; <C-O>
