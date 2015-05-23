@@ -208,7 +208,10 @@ nnoremap <leader>ss :set spell!<CR>
 nnoremap <leader>sf 1z=
 
 " Easier window commands
-nmap <leader>w <C-W>
+nnoremap <leader>w <C-W>
+
+" visual select last paste
+nnoremap <leader>v V`]
 
 " write file using sudo
 cnoremap w!! w !sudo tee % >/dev/null
