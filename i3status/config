@@ -26,12 +26,12 @@ wireless wlan0 {
 }
 
 ethernet eth0 {
-        format_up = "eth0: %ip"
-        format_down = ""
+	format_up = "[eth0]—▸%ip"
+	format_down = ""
 }
 ethernet eth1 {
-        format_up = "eth1: %ip"
-        format_down = ""
+	format_up = "[eth1]—▸%ip"
+	format_down = ""
 }
 
 battery 0 {
@@ -39,23 +39,29 @@ battery 0 {
 }
 
 time {
-	format = "%a %d %b %-I:%M %p"
+	format = "📅 %a %d %b %-I:%M %p"
 	on_click 1 = "exec gsimplecal"
 }
 
 disk "/" {
-        format = "/: %free"
+	format = "[/]—▸%free"
+	on_click 1 = "exec nemo /"
 }
 disk "/home" {
-        format = "/home: %free"
-		  format_not_mounted: ""
+	format = "[/home]—▸%free"
+	on_click 1 = "exec nemo /home"
+	format_not_mounted = ""
 }
 
 volume master {
-	format = "Vol: %volume"
+	format = "🔊 %volume"
+	format_muted = "🔊 %volume"
 	device = "default"
 	mixer = "Master"
 	mixer_idx = 0
+	on_click 1 = "exec pactl -- set-sink-mute 1 toggle"
+	on_click 4 = "exec pactl -- set-sink-volume 1 +2%"
+	on_click 5 = "exec pactl -- set-sink-volume 1 -2%"
 }
 
 cpu_usage {
