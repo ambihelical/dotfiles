@@ -33,6 +33,7 @@ set shell=/bin/bash           " use bash for shelling out
 set shellslash                " use forward slash for expanding file names
 set cmdheight=3               " 3 line command area
 set shortmess=at              " shorten displayed text
+set laststatus=2              " show status in last window
 set scrolloff=5               " minimum # lines to keep above and below cursor
 set mousemodel=popup          " right mouse clicks pops up a menu
 set formatoptions+=n          " recognize lists when formatting text
@@ -64,8 +65,6 @@ set directory=~/.cache/vim//         " where to put .swp files (// makes unique 
 set viminfo+=n~/.cache/vim/viminfo   " where to put viminfo
 set runtimepath=~/.config/vim,~/.config/vim/after,$VIM,$VIMRUNTIME
 
-" use fugitive in status line
-set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
 
 " fix backspace under cygwin
 if &term == "rxvt"
@@ -146,6 +145,13 @@ let c_no_curly_error = 1
 
 " plantuml
 let g:plantuml_executable_script = 'java -jar ~/local/share/java/plantuml.jar'
+
+" airline
+let g:airline_left_sep=' '
+let g:airline_right_sep=' '
+let g:airline_detect_modified=1
+let g:airline#extensions#whitespace#mixed_indent_algo = 2
+
 
 """""""""""""""""""""""" Mappings """""""""""""""""""""""""""
 
