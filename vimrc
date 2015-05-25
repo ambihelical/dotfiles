@@ -175,7 +175,7 @@ nnoremap <C-K> <C-y>k
 nnoremap <leader>/ :nohlsearch<CR>
 
 " toggle relative numbers
-nnoremap <leader># :set relativenumber!<CR>
+nnoremap <leader># :set relativenumber!<CR>:set number!<CR>
 
 "remove trailing spaces
 nnoremap <leader>rs :%s/\s*$//<CR>:nohlsearch<CR>
