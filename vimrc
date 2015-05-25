@@ -45,10 +45,9 @@ set undofile                  " use persistant undo
 set fillchars+=vert:\         " use black for vertical split
 syntax on                     " enable syntax highlighting
 set wildmenu                  " enhanced command line completion (use TAB)
-set wildmode=list:longest,list:full " what to do in wild mode
+set wildmode=list:longest,list:full                                  " what to do in wild mode
 set wildignore+=*/.git/*,*/.hg/*,*/.dep/*,*/.svn/*,*.o,*.a           " file patterns to ignore in wild mode
-" session information saved
-set sessionoptions=winpos,resize,winsize,slash,folds,globals,tabpages,localoptions,buffers
+set sessionoptions+=winpos,resize,slash,globals,localoptions         " session information saved, other than the default
 set listchars=nbsp:·,tab:▹\    " nbsp as dot, tabs as arrow
 set list                       " show special characters as defined in listchars
 hi SpecialKey ctermfg=7 guifg=LightGray  " colors for listchars
