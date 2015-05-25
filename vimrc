@@ -2,6 +2,9 @@ if filereadable("$VIMRUNTIME/debian.vim")
   source $VIMRUNTIME/debian.vim
 endif
 
+filetype plugin indent on      " turn on filetype plugins and indentation
+syntax on                     " enable syntax highlighting
+
 set nocompatible              " always use vim extensions
 set modelines=0               " modelines have security risks, 0 == disabled
 set encoding=utf-8            " always utf8
@@ -17,7 +20,7 @@ set autoindent                " automatically indent
 "set copyindent                " .. and copy indent structure of existing line
 set writebackup               " backup current file
 set backup                    " delete old backup file
-set grepprg=git\ grep          " use git grep for grepping
+set grepprg=git\ grep         " use git grep for grepping
 set makeef=~/.cache/vim/vim##.err   " file to use for make errors
 set errorformat^=%-GIn\ file\ included\ from\ %.%#
 set hidden                    " allow hidden bufs to be modified w/o save required
@@ -44,19 +47,16 @@ set noshowmatch               " don't show matching brackets
 set nostartofline             " keep current column if possible
 set undofile                  " use persistant undo
 set fillchars+=vert:\         " use black for vertical split
-syntax on                     " enable syntax highlighting
+set guioptions-=T             " remove the mostly useless toolbar
+set spelllang=en_us           " set spelling language
+set nospell                   " turn spell off by default
 set wildmenu                  " enhanced command line completion (use TAB)
+set listchars=nbsp:·,tab:▹\   " nbsp as dot, tabs as arrow
+set list                      " show special characters as defined in listchars
+hi SpecialKey ctermfg=7 guifg=LightGray                              " colors for listchars
 set wildmode=list:longest,list:full                                  " what to do in wild mode
 set wildignore+=*/.git/*,*/.hg/*,*/.dep/*,*/.svn/*,*.o,*.a           " file patterns to ignore in wild mode
 set sessionoptions+=winpos,resize,slash,globals,localoptions         " session information saved, other than the default
-set listchars=nbsp:·,tab:▹\    " nbsp as dot, tabs as arrow
-set list                       " show special characters as defined in listchars
-hi SpecialKey ctermfg=7 guifg=LightGray  " colors for listchars
-"set autochdir                  " change to directory of current buffer
-filetype plugin indent on      " turn on filetype plugins and indentation
-set guioptions-=T              " remove the mostly useless toolbar
-set spelllang=en_us            " set spelling language
-set nospell                    " turn spell off by default
 
 " Except for ~/.vimrc, these make vim XDG compatible 
 set backupdir=~/.cache/vim,~/,/tmp   " dirs to use for backup files
