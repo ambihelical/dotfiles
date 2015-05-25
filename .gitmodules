@@ -47,3 +47,6 @@
 [submodule "vimdir/bundle/vim-fugitive"]
 	path = vimdir/bundle/vim-fugitive
 	url = https://github.com/tpope/vim-fugitive.git
+[submodule "vimdir/bundle/vim-airline"]
+	path = vimdir/bundle/vim-airline
+	url = https://github.com/bling/vim-airline.git
