@@ -34,7 +34,7 @@ set tildeop                   " allow ~ to work as operator
 set background=light          " use colors that look good on a light background
 set shell=/bin/bash           " use bash for shelling out
 set shellslash                " use forward slash for expanding file names
-set cmdheight=3               " 3 line command area
+set cmdheight=2               " 2 line command area
 set shortmess=at              " shorten displayed text
 set laststatus=2              " show status in last window
 set scrolloff=5               " minimum # lines to keep above and below cursor
@@ -48,6 +48,9 @@ set nostartofline             " keep current column if possible
 set undofile                  " use persistant undo
 set fillchars+=vert:\         " use black for vertical split
 set guioptions-=T             " remove the mostly useless toolbar
+set guioptions-=r             " no right hand scrollbar
+set guioptions-=b             " no bottom scrollbar
+set guioptions-=L             " no left scrollbar
 set spelllang=en_us           " set spelling language
 set nospell                   " turn spell off by default
 set wildmenu                  " enhanced command line completion (use TAB)
