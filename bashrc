@@ -174,7 +174,7 @@ PS1='\[\033[01;32m\]$(truncm \u)@$(truncm \h)\[\033[00m\]$(gprompt):\[\033[01;34
 [ "$ecma" != "1" ] && PS1='\u@\h$(gprompt):\w\$ ' && PROMPT_DIRTRIM=2
 
 window_title() {
-	local def_title="[${USER}@${HOSTNAME}] $(tilde $PWD)"
+	local def_title="↵ $(tilde $PWD) [${USER}@${HOSTNAME}]"
 	echo -ne "\033]0;${TITLE:-${def_title}}\007"
 }
 

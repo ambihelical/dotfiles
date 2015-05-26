@@ -264,6 +264,7 @@ augroup vimrc
 	autocmd SwapExists * let v:swapchoice = "o"       " always open ro when swap file exists
 	autocmd VimLeavePre * call Resave_session()       " save current session if previously done
 	autocmd FocusLost * :wa                           " save all buffers on focus lost
+	autocmd BufEnter * call SetTitle()                " set title when first showing buffer
 
 	" executing current file
 	"following interferes with normal make
@@ -306,3 +307,10 @@ function! Print()
   let fn = substitute(path, " ", "\\\\ ", "")
   execute ":!a2ps --columns=2 --portrait -Phplj --underlay='UNCONFIRMED' " . fn
 endfunction
+
+function! SetTitle()
+	let cwd=substitute(getcwd(),"^".expand("~"),"","")
+	let path=substitute(expand("%"),"^".getcwd(),"","")
+	let &titlestring = "☯ " . path . " [" . cwd . "]"
+endfunction
+
