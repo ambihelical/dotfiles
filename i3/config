@@ -169,6 +169,9 @@ bar {
 	status_command py3status -c ~/.config/i3status/config
 	workspace_buttons yes
 	tray_output primary
+	# turn off scrolling to select workspace
+	wheel_up_cmd nop
+	wheel_down_cmd nop
 	colors {
 		background $dark1
 		statusline $lite2
@@ -185,6 +188,10 @@ client.focused          $cyan   $cyan   $lite3  $violet
 client.focused_inactive $blue   $blue   $lite3  $violet
 client.unfocused        $dark3  $dark1  $lite2  $violet
 client.urgent           $red    $red    $dark2  $red
+
+# turn off scrolling to select window
+bindsym button4 nop
+bindsym button5 nop
 
 # repeat workplace command to go back
 workspace_auto_back_and_forth yes
