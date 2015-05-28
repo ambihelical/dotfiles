@@ -309,7 +309,7 @@ function! Print()
 endfunction
 
 function! SetTitle()
-	let cwd=substitute(getcwd(),"^".expand("~"),"","")
+	let cwd=substitute(getcwd(),"^".expand("~"),"~","")
 	let path=substitute(expand("%"),"^".getcwd(),"","")
 	let &titlestring = "☯ " . path . " [" . cwd . "]"
 endfunction
