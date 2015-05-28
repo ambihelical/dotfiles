@@ -9,13 +9,18 @@ fi
 
 # Mint or Ubuntu
 add-apt-repository --yes ppa:pithos/ppa
-echo "deb http://debian.sur5r.net/i3/ $(lsb_release -u -c -s) universe" >> /etc/apt/sources.list
-apt-get --allow-unauthenticated install sur5r-keyring
 
-# Ubuntu-only repos
 if hash lsb_release 2> /dev/null; then
+	# Ubuntu-only
 	if [[ "$(lsb_release -ds)" =~ "Ubuntu" ]]; then
 		add-apt-repository --yes ppa:webupd8team/nemo
+		echo "deb http://debian.sur5r.net/i3/ $(lsb_release -c -s) universe" >> /etc/apt/sources.list
+		apt-get --allow-unauthenticated install sur5r-keyring
+	fi
+	# Mint-only 
+	if [[ "$(lsb_release -ds)" =~ "Mint" ]]; then
+		echo "deb http://debian.sur5r.net/i3/ $(lsb_release -u -c -s) universe" >> /etc/apt/sources.list
+		apt-get --allow-unauthenticated install sur5r-keyring
 	fi
 fi
 
