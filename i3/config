@@ -244,6 +244,10 @@ bindsym $mod+w exec i3-input -F 'rename workspace to "%s"' -P 'Workspace name: '
 bindsym $mod+apostrophe exec --no-startup-id xclip -o | gvim -
 bindsym $mod+Shift+apostrophe exec --no-startup-id xclip -selection c -o | gvim -
 
+# copy primary selection to clipboard
+bindsym $mod+c exec --no-startup-id xclip -o | xclip -i -selection c
+
+
 # Fixing hibernate problems: http://blog.roland-kluge.de/?p=793
 #                            http://askubuntu.com/q/1792
 set $Suspend    dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Suspend
