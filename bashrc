@@ -94,6 +94,14 @@ gprompt() {
 	echo $out
 }
 
+# cd relative to current git repo
+gcd() {
+	local rpath=$1
+	local rdir=$(git rev-parse --show-toplevel 2>/dev/null)
+	[ -z $rdir ] || cd ${rdir}/${rpath}
+}
+
+
 # be able to find our locally built libraries
 [ -d ~/local/lib ] && export LD_LIBRARY_PATH=~/local/lib
 
