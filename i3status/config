@@ -12,6 +12,7 @@ general {
 	interval = 5
 }
 
+order += "disk /media/work/DEVO"
 order += "disk /"
 order += "disk /home"
 order += "ethernet eth0"
@@ -51,6 +52,11 @@ disk "/home" {
 	format = "[/home]—▸%free"
 	on_click 1 = "exec nemo /home"
 	format_not_mounted = ""
+}
+disk "/media/work/DEVO" {
+       format = "[/media/work]—▸%free"
+       on_click 1 = "exec nemo /media/work/*"
+       format_not_mounted = ""
 }
 
 volume master {
