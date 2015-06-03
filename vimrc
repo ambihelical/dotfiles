@@ -112,7 +112,7 @@ let g:tagbar_singleclick = 1
 
 "Options for NERDTree
 let NERDTreeDirArrows=1
-let NERDTreeIgnore=['.o$[[file]]','.a$[[file]]','autom4te.cache','Makefile.in$','Makefile$']
+let NERDTreeIgnore=['.o$[[file]]','.a$[[file]]','autom4te.cache','Makefile.in$']
 
 " Options for ctrlp
 let g:ctrlp_user_command = { 'types': {
