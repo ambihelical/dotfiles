@@ -36,4 +36,4 @@ fi
 
 # install some python stuff
 # for now assume pip on all platforms
-pip3 install --upgrade py3status netifaces colour psutil basiciw
+pip3 install --upgrade py3status netifaces colour psutil basiciw i3-py
