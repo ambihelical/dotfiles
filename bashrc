@@ -113,6 +113,7 @@ set -o vi
 # ignore dups, append, increase size, put history in xdg dir
 export HISTCONTROL=ignoreboth
 export HISTSIZE=2000
+export HISTTIMEFORMAT="%d%b_%H:%M "
 shopt -s histappend
 
 #### Store various files in XDG directories
