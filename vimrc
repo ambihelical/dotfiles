@@ -56,6 +56,8 @@ set nospell                   " turn spell off by default
 set wildmenu                  " enhanced command line completion (use TAB)
 set listchars=nbsp:·,tab:▹\   " nbsp as dot, tabs as arrow
 set list                      " show special characters as defined in listchars
+set tags=./tags;/             " look for tags file between cwd and root
+
 hi SpecialKey ctermfg=7 guifg=LightGray                              " colors for listchars
 set wildmode=list:longest,list:full                                  " what to do in wild mode
 set wildignore+=*/.git/*,*/.hg/*,*/.dep/*,*/.svn/*,*.o,*.a           " file patterns to ignore in wild mode
