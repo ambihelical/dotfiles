@@ -11,6 +11,7 @@ I3_FILES = ${CFG}/i3/config ${CFG}/i3status/config ${CFG}/dunst/dunstrc ${CFG}/g
 VIM_FILES = ~/.vimrc ${CFG}/vim  ${CACHE}/vim
 BAREX_FILES = ~/.xsession ~/.Xmodmap
 BIN_FILES=$(foreach bin,$(notdir $(wildcard ${PWD}/bin/*)),~/bin/${bin})
+EMACS_FILES = ~/.emacs.d $(CACHE)/emacs
 
 
 .PHONY: help base dev i3 all defaults
@@ -29,7 +30,7 @@ help:
 base: ${SHELL_FILES} ${DIR_FILES} ${BIN_FILES}
 	@echo "base configured"
 
-dev: ${VIM_FILES} ${APP_FILES} ${GIT_FILES}
+dev: ${VIM_FILES} ${APP_FILES} ${GIT_FILES} ${EMACS_FILES}
 	@echo "dev configured"
 
 i3: ${I3_FILES}
