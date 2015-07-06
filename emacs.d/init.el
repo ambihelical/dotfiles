@@ -226,3 +226,14 @@
 		(powerline-default-theme)
 		(display-time-mode t)
 	:ensure t)
+
+
+(use-package diminish
+	:config
+		(diminish 'projectile-mode)
+		(diminish 'company-mode)
+		(diminish 'git-gutter-mode)
+		(diminish 'undo-tree-mode)
+		(diminish 'evil-commentary-mode)
+		(diminish 'whitespace-mode)
+	:ensure t)
