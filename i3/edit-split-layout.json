@@ -1,0 +1,75 @@
+// vim:ts=4:sw=4:et
+{
+    // splith split container with 2 children
+    "border": "normal",
+    "floating": "auto_off",
+    "layout": "splith",
+    "percent": 1,
+    "type": "con",
+    "nodes": [
+        {
+            // stacked split container with 1 children
+            "border": "normal",
+            "floating": "auto_off",
+            "layout": "stacked",
+            "percent": 0.60,
+            "type": "con",
+            "nodes": [
+                {
+                    "border": "normal",
+                    "current_border_width": 2,
+                    "floating": "auto_off",
+                    "geometry": {
+                       "height": 653,
+                       "width": 750,
+                       "x": 0,
+                       "y": 0
+                    },
+                    //"name": "",
+                    "percent": 1,
+                    "swallows": [
+                       {
+                        "class": "^Emacs$",
+                        "class": "^Gvim$",
+                        "class": "^Firefox$"
+                       }
+                    ],
+                    "type": "con"
+                }
+            ]
+        },
+        {
+            // stacked split container with 1 children
+            "border": "normal",
+            "floating": "auto_off",
+            "layout": "stacked",
+            "percent": 0.40,
+            "type": "con",
+            "nodes": [
+                {
+                    "border": "normal",
+                    "current_border_width": 2,
+                    "floating": "auto_off",
+                    "geometry": {
+                       "height": 460,
+                       "width": 804,
+                       "x": 0,
+                       "y": 0
+                    },
+                    // "name": "",
+                    "percent": 0.5,
+                    "swallows": [
+                       {
+                         "class": "^URxvt$"
+                       // "instance": "^urxvt$",
+                       // "title": "^\\↵\\ \\~\\ \\[ebloodworth\\@jh\\-rvueb\\]$",
+                       // "transient_for": "^$"
+                       }
+                    ],
+                    "type": "con"
+                }
+            ]
+        }
+    ]
+}
+
