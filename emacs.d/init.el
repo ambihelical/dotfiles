@@ -166,6 +166,7 @@
 		(setq projectile-enable-caching t)
 		(setq projectile-switch-project-action 'projectile-find-file)
 		; (setq projectile-switch-project-hook
+		(setq projectile-mode-line '(:eval (format " [%s]" (projectile-project-name))))
 	:config
 		(projectile-global-mode 1)
 		(global-set-key (kbd "<f7>") 'projectile-compile-project)
@@ -238,7 +239,6 @@
 
 (use-package diminish
 	:config
-		(diminish 'projectile-mode)
 		(diminish 'company-mode)
 		(diminish 'git-gutter-mode)
 		(diminish 'undo-tree-mode)
