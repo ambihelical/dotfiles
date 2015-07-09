@@ -80,6 +80,7 @@
 (use-package evil
 	:init
 		(setq evil-shift-width 3)
+		(setq-default evil-symbol-word-search t)
 	:config
 		(define-key evil-inner-text-objects-map "i" 'evil-inner-arg)
 		(define-key evil-outer-text-objects-map "a" 'evil-outer-arg)
