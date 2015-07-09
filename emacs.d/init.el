@@ -198,6 +198,14 @@
 		("\\.hpp\\'" . c++-mode)
 	:ensure t)
 
+(use-package python
+	:config
+		(add-hook 'python-mode-hook
+			(lambda ()
+				(setq indent-tabs-mode t)
+				(setq tab-width 4)))
+	:ensure t)
+
 (use-package git-gutter
 	:config
 		(global-git-gutter-mode)
