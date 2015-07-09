@@ -68,6 +68,7 @@
 		(setq whitespace-line-column 120)
 		(setq whitespace-style '(face trailing tabs tab-mark lines-tail space-before-tab))
 		(setq  whitespace-display-mappings '((tab-mark 9 [9657 9] [92 9])))
+		(global-whitespace-mode t)
 	:ensure t)
 
 (use-package leuven-theme
