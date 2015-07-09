@@ -116,6 +116,7 @@
 			"fd" 'projectile-find-dir
 			"ff" 'projectile-find-file
 			"fg" 'projectile-grep
+			"fi" 'helm-semantic-or-imenu
 			"fj" 'helm-all-mark-ring
 			"fk" 'helm-show-kill-ring
 			"fm" 'helm-man-woman
@@ -146,6 +147,9 @@
 	:config
 		(use-package evil)
 		(evil-commentary-mode)
+	:ensure t)
+
+(use-package semantic
 	:ensure t)
 
 (use-package helm
