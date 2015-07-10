@@ -1,0 +1,24 @@
+#!/bin/bash
+
+if [[ $1 == "-h" || $# -gt 2 ]]; then
+	echo "Usage:  i3layout"
+	echo "        i3layout workspace"
+	echo "        i3layout workspace layout"
+	exit 1
+fi
+
+ws=""
+lo="split"
+
+[ $# -gt 0 ] && ws=$1
+[ $# -gt 1 ] && lo=$2
+
+lof="~/.config/i3/${lo}-layout.json"
+if [ -e "$lof" ]; then
+	msg=""
+	[ -n "$ws"  ] && msg+="workspace $ws;"
+	msg+="append_layout ~/.config/i3/${lo}-layout.json"
+	i3-msg ${msg}
+else
+	echo "Layout \"$lo\" doesn't exist"
+fi

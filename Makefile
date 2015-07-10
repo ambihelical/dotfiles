@@ -8,7 +8,7 @@ DIR_FILES = ~/bin ~/local
 APP_FILES = ${CFG}/screen ${CFG}/ack ~/.Xresources
 GIT_FILES = ${CFG}/git/config  ${CFG}/git/ignore
 I3_FILES = ${CFG}/i3/config ${CFG}/i3status/config ${CFG}/dunst/dunstrc ${CFG}/gsimplecal/config \
-            ${CFG}/i3/edit-split-layout.json
+            ${CFG}/i3/split-layout.json
 VIM_FILES = ~/.vimrc ${CFG}/vim  ${CACHE}/vim
 BAREX_FILES = ~/.xsession ~/.Xmodmap
 BIN_FILES=$(foreach bin,$(notdir $(wildcard ${PWD}/bin/*)),~/bin/${bin})
