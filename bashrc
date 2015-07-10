@@ -70,7 +70,7 @@ truncm() {
 
 # if input string starts with home directory, substitute ~
 tilde() {
-	echo ${1/${HOME}/\~}
+	echo ${*/${HOME}/\~}
 }
 
 # echo git project:branch 
@@ -179,7 +179,7 @@ elif [ -f /opt/local/etc/bash_completion ]; then
 fi
 
 # primary prompt. Color only when ECMA-48 capable terminal
-PS1='\[\033[01;32m\]$(truncm \u)@$(truncm \h)\[\033[00m\]$(gprompt):\[\033[01;34m\]$(truncm $(tilde \w) 20)\[\033[00m\]\$ '
+PS1='\[\033[01;32m\]$(truncm \u)@$(truncm \h)\[\033[00m\]$(gprompt):\[\033[01;34m\]$(truncm "$(tilde \w)" 20)\[\033[00m\]\$ '
 [ "$ecma" != "1" ] && PS1='\u@\h$(gprompt):\w\$ ' && PROMPT_DIRTRIM=2
 
 window_title() {
