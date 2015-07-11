@@ -117,8 +117,11 @@
 		(evil-leader/set-key
 			";" 'evil-jump-forward
 			"," 'evil-jump-backward
+			"<SPC>" 'projectile-find-file
 			"a" 'helm-projectile-find-other-file
-			"b" 'helm-mini
+			"bs" 'save-buffer
+			"bq" 'kill-buffer-and-window
+			"ci" 'projectile-invalidate-cache
 			"e" 'pp-eval-last-sexp
 			"fa" 'helm-apropos
 			"fb" 'projectile-switch-to-buffer
@@ -136,13 +139,10 @@
 			"gw" 'global-whitespace-mode
 			"ls" 'dired-jump
 			"pp" 'projectile-switch-project
-			"pc" 'projectile-invalidate-cache
-			"q" 'kill-buffer-and-window
-			"sv" 'split-window-right
-			"sh" 'split-window-below
 			"t" 'evil-jump-to-tag
 			"v"  'exchange-point-and-mark
-			"w" 'save-buffer
+			"wv" 'split-window-right
+			"wh" 'split-window-below
 			"x" 'helm-M-x
 			)
 	:ensure t)
