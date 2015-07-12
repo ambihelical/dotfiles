@@ -39,6 +39,7 @@
 (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
 ;; Hard-wrap text when in plaintext mode
 (add-hook 'text-mode-hook (lambda () (turn-on-auto-fill)))
+(add-hook 'focus-out-hook (lambda () (interactive) (save-some-buffers t)))
 (setq default-tab-width 3)
 (setq custom-file "~/.cache/emacs/customize")
 
@@ -133,13 +134,17 @@
 			"fk" 'helm-show-kill-ring
 			"fm" 'helm-man-woman
 			"fp" 'helm-top
-			"ft" 'helm-etags-select
+			"fP" 'helm-list-elisp-packages-no-fetch
 			"fx" 'helm-M-x
 			"f/" 'helm-locate
 			"gw" 'global-whitespace-mode
 			"ls" 'dired-jump
 			"pp" 'projectile-switch-project
-			"t" 'evil-jump-to-tag
+			"tt" 'helm-gtags-dwim
+			"tr" 'helm-gtags-find-rtag
+			"td" 'helm-gtags-find-tag
+			"ts" 'helm-gtags-find-symbol
+			"tu" 'helm-gtags-update-tags
 			"v"  'exchange-point-and-mark
 			"wv" 'split-window-right
 			"wh" 'split-window-below
@@ -193,6 +198,21 @@
 		(helm-projectile-on)
 	:bind ("<f5>" . helm-projectile-find-other-file)
 	:ensure t)
+
+(use-package helm-gtags
+	:init
+		(setq helm-gtags-auto-update t)
+		(setq helm-gtags-use-input-at-cursor t)
+
+	:config
+		(add-hook 'dired-mode-hook 'helm-gtags-mode)
+		(add-hook 'eshell-mode-hook 'helm-gtags-mode)
+		(add-hook 'c-mode-hook 'helm-gtags-mode)
+		(add-hook 'c++-mode-hook 'helm-gtags-mode)
+		(add-hook 'python-mode-hook 'helm-gtags-mode)
+		(add-hook 'asm-mode-hook 'helm-gtags-mode)
+	:ensure t)
+
 
 (use-package smart-tabs-mode
 	:config
