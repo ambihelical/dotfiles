@@ -28,8 +28,8 @@
 	(switch-to-buffer (other-buffer (current-buffer) 1)))
 (setq gdb-many-windows t)
 ;; scrolling
-(setq scroll-margin 1
-      scroll-conservatively 0
+(setq scroll-margin 5
+      scroll-conservatively 100
       scroll-up-aggressively 0.01
       scroll-down-aggressively 0.01)
 (setq-default scroll-up-aggressively 0.01
