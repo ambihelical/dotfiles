@@ -5,7 +5,7 @@ CACHE=~/.cache
 
 SHELL_FILES = ~/.bashrc ~/.bash_profile ${CFG}/readline ~/.profile
 DIR_FILES = ~/bin ~/local
-APP_FILES = ${CFG}/screen ${CFG}/ack ~/.Xresources
+APP_FILES = ${CFG}/screen ${CFG}/ack ~/.Xresources $(CFG)/globalrc
 GIT_FILES = ${CFG}/git/config  ${CFG}/git/ignore
 I3_FILES = ${CFG}/i3/config ${CFG}/i3status/config ${CFG}/dunst/dunstrc ${CFG}/gsimplecal/config \
             ${CFG}/i3/split-layout.json

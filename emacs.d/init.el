@@ -203,13 +203,13 @@
 	:init
 		(setq helm-gtags-auto-update t)
 		(setq helm-gtags-use-input-at-cursor t)
+		(setq helm-gtags-ignore-case t)
 
 	:config
 		(add-hook 'dired-mode-hook 'helm-gtags-mode)
 		(add-hook 'eshell-mode-hook 'helm-gtags-mode)
 		(add-hook 'c-mode-hook 'helm-gtags-mode)
 		(add-hook 'c++-mode-hook 'helm-gtags-mode)
-		(add-hook 'python-mode-hook 'helm-gtags-mode)
 		(add-hook 'asm-mode-hook 'helm-gtags-mode)
 	:ensure t)
 

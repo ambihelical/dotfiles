@@ -14,6 +14,7 @@ export XDG_DATA_HOME=${HOME}/.local/share
 # Override certain utilities and programs to use XDG directories
 export GNOME22_USER_DIR=${XDG_CONFIG_HOME}/gnome2.2
 export GIMP2_DIRECTORY=${XDG_CONFIG_HOME}/gimp2
+export GTAGSCONF=${XDG_CONFIG_HOME}/globalrc
 
 # Make chromium use gnome system keyring, since autodetect seems
 # to be busted.
