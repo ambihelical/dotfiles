@@ -45,7 +45,7 @@
 
 ;; pimping
 (column-number-mode t) ; display column/row of cursor in mode-line
-(desktop-save-mode t)
+;(desktop-save-mode t)
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
 (menu-bar-mode t)
