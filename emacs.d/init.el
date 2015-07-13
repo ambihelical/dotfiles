@@ -120,7 +120,7 @@
 			"," 'evil-jump-backward
 			"<SPC>" 'projectile-find-file
 			"a" 'helm-projectile-find-other-file
-			"bs" 'save-buffer
+			"bw" 'save-buffer
 			"bq" 'kill-buffer-and-window
 			"ci" 'projectile-invalidate-cache
 			"e" 'pp-eval-last-sexp
@@ -128,13 +128,13 @@
 			"fb" 'projectile-switch-to-buffer
 			"fd" 'projectile-find-dir
 			"ff" 'projectile-find-file
-			"fg" 'projectile-grep
+			"fg" 'helm-projectile-ag
 			"fi" 'helm-semantic-or-imenu
 			"fj" 'helm-all-mark-ring
 			"fk" 'helm-show-kill-ring
 			"fm" 'helm-man-woman
 			"fp" 'helm-top
-			"fP" 'helm-list-elisp-packages-no-fetch
+			"fe" 'helm-list-elisp-packages-no-fetch
 			"fx" 'helm-M-x
 			"f/" 'helm-locate
 			"gw" 'global-whitespace-mode
@@ -279,4 +279,9 @@
 		(diminish 'undo-tree-mode)
 		(diminish 'evil-commentary-mode)
 		(diminish 'whitespace-mode)
+		(diminish 'helm-gtags-mode)
+	:ensure t)
+
+
+(use-package helm-ag
 	:ensure t)

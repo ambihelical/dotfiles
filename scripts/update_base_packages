@@ -1,6 +1,6 @@
 #!/bin/bash
-# 
-# Make sure some system packages are present. These are only the 
+#
+# Make sure some system packages are present. These are only the
 # most basic packages needed to set up a basic system, plus a few
 # nice-to-haves.
 
@@ -13,11 +13,11 @@ p=""
 if [ "${OSTYPE:0:10}" == 'linux-gnue' ]; then
   p="$p ack-grep autojump htop screen"
   apt-get --quiet --yes --no-install-recommends install $p
-elif [ "${OSTYPE:0:5}" == 'linux' ]; then 
+elif [ "${OSTYPE:0:5}" == 'linux' ]; then
   apt-get --quiet --yes purge mono-runtime
   p="$p ttf-mscorefonts-installer otf-stix unifont ttf-ancient-fonts"
   p="$p python3-pip gparted"
-  p="$p ack-grep autojump htop screen unzip"
+  p="$p ack-grep silversearcher-ag autojump htop screen unzip"
   p="$p curl wget suckless-tools tree xclip"
   p="$p git-core gitk git-doc git-gui"
   p="$p vim-gnome exuberant-ctags rxvt-unicode-256color"
@@ -26,14 +26,14 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
   p="$p nemo nemo-fileroller nemo-dropbox a2ps"
   p="$p libiw-dev chromium-browser"
   apt-get --quiet --yes --no-install-recommends install $p
-elif [ "${OSTYPE:0:6}" == 'darwin' ]; then 
+elif [ "${OSTYPE:0:6}" == 'darwin' ]; then
   port selfupdate
   p="$p wget unison ctags"
   p="$p highlight p5-app-ack grep +nls"
 # lesspipe
-  port install -p $p 
+  port install -p $p
 fi
 
 # install some python stuff
 # for now assume pip on all platforms
-pip3 install --upgrade py3status netifaces colour psutil basiciw i3-py
+pip3 install --upgrade py3status netifaces colour psutil basiciw i3-py pygments
