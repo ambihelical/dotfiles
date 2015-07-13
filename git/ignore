@@ -28,5 +28,10 @@ __pycache__
 *.rej
 
 
-#### tags
+#### tags: ctags,etags,gtags
 tags
+TAGS
+GTAGS
+GRTAGS
+GPATH
+GSYMS
