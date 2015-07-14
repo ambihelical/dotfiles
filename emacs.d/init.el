@@ -244,7 +244,7 @@
 
 (use-package git-gutter
 	:config
-		(global-git-gutter-mode)
+		(global-git-gutter-mode t)
 	:ensure t)
 
 (use-package company
