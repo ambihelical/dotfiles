@@ -28,11 +28,9 @@
                     //"name": "",
                     "percent": 1,
                     "swallows": [
-                       {
-                        "class": "^Emacs$",
-                        "class": "^Gvim$",
-                        "class": "^Firefox$"
-                       }
+                       { "class": "^Emacs$" },
+                       { "class": "^Gvim$" },
+                       { "class": "^Firefox$" }
                     ],
                     "type": "con"
                 }
@@ -59,12 +57,9 @@
                     // "name": "",
                     "percent": 0.5,
                     "swallows": [
-                       {
-                         "class": "^URxvt$"
-                       // "instance": "^urxvt$",
-                       // "title": "^\\↵\\ \\~\\ \\[ebloodworth\\@jh\\-rvueb\\]$",
-                       // "transient_for": "^$"
-                       }
+                       { "class": "^URxvt$" },
+                       { "class": "^Gitk$" },
+                       { "class": "^Git-gui$" }
                     ],
                     "type": "con"
                 }
