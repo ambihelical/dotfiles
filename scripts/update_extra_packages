@@ -15,7 +15,7 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
   p="$p texlive texinfo texlive-extra-utils"
   p="$p graphviz libtiff-tools imagemagick"
   p="$p liferea"
-  apt-get --quiet --yes --no-install-recommends install $p
+  apt-get --quiet --yes install $p
 elif [ "${OSTYPE:0:6}" == 'darwin' ]; then 
   port selfupdate
   p="$p wget unison ctags"
