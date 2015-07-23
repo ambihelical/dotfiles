@@ -22,6 +22,7 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
   p="$p manpages-dev manpages-posix-dev doxygen"
   p="$p gcc-doc glibc-doc"
   p="$p gcc-multilib libgmp-dev libmpc-dev libmpfr-dev ppl-dev libcloog-ppl-dev"         # gcc cross compiler support
+  p="$p libzmq-dev "                                                           # python pkg support
   p="$p autoconf automake libtool gettext intltool"
   p="$p meld git-gui mercurial subversion"
   apt-get --quiet --yes install $p
@@ -31,4 +32,5 @@ fi
 
 # install some python stuff
 # for now assume pip3 on all platforms
-pip3 install --upgrade numpy ipython setuptools pyserial
+pip3 install --upgrade pyserial ipython[notebook] pyzmq jinja2 tornado jsonschema matplotlib
+

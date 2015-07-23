@@ -12,7 +12,7 @@ if [ "${OSTYPE:0:10}" == 'linux-gnue' ]; then
   p="$p ack-grep autojump htop screen"
   apt-get --quiet --yes --no-install-recommends install $p
 elif [ "${OSTYPE:0:5}" == 'linux' ]; then 
-  p="$p texlive texinfo texlive-extra-utils"
+  p="$p texlive texinfo texlive-extra-utils latex-xcolor texlive-latex-extra"
   p="$p graphviz libtiff-tools imagemagick"
   p="$p liferea"
   apt-get --quiet --yes install $p
