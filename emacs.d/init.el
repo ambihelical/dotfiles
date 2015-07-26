@@ -134,6 +134,7 @@
 			"fj" 'helm-all-mark-ring
 			"fk" 'helm-show-kill-ring
 			"fm" 'helm-man-woman
+			"fn" 'evil-deft
 			"fp" 'helm-top
 			"fe" 'helm-list-elisp-packages-no-fetch
 			"fx" 'helm-M-x
@@ -213,6 +214,29 @@
 		(add-hook 'asm-mode-hook 'helm-gtags-mode)
 	:ensure t)
 
+; start deft in evil insert mode
+(defun evil-deft ()
+	(interactive)
+	(deft)
+	(evil-insert-state))
+
+(use-package deft
+	:init
+		(setq deft-directory "~/Dropbox/Notes")
+		(setq deft-recursive t)
+		(setq deft-use-filter-string-for-filename t)
+		(setq deft-file-naming-rules '((nospace . "_")
+												 (noslash . "_")
+												 (case-fn . downcase)))
+		(setq deft-text-mode 'markdown-mode)
+	:ensure t)
+
+(use-package markdown-mode
+	:init
+		;;(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
+		(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+		(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+	:ensure t)
 
 (use-package smart-tabs-mode
 	:config
