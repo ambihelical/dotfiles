@@ -16,47 +16,22 @@
 
 (require 'use-package)
 
-;; Fix operational annoyances
-(fset 'yes-or-no-p 'y-or-n-p)
-(mouse-avoidance-mode 'animate)
-(setq backup-directory-alist '(("." . "~/.cache/emacs")))
-(setq inhibit-splash-screen t
-      inhibit-startup-echo-area-message t
-      inhibit-startup-message t)
-(visual-line-mode 1)
-(defun switch-to-previous-buffer ()
-	(interactive)
-	(switch-to-buffer (other-buffer (current-buffer) 1)))
-(setq gdb-many-windows t)
-;; scrolling
-(setq scroll-margin 5
-      scroll-conservatively 100
-      scroll-up-aggressively 0.01
-      scroll-down-aggressively 0.01)
-(setq-default scroll-up-aggressively 0.01
-      scroll-down-aggressively 0.01)
-(setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
-;(setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
-(setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
-;; Hard-wrap text when in plaintext mode
-(add-hook 'text-mode-hook (lambda () (turn-on-auto-fill)))
-(add-hook 'focus-out-hook (lambda () (interactive) (save-some-buffers t)))
-(setq default-tab-width 3)
-(setq custom-file "~/.cache/emacs/customize")
+;; load utility packages
+(use-package s :ensure t)
 
-;; pimping
-(column-number-mode t) ; display column/row of cursor in mode-line
-;(desktop-save-mode t)
+;; configure the chrome
+(set-default-font "DejaVu Sans Mono 9")
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
 (menu-bar-mode t)
-(set-default-font "DejaVu Sans Mono 9")
-(display-time-mode t)
-
-(use-package s
-	:ensure t)
-
-(setq frame-title-format '(
+(setq inhibit-splash-screen t
+      inhibit-startup-echo-area-message t
+      inhibit-startup-message t)
+(setq gdb-many-windows t)               ; use more complex gdb layout
+(mouse-avoidance-mode 'animate)         ; move mouse pointer out of way
+(column-number-mode t)                  ; display column/row of cursor in mode-line
+(display-time-mode t)                   ; display time in mode-line
+(setq frame-title-format '(             ; set title
 		;;"" invocation-name ": "
 		"☮ "
 		(:eval (if (buffer-file-name)
@@ -64,6 +39,34 @@
 					"%b"))
 		" [" (:eval (abbreviate-file-name default-directory)) "]"
 	  ))
+
+;; tame scrolling
+(setq scroll-margin 5                   ; leave 5 lines at top/bottom if possible
+      scroll-conservatively 100
+      scroll-up-aggressively 0.01
+      scroll-down-aggressively 0.01)
+(setq-default
+		scroll-up-aggressively 0.01
+		scroll-down-aggressively 0.01)
+(setq mouse-wheel-scroll-amount
+		'(1 ((shift) . 1)))               ; one line at a time
+(setq mouse-wheel-follow-mouse 't)      ; scroll window under mouse
+
+;; Operational preferences
+(fset 'yes-or-no-p 'y-or-n-p)
+(setq backup-directory-alist '(("." . "~/.cache/emacs")))
+(setq custom-file
+		"~/.cache/emacs/customize")       ; don't modify this file with these
+
+;; Text handling
+(visual-line-mode t)                    ; edit visual lines
+(setq default-tab-width 3)              ; ideal tab setting :)
+(add-hook 'text-mode-hook (             ; Hard-wrap text when in plaintext mode
+		lambda () (turn-on-auto-fill)))
+(add-hook 'focus-out-hook (             ; save on focus lost
+		lambda ()
+			(interactive)
+			(save-some-buffers t)))
 
 (use-package whitespace
 	:init
@@ -79,6 +82,10 @@
 		(set-face-attribute 'whitespace-tab nil :foreground "gainsboro" :background "white" )
 		(set-face-attribute 'whitespace-trailing nil :foreground "black" :background "red" )
 	:ensure t)
+
+(defun switch-to-previous-buffer ()
+	(interactive)
+	(switch-to-buffer (other-buffer (current-buffer) 1)))
 
 (use-package evil
 	:init
