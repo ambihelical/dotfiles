@@ -18,6 +18,7 @@
 
 ;; Fix operational annoyances
 (fset 'yes-or-no-p 'y-or-n-p)
+(mouse-avoidance-mode 'animate)
 (setq backup-directory-alist '(("." . "~/.cache/emacs")))
 (setq inhibit-splash-screen t
       inhibit-startup-echo-area-message t
@@ -171,8 +172,7 @@
 		(setq helm-split-window-in-side-p t
 			helm-move-to-line-cycle-in-source t
 			helm-ff-search-library-in-sexp t
-			helm-scroll-amount 8
-			helm-ff-file-name-history-use-recentf t)
+			helm-scroll-amount 8)
 	:config
 		(global-set-key (kbd "M-x") 'helm-M-x)
 		(global-set-key (kbd "C-x b") 'helm-mini)
