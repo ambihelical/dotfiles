@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [ $# != 1 ]; then
+	echo "Usage backup dest"
+	exit 1
+fi
+DEST=$1
+FLAGS="-v --recursive --compress --backup --relative --perms --times --group --owner --cvs-exclude "
+
+rsync ${FLAGS} --exclude-from="${HOME}/bin/backup-exclude.txt" --backup-dir="${DEST}-older" "${HOME}" "${DEST}"
