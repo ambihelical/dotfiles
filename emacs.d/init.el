@@ -309,6 +309,7 @@
 			"fx" 'helm-M-x
 			"f/" 'helm-locate
 			"gw" 'global-whitespace-mode
+			"gb" 'vc-annotate
 			"ls" 'dired-jump
 			"pp" 'projectile-switch-project
 			"tt" 'helm-gtags-dwim
