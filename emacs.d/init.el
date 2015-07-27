@@ -51,12 +51,14 @@
 (setq mouse-wheel-scroll-amount
 		'(1 ((shift) . 1)))               ; one line at a time
 (setq mouse-wheel-follow-mouse 't)      ; scroll window under mouse
+(setq scroll-preserve-screen-position
+		'always)
 
 ;; Operational preferences
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq backup-directory-alist '(("." . "~/.cache/emacs")))
 (setq custom-file
-		"~/.cache/emacs/customize")       ; don't modify this file with these
+		"~/.cache/emacs/customize")       ; don't modify this file customizations
 
 ;; Text handling
 (visual-line-mode t)                    ; edit visual lines
@@ -77,8 +79,8 @@
 	:ensure t)
 
 (use-package leuven-theme
+	:requires whitespace
 	:config
-		(use-package whitespace)
 		(set-face-attribute 'whitespace-tab nil :foreground "gainsboro" :background "white" )
 		(set-face-attribute 'whitespace-trailing nil :foreground "black" :background "red" )
 	:ensure t)
@@ -91,6 +93,7 @@
 	:init
 		(setq evil-shift-width 3)
 		(setq-default evil-symbol-word-search t)
+		(setq evil-search-module 'evil-search)
 	:config
 		(define-key evil-inner-text-objects-map "i" 'evil-inner-arg)
 		(define-key evil-outer-text-objects-map "a" 'evil-outer-arg)
@@ -117,11 +120,170 @@
 		(evil-mode 1)
 	:ensure t)
 
+(use-package evil-args
+	:requires evil
+	:ensure t)
+
+(use-package evil-commentary
+	:requires evil
+	:config
+		(evil-commentary-mode)
+	:ensure t)
+
+(use-package semantic
+	:ensure t)
+
+(use-package helm
+	:init
+		(setq helm-split-window-in-side-p t
+			helm-move-to-line-cycle-in-source t
+			helm-ff-search-library-in-sexp t
+			helm-buffer-max-length 40
+			helm-scroll-amount 8)
+	:config
+		(global-set-key (kbd "M-x") 'helm-M-x)
+		(global-set-key (kbd "C-x b") 'helm-mini)
+		(global-set-key (kbd "<f3>") 'helm-mini)
+		;(helm-mode t)
+	:ensure t)
+
+(use-package projectile
+	:init
+		(setq projectile-completion-system 'helm)
+		(setq projectile-enable-caching t)
+		(setq projectile-switch-project-action 'projectile-find-file)
+		; (setq projectile-switch-project-hook
+		(setq projectile-mode-line '(:eval (format " [%s]" (projectile-project-name))))
+	:config
+		(projectile-global-mode 1)
+		(global-set-key (kbd "<f7>") 'projectile-compile-project)
+
+	:ensure t)
+
+(use-package helm-projectile
+	:config
+		(helm-projectile-on)
+	:requires helm
+	:requires projectile
+	:bind ("<f5>" . helm-projectile-find-other-file)
+	:ensure t)
+
+(use-package helm-gtags
+	:init
+		(setq helm-gtags-auto-update t)
+		(setq helm-gtags-use-input-at-cursor t)
+		(setq helm-gtags-ignore-case t)
+	:requires helm
+	:config
+		(add-hook 'dired-mode-hook 'helm-gtags-mode)
+		(add-hook 'eshell-mode-hook 'helm-gtags-mode)
+		(add-hook 'c-mode-hook 'helm-gtags-mode)
+		(add-hook 'c++-mode-hook 'helm-gtags-mode)
+		(add-hook 'asm-mode-hook 'helm-gtags-mode)
+	:ensure t)
+
+(use-package helm-ag
+	:requires helm
+	:ensure t)
+
+; start deft in evil insert mode
+(defun evil-deft ()
+	(interactive)
+	(deft)
+	(evil-insert-state))
+
+(use-package deft
+	:requires markdown-mode
+	:init
+		(setq deft-directory "~/Dropbox/Notes")
+		(setq deft-recursive t)
+		(setq deft-use-filter-string-for-filename t)
+		(setq deft-file-naming-rules '((nospace . "_")
+												 (noslash . "_")
+												 (case-fn . downcase)))
+		(setq deft-text-mode 'markdown-mode)
+	:ensure t)
+
+(use-package markdown-mode
+	:init
+		;;(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
+		(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+		(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+	:ensure t)
+
+(use-package smart-tabs-mode
+	:config
+		(smart-tabs-insinuate 'c 'c++)
+	:ensure t)
+
+(use-package cc-mode
+	:init
+		(setq c-default-style "k&r" c-basic-offset=3)
+		(setq show-paren-mode 0)
+	:requires smart-tabs-mode
+	:config
+		(define-key c-mode-base-map (kbd "RET") 'newline-and-indent)
+	:mode
+		("\\.c\\'" . cc-mode)
+		("\\.cpp\\'" . c++-mode)
+		("\\.cxx\\'" . c++-mode)
+		("\\.h\\'" . c++-mode)
+		("\\.hpp\\'" . c++-mode)
+	:ensure t)
+
+(use-package python
+	:config
+		(add-hook 'python-mode-hook
+			(lambda ()
+				(setq indent-tabs-mode t)
+				(setq tab-width 4)))
+	:ensure t)
+
+(use-package git-gutter
+	:config
+		(global-git-gutter-mode t)
+	:ensure t)
+
+
+(use-package company
+	:config
+		(add-hook 'after-init-hook 'global-company-mode)
+	:ensure t)
+
+(use-package helm-company
+	:requires company
+	:ensure t)
+
+(use-package neotree
+	:bind ("<f4>" . neotree-toggle)
+	:config
+		(add-hook 'neotree-mode-hook
+			(lambda ()
+				(define-key evil-normal-state-local-map (kbd "TAB") 'neotree-enter)
+				(define-key evil-normal-state-local-map (kbd "SPC") 'neotree-enter)
+				(define-key evil-normal-state-local-map (kbd "q") 'neotree-hide)
+				(define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)))
+	:ensure t)
+
+
+(use-package powerline-evil
+	:config
+		(powerline-default-theme)
+		(display-time-mode t)
+	:requires evil
+	:ensure t)
+
+
+
 (use-package evil-leader
 	:init
 		(setq evil-leader/in-all-states 1)
+	:requires evil
+	:requires helm
+	:requires projectile
+	:requires dired
 	:config
-		(global-evil-leader-mode 1)
+		(global-evil-leader-mode t)
 		(evil-leader/set-leader "<SPC>")
 		(evil-leader/set-key
 			";" 'evil-jump-forward
@@ -161,148 +323,6 @@
 			)
 	:ensure t)
 
-(use-package evil-args
-	:config
-		(use-package evil)
-	:ensure t)
-
-(use-package evil-commentary
-	:config
-		(use-package evil)
-		(evil-commentary-mode)
-	:ensure t)
-
-(use-package semantic
-	:ensure t)
-
-(use-package helm
-	:init
-		(setq helm-split-window-in-side-p t
-			helm-move-to-line-cycle-in-source t
-			helm-ff-search-library-in-sexp t
-			helm-scroll-amount 8)
-	:config
-		(global-set-key (kbd "M-x") 'helm-M-x)
-		(global-set-key (kbd "C-x b") 'helm-mini)
-		(global-set-key (kbd "<f3>") 'helm-mini)
-		;(helm-mode t)
-	:ensure t)
-
-(use-package projectile
-	:init
-		(setq projectile-completion-system 'helm)
-		(setq projectile-enable-caching t)
-		(setq projectile-switch-project-action 'projectile-find-file)
-		; (setq projectile-switch-project-hook
-		(setq projectile-mode-line '(:eval (format " [%s]" (projectile-project-name))))
-	:config
-		(projectile-global-mode 1)
-		(global-set-key (kbd "<f7>") 'projectile-compile-project)
-
-	:ensure t)
-
-(use-package helm-projectile
-	:config
-		(helm-projectile-on)
-	:bind ("<f5>" . helm-projectile-find-other-file)
-	:ensure t)
-
-(use-package helm-gtags
-	:init
-		(setq helm-gtags-auto-update t)
-		(setq helm-gtags-use-input-at-cursor t)
-		(setq helm-gtags-ignore-case t)
-
-	:config
-		(add-hook 'dired-mode-hook 'helm-gtags-mode)
-		(add-hook 'eshell-mode-hook 'helm-gtags-mode)
-		(add-hook 'c-mode-hook 'helm-gtags-mode)
-		(add-hook 'c++-mode-hook 'helm-gtags-mode)
-		(add-hook 'asm-mode-hook 'helm-gtags-mode)
-	:ensure t)
-
-; start deft in evil insert mode
-(defun evil-deft ()
-	(interactive)
-	(deft)
-	(evil-insert-state))
-
-(use-package deft
-	:init
-		(setq deft-directory "~/Dropbox/Notes")
-		(setq deft-recursive t)
-		(setq deft-use-filter-string-for-filename t)
-		(setq deft-file-naming-rules '((nospace . "_")
-												 (noslash . "_")
-												 (case-fn . downcase)))
-		(setq deft-text-mode 'markdown-mode)
-	:ensure t)
-
-(use-package markdown-mode
-	:init
-		;;(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
-		(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-		(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-	:ensure t)
-
-(use-package smart-tabs-mode
-	:config
-		(smart-tabs-insinuate 'c 'c++)
-	:ensure t)
-
-(use-package cc-mode
-	:init
-		(setq c-default-style "k&r" c-basic-offset=3)
-		(setq show-paren-mode 0)
-	:config
-		(define-key c-mode-base-map (kbd "RET") 'newline-and-indent)
-		(use-package smart-tabs-mode)
-	:mode
-		("\\.c\\'" . cc-mode)
-		("\\.cpp\\'" . c++-mode)
-		("\\.cxx\\'" . c++-mode)
-		("\\.h\\'" . c++-mode)
-		("\\.hpp\\'" . c++-mode)
-	:ensure t)
-
-(use-package python
-	:config
-		(add-hook 'python-mode-hook
-			(lambda ()
-				(setq indent-tabs-mode t)
-				(setq tab-width 4)))
-	:ensure t)
-
-(use-package git-gutter
-	:config
-		(global-git-gutter-mode t)
-	:ensure t)
-
-(use-package company
-	:config
-		(add-hook 'after-init-hook 'global-company-mode)
-	:ensure t)
-
-
-(use-package neotree
-	:bind ("<f4>" . neotree-toggle)
-	:config
-		(add-hook 'neotree-mode-hook
-			(lambda ()
-				(define-key evil-normal-state-local-map (kbd "TAB") 'neotree-enter)
-				(define-key evil-normal-state-local-map (kbd "SPC") 'neotree-enter)
-				(define-key evil-normal-state-local-map (kbd "q") 'neotree-hide)
-				(define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)))
-	:ensure t)
-
-
-(use-package powerline-evil
-	:config
-		(powerline-default-theme)
-		(display-time-mode t)
-	:ensure t)
-
-
 (use-package diminish
 	:config
 		(diminish 'company-mode)
@@ -311,8 +331,4 @@
 		(diminish 'evil-commentary-mode)
 		(diminish 'whitespace-mode)
 		(diminish 'helm-gtags-mode)
-	:ensure t)
-
-
-(use-package helm-ag
 	:ensure t)
