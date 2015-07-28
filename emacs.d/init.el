@@ -192,18 +192,6 @@
 	(deft)
 	(evil-insert-state))
 
-(use-package deft
-	:requires markdown-mode
-	:init
-		(setq deft-directory "~/Dropbox/Notes")
-		(setq deft-recursive t)
-		(setq deft-use-filter-string-for-filename t)
-		(setq deft-file-naming-rules '((nospace . "_")
-												 (noslash . "_")
-												 (case-fn . downcase)))
-		(setq deft-text-mode 'markdown-mode)
-	:ensure t)
-
 (use-package markdown-mode
 	:init
 		;;(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
@@ -244,6 +232,17 @@
 		(global-git-gutter-mode t)
 	:ensure t)
 
+(use-package deft
+	:requires markdown-mode
+	:init
+		(setq deft-directory "~/Dropbox/Notes")
+		(setq deft-recursive t)
+		(setq deft-use-filter-string-for-filename t)
+		(setq deft-file-naming-rules '((nospace . "_")
+												 (noslash . "_")
+												 (case-fn . downcase)))
+		(setq deft-text-mode 'markdown-mode)
+	:ensure t)
 
 (use-package company
 	:config
