@@ -239,7 +239,7 @@
 		; first extension in list seems to be used for new files.  Not sure
 		; what deft-default-extesion does
 		(setq deft-default-extension "md")
-		(setq deft-extensions '("md", "txt", "text", "markdown", "mmd", "org"))
+		(setq deft-extensions '("md" "txt" "text" "markdown" "mmd" "org"))
 
 	:config
 		(add-hook 'deft-mode-hook (lambda ()
