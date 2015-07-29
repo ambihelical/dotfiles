@@ -186,12 +186,6 @@
 	:requires helm
 	:ensure t)
 
-; start deft in evil insert mode
-(defun evil-deft ()
-	(interactive)
-	(deft)
-	(evil-insert-state))
-
 (use-package markdown-mode
 	:init
 		;;(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
@@ -242,6 +236,15 @@
 												 (noslash . "_")
 												 (case-fn . downcase)))
 		(setq deft-text-mode 'markdown-mode)
+		; first extension in list seems to be used for new files.  Not sure
+		; what deft-default-extesion does
+		(setq deft-default-extension "md")
+		(setq deft-extensions '("md", "txt", "text", "markdown", "mmd", "org"))
+
+	:config
+		(add-hook 'deft-mode-hook (lambda ()
+											 (define-key deft-mode-map (kbd "<C-return>") 'deft-new-file)
+											 (define-key deft-mode-map (kbd "<C-backspace>") 'deft-filter-clear)))
 	:ensure t)
 
 (use-package company
@@ -273,6 +276,11 @@
 	:ensure t)
 
 
+; start deft in evil insert mode
+(defun evil-deft ()
+	(interactive)
+	(deft)
+	(evil-insert-state))
 
 (use-package evil-leader
 	:init
