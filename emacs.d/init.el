@@ -63,8 +63,8 @@
 ;; Text handling
 (visual-line-mode t)                    ; edit visual lines
 (setq default-tab-width 3)              ; ideal tab setting :)
-(add-hook 'text-mode-hook (             ; Hard-wrap text when in plaintext mode
-		lambda () (turn-on-auto-fill)))
+;(add-hook 'text-mode-hook (             ; Hard-wrap text when in plaintext mode
+;		lambda () (turn-on-auto-fill)))
 (add-hook 'focus-out-hook (             ; save on focus lost
 		lambda ()
 			(interactive)
