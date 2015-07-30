@@ -213,10 +213,15 @@
 		("\\.hpp\\'" . c++-mode)
 	:ensure t)
 
-(use-package python
+(use-package python-mode
 	:config
+		(smart-tabs-advice py-indent-line py-indent-offset)
+		(smart-tabs-advice py-newline-and-indent py-indent-offset)
+		(smart-tabs-advice py-indent-region py-indent-offset)
+		(add-hook 'python-mode-hook 'guess-style-guess-tabs-mode)
 		(add-hook 'python-mode-hook
 			(lambda ()
+				(semantic-mode)
 				(setq indent-tabs-mode t)
 				(setq tab-width 4)))
 	:ensure t)
