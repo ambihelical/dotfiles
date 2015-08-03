@@ -305,7 +305,7 @@
 			"bw" 'save-buffer
 			"bq" 'kill-buffer-and-window
 			"ci" 'projectile-invalidate-cache
-			"e" 'pp-eval-last-sexp
+			"ee" 'pp-eval-last-sexp
 			"fa" 'helm-apropos
 			"fb" 'projectile-switch-to-buffer
 			"fd" 'projectile-find-dir
@@ -315,15 +315,13 @@
 			"fj" 'helm-all-mark-ring
 			"fk" 'helm-show-kill-ring
 			"fm" 'helm-man-woman
-			"fn" 'evil-deft
-			"fp" 'helm-top
-			"fe" 'helm-list-elisp-packages-no-fetch
-			"fx" 'helm-M-x
+			"fp" 'helm-list-elisp-packages-no-fetch
+			"fx" 'helm-top
 			"f/" 'helm-locate
-			"gw" 'global-whitespace-mode
 			"gb" 'vc-annotate
 			"ls" 'dired-jump
-			"pp" 'projectile-switch-project
+			"n" 'evil-deft
+			"p" 'projectile-switch-project
 			"tt" 'helm-gtags-dwim
 			"tr" 'helm-gtags-find-rtag
 			"td" 'helm-gtags-find-tag
