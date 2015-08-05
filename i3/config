@@ -206,6 +206,7 @@ bindsym $mod+minus scratchpad show
 # assignments
 
 assign [class="Pithos"] 10:Admin
+assign [class="Thunderbird"] 10:Admin
 assign [class="Pidgin"] 9:IM
 
 # startup programs
@@ -217,7 +218,6 @@ exec --no-startup-id clipit
 exec --no-startup-id mintupdate-launcher
 exec --no-startup-id pithos
 exec --no-startup-id thunderbird
-exec --no-startup-id "i3-msg 'workspace 1:Dev; append_layout ~/.config/i3/edit-split-layout.json'"
 
 # convenient key bindings
 bindsym $mod+slash exec nemo --no-desktop || pcmanfm || nautilus --no-desktop

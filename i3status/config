@@ -40,7 +40,7 @@ battery 0 {
 }
 
 time {
-	format = "📅 %a %d %b %-I:%M %p"
+	format = "📅 %a %d %b %I:%M %p"
 	on_click 1 = "exec gsimplecal"
 }
 
