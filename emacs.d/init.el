@@ -41,18 +41,15 @@
 	  ))
 
 ;; tame scrolling
-(setq scroll-margin 5                   ; leave 5 lines at top/bottom if possible
-      scroll-conservatively 100
-      scroll-up-aggressively 0.01
-      scroll-down-aggressively 0.01)
+(setq scroll-margin 5                               ; leave 5 lines at top/bottom
+		scroll-conservatively 100                     ; scroll # to bring point in view
+		scroll-preserve-screen-position 'always       ; move cursor when scrolling
+		mouse-wheel-scroll-amount '(3 ((shift) . 9))  ; 3 or 9 line when shift held
+		mouse-wheel-follow-mouse 't                   ; scroll window under mouse
+		mouse-wheel-progressive-speed nil)            ; don't speed up
 (setq-default
 		scroll-up-aggressively 0.01
 		scroll-down-aggressively 0.01)
-(setq mouse-wheel-scroll-amount
-		'(1 ((shift) . 1)))               ; one line at a time
-(setq mouse-wheel-follow-mouse 't)      ; scroll window under mouse
-(setq scroll-preserve-screen-position
-		'always)
 
 ;; Operational preferences
 (fset 'yes-or-no-p 'y-or-n-p)
