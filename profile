@@ -15,3 +15,4 @@ export XDG_DATA_HOME=${HOME}/.local/share
 export GNOME22_USER_DIR=${XDG_CONFIG_HOME}/gnome2.2
 export GIMP2_DIRECTORY=${XDG_CONFIG_HOME}/gimp2
 export GTAGSCONF=${XDG_CONFIG_HOME}/globalrc
+export IPYTHONDIR=${XDG_CONFIG_HOME}/ipython
