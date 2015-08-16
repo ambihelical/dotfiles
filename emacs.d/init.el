@@ -133,14 +133,19 @@
 (use-package helm
 	:init
 		(setq helm-split-window-in-side-p t
+			helm-M-x-fuzzy-match t
+			helm-buffers-fuzzy-matching t
+			helm-recentf-fuzzy-match t
+			helm-locate-fuzzy-match t
+			helm-apropos-fuzzy-match t
 			helm-move-to-line-cycle-in-source t
 			helm-ff-search-library-in-sexp t
 			helm-buffer-max-length 40
 			helm-scroll-amount 8)
 	:config
 		(global-set-key (kbd "M-x") 'helm-M-x)
-		(global-set-key (kbd "C-x b") 'helm-mini)
-		(global-set-key (kbd "<f3>") 'helm-mini)
+		(global-set-key (kbd "C-x b") 'helm-for-files)
+		(global-set-key (kbd "<f3>") 'helm-for-files)
 		;(helm-mode t)
 	:ensure t)
 
@@ -218,7 +223,7 @@
 		(add-hook 'python-mode-hook 'guess-style-guess-tabs-mode)
 		(add-hook 'python-mode-hook
 			(lambda ()
-				(semantic-mode)
+				(semantic-mode t)
 				(setq indent-tabs-mode t)
 				(setq tab-width 4)))
 	:ensure t)
