@@ -26,6 +26,7 @@ floating_modifier $mod
 
 # start a terminal
 bindsym $mod+Return exec urxvt || i3-sensible-terminal
+bindsym $mod+Shift+Return exec --no-startup-id urxvt -name scratch
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -218,6 +219,15 @@ exec --no-startup-id clipit
 exec --no-startup-id mintupdate-launcher
 exec --no-startup-id pithos
 exec --no-startup-id thunderbird
+exec --no-startup-id urxvt -name scratch
+
+# special window handling
+for_window [class="Gcalctool"] floating enable
+for_window [class="Gsimplecal"] floating enable
+for_window [class="Qalculate"] floating enable
+for_window [class="Update-manager"] floating enable
+for_window [class="MintUpdate.py"] floating enable
+for_window [instance="scratch"] floating enable, move scratchpad, scratchpad show, resize grow left 300, resize grow right 300, resize grow up 200, resize shrink down 300, move scratchpad
 
 # convenient key bindings
 bindsym $mod+slash exec nemo --no-desktop || pcmanfm || nautilus --no-desktop
@@ -227,11 +237,6 @@ bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 1 -- -5%
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 1 toggle
 bindsym $mod+equal exec qalculate || gnome-calculator
 bindsym XF86Calculator exec qalculate || gnome-calculator
-for_window [class="Gcalctool"] floating enable
-for_window [class="Gsimplecal"] floating enable
-for_window [class="Qalculate"] floating enable
-for_window [class="Update-manager"] floating enable
-for_window [class="MintUpdate.py"] floating enable
 bindsym XF86Mail [class="Thunderbird"] focus
 bindsym Shift+XF86Mail [class="Pidgin"] focus
 bindsym XF86Tools [class="Pithos"] focus
