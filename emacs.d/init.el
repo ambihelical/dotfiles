@@ -162,11 +162,23 @@
 
 	:ensure t)
 
+(use-package ag
+	:ensure t)
+
+(use-package helm-ag
+	:ensure t)
+
+(use-package grep
+	:ensure t)
+
 (use-package helm-projectile
 	:config
 		(helm-projectile-on)
+	:requires grep
 	:requires helm
 	:requires projectile
+	:requires ag
+	:requires helm-ag
 	:bind ("<f5>" . helm-projectile-find-other-file)
 	:ensure t)
 
@@ -182,10 +194,6 @@
 		(add-hook 'c-mode-hook 'helm-gtags-mode)
 		(add-hook 'c++-mode-hook 'helm-gtags-mode)
 		(add-hook 'asm-mode-hook 'helm-gtags-mode)
-	:ensure t)
-
-(use-package helm-ag
-	:requires helm
 	:ensure t)
 
 (use-package markdown-mode
