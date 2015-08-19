@@ -110,10 +110,10 @@
 		(define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
 		(define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
 		; scroll keeping cursor in place
-		(define-key evil-normal-state-map (kbd "C-k")
-			(lambda () (interactive) (evil-scroll-line-down 1) (evil-next-visual-line 1)))
 		(define-key evil-normal-state-map (kbd "C-j")
-			(lambda () (interactive) (evil-scroll-line-up 1) (evil-previous-visual-line 1)))
+			(lambda () (interactive)  (evil-scroll-line-down 1) (evil-next-visual-line 0)))
+		(define-key evil-normal-state-map (kbd "C-k")
+			(lambda () (interactive) (evil-scroll-line-up 1) (evil-previous-visual-line 0)))
 		(evil-mode 1)
 	:ensure t)
 
