@@ -1,0 +1,8 @@
+/etc/dhcp
+/etc/default
+/etc/fstab
+/etc/sysctl.conf
+/etc/udev
+/etc/group
+/etc/passwd
+/etc/exports
