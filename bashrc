@@ -3,23 +3,11 @@
 # include sh/dash profile
 [ -e ${HOME}/.profile ] && source ${HOME}/.profile
 
-case "$OSTYPE" in
-linux*)
-    ;;
-darwin*)
-  export PATH=/opt/local/bin:/opt/local/sbin:$PATH
-  export MANPATH=/opt/local/man:/opt/local/share/man:$MANPATH
-    ;;
-*)
-    ;;
-esac
-
-
 # setup path. These are in reverse order of how they appear in the PATH value. 
 
 [ -d ~/extern/gccarm-dev/bin ] && PATH=~/extern/gccarm-dev/bin:"${PATH}"    # arm gcc cross compiler
 [ -d /usr/lib/ccache ] && PATH=/usr/lib/ccache:"${PATH}"                    # compile cache
-[ -d ~/local/bin ] && PATH=~/local/bin:"${PATH}"                            # locally installed execs
+[ -d ~/.local/bin ] && PATH=~/.local/bin:"${PATH}"                            # locally installed execs
 [ -d ~/bin ] && PATH=~/bin:"${PATH}"                                        # my utilities
 [ -d ~/bin/${OSTYPE} ] && PATH=~/bin/${OSTYPE}:"${PATH}"                    # my utilities, os specific
 
@@ -34,19 +22,6 @@ export ACKRC=${XDG_CONFIG_HOME}/ack
 [ -z "$PS1" ] && return
 
 ################ Interactive Portion ###############
-
-# create ssh agent if needed and add private key identities
-export SSH_AGENT_PID=`pgrep -o -u $USER ssh-agent`
-if [ "$SSH_AGENT_PID" != '' ]; then
-	export SSH_AUTH_SOCK="$(\ls $(find /tmp -type d -uid $(id -u) -name 'ssh-*' 2>/dev/null | head -n 1)/agent.*)"
-	echo "using existing ssh-agent $SSH_AGENT_PID on $SSH_AUTH_SOCK"
-else
-	eval `ssh-agent`
-	echo "created new ssh-agent"
-	ssh-add
-fi
-
-[ -e /usr/share/autojump/autojump.sh ] && . /usr/share/autojump/autojump.sh
 
 # echo only the outside N characters of the string provided, using an ellipsis to 
 # indicate removed characters.  Strings shorter than N are unmolested. 
@@ -101,9 +76,20 @@ gcd() {
 	[ -z $rdir ] || cd ${rdir}/${rpath}
 }
 
-
+if [ ${OSTYPE:0:5} == 'linux' ]; then
+	# create ssh agent if needed and add private key identities
+	export SSH_AGENT_PID=`pgrep -o -u $USER ssh-agent`
+	if [ "$SSH_AGENT_PID" != '' ]; then
+		export SSH_AUTH_SOCK="$(\ls $(find /tmp -type d -uid $(id -u) -name 'ssh-*' 2>/dev/null | head -n 1)/agent.*)"
+		echo "using existing ssh-agent $SSH_AGENT_PID on $SSH_AUTH_SOCK"
+	else
+		eval `ssh-agent`
+		echo "created new ssh-agent"
+		ssh-add
+	fi
+fi
 # be able to find our locally built libraries
-[ -d ~/local/lib ] && export LD_LIBRARY_PATH=~/local/lib
+[ -d ~/.local/lib ] && export LD_LIBRARY_PATH=~/.local/lib
 
 # use vim as default editor and for command line editting style
 export EDITOR=vim
@@ -140,14 +126,8 @@ shopt -s checkwinsize
 shopt -s cdspell 
 
 # prefixes used to iron certain platform differences
-case "$OSTYPE" in
-  linux*)
-    _PRE_=
-  ;;
-  darwin*)
-    _PRE_="g"
-  ;;
-esac
+_PRE_=
+[ ${OSTYPE:0:6} == 'darwin' ] && _PRE_="g"
 
 # make less more friendly for non-text input files, see lesspipe(1)
 which lesspipe > /dev/null && eval "$(SHELL=/bin/sh lesspipe)"
@@ -174,9 +154,19 @@ if [ -f /usr/share/bash-completion/bash_completion ]; then
    . /usr/share/bash-completion/bash_completion
 elif [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
-elif [ -f /opt/local/etc/bash_completion ]; then
-    . /opt/local/etc/bash_completion
+elif [ -d /usr/local/etc/bash_completion.d ]; then
+	for file in /usr/local/etc/bash_completion.d/*; do
+		. $file
+	done
 fi
+
+# Enable autojump
+if [ -e /usr/share/autojump/autojump.sh ]; then
+	. /usr/share/autojump/autojump.sh
+elif [ -e /usr/local/etc/autojump.sh ]; then
+	. /usr/local/etc/autojump.sh
+fi
+
 
 # primary prompt. Color only when ECMA-48 capable terminal
 PS1='\[\033[01;32m\]$(truncm \u)@$(truncm \h)\[\033[00m\]$(gprompt):\[\033[01;34m\]$(truncm "$(tilde \w)" 20)\[\033[00m\]\$ '
@@ -258,7 +248,7 @@ darwin*)  # OSX
     # 2. Scripts written to use BSD tools may unintentionally use GNU tools because 
     #    the GNU tools are first in $PATH
     # 
-    # By default Macports prefixes the most common GNU tools with "g".  They can 
+    # By default Macports/Brew prefixes the most common GNU tools with "g".  They can 
     # be aliased to the regular name without cause problem #2, but #1 can still occur. 
     # Put any such aliases here:
     ;;
