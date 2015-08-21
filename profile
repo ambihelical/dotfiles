@@ -18,3 +18,7 @@ export GIMP2_DIRECTORY=${XDG_CONFIG_HOME}/gimp2
 export GTAGSCONF=${XDG_CONFIG_HOME}/globalrc
 export IPYTHONDIR=${XDG_CONFIG_HOME}/ipython
 export GNUPGHOME=${XDG_CONFIG_HOME}/gnupg
+export __GL_SHADER_DISK_CACHE_PATH=${XDG_CACHE_HOME}/nv
+export CUDA_CACHE_PATH=${XDG_CACHE_HOME}/nv 
+[ ! -d ${XDG_CACHE_HOME}/nv ] && mkdir -p ${XDG_CACHE_HOME}/nv
+export ICEAUTHORITY=${XDG_CACHE_HOME}/X11-iceauthority
