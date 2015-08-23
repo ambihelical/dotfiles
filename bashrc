@@ -104,19 +104,19 @@ shopt -s histappend
 
 #### Store various files in XDG directories
 
-# bash history
 export HISTFILE=${XDG_CACHE_HOME}/bash/history
-[ ! -d ${XDG_CACHE_HOME}/bash ] && mkdir -p ${XDG_CACHE_HOME}/bash
-
-# less history
+[ -d ${XDG_CACHE_HOME}/bash ] || mkdir -p ${XDG_CACHE_HOME}/bash
 export LESSHISTFILE=${XDG_CACHE_HOME}/less/history
-[ ! -d ${XDG_CACHE_HOME}/less ] && mkdir -p ${XDG_CACHE_HOME}/less
-
-# readline config
+[ -d ${XDG_CACHE_HOME}/less ] || mkdir -p ${XDG_CACHE_HOME}/less
 export INPUTRC=${XDG_CONFIG_HOME}/readline
-
-# screen config
 export SCREENRC=${XDG_CONFIG_HOME}/screen
+export SUBVERSION_HOME=${XDG_CONFIG_HOME}/subversion
+export PYTHONSTARTUP=${XDG_CONFIG_HOME}/pythonrc
+export PIP_CONFIG_FILE=${XDG_CONFIG_HOME}/pip/config
+export PIP_LOG_FILE=${XDG_CACHE_HOME}/pip/log
+export IPYTHONDIR=${XDG_CONFIG_HOME}/ipython
+export ANDROID_SDK_HOME=${XDG_DATA_HOME}/android
+export AWS_CONFIG_FILE=${XDG_CONFIG_HOME}/aws/config
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.

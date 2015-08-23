@@ -1,0 +1,15 @@
+import os
+import atexit
+import readline
+from xdg import BaseDirectory
+
+# save python_history in $XDG_CACHE_DIR/python
+
+cache_dir = BaseDirectory.save_cache_path("python")
+
+history_file = os.path.join(cache_dir, 'python_history')
+try:
+    readline.read_history_file(history_file)
+except IOError:
+    pass
+atexit.register(readline.write_history_file, history_file)
