@@ -21,6 +21,9 @@
 
 ;; configure the chrome
 (set-default-font "DejaVu Sans Mono 9")
+(cond
+ ((string-equal system-type "darwin")
+  (set-default-font "Menlo Regular 12")))
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
 (menu-bar-mode t)
@@ -96,7 +99,6 @@
 		(define-key evil-outer-text-objects-map "a" 'evil-outer-arg)
 		(define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
 		(define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
-		(define-key evil-normal-state-map (kbd "<f6>") 'evil-jump-to-tag)   ;; deprecated--use leader-t instead
 		; buffer swapping, next/previous
 		(define-key evil-normal-state-map (kbd "<RET>") 'switch-to-previous-buffer)
 		(define-key evil-normal-state-map (kbd "<backtab>") 'evil-prev-buffer)

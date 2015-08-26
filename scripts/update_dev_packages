@@ -1,8 +1,8 @@
 #!/bin/bash
-# 
-# Make sure some system packages are present
-# 
-# Includes some common software development packages, other 
+#
+# Make sure some development packages are present
+#
+# Includes some common software development packages, other
 # projects should have their own script as needed
 if [[ $EUID -ne 0 ]]; then
 	echo "This script must be run with root privilegs" 1>&2
@@ -11,26 +11,25 @@ fi
 
 p=""
 if [ "${OSTYPE:0:10}" == 'linux-gnue' ]; then
-  p="$p build-essential ccache"
-  p="$p libboost-all-dev"
-  p="$p autoconf automake libtool"
-  p="$p python3-dev "
-  apt-get --quiet --yes --no-install-recommends install $p
-elif [ "${OSTYPE:0:5}" == 'linux' ]; then 
-  p="$p rdoc ri"
-  p="$p cmake-gui build-essential ccache" 
-  p="$p manpages-dev manpages-posix-dev doxygen"
-  p="$p gcc-doc glibc-doc"
-  p="$p gcc-multilib libgmp-dev libmpc-dev libmpfr-dev ppl-dev libcloog-ppl-dev"         # gcc cross compiler support
-  p="$p libzmq-dev "                                                           # python pkg support
-  p="$p autoconf automake libtool gettext intltool"
-  p="$p meld git-gui mercurial subversion"
-  apt-get --quiet --yes install $p
-elif [ "${OSTYPE:0:6}" == 'darwin' ]; then 
-  p="$p coreutils git-core +bash_completion"
+	p="$p build-essential ccache"
+	p="$p libboost-all-dev"
+	p="$p autoconf automake libtool"
+	p="$p python3-dev "
+	apt-get --quiet --yes --no-install-recommends install $p
+elif [ "${OSTYPE:0:5}" == 'linux' ]; then
+	p="$p rdoc ri"
+	p="$p cmake-gui build-essential ccache"
+	p="$p manpages-dev manpages-posix-dev doxygen"
+	p="$p gcc-doc glibc-doc"
+	p="$p gcc-multilib libgmp-dev libmpc-dev libmpfr-dev ppl-dev libcloog-ppl-dev"         # gcc cross compiler support
+	p="$p libzmq-dev "                                                           # python pkg support
+	p="$p autoconf automake libtool gettext intltool"
+	p="$p meld git-gui mercurial subversion global"
+	apt-get --quiet --yes install $p
+	pip3 install --upgrade pyserial ipython[notebook] pyzmq jinja2 tornado jsonschema matplotlib
+elif [ "${OSTYPE:0:6}" == 'darwin' ]; then
+	brew update
+	p="$p global --with-pygments "
+	p="$p macvim emacs --with-cocoa"
+	brew install $p
 fi
-
-# install some python stuff
-# for now assume pip3 on all platforms
-pip3 install --upgrade pyserial ipython[notebook] pyzmq jinja2 tornado jsonschema matplotlib
-

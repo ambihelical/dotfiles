@@ -229,30 +229,28 @@ linux*)
     ;;
 
 darwin*)  # OSX
-    # use bwana plugin to open man page in browser
-    hman() { open -a Safari man:$*; }
-    # use preview (ps2pdf keeps preview from having a file to save)
-    # gman() { man -t $* | ps2pdf - - | open -g -f -a Preview; }
-    # this version works oob on osx
-    gman() {
-      t=`mktemp -t gman`
-      man -t $* | pstopdf -i -o "$t"
-      open -f -g -a Preview < "$t"
-      rm "$t"
-    }
-    alias view='qlmanage -p $*> /dev/null'
-    alias vi='mvim'
+	# emacs
+	alias emacs='open -a Emacs.app'
+	# open man page in preview
+	gman() {
+		t=`mktemp -t gman`
+		man -t $* | pstopdf -i -o "$t"
+		open -f -g -a Preview < "$t"
+		rm "$t"
+	}
+	alias view='qlmanage -p $*> /dev/null'
+	alias vi='mvim'
 
-    # Brew installs GNU tools, and the system uses BSD tools. If the coreutils package
-    # overwrote the common tools like 'ls' there would be two problems:
-    #
-    # 1. System tools understand file resources, GNU tools do not
-    # 2. Scripts written to use BSD tools may unintentionally use GNU tools because
-    #    the GNU tools are first in $PATH
-    #
-    # By default Macports/Brew prefixes the most common GNU tools with "g".  They can
-    # be aliased to the regular name without cause problem #2, but #1 can still occur.
-    # Put any such aliases here:
+	# Brew installs GNU tools, and the system uses BSD tools. If the coreutils package
+	# overwrote the common tools like 'ls' there would be two problems:
+	#
+	# 1. System tools understand file resources, GNU tools do not
+	# 2. Scripts written to use BSD tools may unintentionally use GNU tools because
+	#    the GNU tools are first in $PATH
+	#
+	# By default Macports/Brew prefixes the most common GNU tools with "g".  They can
+	# be aliased to the regular name without cause problem #2, but #1 can still occur.
+	# Put any such aliases here:
     ;;
 
 *)   # Everything else
