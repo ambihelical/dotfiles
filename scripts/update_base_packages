@@ -30,6 +30,6 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	pip install --upgrade pygments
 elif [ "${OSTYPE:0:6}" == 'darwin' ]; then
 	brew update
-	p="$p coreutils git autojump the_silver_searcher lesspipe"
+	p="$p coreutils git autojump the_silver_searcher lesspipe tree"
 	brew install $p
 fi

@@ -30,6 +30,7 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 elif [ "${OSTYPE:0:6}" == 'darwin' ]; then
 	brew update
 	p="$p global --with-pygments "
+	p="$p cmake "
 	p="$p macvim emacs --with-cocoa"
 	brew install $p
 fi
