@@ -205,6 +205,12 @@
 		(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 	:ensure t)
 
+(use-package cmake-mode
+	:init
+		(add-to-list 'auto-mode-alist '("CMakeLists\\.txt\\'" . cmake-mode))
+		(add-to-list 'auto-mode-alist '("\\.cmake\\'" . cmake-mode))
+	:ensure t)
+
 (use-package smart-tabs-mode
 	:config
 		(smart-tabs-insinuate 'c 'c++)
