@@ -36,12 +36,11 @@
 (column-number-mode t)                  ; display column/row of cursor in mode-line
 (display-time-mode t)                   ; display time in mode-line
 (setq frame-title-format '(             ; set title
-		;;"" invocation-name ": "
 		"☮ "
 		(:eval (if (buffer-file-name)
-					(s-replace default-directory "" buffer-file-name)
+					(s-replace (abbreviate-file-name default-directory) "" (abbreviate-file-name buffer-file-name))
 					"%b"))
-		" [" (:eval (abbreviate-file-name default-directory)) "]"
+		" %* [" (:eval (abbreviate-file-name default-directory)) "]"
 	  ))
 
 ;; tame scrolling
