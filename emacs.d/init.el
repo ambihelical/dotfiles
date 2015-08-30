@@ -15,9 +15,10 @@
 	(package-install 'use-package))
 
 (require 'use-package)
+(setq use-package-always-ensure t)
 
 ;; load utility packages
-(use-package s :ensure t)
+(use-package s)
 
 ;; configure the chrome
 (set-default-font "DejaVu Sans Mono 9")
@@ -57,8 +58,7 @@
 ;; Operational preferences
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq backup-directory-alist '(("." . "~/.cache/emacs")))
-(setq custom-file
-		"~/.cache/emacs/customize")       ; don't modify this file customizations
+(setq custom-file "~/.cache/emacs/customize")       ; put customizations here
 
 ;; Text handling
 (visual-line-mode t)                    ; edit visual lines
@@ -76,62 +76,22 @@
 		(setq whitespace-style '(face trailing tabs tab-mark lines-tail space-before-tab))
 		(setq  whitespace-display-mappings '((tab-mark 9 [9657 9] [92 9])))
 		(global-whitespace-mode t)
-	:ensure t)
+	)
 
 (use-package leuven-theme
 	:requires whitespace
 	:config
 		(set-face-attribute 'whitespace-tab nil :foreground "gainsboro" :background "white" )
 		(set-face-attribute 'whitespace-trailing nil :foreground "black" :background "red" )
-	:ensure t)
+	)
 
 (defun switch-to-previous-buffer ()
 	(interactive)
 	(switch-to-buffer (other-buffer (current-buffer) 1)))
 
-(use-package evil
-	:init
-		(setq evil-shift-width 3)
-		(setq-default evil-symbol-word-search t)
-		(setq evil-search-module 'evil-search)
-	:config
-		(define-key evil-inner-text-objects-map "i" 'evil-inner-arg)
-		(define-key evil-outer-text-objects-map "a" 'evil-outer-arg)
-		(define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
-		(define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
-		; buffer swapping, next/previous
-		(define-key evil-normal-state-map (kbd "<RET>") 'switch-to-previous-buffer)
-		(define-key evil-normal-state-map (kbd "<backtab>") 'evil-prev-buffer)
-		(define-key evil-normal-state-map (kbd "<tab>") 'evil-next-buffer)
-		; esc key (from WikEmacs)
-		(define-key evil-normal-state-map [escape] 'keyboard-quit)
-		(define-key evil-visual-state-map [escape] 'keyboard-quit)
-		(define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
-		(define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
-		(define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
-		(define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
-		(define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
-		; scroll keeping cursor in place
-		(define-key evil-normal-state-map (kbd "C-j")
-			(lambda () (interactive)  (evil-scroll-line-down 1) (evil-next-visual-line 0)))
-		(define-key evil-normal-state-map (kbd "C-k")
-			(lambda () (interactive) (evil-scroll-line-up 1) (evil-previous-visual-line 0)))
-		(evil-mode 1)
-	:ensure t)
+(use-package semantic)
 
-(use-package evil-args
-	:requires evil
-	:ensure t)
-
-(use-package evil-commentary
-	:requires evil
-	:config
-		(evil-commentary-mode)
-	:ensure t)
-
-(use-package semantic
-	:ensure t)
-
+;; N.B. demand loaded because invoked via evil-leader
 (use-package helm
 	:init
 		(setq helm-split-window-in-side-p t
@@ -145,12 +105,12 @@
 			helm-buffer-max-length 40
 			helm-scroll-amount 8)
 	:config
-		(global-set-key (kbd "M-x") 'helm-M-x)
-		(global-set-key (kbd "C-x b") 'helm-for-files)
-		(global-set-key (kbd "<f3>") 'helm-for-files)
-		;(helm-mode t)
-	:ensure t)
+	:bind ("M-x" . helm-M-x)
+	:bind ("C-x b" . helm-for-files)
+	:bind ("<f3>" . helm-for-files)
+	:demand t)
 
+;; N.B. demand loaded because invoked via evil-leader
 (use-package projectile
 	:init
 		(setq projectile-completion-system 'helm)
@@ -160,29 +120,19 @@
 		(setq projectile-mode-line '(:eval (format " [%s]" (projectile-project-name))))
 	:config
 		(projectile-global-mode 1)
-		(global-set-key (kbd "<f7>") 'projectile-compile-project)
+	:bind ("<f7>" . projectile-compile-project)
+	:demand t)
 
-	:ensure t)
-
-(use-package ag
-	:ensure t)
-
-(use-package helm-ag
-	:ensure t)
-
-(use-package grep
-	:ensure t)
+(use-package ag)
+(use-package helm-ag)
+(use-package grep)
 
 (use-package helm-projectile
 	:config
 		(helm-projectile-on)
-	:requires grep
 	:requires helm
 	:requires projectile
-	:requires ag
-	:requires helm-ag
-	:bind ("<f5>" . helm-projectile-find-other-file)
-	:ensure t)
+	:bind ("<f5>" . helm-projectile-find-other-file))
 
 (use-package helm-gtags
 	:init
@@ -196,31 +146,30 @@
 		(add-hook 'c-mode-hook 'helm-gtags-mode)
 		(add-hook 'c++-mode-hook 'helm-gtags-mode)
 		(add-hook 'asm-mode-hook 'helm-gtags-mode)
-	:ensure t)
+	)
 
 (use-package markdown-mode
 	:init
 		;;(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
 		(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 		(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-	:ensure t)
+	)
 
 (use-package cmake-mode
 	:init
 		(add-to-list 'auto-mode-alist '("CMakeLists\\.txt\\'" . cmake-mode))
 		(add-to-list 'auto-mode-alist '("\\.cmake\\'" . cmake-mode))
-	:ensure t)
+	)
 
 (use-package smart-tabs-mode
 	:config
 		(smart-tabs-insinuate 'c 'c++)
-	:ensure t)
+	)
 
 (use-package cc-mode
 	:init
 		(setq c-default-style "k&r" c-basic-offset=3)
 		(setq show-paren-mode 0)
-	:requires smart-tabs-mode
 	:config
 		(define-key c-mode-base-map (kbd "RET") 'newline-and-indent)
 	:mode
@@ -229,7 +178,7 @@
 		("\\.cxx\\'" . c++-mode)
 		("\\.h\\'" . c++-mode)
 		("\\.hpp\\'" . c++-mode)
-	:ensure t)
+	)
 
 (use-package python-mode
 	:config
@@ -242,12 +191,12 @@
 				(semantic-mode t)
 				(setq indent-tabs-mode t)
 				(setq tab-width 4)))
-	:ensure t)
+	)
 
 (use-package git-gutter
 	:config
 		(global-git-gutter-mode t)
-	:ensure t)
+	)
 
 (use-package deft
 	:requires markdown-mode
@@ -268,16 +217,17 @@
 		(add-hook 'deft-mode-hook (lambda ()
 											 (define-key deft-mode-map (kbd "<C-return>") 'deft-new-file)
 											 (define-key deft-mode-map (kbd "<C-backspace>") 'deft-filter-clear)))
-	:ensure t)
+	)
 
 (use-package company
 	:config
 		(add-hook 'after-init-hook 'global-company-mode)
-	:ensure t)
+	)
 
-(use-package helm-company
-	:requires company
-	:ensure t)
+;broken due to changes in helm
+;(use-package helm-company
+;	:requires company
+;	:requires helm)
 
 (use-package neotree
 	:bind ("<f4>" . neotree-toggle)
@@ -288,16 +238,7 @@
 				(define-key evil-normal-state-local-map (kbd "SPC") 'neotree-enter)
 				(define-key evil-normal-state-local-map (kbd "q") 'neotree-hide)
 				(define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)))
-	:ensure t)
-
-
-(use-package powerline-evil
-	:config
-		(powerline-default-theme)
-		(display-time-mode t)
-	:requires evil
-	:ensure t)
-
+	)
 
 ; start deft in evil insert mode
 (defun evil-deft ()
@@ -305,52 +246,85 @@
 	(deft)
 	(evil-insert-state))
 
-(use-package evil-leader
+;; N.B. evil-mode must be enabled after global-evil-leader-mode
+(use-package evil
 	:init
-		(setq evil-leader/in-all-states 1)
-	:requires evil
-	:requires helm
-	:requires projectile
-	:requires dired
+		(setq evil-shift-width 3)
+		(setq-default evil-symbol-word-search t)
+		(setq evil-search-module 'evil-search)
 	:config
-		(global-evil-leader-mode t)
-		(evil-leader/set-leader "<SPC>")
-		(evil-leader/set-key
-			";" 'evil-jump-forward
-			"," 'evil-jump-backward
-			"<SPC>" 'projectile-find-file
-			"a" 'helm-projectile-find-other-file
-			"bw" 'save-buffer
-			"bq" 'kill-buffer-and-window
-			"ci" 'projectile-invalidate-cache
-			"ee" 'pp-eval-last-sexp
-			"fa" 'helm-apropos
-			"fb" 'projectile-switch-to-buffer
-			"fd" 'projectile-find-dir
-			"ff" 'projectile-find-file
-			"fg" 'helm-projectile-ag
-			"fi" 'helm-semantic-or-imenu
-			"fj" 'helm-all-mark-ring
-			"fk" 'helm-show-kill-ring
-			"fm" 'helm-man-woman
-			"fp" 'helm-list-elisp-packages-no-fetch
-			"fx" 'helm-top
-			"f/" 'helm-locate
-			"gb" 'vc-annotate
-			"ls" 'dired-jump
-			"n" 'evil-deft
-			"p" 'projectile-switch-project
-			"tt" 'helm-gtags-dwim
-			"tr" 'helm-gtags-find-rtag
-			"td" 'helm-gtags-find-tag
-			"ts" 'helm-gtags-find-symbol
-			"tu" 'helm-gtags-update-tags
-			"v"  'exchange-point-and-mark
-			"wv" 'split-window-right
-			"wh" 'split-window-below
-			"x" 'helm-M-x
-			)
-	:ensure t)
+		(use-package evil-args)
+		(use-package evil-commentary :config (evil-commentary-mode))
+		(use-package evil-leader
+			:init
+				(setq evil-leader/in-all-states 1)
+			:config
+				(global-evil-leader-mode t)
+				(evil-leader/set-leader "<SPC>")
+				(evil-leader/set-key
+					";" 'evil-jump-forward
+					"," 'evil-jump-backward
+					"<SPC>" 'projectile-find-file
+					"a" 'helm-projectile-find-other-file
+					"bw" 'save-buffer
+					"bq" 'kill-buffer-and-window
+					"ci" 'projectile-invalidate-cache
+					"ee" 'pp-eval-last-sexp
+					"fa" 'helm-apropos
+					"fb" 'projectile-switch-to-buffer
+					"fd" 'projectile-find-dir
+					"ff" 'projectile-find-file
+					"fg" 'helm-projectile-ag
+					"fi" 'helm-semantic-or-imenu
+					"fj" 'helm-all-mark-ring
+					"fk" 'helm-show-kill-ring
+					"fm" 'helm-man-woman
+					"fp" 'helm-list-elisp-packages-no-fetch
+					"fx" 'helm-top
+					"f/" 'helm-locate
+					"gb" 'vc-annotate
+					"ls" 'dired-jump
+					"n" 'evil-deft
+					"p" 'projectile-switch-project
+					"tt" 'helm-gtags-dwim
+					"tr" 'helm-gtags-find-rtag
+					"td" 'helm-gtags-find-tag
+					"ts" 'helm-gtags-find-symbol
+					"tu" 'helm-gtags-update-tags
+					"v"  'exchange-point-and-mark
+					"wv" 'split-window-right
+					"wh" 'split-window-below
+					"x" 'helm-M-x
+					)
+			)  ; evil-leader
+
+		(define-key evil-inner-text-objects-map "i" 'evil-inner-arg)
+		(define-key evil-outer-text-objects-map "a" 'evil-outer-arg)
+		(define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
+		(define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
+		; buffer swapping, next/previous
+		(define-key evil-normal-state-map (kbd "<RET>") 'switch-to-previous-buffer)
+		; esc key (from WikEmacs)
+		(define-key evil-normal-state-map [escape] 'keyboard-quit)
+		(define-key evil-visual-state-map [escape] 'keyboard-quit)
+		(define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
+		(define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
+		(define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
+		(define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
+		(define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
+		; scroll keeping cursor in place
+		(define-key evil-normal-state-map (kbd "C-j")
+			(lambda () (interactive)  (evil-scroll-line-down 1) (evil-next-visual-line 0)))
+		(define-key evil-normal-state-map (kbd "C-k")
+			(lambda () (interactive) (evil-scroll-line-up 1) (evil-previous-visual-line 0)))
+		(evil-mode 1)
+	) ; evil
+
+(use-package powerline-evil
+	:config
+		(powerline-default-theme)
+		(display-time-mode t)
+	)
 
 (use-package diminish
 	:config
@@ -360,4 +334,4 @@
 		(diminish 'evil-commentary-mode)
 		(diminish 'whitespace-mode)
 		(diminish 'helm-gtags-mode)
-	:ensure t)
+	)
