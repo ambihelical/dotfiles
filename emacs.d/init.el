@@ -16,6 +16,7 @@
 
 (require 'use-package)
 (setq use-package-always-ensure t)
+;(setq use-package-verbose t)
 
 ;; load utility packages
 (use-package s)
@@ -75,10 +76,9 @@
 		(setq whitespace-style '(face trailing tabs tab-mark lines-tail space-before-tab))
 		(setq  whitespace-display-mappings '((tab-mark 9 [9657 9] [92 9])))
 		(global-whitespace-mode t)
-	)
+	:diminish global-whitespace-mode)
 
 (use-package leuven-theme
-	:requires whitespace
 	:config
 		(set-face-attribute 'whitespace-tab nil :foreground "gainsboro" :background "white" )
 		(set-face-attribute 'whitespace-trailing nil :foreground "black" :background "red" )
@@ -145,7 +145,7 @@
 		(add-hook 'c-mode-hook 'helm-gtags-mode)
 		(add-hook 'c++-mode-hook 'helm-gtags-mode)
 		(add-hook 'asm-mode-hook 'helm-gtags-mode)
-	)
+	:diminish helm-gtags-mode)
 
 (use-package markdown-mode
 	:init
@@ -195,7 +195,7 @@
 (use-package git-gutter
 	:config
 		(global-git-gutter-mode t)
-	)
+	:diminish git-gutter-mode)
 
 (use-package deft
 	:requires markdown-mode
@@ -221,6 +221,7 @@
 (use-package company
 	:config
 		(add-hook 'after-init-hook 'global-company-mode)
+	:diminish company-mode
 	)
 
 ;broken due to changes in helm
@@ -253,7 +254,9 @@
 		(setq evil-search-module 'evil-search)
 	:config
 		(use-package evil-args)
-		(use-package evil-commentary :config (evil-commentary-mode))
+		(use-package evil-commentary
+		  :config (evil-commentary-mode)
+		  :diminish evil-commentary-mode)
 		(use-package evil-leader
 			:init
 				(setq evil-leader/in-all-states 1)
@@ -327,10 +330,5 @@
 
 (use-package diminish
 	:config
-		(diminish 'company-mode)
-		(diminish 'git-gutter-mode)
 		(diminish 'undo-tree-mode)
-		(diminish 'evil-commentary-mode)
-		(diminish 'whitespace-mode)
-		(diminish 'helm-gtags-mode)
 	)
