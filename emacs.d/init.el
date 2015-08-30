@@ -14,9 +14,14 @@
 (when (not (package-installed-p 'use-package ))
 	(package-install 'use-package))
 
-(require 'use-package)
+(eval-when-compile
+  (require 'use-package))
+(require 'diminish)                ;; if you use :diminish
+(require 'bind-key)                ;; if you use any :bind variant
 (setq use-package-always-ensure t)
-;(setq use-package-verbose t)
+
+;(setq use-package-minimum-reported-time 0.05
+;		use-package-verbose t)
 
 ;; load utility packages
 (use-package s)
@@ -88,7 +93,10 @@
 	(interactive)
 	(switch-to-buffer (other-buffer (current-buffer) 1)))
 
-(use-package semantic)
+(use-package semantic
+  :config
+    (semantic-mode t)
+  :defer 5)
 
 ;; N.B. demand loaded because invoked via evil-leader
 (use-package helm
@@ -145,19 +153,19 @@
 		(add-hook 'c-mode-hook 'helm-gtags-mode)
 		(add-hook 'c++-mode-hook 'helm-gtags-mode)
 		(add-hook 'asm-mode-hook 'helm-gtags-mode)
+	:defer 5
 	:diminish helm-gtags-mode)
 
 (use-package markdown-mode
-	:init
-		;;(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
-		(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-		(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+	:mode
+		("\\.markdown\\'" . markdown-mode)
+		("\\.md\\'" . markdown-mode)
 	)
 
 (use-package cmake-mode
-	:init
-		(add-to-list 'auto-mode-alist '("CMakeLists\\.txt\\'" . cmake-mode))
-		(add-to-list 'auto-mode-alist '("\\.cmake\\'" . cmake-mode))
+	:mode
+		("CMakeLists\\.txt\\'" . cmake-mode)
+		("\\.cmake\\'" . cmake-mode)
 	)
 
 (use-package smart-tabs-mode
@@ -190,11 +198,12 @@
 				(semantic-mode t)
 				(setq indent-tabs-mode t)
 				(setq tab-width 4)))
-	)
+	:defer 5)
 
 (use-package git-gutter
 	:config
 		(global-git-gutter-mode t)
+	:defer 1
 	:diminish git-gutter-mode)
 
 (use-package deft
