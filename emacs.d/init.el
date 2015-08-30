@@ -20,7 +20,7 @@
 (require 'bind-key)                ;; if you use any :bind variant
 (setq use-package-always-ensure t)
 
-;(setq use-package-minimum-reported-time 0.05
+;(setq use-package-minimum-reported-time 0.03
 ;		use-package-verbose t)
 
 ;; load utility packages
@@ -65,6 +65,10 @@
 (setq backup-directory-alist '(("." . "~/.cache/emacs")))
 (setq custom-file "~/.cache/emacs/customize")       ; put customizations here
 
+; make some keys available for use
+(global-unset-key (kbd "<f4>"))
+
+
 ;; Text handling
 (visual-line-mode t)                    ; edit visual lines
 (setq default-tab-width 3)              ; ideal tab setting :)
@@ -98,7 +102,6 @@
     (semantic-mode t)
   :defer 5)
 
-;; N.B. demand loaded because invoked via evil-leader
 (use-package helm
 	:init
 		(setq helm-split-window-in-side-p t
@@ -111,13 +114,22 @@
 			helm-ff-search-library-in-sexp t
 			helm-buffer-max-length 40
 			helm-scroll-amount 8)
-	:config
-	:bind ("M-x" . helm-M-x)
-	:bind ("C-x b" . helm-for-files)
-	:bind ("<f3>" . helm-for-files)
-	:demand t)
+	:bind
+		("M-x" . helm-M-x)
+		("C-x b" . helm-for-files)
+		("<f3>" . helm-for-files)
+		("<S-f3>" . dired-jump)
+		("<f4> a" . helm-apropos)
+		("<f4> d" . helm-semantic-or-imenu)
+		("<f4> j" . helm-all-mark-ring)
+		("<f4> i" . helm-info-at-point)
+		("<f4> k" . helm-show-kill-ring)
+		("<f4> m" . helm-man-woman)
+		("<f4> p" . helm-list-elisp-packages-no-fetch)
+		("<f4> x" . helm-top)
+		("<f4> l" . helm-locate)
+	)
 
-;; N.B. demand loaded because invoked via evil-leader
 (use-package projectile
 	:init
 		(setq projectile-completion-system 'helm)
@@ -127,33 +139,40 @@
 		(setq projectile-mode-line '(:eval (format " [%s]" (projectile-project-name))))
 	:config
 		(projectile-global-mode 1)
-	:bind ("<f7>" . projectile-compile-project)
-	:demand t)
+		(use-package helm-projectile
+			:config
+				(helm-projectile-on)
+				;; show projectile info in helm-for-files when in a project
+				;;(add-to-list 'helm-for-files-preferred-list helm-source-projectile-projects)
+				(add-to-list 'helm-for-files-preferred-list helm-source-projectile-files-list)
+				;;(add-to-list 'helm-for-files-preferred-list helm-source-projectile-directories-list)
+			)
+		(use-package ag)
+		(use-package helm-ag)
+		(use-package grep)
 
-(use-package ag)
-(use-package helm-ag)
-(use-package grep)
-
-(use-package helm-projectile
-	:config
-		(helm-projectile-on)
-	:requires helm
-	:requires projectile
-	:bind ("<f5>" . helm-projectile-find-other-file))
+	:bind
+		("<f4> g" . helm-projectile-ag)
+		("<f5>" . helm-projectile-find-other-file)
+		("<f7> <f7>" . projectile-switch-project)
+		("<f7> c" . projectile-compile-project)
+		("<f7> u" . projectile-invalidate-cache)
+	)
 
 (use-package helm-gtags
 	:init
 		(setq helm-gtags-auto-update t)
 		(setq helm-gtags-use-input-at-cursor t)
 		(setq helm-gtags-ignore-case t)
-	:requires helm
 	:config
 		(add-hook 'dired-mode-hook 'helm-gtags-mode)
 		(add-hook 'eshell-mode-hook 'helm-gtags-mode)
 		(add-hook 'c-mode-hook 'helm-gtags-mode)
 		(add-hook 'c++-mode-hook 'helm-gtags-mode)
 		(add-hook 'asm-mode-hook 'helm-gtags-mode)
-	:defer 5
+	:bind
+		("<f6>" . helm-gtags-dwim)
+		("<S-f6>" . helm-gtags-update-tags )
 	:diminish helm-gtags-mode)
 
 (use-package markdown-mode
@@ -206,8 +225,12 @@
 	:defer 1
 	:diminish git-gutter-mode)
 
+(defun start-deft-in-evil-insert-mode ()
+	(interactive)
+	(deft)
+	(evil-insert-state))
+
 (use-package deft
-	:requires markdown-mode
 	:init
 		(setq deft-directory "~/Dropbox/Notes")
 		(setq deft-recursive t)
@@ -220,6 +243,9 @@
 		; what deft-default-extesion does
 		(setq deft-default-extension "md")
 		(setq deft-extensions '("md" "txt" "text" "markdown" "mmd" "org"))
+
+	:bind
+		("<f4> n" . start-deft-in-evil-insert-mode)
 
 	:config
 		(add-hook 'deft-mode-hook (lambda ()
@@ -237,23 +263,6 @@
 ;(use-package helm-company
 ;	:requires company
 ;	:requires helm)
-
-(use-package neotree
-	:bind ("<f4>" . neotree-toggle)
-	:config
-		(add-hook 'neotree-mode-hook
-			(lambda ()
-				(define-key evil-normal-state-local-map (kbd "TAB") 'neotree-enter)
-				(define-key evil-normal-state-local-map (kbd "SPC") 'neotree-enter)
-				(define-key evil-normal-state-local-map (kbd "q") 'neotree-hide)
-				(define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)))
-	)
-
-; start deft in evil insert mode
-(defun evil-deft ()
-	(interactive)
-	(deft)
-	(evil-insert-state))
 
 ;; N.B. evil-mode must be enabled after global-evil-leader-mode
 (use-package evil
@@ -275,37 +284,13 @@
 				(evil-leader/set-key
 					";" 'evil-jump-forward
 					"," 'evil-jump-backward
-					"<SPC>" 'projectile-find-file
-					"a" 'helm-projectile-find-other-file
 					"bw" 'save-buffer
 					"bq" 'kill-buffer-and-window
-					"ci" 'projectile-invalidate-cache
 					"ee" 'pp-eval-last-sexp
-					"fa" 'helm-apropos
-					"fb" 'projectile-switch-to-buffer
-					"fd" 'projectile-find-dir
-					"ff" 'projectile-find-file
-					"fg" 'helm-projectile-ag
-					"fi" 'helm-semantic-or-imenu
-					"fj" 'helm-all-mark-ring
-					"fk" 'helm-show-kill-ring
-					"fm" 'helm-man-woman
-					"fp" 'helm-list-elisp-packages-no-fetch
-					"fx" 'helm-top
-					"f/" 'helm-locate
 					"gb" 'vc-annotate
-					"ls" 'dired-jump
-					"n" 'evil-deft
-					"p" 'projectile-switch-project
-					"tt" 'helm-gtags-dwim
-					"tr" 'helm-gtags-find-rtag
-					"td" 'helm-gtags-find-tag
-					"ts" 'helm-gtags-find-symbol
-					"tu" 'helm-gtags-update-tags
 					"v"  'exchange-point-and-mark
 					"wv" 'split-window-right
 					"wh" 'split-window-below
-					"x" 'helm-M-x
 					)
 			)  ; evil-leader
 
