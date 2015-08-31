@@ -20,8 +20,8 @@
 (require 'bind-key)                ;; if you use any :bind variant
 (setq use-package-always-ensure t)
 
-;(setq use-package-minimum-reported-time 0.03
-;		use-package-verbose t)
+(setq use-package-minimum-reported-time 0.03
+		use-package-verbose t)
 
 ;; load utility packages
 (use-package s)
@@ -100,7 +100,7 @@
 (use-package semantic
   :config
     (semantic-mode t)
-  :defer 5)
+  :defer 3)
 
 (use-package helm
 	:init
@@ -150,7 +150,7 @@
 		(use-package ag)
 		(use-package helm-ag)
 		(use-package grep)
-
+	:defer 3
 	:bind
 		("<f4> g" . helm-projectile-ag)
 		("<f5>" . helm-projectile-find-other-file)
@@ -217,12 +217,12 @@
 				(semantic-mode t)
 				(setq indent-tabs-mode t)
 				(setq tab-width 4)))
-	:defer 5)
+	:defer 3)
 
 (use-package git-gutter
 	:config
 		(global-git-gutter-mode t)
-	:defer 1
+	:defer 3
 	:diminish git-gutter-mode)
 
 (defun start-deft-in-evil-insert-mode ()
