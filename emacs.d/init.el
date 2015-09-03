@@ -284,13 +284,11 @@
 				(evil-leader/set-key
 					";" 'evil-jump-forward
 					"," 'evil-jump-backward
-					"bw" 'save-buffer
-					"bq" 'kill-buffer-and-window
-					"ee" 'pp-eval-last-sexp
+					"w" 'save-buffer
+					"x" 'kill-buffer
+					"e" 'pp-eval-last-sexp
 					"gb" 'vc-annotate
 					"v"  'exchange-point-and-mark
-					"wv" 'split-window-right
-					"wh" 'split-window-below
 					)
 			)  ; evil-leader
 
