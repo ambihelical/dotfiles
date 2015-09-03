@@ -114,9 +114,15 @@
 			helm-ff-search-library-in-sexp t
 			helm-buffer-max-length 40
 			helm-scroll-amount 8)
+		;; set the sources for helm-for-files
+		(setq helm-for-files-preferred-list '(
+			helm-source-recentf
+			helm-source-buffers-list
+			helm-source-files-in-current-dir
+			helm-source-locate))
 	:bind
 		("M-x" . helm-M-x)
-		("C-x b" . helm-for-files)
+		("C-x b" . helm-mini)
 		("<f3>" . helm-for-files)
 		("<S-f3>" . dired-jump)
 		("<f4> a" . helm-apropos)
@@ -128,33 +134,37 @@
 		("<f4> p" . helm-list-elisp-packages-no-fetch)
 		("<f4> x" . helm-top)
 		("<f4> l" . helm-locate)
+	:defer 2
 	)
 
 (use-package projectile
 	:init
 		(setq projectile-completion-system 'helm)
 		(setq projectile-enable-caching t)
-		(setq projectile-switch-project-action 'projectile-find-file)
-		; (setq projectile-switch-project-hook
 		(setq projectile-mode-line '(:eval (format " [%s]" (projectile-project-name))))
 	:config
-		(projectile-global-mode 1)
 		(use-package helm-projectile
 			:config
 				(helm-projectile-on)
-				;; show projectile info in helm-for-files when in a project
-				;;(add-to-list 'helm-for-files-preferred-list helm-source-projectile-projects)
-				(add-to-list 'helm-for-files-preferred-list helm-source-projectile-files-list)
-				;;(add-to-list 'helm-for-files-preferred-list helm-source-projectile-directories-list)
+				(setq projectile-switch-project-action 'helm-for-files)
 			)
 		(use-package ag)
 		(use-package helm-ag)
 		(use-package grep)
+		(setq helm-for-files-preferred-list '(
+			helm-source-projectile-recentf-list
+			helm-source-recentf
+			helm-source-projectile-files-list
+			helm-source-buffers-list
+			helm-source-projectile-projects
+			helm-source-files-in-current-dir
+			helm-source-locate))
+		(projectile-global-mode 1)
 	:defer 3
 	:bind
 		("<f4> g" . helm-projectile-ag)
 		("<f5>" . helm-projectile-find-other-file)
-		("<f7> <f7>" . projectile-switch-project)
+		("<f7> <f7>" . helm-projectile-switch-project)
 		("<f7> c" . projectile-compile-project)
 		("<f7> u" . projectile-invalidate-cache)
 	)
