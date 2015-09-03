@@ -24,10 +24,11 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	p="$p gcc-multilib libgmp-dev libmpc-dev libmpfr-dev ppl-dev libcloog-ppl-dev"         # gcc cross compiler support
 	p="$p libzmq-dev "                                                           # python pkg support
 	p="$p autoconf automake libtool gettext intltool"
-	p="$p meld git-gui mercurial subversion global"
 	p="$p clang"
+	p="$p meld git-gui mercurial subversion "
 	apt-get --quiet --yes install $p
 	pip3 install --upgrade pyserial ipython[notebook] pyzmq jinja2 tornado jsonschema matplotlib
+	echo "NOTE: Install global via source, debian is out of date"
 elif [ "${OSTYPE:0:6}" == 'darwin' ]; then
 	brew update
 	p="$p global --with-pygments "
