@@ -182,7 +182,8 @@
 		(add-hook 'asm-mode-hook 'helm-gtags-mode)
 	:bind
 		("<f6>" . helm-gtags-dwim)
-		("<S-f6>" . helm-gtags-update-tags )
+		("<S-f6>" . helm-gtags-find-pattern)
+		("<C-f6>" . helm-gtags-update-tags )
 	:diminish helm-gtags-mode)
 
 (use-package markdown-mode
