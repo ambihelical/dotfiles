@@ -23,9 +23,6 @@
 (setq use-package-minimum-reported-time 0.03
 		use-package-verbose t)
 
-;; load utility packages
-(use-package s)
-
 ;; configure the chrome
 (set-default-font "DejaVu Sans Mono 9")
 (cond
@@ -41,13 +38,16 @@
 (mouse-avoidance-mode 'animate)         ; move mouse pointer out of way
 (column-number-mode t)                  ; display column/row of cursor in mode-line
 (display-time-mode t)                   ; display time in mode-line
+
+(defun replace-prefix (prefix input)
+	(replace-regexp-in-string ( concat "^" (regexp-quote prefix)) "" input))
+
 (setq frame-title-format '(             ; set title
 		"☮ "
 		(:eval (if (buffer-file-name)
-					(s-replace (abbreviate-file-name default-directory) "" (abbreviate-file-name buffer-file-name))
+			 (replace-prefix (abbreviate-file-name default-directory) (abbreviate-file-name buffer-file-name))
 					"%b"))
-		" %* [" (:eval (abbreviate-file-name default-directory)) "]"
-	  ))
+		" %* [" (:eval (abbreviate-file-name default-directory)) "]"))
 
 ;; tame scrolling
 (setq scroll-margin 5                               ; leave 5 lines at top/bottom
