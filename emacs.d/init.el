@@ -259,9 +259,10 @@
 		("<f4> n" . start-deft-in-evil-insert-mode)
 
 	:config
-		(add-hook 'deft-mode-hook (lambda ()
-											 (define-key deft-mode-map (kbd "<C-return>") 'deft-new-file)
-											 (define-key deft-mode-map (kbd "<C-backspace>") 'deft-filter-clear)))
+	(add-hook 'deft-mode-hook
+		(lambda ()
+			(define-key deft-mode-map (kbd "<C-return>") 'deft-new-file)
+			(define-key deft-mode-map (kbd "<C-backspace>") 'deft-filter-clear)))
 	)
 
 (use-package company
