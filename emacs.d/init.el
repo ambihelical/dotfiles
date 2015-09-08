@@ -283,6 +283,7 @@
 		(setq evil-search-module 'evil-search)
 	:config
 		(use-package evil-args)
+		(use-package evil-textobj-anyblock)
 		(use-package evil-commentary
 		  :config (evil-commentary-mode)
 		  :diminish evil-commentary-mode)
@@ -302,9 +303,10 @@
 					"v"  'exchange-point-and-mark
 					)
 			)  ; evil-leader
-
-		(define-key evil-inner-text-objects-map "i" 'evil-inner-arg)
+		(define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
 		(define-key evil-outer-text-objects-map "a" 'evil-outer-arg)
+		(define-key evil-inner-text-objects-map "b" 'evil-textobj-anyblock-inner-block)
+		(define-key evil-outer-text-objects-map "b" 'evil-textobj-anyblock-a-block)
 		(define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
 		(define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
 		; buffer swapping, next/previous
