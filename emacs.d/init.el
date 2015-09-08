@@ -335,3 +335,7 @@
 	:config
 		(diminish 'undo-tree-mode)
 	)
+
+(use-package ws-butler
+	:config
+	(ws-butler-global-mode t))
