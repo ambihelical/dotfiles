@@ -61,7 +61,9 @@ defaults:
 	-gsettings set org.nemo.preferences show-image-thumbnails 'never'
 	-gsettings set org.nemo.preferences show-advanced-permissions true
 	-gsettings set org.nemo.preferences size-prefixes base-2
-	-gsettings set org.gnome.libgnomekbd.keyboard options "['caps\tcaps:super', 'Compose key\tcompose:rwin', 'altwin\taltwin:ctrl_win']"
+	# Make capslock Hyper, R-Alt as Compose, keep Window keys as Super(s)
+	# see /usr/share/X11/xkb/rules/evdev.lst, etc
+	-gsettings set org.gnome.libgnomekbd.keyboard options "['caps\tcaps:hyper', 'Compose key\tcompose:ralt']"
 	-gsettings set org.gnome.settings-daemon.plugins.xsettings hinting full
 	-gsettings set org.gnome.desktop.media-handling autorun-never true
 	-gsettings set org.gnome.desktop.wm.preferences audible-bell false
