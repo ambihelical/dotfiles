@@ -16,6 +16,7 @@
 	rbc = rebase --continue
 	rba = rebase --abort
 	fap = fetch --all --prune
+	pick = cherry-pick
 
 [color]
 	status = true
