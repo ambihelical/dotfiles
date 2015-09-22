@@ -38,6 +38,7 @@
 (mouse-avoidance-mode 'animate)         ; move mouse pointer out of way
 (column-number-mode t)                  ; display column/row of cursor in mode-line
 (display-time-mode t)                   ; display time in mode-line
+(setq compilation-scroll-output "first-error")
 
 (defun replace-prefix (prefix input)
 	(replace-regexp-in-string ( concat "^" (regexp-quote prefix)) "" input))
@@ -134,6 +135,7 @@
 		("<f4> p" . helm-list-elisp-packages-no-fetch)
 		("<f4> x" . helm-top)
 		("<f4> l" . helm-locate)
+		("<f4> <f4>" . helm-resume)
 	:defer 2
 	)
 
