@@ -238,11 +238,6 @@
 	:defer 3
 	:diminish git-gutter-mode)
 
-(defun start-deft-in-evil-insert-mode ()
-	(interactive)
-	(deft)
-	(evil-insert-state))
-
 (use-package deft
 	:init
 		(setq deft-directory "~/Dropbox/Notes")
@@ -258,9 +253,10 @@
 		(setq deft-extensions '("md" "txt" "text" "markdown" "mmd" "org"))
 
 	:bind
-		("<f4> n" . start-deft-in-evil-insert-mode)
+		("<f4> n" . deft)
 
 	:config
+	(add-to-list 'evil-insert-state-modes 'deft-mode)
 	(add-hook 'deft-mode-hook
 		(lambda ()
 			(define-key deft-mode-map (kbd "<C-return>") 'deft-new-file)
