@@ -76,6 +76,25 @@ gcd() {
 	[ -z $rdir ] || cd ${rdir}/${rpath}
 }
 
+# completion function for gcd
+_gcd() {
+	local rpath=$2
+	local rdir=$(git rev-parse --show-toplevel 2>/dev/null)
+	COMPREPLY=()
+	if [ $rdir ]; then
+		IFS=$'\n'
+		rlen=0
+		for dir in $( compgen -d -- "$rdir/$rpath" ); do
+			sub=${dir#$rdir/}        # cut off directory
+			COMPREPLY[rlen++]=$sub
+		done
+		IFS=$' \t\n'
+		return 0
+	fi
+	return 1
+}
+complete -ofilenames -onospace -F _gcd gcd
+
 # window title, TITLE defined allows override
 window_title() {
 	local def_title="↵ $(tilde $PWD) [${USER}@${HOSTNAME}]"
