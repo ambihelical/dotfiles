@@ -2,6 +2,7 @@
 LN = scripts/safe_link
 CFG = ~/.config
 CACHE=~/.cache
+ETC=/etc
 
 SHELL_FILES = ~/.bashrc ~/.bash_profile ${CFG}/readline ~/.profile
 DIR_FILES = ~/bin
@@ -13,6 +14,7 @@ VIM_FILES = ~/.vimrc ${CFG}/vim  ${CACHE}/vim
 BAREX_FILES = ~/.xsession ~/.Xmodmap
 BIN_FILES=$(foreach bin,$(notdir $(wildcard ${PWD}/bin/*)),~/bin/${bin})
 EMACS_FILES = ~/.emacs.d $(CACHE)/emacs
+ETC_FILES = ${ETC}/sysctl.d/99-edb-sysctl.conf
 
 
 .PHONY: help base dev i3 all defaults
@@ -26,6 +28,7 @@ help:
 	@echo "   all        - all of the above"
 	@echo "Special:"
 	@echo "   help       - what you are seeing now"
+	@echo "   root       - sudo needed for these"
 	@echo "   barex      - install .xsession, .Xmodmap"
 
 base: ${SHELL_FILES} ${DIR_FILES} ${BIN_FILES}
@@ -38,6 +41,8 @@ i3: ${I3_FILES}
 	@echo "i3 configured"
 
 barex: ${BAREX_FILES}
+
+root: ${ETC_FILES}
 
 # fix some annoying default settings
 defaults:
@@ -108,3 +113,6 @@ ${CFG}/%: ${PWD}/%
 
 ${CACHE}/%:
 	mkdir -p $@
+
+${ETC}/%: ./etc/%
+	cp -f $< $@
