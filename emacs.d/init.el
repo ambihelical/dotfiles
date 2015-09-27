@@ -251,6 +251,8 @@
 		; what deft-default-extesion does
 		(setq deft-default-extension "md")
 		(setq deft-extensions '("md" "txt" "text" "markdown" "mmd" "org"))
+		; deft auto-save interferes with whitespace-butler, so disable
+		(setq deft-auto-save-interval 0)
 
 	:bind
 		("<f4> n" . deft)
