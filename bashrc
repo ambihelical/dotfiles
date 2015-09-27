@@ -163,6 +163,7 @@ export PIP_LOG_FILE=${XDG_CACHE_HOME}/pip/log
 export IPYTHONDIR=${XDG_CONFIG_HOME}/ipython
 export ANDROID_SDK_HOME=${XDG_DATA_HOME}/android
 export AWS_CONFIG_FILE=${XDG_CONFIG_HOME}/aws/config
+export WIRESHARK_DATA_DIR=${XDG_CONFIG_HOME}/wireshark
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -214,6 +215,7 @@ alias m="make -k"
 alias cd..="cd .."
 alias ls-x="ls -x"
 alias ack='mark && ack-grep'
+alias ag='mark && \ag'
 
 ##### OS Specific aliases #####
 
