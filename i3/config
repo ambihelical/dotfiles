@@ -229,6 +229,23 @@ for_window [class="Update-manager"] floating enable
 for_window [class="MintUpdate.py"] floating enable
 for_window [instance="scratch"] floating enable, move scratchpad, scratchpad show, resize grow left 300, resize grow right 300, resize grow up 200, resize shrink down 300, move scratchpad
 
+# title formatting
+for_window [class="Gcalctool"] title_format "Σ %title"
+for_window [class="Qalculate"] title_format "Σ %title"
+for_window [class="Emacs"] title_format "☮ %title"
+for_window [class="URxvt"] title_format "↵ %title"
+for_window [class="Firefox"] title_format "☯ %title"
+for_window [class="Pithos"] title_format "♫ %title"
+for_window [class="Thunderbird"] title_format "💩 %title"
+for_window [class="Git-gui"] title_format "Ⓖ %title"
+for_window [class="Gitk"] title_format "⛕ %title"
+for_window [class="GVim"] title_format "☢ %title"
+for_window [class="Pidgin"] title_format "🐦 %title"
+for_window [class="Evince"] title_format "ℰ %title"
+for_window [class="libreoffice-writer"] title_format "𝒲 %title"
+for_window [class="Wireshark"] title_format "↔ %title"
+for_window [class="Nemo"] title_format "📂 %title"
+
 # convenient key bindings
 bindsym $mod+slash exec nemo --no-desktop || pcmanfm || nautilus --no-desktop
 bindsym $mod+b exec firefox || chromium-browser || chromium

@@ -44,7 +44,6 @@
 	(replace-regexp-in-string ( concat "^" (regexp-quote prefix)) "" input))
 
 (setq frame-title-format '(             ; set title
-		"☮ "
 		(:eval (if (buffer-file-name)
 			 (replace-prefix (abbreviate-file-name default-directory) (abbreviate-file-name buffer-file-name))
 					"%b"))

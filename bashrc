@@ -97,7 +97,7 @@ complete -ofilenames -onospace -F _gcd gcd
 
 # window title, TITLE defined allows override
 window_title() {
-	local def_title="↵ $(tilde $PWD) [${USER}@${HOSTNAME}]"
+	local def_title="$(tilde $PWD) [${USER}@${HOSTNAME}]"
 	echo -ne "\033]0;${TITLE:-${def_title}}\007"
 }
 
