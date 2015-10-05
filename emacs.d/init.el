@@ -153,9 +153,9 @@
 		(use-package helm-ag)
 		(use-package grep)
 		(setq helm-for-files-preferred-list '(
+			helm-source-projectile-files-list
 			helm-source-projectile-recentf-list
 			helm-source-recentf
-			helm-source-projectile-files-list
 			helm-source-buffers-list
 			helm-source-projectile-projects
 			helm-source-files-in-current-dir
@@ -270,6 +270,16 @@
 	:diminish company-mode
 	)
 
+; enable code folding (evil has bindings)
+(use-package hideshow
+  :config
+		(add-hook 'c-mode-common-hook   'hs-minor-mode)
+		(add-hook 'c++-mode-hook        'hs-minor-mode)
+		(add-hook 'emacs-lisp-mode-hook 'hs-minor-mode)
+		(add-hook 'sh-mode-hook         'hs-minor-mode)
+		(add-hook 'python-mode-hook     'hs-minor-mode)
+	)
+
 ;broken due to changes in helm
 ;(use-package helm-company
 ;	:requires company
@@ -314,11 +324,7 @@
 		; esc key (from WikEmacs)
 		(define-key evil-normal-state-map [escape] 'keyboard-quit)
 		(define-key evil-visual-state-map [escape] 'keyboard-quit)
-		(define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
-		(define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
-		(define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
-		(define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
-		(define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
+		(define-key helm-map [escape] 'helm-keyboard-quit)
 		; scroll keeping cursor in place
 		(define-key evil-normal-state-map (kbd "C-j")
 			(lambda () (interactive)  (evil-scroll-line-down 1) (evil-next-visual-line 0)))
