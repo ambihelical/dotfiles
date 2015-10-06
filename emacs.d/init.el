@@ -48,6 +48,7 @@
 			 (replace-prefix (abbreviate-file-name default-directory) (abbreviate-file-name buffer-file-name))
 					"%b"))
 		" %* [" (:eval (abbreviate-file-name default-directory)) "]"))
+(setq icon-title-format frame-title-format)
 
 ;; tame scrolling
 (setq scroll-margin 5                               ; leave 5 lines at top/bottom
