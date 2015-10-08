@@ -121,6 +121,8 @@
 			helm-source-buffers-list
 			helm-source-files-in-current-dir
 			helm-source-locate))
+	:config
+		(define-key helm-map [escape] 'helm-keyboard-quit)
 	:bind
 		("M-x" . helm-M-x)
 		("C-x b" . helm-mini)
@@ -325,7 +327,6 @@
 		; esc key (from WikEmacs)
 		(define-key evil-normal-state-map [escape] 'keyboard-quit)
 		(define-key evil-visual-state-map [escape] 'keyboard-quit)
-		(define-key helm-map [escape] 'helm-keyboard-quit)
 		; scroll keeping cursor in place
 		(define-key evil-normal-state-map (kbd "C-j")
 			(lambda () (interactive)  (evil-scroll-line-down 1) (evil-next-visual-line 0)))
