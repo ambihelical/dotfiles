@@ -27,7 +27,6 @@ floating_modifier $mod
 # start a terminal
 bindsym $mod+Return exec urxvt || i3-sensible-terminal
 bindsym $mod+Shift+Return exec --no-startup-id urxvt -name scratch
-
 # kill focused window
 bindsym $mod+Shift+q kill
 
@@ -227,14 +226,15 @@ for_window [class="Gsimplecal"] floating enable
 for_window [class="Qalculate"] floating enable
 for_window [class="Update-manager"] floating enable
 for_window [class="MintUpdate.py"] floating enable
-for_window [instance="scratch"] floating enable, move scratchpad, scratchpad show, resize grow left 300, resize grow right 300, resize grow up 200, resize shrink down 300, move scratchpad
+for_window [instance="scratch"] floating enable, move scratchpad, scratchpad show, \
+	resize set 1600 480, move position center, scratchpad show
 
 # title formatting
 for_window [class="Gcalctool"] title_format "Σ %title"
 for_window [class="Qalculate"] title_format "Σ %title"
 for_window [class="Emacs"] title_format "☮ %title"
-for_window [class="URxvt"] title_format "↵ %title"
-for_window [class="Firefox"] title_format "☯ %title"
+for_window [class="URxvt"] title_format "<span foreground='black'>↵ %title</span>"
+for_window [class="Firefox"] title_format "<span foreground='dark gray'>☯ %title</span>"
 for_window [class="Pithos"] title_format "♫ %title"
 for_window [class="Thunderbird"] title_format "💩 %title"
 for_window [class="Git-gui"] title_format "Ⓖ %title"
