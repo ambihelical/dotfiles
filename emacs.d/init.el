@@ -126,6 +126,7 @@
 	:bind
 		("M-x" . helm-M-x)
 		("C-x b" . helm-mini)
+		("<f2>"   . helm-mini)
 		("<f3>" . helm-for-files)
 		("<S-f3>" . dired-jump)
 		("<f4> a" . helm-apropos)
