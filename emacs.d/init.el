@@ -105,14 +105,21 @@
 
 (use-package helm
 	:init
-		(setq helm-split-window-in-side-p t
-			helm-M-x-fuzzy-match t
-			helm-buffers-fuzzy-matching t
-			helm-recentf-fuzzy-match t
-			helm-locate-fuzzy-match t
-			helm-apropos-fuzzy-match t
-			helm-move-to-line-cycle-in-source t
-			helm-ff-search-library-in-sexp t
+		(setq helm-split-window-in-side-p        t
+			helm-apropos-fuzzy-match              t
+			helm-bookmark-show-location           t
+			helm-buffers-fuzzy-matching           t
+			helm-completion-in-region-fuzzy-match t
+			helm-ff-search-library-in-sexp        t
+			helm-file-cache-fuzzy-match           t
+			helm-imenu-fuzzy-match                t
+			helm-locate-fuzzy-match               t
+			helm-mode-fuzzy-match                 t
+			helm-move-to-line-cycle-in-source     t
+			helm-M-x-fuzzy-match                  t
+			helm-quick-update                     t
+			helm-recentf-fuzzy-match              t
+			helm-semantic-fuzzy-match             t
 			helm-buffer-max-length 40
 			helm-scroll-amount 8)
 		;; set the sources for helm-for-files
