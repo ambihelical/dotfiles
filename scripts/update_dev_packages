@@ -17,9 +17,9 @@ if [ "${OSTYPE:0:10}" == 'linux-gnue' ]; then
 	p="$p python3-dev "
 	apt-get --quiet --yes --no-install-recommends install $p
 elif [ "${OSTYPE:0:5}" == 'linux' ]; then
-	p="$p rdoc ri"
+	p="$p rdoc ri doxygen"
 	p="$p cmake-gui build-essential ccache"
-	p="$p manpages-dev manpages-posix-dev doxygen"
+	p="$p manpages-dev manpages-posix-dev ncurses-doc"
 	p="$p gcc-doc glibc-doc"
 	p="$p gcc-multilib libgmp-dev libmpc-dev libmpfr-dev ppl-dev libcloog-ppl-dev"         # gcc cross compiler support
 	p="$p libzmq-dev "                                                           # python pkg support
