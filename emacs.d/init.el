@@ -137,7 +137,6 @@
 		("<f3>" . helm-for-files)
 		("<S-f3>" . dired-jump)
 		("<f4> a" . helm-apropos)
-		("<f4> d" . helm-semantic-or-imenu)
 		("<f4> j" . helm-all-mark-ring)
 		("<f4> i" . helm-info-at-point)
 		("<f4> k" . helm-show-kill-ring)
@@ -181,6 +180,10 @@
 		("<f7> u" . projectile-invalidate-cache)
 	)
 
+(defun update-all-tags ( )
+	(interactive)
+	(let ((current-prefix-arg 4)) (call-interactively 'helm-gtags-update-tags)))
+
 (use-package helm-gtags
 	:init
 		(setq helm-gtags-auto-update t)
@@ -193,9 +196,11 @@
 		(add-hook 'c++-mode-hook 'helm-gtags-mode)
 		(add-hook 'asm-mode-hook 'helm-gtags-mode)
 	:bind
-		("<f6>" . helm-gtags-dwim)
-		("<S-f6>" . helm-gtags-find-pattern)
-		("<C-f6>" . helm-gtags-update-tags )
+		("<f6> <f6>" . helm-gtags-dwim)
+		("<f6> d" . helm-gtags-find-tag)
+		("<f6> r" . helm-gtags-find-rtag)
+		("<f6> u" . update-all-tags )
+		("<f6> m" . helm-semantic-or-imenu)
 	:diminish helm-gtags-mode)
 
 (use-package markdown-mode
