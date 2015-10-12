@@ -17,7 +17,7 @@ if [ "${OSTYPE:0:10}" == 'linux-gnue' ]; then
 	p="$p python3-dev "
 	apt-get --quiet --yes --no-install-recommends install $p
 elif [ "${OSTYPE:0:5}" == 'linux' ]; then
-	p="$p rdoc ri doxygen"
+	p="$p rdoc ri doxygen librsvg2-bin"
 	p="$p cmake-gui build-essential ccache"
 	p="$p manpages-dev manpages-posix-dev ncurses-doc"
 	p="$p gcc-doc glibc-doc"
