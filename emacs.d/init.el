@@ -294,6 +294,7 @@
 		(add-hook 'emacs-lisp-mode-hook 'hs-minor-mode)
 		(add-hook 'sh-mode-hook         'hs-minor-mode)
 		(add-hook 'python-mode-hook     'hs-minor-mode)
+	:diminish hs-minor-mode
 	)
 
 ;broken due to changes in helm
@@ -361,4 +362,6 @@
 
 (use-package ws-butler
 	:config
-	(ws-butler-global-mode t))
+	(ws-butler-global-mode t)
+	:defer 3
+	)
