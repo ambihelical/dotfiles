@@ -177,6 +177,7 @@
 		("<f5>" . helm-projectile-find-other-file)
 		("<f7> <f7>" . helm-projectile-switch-project)
 		("<f7> c" . projectile-compile-project)
+		("<f7> o" . projectile-multi-occur)
 		("<f7> u" . projectile-invalidate-cache)
 	)
 
