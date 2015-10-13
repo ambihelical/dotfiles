@@ -1,148 +1,348 @@
 @startuml
 
-state "Normal Mode" as NormalMode {
+' TODO
+' add note on visual states about what they do
 
-OpCount -right-> Operator
-Operator -right->  MotionCount
-MotionCount -down-> Modifier
-MotionCount -right-> Motion
-Modifier -right-> Object
 
-state Operator: Repeat to operate on current line only and for this case motion is not used\nFor the g operators, the second g can be omitted (e.g. guu instead of gugu)
-state Operator: =====
+[*] --> OptionalRepeatCount
 
-state Operator: **d**      delete
-state Operator: **y**      yank
-state Operator: **c**      change
-state Operator: **g~ **   swap case
-state Operator: **gu**    make lowercase
-state Operator: **gU**    make uppercase
-state Operator: **!**     filter through shell cmd
-state Operator: **=**      filter through indenting
-state Operator: **gq**    text format
-state Operator: **g?**     rot13
-state Operator: **>**      shift right
-state Operator: **<**      shift left
-state Operator: **zf**     define fold
-state Operator: **g@**   call function set with **operatorfunc**
-state Operator: **gc**     comment [tcomment bundle]
+OptionalRepeatCount -left-> VisualOp
+OptionalRepeatCount -right-> SimpleOp
+OptionalRepeatCount --> OptionalRegister
+OptionalRepeatCount --> SimpleMotionOp
 
-state "Motion Count" as MotionCount {
-	state "digit" as modigits
-	modigits --> modigits: 0-9
+
+OptionalRegister -->  RegMotionOp
+OptionalRegister -left->  RegVisualOp
+OptionalRegister -right->  RegOp
+
+SimpleMotionOp -down-> OptionalMotionCount
+RegMotionOp --> OptionalMotionCount
+
+OptionalMotionCount --> OptionalMotionModifier
+OptionalMotionModifier -down-> SimpleMotion
+OptionalMotionModifier -down-> SearchMotion
+OptionalMotionModifier -down-> TextObjectMotion
+
+'TextObjectMotion --> [*]
+'SimpleMotion --> [*]
+'SearchMotion --> [*]
+'RegVisualOp --> [*]
+'RegOp --> [*]
+
+state OptionalRepeatCount {
+	state "Digit" as RepeatDigit: 0-9
+	[*] --> [*]
+	[*] --> RepeatDigit
+	RepeatDigit --> [*]
+	RepeatDigit -right-> RepeatDigit
 }
 
-state "Overall Count" as OpCount {
-	state "digit" as opdigits
-	opdigits --> opdigits: 0-9
+state OptionalRegister {
+	[*] --> [*]
+	[*] -down-> Register
+	Register -down-> [*]
+	state Register {
+		state Register: ""**"** followed single character""
+		state Register: ====
+		state Register: ""**0**       most recent yank (caveats apply, see docs) [ro] ""
+		state Register: ""**n**       nth most recent delete (caveats apply, see docs) [ro]""
+		state Register: ""**-**       small deletes (less than one line) [ro]""
+		state Register: ""**a-zA-Z**  user register""
+		state Register: ""**.**       last inserted text [ro]""
+		state Register: ""**%**       Name of current file [ro]""
+		state Register: ""**#**       Name of alternate file [ro]""
+		state Register: ""**:**       Most recent command line [ro]""
+		state Register: ""**=**       Evaluate expression""
+		state Register: ""**~***       selection""
+		state Register: ""**+**       clipboard""
+		state Register: ""**~ **      Last dropped text""
+	}
 }
 
-state Motion: --Character--
-state Motion: **h**             //count// characters to left
-state Motion: **l**              //count// characters to right
-state Motion: **0**              first character of line
-state Motion: **g0**            first character of screen line
-state Motion: **^**             first non-blank character of line
-state Motion: **g^**            first non-blank character of screen line
-state Motion: **$**             end of line
-state Motion: **g$**            end of screen line
-state Motion: **|**              //count// column
-state Motion: **g_**            last nonblank character and //count// lines down
-state Motion: **f** //ch//         find character ch to right, include ch
-state Motion: **F** //ch//         find character ch to left, include ch
-state Motion: **t** //ch//         find character ch to right, don't inlude ch
-state Motion: **T** //ch//         find character ch to left, don't inlude ch
-state Motion: **;**                Repeat last f, t, F or T
-state Motion: **,**                Repeat last f, t, F or T in opposite direction
+state RegMotionOp {
+	state RegMotionOp: ""**y**     yank""
+	state RegMotionOp: ""**c**     delete and start insert""
+	state RegMotionOp: ""**d**     delete""
+	state RegMotionOp: ""**D**     delete to end of line""
+}
 
+state OptionalMotionCount {
+	state "Digit" as MotionDigit: 0-9
+	[*] --> [*]
+	[*] --> MotionDigit
+	MotionDigit -right-> MotionDigit
+	MotionDigit --> [*]
+}
 
-state Motion: --Word--
-state Motion: **w**             forward //count// words, position at beginning 
-state Motion: **W**             forward //count// WORDs, position at beginning
-state Motion: **b**             backward //count// words, position at beginning
-state Motion: **B**             backward //count// WORDs, position at beginning
-state Motion: **e**             forward //count// word, position at end
-state Motion: **E**             forward //count// WORDs, position at end
-state Motion: **ge**            backward //count// word, position at end
-state Motion: **gE**            backward //count// WORD, position at end
+state OptionalMotionModifier {
+	[*] --> [*]
+	[*] -down-> MotionModifier
+	MotionModifier -down-> [*]
+	state MotionModifier {
+		state MotionModifier: ""**v**   if line-wise, force character-wise motion""
+		state MotionModifier: ""    otherwise toggle exclusivity""
+		state MotionModifier: ""**V**   if character-wise, force line-wise motion""
+		state MotionModifier: ""**^V**  force block-wise motion""
+	}
+}
 
-state Motion: --Objects--
-state Motion: **(**             sentence back
-state Motion: **)**             sentence forward
-state Motion: **{**             paragraph back
-state Motion: **}**             paragraph forward
+' can be preceded by count
+state SimpleOp {
+	state SimpleOp: --Character--
+	state SimpleOp: ""**r** //ch//  replace character""
+	state SimpleOp: ""**R**     enter replace mode""
+	state SimpleOp: ""**~ **    change case""
+	state SimpleOp: --Line--
+	state SimpleOp: ""**g~~ **  swap case""
+	state SimpleOp: ""**guu**   make lowercase""
+	state SimpleOp: ""**gUU**   make uppercase""
+	state SimpleOp: ""**g??**   rot13""
+	state SimpleOp: ""**gqq**   text format""
+	state SimpleOp: ""**gww**   text format, don't move cursor""
+	state SimpleOp: ""**>>**    shift line right""
+	state SimpleOp: ""**<<**    shift line left""
+	state SimpleOp: ""**gcc**   comment line [tcomment bundle]""
+	state SimpleOp: ""**J**     join lines""
+	state SimpleOp: ""**gJ**    join lines, don't add or remove spaces""
+}
 
-state Motion: **%**            matching delimiter under cursor (no count)
-
-state Motion: **])**            next unmatched (
-state Motion: **]}**           next unmatched {
-state Motion: **]#**           next unmatched #if or #endif
-state Motion: **]*** or **]/**    next end of /* */ comment
-state Motion: **]m**           next method start
-state Motion: **]M**           next method end
-state Motion: **]]**             section forward or next { in first column
-state Motion: **][**             section forward or next } in first column
-
-state Motion: **[(**            previous unmatched (
-state Motion: **[{**           previous unmatched {
-state Motion: **[#**           previous unmatched #if or #else
-state Motion: **[*** or **[/**    go to previous start of /* */ comment
-state Motion: **[m**           previous method start
-state Motion: **[M**           previous method end
-state Motion: **[[**             section back or previous { in first column
-state Motion: **[]**             section back or previous } in first column
-
-
-
-state Motion: --Line Relative--
-state Motion: **k**             //count// lines up
-state Motion: **gk**           //count// display lines up
-state Motion: **-**             //count// display lines up, on the first non-blank character
-state Motion: **j**             //count// lines down
-state Motion: **gj**           //count// display lines down
-state Motion: **+**            //count// display lines down, on the first non-blank character
-state Motion: **_**             //count//-1 display lines down, on the first non-blank character
-state Motion: **gn**             next search search pattern match
-state Motion: **g;**             //count// older position in change list
-state Motion: **g,**             //count// newer position in change list
-
-
-state Motion: --Line Absolute--
-state Motion: **G**            go to file line //count// (default last line), on first non-blank character
-state Motion: **H**            go to line //count// from top of window, on first non-blank character
-state Motion: **L**             go to line //count// from bottom of window, on first non-blank character
-state Motion: **M**            go to middle of window, on first non-blank character
-state Motion: **gg**           go to line //count// (default first line), on first non-blank character
-state Motion: **go**           go to byte //count// in buffer 
-state Motion: **%**            go to //count// percentage in file, on first non-blank character
-
-
-state Motion: --Marks--
-state Motion: **g'** //m//         to mark //m// (jumplist unaffected)
-state Motion: **'** //m//          to the mark //m//
-state Motion: **]'**            next //count// lowercase mark below cursor on first non-blank character
-state Motion: **]`**            next //count// lowercase mark below cursor
-state Motion: **['**            previous //count// lowercase mark above cursor on first non-blank character
-state Motion: **[`**            previous //count// lowercase mark above cursor
-
-
-state Modifier: **a**            around object   
-state Modifier: **i**            inside object
-
-state Object: **w**                  word
-state Object: **W**                 WORD
-state Object: **s**                  sentence
-state Object: **p**                  paragraph
-state Object: **[** or **]**              [] block
-state Object: **(** or **)** or **b**      () block
-state Object: **{** or **}** or **B**    {} block
-state Object: **<** or **>**          <> block
-state Object: **"** or **'** or **`**      quoted string
-state Object: **t**                   XML/HTML tag
-state Object: **a**                  argument [textargobj.vim]
+' no register, operates on visual selection
+state VisualOp {
+	state VisualOp: ""**r** //ch//  replace with character ch""
+	state VisualOp: ""**~ **    change case""
+	state VisualOp: ""**U**     make uppercase""
+	state VisualOp: ""**u**     make lowercase""
+	state VisualOp: ""**=**     filter lines through indenting""
+	state VisualOp: ""**>**     shift selection right""
+	state VisualOp: ""**<**     shift selection left""
+	state VisualOp: ""**!**     filter lines through shell cmd""
+	state VisualOp: ""**gq**    format text""
+	state VisualOp: ""**gw**    format text, don't move cursor""
+	state VisualOp: ""**g?**    rot13 text""
+	state VisualOp: ""**J**     join lines, don't move cursor""
+	state VisualOp: ""**gJ**    join lines, don't add or remove spaces""
 
 }
-legend 
+
+' can be preceded by count and/or register
+state RegOp {
+	state RegOp: --Character--
+	state RegOp: ""**s**      delete characters and start insert""
+	state RegOp: ""**x**      delete char at cursor""
+	state RegOp: ""**X**      delete char before cursor""
+	state RegOp: ""**p**      put text after cursor""
+	state RegOp: ""**P**      put text before cursor""
+	state RegOp: ""**gp**     put text after cursor, move to end""
+	state RegOp: ""**gP**     put text before cursor, move to end""
+	state RegOp: --Line--
+	state RegOp: ""**dd**     delete lines""
+	state RegOp: ""**yy**     yank lines""
+	state RegOp: ""**Y**      same as yy""
+	state RegOp: ""**cc**     delete lines and start insert""
+	state RegOp: ""**S**      delete lines and start insert""
+	state RegOp: ""**C**      delete to end of line and start insert""
+	state RegOp: ""**D**      delete to end of line""
+}
+
+' can be preceded by register, operates on visual selection
+state RegVisualOp {
+	state RegVisualOp: --Character--
+	state RegVisualOp: ""**c**      delete text and start insert""
+	state RegVisualOp: ""**s**      delete text and start insert""
+	state RegVisualOp: ""**x**      delete text""
+	state RegVisualOp: ""**d**      delete text""
+	state RegVisualOp: ""**y**      yank""
+	state RegVisualOp: ""**p**      put text replacing selection""
+	state RegVisualOp: ""**P**      put text replacing selection""
+	state RegVisualOp: ""**gp**     put text replacing selection""
+	state RegVisualOp: ""**gP**     put text replacing selection""
+	state RegVisualOp: --Line--
+	state RegVisualOp: ""**S**      delete lines and start insert""
+	state RegVisualOp: ""**X**      delete lines""
+	state RegVisualOp: ""**D**      delete to end of line""
+	state RegVisualOp: ""**Y**      yank lines""
+}
+
+state SimpleMotionOp {
+	state SimpleMotionOp: ""**g~ **   swap case""
+	state SimpleMotionOp: ""**gu**    make lowercase""
+	state SimpleMotionOp: ""**gU**    make uppercase""
+	state SimpleMotionOp: ""**!**     filter through shell cmd""
+	state SimpleMotionOp: ""**=**     filter through indenting""
+	state SimpleMotionOp: ""**gq**    text format""
+	state SimpleMotionOp: ""**gw**    text format, don't move cursor""
+	state SimpleMotionOp: ""**g?**    rot13""
+	state SimpleMotionOp: ""**>**     shift lines right""
+	state SimpleMotionOp: ""**<**     shift lines left""
+	state SimpleMotionOp: ""**zf**    define fold""
+	state SimpleMotionOp: ""**g@**    call function set with //operatorfunc//""
+	state SimpleMotionOp: ""**gc**    comment [plugin]""
+}
+
+state TextObjectMotion {
+	[*] --> Modifier
+	Modifier --> Object
+	Object --> [*]
+
+	state Modifier: ""**a**   around object""
+	state Modifier: ""**i**   inside object""
+
+	state Object: ""**w**            word""
+	state Object: ""**W**            WORD""
+	state Object: ""**s**            sentence""
+	state Object: ""**p**            paragraph""
+	state Object: ""**[** or **]**       [] block""
+	state Object: ""**(** or **)** or **b**  () block""
+	state Object: ""**{** or **}** or **B**  {} block""
+	state Object: ""**<** or **>**       <> block""
+	state Object: ""**"** or **'** or **`**  quoted string""
+	state Object: ""**t**            XML/HTML tag""
+	state Object: ""**a**            argument [textargobj.vim]""
+}
+
+state SimpleMotion {
+	state SimpleMotion: --Character--
+	state SimpleMotion: ""**h**     //count// characters to left""
+	state SimpleMotion: ""**l**     //count// characters to right""
+	state SimpleMotion: ""**0**     first character of line""
+	state SimpleMotion: ""**g0**    first character of screen line""
+	state SimpleMotion: ""**^**     first non-blank character of line""
+	state SimpleMotion: ""**g^**    first non-blank character of screen line""
+	state SimpleMotion: ""**$**     end of line""
+	state SimpleMotion: ""**g$**    end of screen line""
+	state SimpleMotion: ""**|**     //count// column""
+	state SimpleMotion: ""**g_**    last nonblank character and //count// lines down""
+	state SimpleMotion: ""**f** //ch//  find character ch to right, include ch""
+	state SimpleMotion: ""**F** //ch//  find character ch to left, include ch""
+	state SimpleMotion: ""**t** //ch//  find character ch to right, don't inlude ch""
+	state SimpleMotion: ""**T** //ch//  find character ch to left, don't inlude ch""
+	state SimpleMotion: ""**;**     Repeat last f, t, F or T""
+	state SimpleMotion: ""**,**     Repeat last f, t, F or T in opposite direction""
+
+	state SimpleMotion: --Word--
+	state SimpleMotion: ""**w**     forward //count// words, position at beginning""
+	state SimpleMotion: ""**W**     forward //count// WORDs, position at beginning""
+	state SimpleMotion: ""**b**     backward //count// words, position at beginning""
+	state SimpleMotion: ""**B**     backward //count// WORDs, position at beginning""
+	state SimpleMotion: ""**e**     forward //count// word, position at end""
+	state SimpleMotion: ""**E**     forward //count// WORDs, position at end""
+	state SimpleMotion: ""**ge**    backward //count// word, position at end""
+	state SimpleMotion: ""**gE**    backward //count// WORD, position at end""
+
+	state SimpleMotion: --Sentence--
+	state SimpleMotion: ""**(**     sentence back""
+	state SimpleMotion: ""**)**     sentence forward""
+	state SimpleMotion: --Paragraph--
+	state SimpleMotion: ""**{**     paragraph back""
+	state SimpleMotion: ""**}**     paragraph forward""
+
+	state SimpleMotion: --Delimiters--
+	state SimpleMotion: ""**%**         matching delimiter under cursor (no count)""
+	state SimpleMotion: ""**])**        next unmatched (""
+	state SimpleMotion: ""**]}**        next unmatched {""
+	state SimpleMotion: ""**]#**        next unmatched #if or #endif""
+	state SimpleMotion: ""**]*** or **]/**  next end of /* */ comment""
+	state SimpleMotion: ""**]m**        next method start""
+	state SimpleMotion: ""**]M**        next method end""
+	state SimpleMotion: ""**]]**        section forward or next { in first column""
+	state SimpleMotion: ""**][**        section forward or next } in first column""
+
+	state SimpleMotion: ""**[(**        previous unmatched (""
+	state SimpleMotion: ""**[{**        previous unmatched {""
+	state SimpleMotion: ""**[#**        previous unmatched #if or #else""
+	state SimpleMotion: ""**[*** or **[/**  go to previous start of /* */ comment""
+	state SimpleMotion: ""**[m**        previous method start""
+	state SimpleMotion: ""**[M**        previous method end""
+	state SimpleMotion: ""**[[**        section back or previous { in first column""
+	state SimpleMotion: ""**[]**        section back or previous } in first column""
+
+	state SimpleMotion: --Line Relative--
+	state SimpleMotion: ""**k**      //count// lines up""
+	state SimpleMotion: ""**gk**     //count// display lines up""
+	state SimpleMotion: ""**-**      //count// display lines up, on the first non-blank character""
+	state SimpleMotion: ""**j**      //count// lines down""
+	state SimpleMotion: ""**gj**     //count// display lines down""
+	state SimpleMotion: ""**+**      //count// display lines down, on the first non-blank character""
+	state SimpleMotion: ""**_**      //count//-1 display lines down, on the first non-blank character""
+	state SimpleMotion: ""**gn**     next search search pattern match""
+	state SimpleMotion: ""**g;**     //count// older position in change list""
+	state SimpleMotion: ""**g,**     //count// newer position in change list""
+
+	state SimpleMotion: --Line Absolute--
+	state SimpleMotion: ""**G**      go to file line //count// (default last line), on first non-blank character""
+	state SimpleMotion: ""**H**      go to line //count// from top of window, on first non-blank character""
+	state SimpleMotion: ""**L**      go to line //count// from bottom of window, on first non-blank character""
+	state SimpleMotion: ""**M**      go to middle of window, on first non-blank character""
+	state SimpleMotion: ""**gg**     go to line //count// (default first line), on first non-blank character""
+	state SimpleMotion: ""**go**     go to byte //count// in buffer""
+	state SimpleMotion: ""**%**      go to //count// percentage in file, on first non-blank character""
+
+	state SimpleMotion: --Marks--
+	state SimpleMotion: ""**g'** //m//   to mark //m// (jumplist unaffected)""
+	state SimpleMotion: ""**'** //m//    to the mark //m//""
+	state SimpleMotion: ""**]'**     next //count// lowercase mark below cursor on first non-blank character""
+	state SimpleMotion: ""**]`**     next //count// lowercase mark below cursor""
+	state SimpleMotion: ""**['**     previous //count// lowercase mark above cursor on first non-blank character""
+	state SimpleMotion: ""**[`**     previous //count// lowercase mark above cursor""
+}
+
+state SearchMotion {
+	[*] --> SearchOp1
+	[*] --> SearchOp2
+	SearchOp2 --> SearchOffset
+	SearchOp2 -right-> SearchAgain
+	SearchAgain --> SearchOp1
+	SearchAgain --> SearchOp2
+	SearchOffset --> [*]
+	SearchOp1 --> [*]
+	SearchOp2 --> [*]
+
+	state SearchOp1 {
+		state SearchOp1: Uses previous pattern\nif none provided
+		state SearchOp1: =====
+		state SearchOp1: ""**/**//pat//    search forward""
+		state SearchOp1: ""**?**//pat//    search backward""
+	}
+	state SearchOp2 {
+		state SearchOp2: Uses previous pattern\nif none provided
+		state SearchOp2: =====
+		state SearchOp2: ""**/**//pat//**/**    search forward""
+		state SearchOp2: ""**?**//pat//**?**    search backward""
+	}
+	state SearchOffset {
+		state SearchOffset: Line oriented if character offset not provided\nCount is 1 if no count provided
+		state SearchOffset: =====
+
+		[*] --> OffsetPosition
+		[*] --> OffsetDirection
+		OffsetPosition --> [*]
+		OffsetPosition -down-> OffsetDirection
+		OffsetDirection --> [*]
+		OffsetDirection --> OffsetCount
+		OffsetCount --> [*]
+
+		state "Position" as OffsetPosition {
+			state OffsetPosition: ""**e**  from end of match""
+			state OffsetPosition: ""**s**  from start of match""
+			state OffsetPosition: ""**b**  (synonym for **s**)""
+		}
+
+		state "Direction" as OffsetDirection {
+			state OffsetDirection: ""**+**   right or down""
+			state OffsetDirection: ""**-**   left or up""
+		}
+
+		state "Digit" as OffsetCount: 0-9
+		OffsetCount -right-> OffsetCount
+	}
+	state SearchAgain {
+		state SearchAgain: ""**;**    perform another search""
+	}
+}
+
+
+legend
 word is a keyword type word
 WORD are strictly space seperated
 endlegend
