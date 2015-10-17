@@ -331,6 +331,11 @@
 					"v"  'exchange-point-and-mark
 					)
 			)  ; evil-leader
+		(use-package powerline-evil
+			:config
+				(powerline-default-theme)
+				(display-time-mode t)
+			)
 		(define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
 		(define-key evil-outer-text-objects-map "a" 'evil-outer-arg)
 		(define-key evil-inner-text-objects-map "b" 'evil-textobj-anyblock-inner-block)
@@ -350,11 +355,6 @@
 		(evil-mode 1)
 	) ; evil
 
-(use-package powerline-evil
-	:config
-		(powerline-default-theme)
-		(display-time-mode t)
-	)
 
 (use-package diminish
 	:config
