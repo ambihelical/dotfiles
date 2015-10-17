@@ -366,3 +366,14 @@
 	(ws-butler-global-mode t)
 	:defer 3
 	)
+
+(use-package shell-pop
+	:init
+		(setq shell-pop-internal-mode "ansi-term")
+		(setq shell-pop-term-shell "/bin/bash")
+		(setq shell-pop-window-size 40)
+		(setq shell-pop-window-position "top")
+		(setq shell-pop-universal-key "<f8>")
+	:bind
+		("<f8>" . shell-pop)
+	)
