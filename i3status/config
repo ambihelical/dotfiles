@@ -19,6 +19,8 @@ order += "ethernet eth0"
 order += "ethernet eth1"
 order += "wireless wlan0"
 order += "volume master"
+order += "cpu_usage"
+order += "load"
 order += "time"
 
 wireless wlan0 {
@@ -40,7 +42,7 @@ battery 0 {
 }
 
 time {
-	format = "📅 %a %d %b %I:%M %p"
+	format = "[📅]—▸%a %d %b %I:%M %p"
 	on_click 1 = "exec gsimplecal"
 }
 
@@ -60,8 +62,8 @@ disk "/media/work/DEVO" {
 }
 
 volume master {
-	format = "🔊 %volume"
-	format_muted = "🔊 %volume"
+	format = "[🔊]—▸%volume"
+	format_muted = "[🔊]—▸%volume"
 	device = "default"
 	mixer = "Master"
 	mixer_idx = 0
@@ -71,11 +73,13 @@ volume master {
 }
 
 cpu_usage {
-	format = "CPUs: %usage"
+	format = "[⚙]—▸%usage"
+	on_click 1 = "exec gnome-system-monitor"
 }
 
 load {
-	format = "%1min"
+	format = "[🔥]—▸%1min"
+	on_click 1 = "exec gnome-system-monitor"
 }
  
 cpu_temperature 0 {
