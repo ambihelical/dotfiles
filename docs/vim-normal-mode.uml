@@ -16,8 +16,8 @@ OptionalRegister -->  RegMotionOp
 OptionalRegister -left->  RegVisualOp
 OptionalRegister -right->  RegOp
 
-SimpleMotionOp -down-> OptionalMotionCount
-RegMotionOp --> OptionalMotionCount
+SimpleMotionOp -left-> OptionalMotionCount
+RegMotionOp -right-> OptionalMotionCount
 
 OptionalMotionCount --> OptionalMotionModifier
 OptionalMotionModifier -down-> SimpleMotion
