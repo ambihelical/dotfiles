@@ -120,8 +120,10 @@
 			helm-quick-update                     nil   ; ui flashing occurs
 			helm-recentf-fuzzy-match              t
 			helm-semantic-fuzzy-match             t
-			helm-buffer-max-length 40
-			helm-scroll-amount 8)
+			helm-input-idle-delay                 0.01
+			helm-input-delay                      0.01
+			helm-buffer-max-length                40
+			helm-scroll-amount                    8)
 		;; set the sources for helm-for-files
 		(setq helm-for-files-preferred-list '(
 			helm-source-recentf
@@ -179,6 +181,7 @@
 		("<f7> c" . projectile-compile-project)
 		("<f7> o" . projectile-multi-occur)
 		("<f7> u" . projectile-invalidate-cache)
+		("<f7> k" . projectile-kill-buffers)
 	)
 
 (defun update-all-tags ( )
