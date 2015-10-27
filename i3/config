@@ -26,7 +26,11 @@ floating_modifier $mod
 
 # start a terminal
 bindsym $mod+Return exec urxvt || i3-sensible-terminal
-bindsym $mod+Shift+Return exec --no-startup-id urxvt -name scratch
+# open terminal in bottom of screen
+bindsym $mod+Shift+Return focus parent, split v, exec urxvt
+# open scratch window if closed accidently
+bindsym $mod+Control+Return exec --no-startup-id urxvt -name scratch
+
 # kill focused window
 bindsym $mod+Shift+q kill
 
