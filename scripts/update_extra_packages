@@ -1,5 +1,5 @@
 #!/bin/bash
-# 
+#
 # Extra packages needed only for personal machine
 #
 if [[ $EUID -ne 0 ]]; then
@@ -9,18 +9,19 @@ fi
 
 p=""
 if [ "${OSTYPE:0:10}" == 'linux-gnue' ]; then
-  p="$p ack-grep autojump htop screen"
-  apt-get --quiet --yes --no-install-recommends install $p
-elif [ "${OSTYPE:0:5}" == 'linux' ]; then 
-  p="$p texlive texinfo texlive-extra-utils latex-xcolor texlive-latex-extra"
-  p="$p graphviz libtiff-tools imagemagick"
-  p="$p liferea"
-  apt-get --quiet --yes install $p
-elif [ "${OSTYPE:0:6}" == 'darwin' ]; then 
-  port selfupdate
-  p="$p wget unison ctags"
-  p="$p texlive-latex texlive-latex-recommended texlive-latex-extra p5-text-multimarkdown"
-  p="$p highlight p5-app-ack grep +nls"
-# lesspipe
-  port install -p $p 
+	p="$p ack-grep autojump htop screen"
+	apt-get --quiet --yes --no-install-recommends install $p
+elif [ "${OSTYPE:0:5}" == 'linux' ]; then
+	p="$p texlive texinfo texlive-extra-utils latex-xcolor texlive-latex-extra"
+	p="$p graphviz libtiff-tools imagemagick gnome-specimen"
+	p="$p liferea"
+	p="$p default-jre"
+	apt-get --quiet --yes install $p
+elif [ "${OSTYPE:0:6}" == 'darwin' ]; then
+	port selfupdate
+	p="$p wget unison ctags"
+	p="$p texlive-latex texlive-latex-recommended texlive-latex-extra p5-text-multimarkdown"
+	p="$p highlight p5-app-ack grep +nls"
+	# lesspipe
+	port install -p $p
 fi

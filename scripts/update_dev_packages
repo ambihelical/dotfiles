@@ -17,15 +17,24 @@ if [ "${OSTYPE:0:10}" == 'linux-gnue' ]; then
 	p="$p python3-dev "
 	apt-get --quiet --yes --no-install-recommends install $p
 elif [ "${OSTYPE:0:5}" == 'linux' ]; then
+  # documentation tools
 	p="$p rdoc ri doxygen librsvg2-bin"
-	p="$p cmake-gui build-essential ccache"
 	p="$p manpages-dev manpages-posix-dev ncurses-doc"
-	p="$p gcc-doc glibc-doc"
-	p="$p gcc-multilib libgmp-dev libmpc-dev libmpfr-dev ppl-dev libcloog-ppl-dev"         # gcc cross compiler support
-	p="$p libzmq-dev "                                                           # python pkg support
+  # compilers and building
+	p="$p cmake-gui build-essential ccache"
+	p="$p clang gcc-doc glibc-doc"
 	p="$p autoconf automake libtool gettext intltool"
-	p="$p clang"
+  # gcc cross compiler support
+	p="$p gcc-multilib libgmp-dev libmpc-dev libmpfr-dev ppl-dev libcloog-ppl-dev"
+  # version control
 	p="$p meld git-gui mercurial subversion "
+  # libraries sometimes needed to build from source
+	p="$p libncurses5-dev"
+	p="$p libzmq-dev libpng-dev libfreetype6-dev"
+	p="$p libxcb1-dev libxcb-util-dev libxkbcommon-dev libxkbcommon-x11-dev libxcb-keysyms1-dev libxcb-cursor-dev"
+	p="$p libxcb-randr0-dev libxcb-icccm4-dev libxcb-xinerama0-dev"
+	p="$p libev-dev libyajl-dev libpcre3-dev libstartup-notification0-dev libpango1.0-dev libcairo-dev"
+
 	apt-get --quiet --yes install $p
 	pip3 install --upgrade pyserial ipython[notebook] pyzmq jinja2 tornado jsonschema matplotlib
 	echo "NOTE: Install global via source, debian is out of date"

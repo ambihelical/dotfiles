@@ -214,8 +214,8 @@ assign [class="Thunderbird"] 10:Admin
 assign [class="Pidgin"] 9:IM
 
 # startup programs
-exec --no-startup-id cinnamon-settings-daemon || gnome-settings-daemon   # bring over desktop settings
-exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 || /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1  # gui authentication
+exec --no-startup-id unity-settings-daemon || gnome-settings-daemon   # bring over desktop settings
+exec --no-startup-id /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1  # gui authentication
 exec --no-startup-id nm-applet
 exec --no-startup-id dropbox start -i
 exec --no-startup-id clipit
@@ -251,7 +251,7 @@ for_window [class="Wireshark"] title_format "↔ %title"
 for_window [class="Nemo"] title_format "📂 %title"
 
 # convenient key bindings
-bindsym $mod+slash exec nemo --no-desktop || pcmanfm || nautilus --no-desktop
+bindsym $mod+slash exec nemo --no-desktop || nautilus --no-desktop
 bindsym $mod+b exec firefox || chromium-browser || chromium
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 1 -- +5% && killall -SIGUSR1 i3status
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 1 -- -5% && killall -SIGUSR1 i3status
