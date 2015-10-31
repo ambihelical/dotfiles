@@ -1,28 +1,29 @@
 #!/bin/bash
 
+doexit() {
+	echo $1
+	exit -1
+}
+
 if [ $# -lt 1 ]; then 
 	echo "Usage: plant2pdf a.uml [ b.uml ... ] > output.pdf"
 	exit -1
 fi
 JAR=~/.local/share/java/plantuml.jar
-have_apps=1
-type rsvg-convert &> /dev/null || echo "Please install librsvg2-bin" && have_apps=0
-type java &> /dev/null || echo "Please install default-jre" && have_apps=0
-[ -e ${JAR} ] || echo "Please download plantuml.jar to ~/.local/share/java" && have_apps=0
+type rsvg-convert &> /dev/null || doexit "Please install librsvg2-bin"
+type java &> /dev/null || doexit "Please install default-jre"
+[ -e ${JAR} ] || doexit "Please download plantuml.jar to ~/.local/share/java/plantuml.jar"
 
 TMP=$(mktemp -d 2>/dev/null || mktemp -d -t 'plant2uml')   #unix.stackexchange.com question 30091
-if [[ ${have_apps} ]]; then
-	SRC=$*
-	java -jar $JAR -tsvg -o${TMP} ${SRC}
-	OUT=""
-	for src in ${SRC}; do
-		base=${src##*/}
-		for sub in "${TMP}/${base%.*}"*.svg; do
-			OUT+=" ${sub}"
-		done
+SRC=$*
+java -jar $JAR -tsvg -o${TMP} ${SRC}
+OUT=""
+for src in ${SRC}; do
+	base=${src##*/}
+	for sub in "${TMP}/${base%.*}"*.svg; do
+		OUT+=" ${sub}"
 	done
-	rsvg-convert --format pdf --keep-aspect-ratio ${OUT}
-	rm -f ${TMP}/*
-	rmdir ${TMP}
-fi
-
+done
+rsvg-convert --format pdf --keep-aspect-ratio ${OUT}
+rm -f ${TMP}/*
+rmdir ${TMP}
