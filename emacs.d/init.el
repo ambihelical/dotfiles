@@ -34,29 +34,29 @@
 (setq inhibit-splash-screen t
       inhibit-startup-echo-area-message t
       inhibit-startup-message t)
-(setq gdb-many-windows t)               ; use more complex gdb layout
-(mouse-avoidance-mode 'animate)         ; move mouse pointer out of way
-(column-number-mode t)                  ; display column/row of cursor in mode-line
-(display-time-mode t)                   ; display time in mode-line
+(setq gdb-many-windows t)                                   ; use more complex gdb layout
+(mouse-avoidance-mode 'animate)                             ; move mouse pointer out of way
+(column-number-mode t)                                      ; display column/row of cursor in mode-line
+(display-time-mode t)                                       ; display time in mode-line
 (setq compilation-scroll-output "first-error")
 
 (defun replace-prefix (prefix input)
 	(replace-regexp-in-string ( concat "^" (regexp-quote prefix)) "" input))
 
-(setq frame-title-format '(             ; set title
+(setq frame-title-format '(                                 ; set title
 		(:eval (if (buffer-file-name)
 			 (replace-prefix (abbreviate-file-name default-directory) (abbreviate-file-name buffer-file-name))
 					"%b"))
 		" %* [" (:eval (abbreviate-file-name default-directory)) "]"))
-(setq icon-title-format frame-title-format)
+(setq icon-title-format frame-title-format)                 ; use same title for unselected frame
 
 ;; tame scrolling
-(setq scroll-margin 5                               ; leave 5 lines at top/bottom
-		scroll-conservatively 100                     ; scroll # to bring point in view
-		scroll-preserve-screen-position 'always       ; move cursor when scrolling
-		mouse-wheel-scroll-amount '(3 ((shift) . 9))  ; 3 or 9 line when shift held
-		mouse-wheel-follow-mouse 't                   ; scroll window under mouse
-		mouse-wheel-progressive-speed nil)            ; don't speed up
+(setq scroll-margin 5                                       ; leave 5 lines at top/bottom
+		scroll-conservatively 100                             ; scroll # to bring point in view
+		scroll-preserve-screen-position 'always               ; move cursor when scrolling
+		mouse-wheel-scroll-amount '(3 ((shift) . 9))          ; 3 lines, or 9 line when shift held
+		mouse-wheel-follow-mouse 't                           ; scroll window under mouse
+		mouse-wheel-progressive-speed nil)                    ; don't speed up
 (setq-default
 		scroll-up-aggressively 0.01
 		scroll-down-aggressively 0.01)
@@ -64,21 +64,24 @@
 ;; Operational preferences
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq backup-directory-alist '(("." . "~/.cache/emacs")))
-(setq custom-file "~/.cache/emacs/customize")       ; put customizations here
+(setq custom-file "~/.cache/emacs/customize")               ; put customizations here
+(global-auto-revert-mode t)                                 ; revert unchanged files automatically
 
 ; make some keys available for use
 (global-unset-key (kbd "<f4>"))
 
 
 ;; Text handling
-(visual-line-mode t)                    ; edit visual lines
-(setq default-tab-width 3)              ; ideal tab setting :)
-;(add-hook 'text-mode-hook (             ; Hard-wrap text when in plaintext mode
+(visual-line-mode t)                                        ; edit visual lines
+(setq default-tab-width 3)                                  ; ideal tab setting :)
+(setq x-select-enable-clipboard nil)                        ; make cut/paste function correctly
+;(add-hook 'text-mode-hook (                                ; Hard-wrap text when in plaintext mode
 ;		lambda () (turn-on-auto-fill)))
-(add-hook 'focus-out-hook (             ; save on focus lost
+(add-hook 'focus-out-hook (                                 ; save on focus lost
 		lambda ()
 			(interactive)
 			(save-some-buffers t)))
+(setq sentence-end-double-space nil)                        ; sentences end with one space
 
 (use-package whitespace
 	:init
@@ -113,15 +116,15 @@
 			helm-ff-search-library-in-sexp        t
 			helm-file-cache-fuzzy-match           t
 			helm-imenu-fuzzy-match                t
-			helm-locate-fuzzy-match               nil   ; not useful
+			helm-locate-fuzzy-match               nil          ; not useful
 			helm-mode-fuzzy-match                 t
 			helm-move-to-line-cycle-in-source     t
 			helm-M-x-fuzzy-match                  t
-			helm-quick-update                     nil   ; ui flashing occurs
+			helm-quick-update                     nil          ; ui flashing occurs
 			helm-recentf-fuzzy-match              t
 			helm-semantic-fuzzy-match             t
-			helm-input-idle-delay                 0.01
-			helm-input-delay                      0.01
+			helm-input-idle-delay                 0.1
+			helm-idle-delay                       0.0
 			helm-buffer-max-length                40
 			helm-scroll-amount                    8)
 		;; set the sources for helm-for-files
@@ -175,13 +178,13 @@
 		(projectile-global-mode 1)
 	:defer 3
 	:bind
-		("<f4> g" . helm-projectile-ag)
 		("<f5>" . helm-projectile-find-other-file)
 		("<f7> <f7>" . helm-projectile-switch-project)
 		("<f7> c" . projectile-compile-project)
 		("<f7> o" . projectile-multi-occur)
 		("<f7> u" . projectile-invalidate-cache)
 		("<f7> k" . projectile-kill-buffers)
+		("<f7> f" . helm-projectile-ag)
 	)
 
 (defun update-all-tags ( )
@@ -301,10 +304,12 @@
 	:diminish hs-minor-mode
 	)
 
+
 ;broken due to changes in helm
 ;(use-package helm-company
 ;	:requires company
 ;	:requires helm)
+
 
 ;; N.B. evil-mode must be enabled after global-evil-leader-mode
 (use-package evil
@@ -332,6 +337,7 @@
 					"e" 'pp-eval-last-sexp
 					"gb" 'vc-annotate
 					"v"  'exchange-point-and-mark
+
 					)
 			)  ; evil-leader
 		(use-package powerline-evil
@@ -380,3 +386,24 @@
 	:bind
 		("<f8>" . shell-pop)
 	)
+
+(use-package guide-key
+	:defer 3
+	:init
+	(setq guide-key/guide-key-sequence '(
+		"<SPC>" "C-x" "C-h" "C-w"
+		"<f4>" "<f6>" "<f7>" "z" "g" ))
+	:config
+		(guide-key-mode 1)
+	:diminish guide-key-mode)
+
+(use-package magit
+  :init
+  :config
+	; keep me accidently hitting k key due to evil habits
+	; this should suffice until magit mapping is figured out
+		(define-key magit-mode-map (kbd "<DEL>") 'magit-delete-thing)
+		(define-key magit-mode-map "k" nil)
+	:bind
+		("<f7> g" . magit-status)
+	:defer t)
