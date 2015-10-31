@@ -20,8 +20,7 @@ Git submodules are used for vim plugins. Ideally, you cloned this repository lik
 If you didn''t use --recursive with the git clone command, you need to do the following in the 
 this repository:
 
-    git submodule init
-    git submodule update
+    git submodule update --init
 
 To refresh the plugins with the latest, just use:
 
