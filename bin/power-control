@@ -1,0 +1,56 @@
+#!/bin/bash
+
+if hash lsb_release 2> /dev/null; then
+
+	brand=$(lsb_release -ds|cut -d\  -f1)
+	version=$(lsb_release -ds|cut -d\  -f2|sed -e 's/\.//')
+else
+	echo "You are on your own"
+	exit 1
+fi
+#echo "version is $version"
+#echo "brand is $brand"
+
+if [[ "$brand" != "Ubuntu" ]]; then
+	echo "Only Ubuntu for now"
+	exit 1
+fi
+
+
+# Fixing hibernate problems: http://blog.roland-kluge.de/?p=793
+#                            http://askubuntu.com/q/1792
+#
+# the version comparison here is conservative, old versions may act like 15.10, I don't know
+systemd=1510
+
+case $1 in
+suspend)
+	if [ "$version" -ge "$systemd" ]; then
+		dbus-send --system --print-reply --dest="org.freedesktop.login1" /org/freedesktop/login1 org.freedesktop.login1.Manager.Suspend boolean:true
+	else
+		dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Suspend
+	fi
+	;;
+hibernate)
+	if [ "$version" -ge "$systemd" ]; then
+		dbus-send --system --print-reply --dest="org.freedesktop.login1" /org/freedesktop/login1 org.freedesktop.login1.Manager.Hibernate boolean:true
+	else
+		dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Hibernate
+	fi
+	;;
+restart)
+	if [ "$version" -ge "$systemd" ]; then
+		dbus-send --system --print-reply --dest="org.freedesktop.login1" /org/freedesktop/login1 org.freedesktop.login1.Manager.Reboot boolean:true
+	else
+		dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Restart
+	fi
+	;;
+shutdown)
+	if [ "$version" -ge "$systemd" ]; then
+		dbus-send --system --print-reply --dest="org.freedesktop.login1" /org/freedesktop/login1 org.freedesktop.login1.Manager.Power-off boolean:true
+	else
+		dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Stop
+	fi
+	;;
+esac
+

@@ -15,7 +15,7 @@ if [ "${OSTYPE:0:10}" == 'linux-gnue' ]; then
 	apt-get --quiet --yes --no-install-recommends install $p
 elif [ "${OSTYPE:0:5}" == 'linux' ]; then
  # fonts
-	p="$p ttf-mscorefonts-installer otf-stix unifont ttf-ancient-fonts"
+	p="$p ttf-mscorefonts-installer otf-stix unifont ttf-ancient-fonts ttf-ancient-fonts-symbola"
  # cli tools
 	p="$p git-core gitk git-doc git-gui"
 	p="$p ack-grep silversearcher-ag autojump htop screen unzip"
