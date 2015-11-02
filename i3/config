@@ -26,10 +26,10 @@ floating_modifier $mod
 
 # start a terminal
 bindsym $mod+Return exec urxvt || i3-sensible-terminal
-# open terminal in bottom of screen
-bindsym $mod+Shift+Return focus parent, split v, exec urxvt
+
 # open scratch window if closed accidently
 bindsym $mod+Control+Return exec --no-startup-id urxvt -name scratch
+
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -73,9 +73,15 @@ bindsym $mod+Shift+Control+Down move workspace to output down
 bindsym $mod+Shift+Control+Up move workspace to output up
 bindsym $mod+Shift+Control+Right move workspace to output right
 
-# splitting
-bindsym $mod+z split h
-bindsym $mod+v split v
+# splitting horiZontal or Vertical
+bindsym $mod+Shift+z split h
+bindsym $mod+Shift+v split v
+
+# focus on parent first and then split: new
+# window goes at parent level instead at current
+# windows.
+bindsym $mod+z focus parent, split h
+bindsym $mod+v focus parent, split v
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen
@@ -83,7 +89,7 @@ bindsym $mod+f fullscreen
 # change container layout (stacked, tabbed, toggle split)
 bindsym $mod+s layout stacking
 bindsym $mod+t layout tabbed
-bindsym $mod+e layout toggle split
+bindsym $mod+e layout toggle
 
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
