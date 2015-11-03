@@ -4,7 +4,7 @@
 # most basic packages needed to set up a basic system, plus a few
 # nice-to-haves.
 
-if [[ $EUID -ne 0 ]]; then
+if [ $EUID -ne 0 ]; then
 	echo "This script must be run with root privileges" 1>&2
 	exit 1
 fi
@@ -41,11 +41,11 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	p="$p libiw-dev"
 
  # version variations
-	if [[ "$linux" -eq "Ubuntu" ]]; then
-		if [[ $version -ge 1510 ]]; then
+	if [ "$linux" == "Ubuntu" ]; then
+		if [ $version -ge 1510 ]; then
 			p="$p ttf-ancient-fonts-symbola"
 			# no nemo-dropbox yet...
-		elif [[ $version < 1510 ]]; then
+		elif [ $version -lt 1510 ]; then
 			p="$p ttf-ancient-fonts"
 			p="$p nemo-dropbox"
 		fi
