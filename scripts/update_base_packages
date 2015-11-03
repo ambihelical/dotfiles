@@ -8,14 +8,20 @@ if [[ $EUID -ne 0 ]]; then
 	echo "This script must be run with root privileges" 1>&2
 	exit 1
 fi
+script_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 p=""
 if [ "${OSTYPE:0:10}" == 'linux-gnue' ]; then
 	p="$p ack-grep autojump htop screen"
 	apt-get --quiet --yes --no-install-recommends install $p
 elif [ "${OSTYPE:0:5}" == 'linux' ]; then
+
+	. ${script_path}/../bin/common/linux.sh
+	linux=$(linux_distribution_name)
+	version=$(linux_distribution_version)
+
  # fonts
-	p="$p ttf-mscorefonts-installer otf-stix unifont ttf-ancient-fonts ttf-ancient-fonts-symbola"
+	p="$p ttf-mscorefonts-installer otf-stix unifont"
  # cli tools
 	p="$p git-core gitk git-doc git-gui"
 	p="$p ack-grep silversearcher-ag autojump htop screen unzip"
@@ -30,10 +36,20 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	p="$p pithos"
 	p="$p qalculate"
 	p="$p gparted nemo nemo-fileroller"
-	p="$p nemo-dropbox"
 	p="$p vim-gnome rxvt-unicode-256color"
  # support for python stuff below
 	p="$p libiw-dev"
+
+ # version variations
+	if [[ "$linux" -eq "Ubuntu" ]]; then
+		if [[ $version -ge 1510 ]]; then
+			p="$p ttf-ancient-fonts-symbola"
+			# no nemo-dropbox yet...
+		elif [[ $version < 1510 ]]; then
+			p="$p ttf-ancient-fonts"
+			p="$p nemo-dropbox"
+		fi
+	fi
 	apt-get --ignore-missing --quiet --yes install $p
 	easy_install3 pip
 	pip3 install --upgrade py3status netifaces colour psutil basiciw i3-py pygments
