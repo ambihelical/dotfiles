@@ -404,6 +404,8 @@
 	; this should suffice until magit mapping is figured out
 		(define-key magit-mode-map (kbd "<DEL>") 'magit-delete-thing)
 		(define-key magit-mode-map "k" nil)
+		(define-key magit-blame-mode-map (kbd "<f7> b") 'magit-blame-quit)
 	:bind
 		("<f7> g" . magit-status)
+		("<f7> b" . magit-blame)
 	:defer t)
