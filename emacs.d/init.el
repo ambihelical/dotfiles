@@ -157,6 +157,7 @@
 	:init
 		(setq projectile-completion-system 'helm)
 		(setq projectile-enable-caching t)
+		(setq projectile-use-git-grep t)
 		(setq projectile-mode-line '(:eval (format " [%s]" (projectile-project-name))))
 	:config
 		(use-package helm-projectile
@@ -408,4 +409,5 @@
 	:bind
 		("<f7> g" . magit-status)
 		("<f7> b" . magit-blame)
+		("<f7> a" . magit-run-git-gui-blame)
 	:defer t)
