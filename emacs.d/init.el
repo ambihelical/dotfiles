@@ -281,7 +281,6 @@
 		("<f4> n" . deft)
 
 	:config
-	(add-to-list 'evil-insert-state-modes 'deft-mode)
 	(add-hook 'deft-mode-hook
 		(lambda ()
 			(define-key deft-mode-map (kbd "<C-return>") 'deft-new-file)
@@ -346,6 +345,10 @@
 				(powerline-default-theme)
 				(display-time-mode t)
 			)
+		(evil-set-initial-state 'git-rebase-mode 'emacs)
+		(evil-set-initial-state 'git-commit-mode 'insert)
+		(evil-set-initial-state 'deft-mode 'insert)
+		(evil-set-initial-state 'magit-branch-manager-mode 'emacs)
 		(define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
 		(define-key evil-outer-text-objects-map "a" 'evil-outer-arg)
 		(define-key evil-inner-text-objects-map "b" 'evil-textobj-anyblock-inner-block)
@@ -399,13 +402,14 @@
 	:diminish guide-key-mode)
 
 (use-package magit
-  :init
-  :config
+	:init
+	:config
+	; get out of magit blame mode
+		(define-key magit-blame-mode-map (kbd "<f7> b") 'magit-blame-quit)
 	; keep me accidently hitting k key due to evil habits
 	; this should suffice until magit mapping is figured out
 		(define-key magit-mode-map (kbd "<DEL>") 'magit-delete-thing)
 		(define-key magit-mode-map "k" nil)
-		(define-key magit-blame-mode-map (kbd "<f7> b") 'magit-blame-quit)
 	:bind
 		("<f7> g" . magit-status)
 		("<f7> b" . magit-blame)
