@@ -13,13 +13,6 @@
 [submodule "vimdir/bundle/bufmru.vim"]
 	path = vimdir/bundle/bufmru.vim
 	url = https://github.com/vim-scripts/bufmru.vim.git
-[submodule "vimdir/bundle/taglist.vim"]
-	path = vimdir/bundle/taglist.vim
-	url = https://github.com/vim-scripts/taglist.vim.git
-	ignore = dirty
-[submodule "vimdir/bundle/plantuml-syntax"]
-	path = vimdir/bundle/plantuml-syntax
-	url = https://github.com/aklt/plantuml-syntax.git
 [submodule "vimdir/bundle/bufkill.vim"]
 	path = vimdir/bundle/bufkill.vim
 	url = https://github.com/vim-scripts/bufkill.vim.git
@@ -29,24 +22,12 @@
 [submodule "vimdir/bundle/tcomment_vim"]
 	path = vimdir/bundle/tcomment_vim
 	url = https://github.com/tomtom/tcomment_vim.git
-[submodule "vimdir/bundle/vim-surround"]
-	path = vimdir/bundle/vim-surround
-	url = https://github.com/tpope/vim-surround.git
 [submodule "vimdir/bundle/vim-repeat"]
 	path = vimdir/bundle/vim-repeat
 	url = https://github.com/tpope/vim-repeat.git
 [submodule "vimdir/bundle/vim-gitgutter"]
 	path = vimdir/bundle/vim-gitgutter
 	url = https://github.com/airblade/vim-gitgutter.git
-[submodule "vimdir/bundle/tagbar"]
-	path = vimdir/bundle/tagbar
-	url = https://github.com/majutsushi/tagbar.git
-[submodule "vimdir/bundle/ctrlp.vim"]
-	path = vimdir/bundle/ctrlp.vim
-	url = https://github.com/kien/ctrlp.vim.git
-[submodule "vimdir/bundle/vim-fugitive"]
-	path = vimdir/bundle/vim-fugitive
-	url = https://github.com/tpope/vim-fugitive.git
 [submodule "vimdir/bundle/vim-airline"]
 	path = vimdir/bundle/vim-airline
 	url = https://github.com/bling/vim-airline.git

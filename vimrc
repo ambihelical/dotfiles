@@ -106,23 +106,9 @@ let ruby_space_errors=1
 " Options for bufmru
 let g:bufmru_switchkey = "<CR>"
 
-" Options for tagbar
-let g:tagbar_compact = 1
-let g:tagbar_singleclick = 1
-
-
-
 "Options for NERDTree
 let NERDTreeDirArrows=1
 let NERDTreeIgnore=['.o$[[file]]','.a$[[file]]','autom4te.cache','Makefile.in$']
-
-" Options for ctrlp
-let g:ctrlp_user_command = { 'types': {
-			\ 1: ['.git', 'cd %s && git ls-files'],
-			\ 2: ['.hg', 'hg --cwd %s locate -I .'],
-			\ },
-			\ 'fallback': 'find %s -type f' }
-let g:ctrlp_match_window = 'order:ttb,bottom'
 
 " ignore lines that don't match any patterns defined for gcc
 let g:compiler_gcc_ignore_unmatched_lines=1
@@ -188,14 +174,6 @@ nnoremap <leader>rs :%s/\s*$//<CR>:nohlsearch<CR>
 " Quickly edit/reload the vimrc file
 nmap <silent> <leader>ev :e $MYVIMRC<CR>
 nmap <silent> <leader>rv :so $MYVIMRC<CR>
-
-" ctrl-p searches
-nmap <leader>b :CtrlPBuffer<CR>
-nmap <leader>f :CtrlP<CR>
-nmap <leader>r :CtrlPMRU<CR>
-
-" fugitive mappings
-nnoremap <leader>gb :Gblame<CR>
 
 " Define clipboard and primary register aliases
 " for easier typing (compose with y,d or p)
