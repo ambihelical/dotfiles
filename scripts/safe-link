@@ -6,8 +6,8 @@
 
 [ "${HOME}" == "" ] && echo "Environment variable HOME is not defined, abort!" && exit -1
 [ "${PWD}" == "" ] && echo "Environment variable PWD is not defined, abort!" && exit -1
-[ ! -e "${PWD}/scripts/safe_link" ] && echo "Script must be run at root of project, abort!" && exit -1
-[ $# != 2 ] && echo "Usage safe_link <source> <destination>" && exit -1
+[ ! -e "${PWD}/scripts/safe-link" ] && echo "Script must be run at root of project, abort!" && exit -1
+[ $# != 2 ] && echo "Usage safe-link <source> <destination>" && exit -1
 src=$1
 dest=$2
 [ ! -e "${src}" ] && echo "source file \"${src}\" doesn't exist" && exit -1

@@ -1,5 +1,5 @@
 
-LN = scripts/safe_link
+LN = scripts/safe-link
 CFG = ~/.config
 CACHE=~/.cache
 ETC=/etc
