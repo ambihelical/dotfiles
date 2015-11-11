@@ -17,10 +17,13 @@ if hash lsb_release 2> /dev/null; then
 	if [[ "$release" =~ "Ubuntu 14.04" ]]; then
 		# pithos
 		add-apt-repository --yes ppa:pithos/ppa
+		add-apt-repository --yes ppa:lvillani/silversearcher
 	fi
 
 	# Any Ubuntu
 	if [[ "$release" =~ "Ubuntu" ]]; then
+		# git
+		add-apt-repository --yes ppa:git-core/ppa
 		# nemo
 		add-apt-repository --yes ppa:webupd8team/nemo
 		# i3

@@ -2,14 +2,14 @@
 #
 # Make sure some development packages are present
 #
-# Includes some common software development packages, other
-# projects should have their own script as needed
+# Mainly includes common software development packages
 if [[ $EUID -ne 0 ]]; then
 	echo "This script must be run with root privilegs" 1>&2
 	exit 1
 fi
 
-p=""
+p=""  # normal packages
+q=""  # packages that over-recommend
 if [ "${OSTYPE:0:10}" == 'linux-gnue' ]; then
 	p="$p build-essential ccache"
 	p="$p libboost-all-dev"
@@ -18,25 +18,20 @@ if [ "${OSTYPE:0:10}" == 'linux-gnue' ]; then
 	apt-get --quiet --yes --no-install-recommends install $p
 elif [ "${OSTYPE:0:5}" == 'linux' ]; then
   # documentation tools
-	p="$p rdoc ri doxygen librsvg2-bin"
+	q="$q doxygen"
 	p="$p manpages-dev manpages-posix-dev ncurses-doc"
-  # compilers and building
+	p="$p librsvg2-bin"
+  # languages, compilers and building
 	p="$p cmake-gui build-essential ccache"
 	p="$p clang gcc-doc glibc-doc"
 	p="$p autoconf automake libtool gettext intltool"
-  # gcc cross compiler support
-	p="$p gcc-multilib libgmp-dev libmpc-dev libmpfr-dev ppl-dev libcloog-ppl-dev"
+	p="$p ruby"
   # version control
 	p="$p meld git-gui mercurial subversion "
   # libraries sometimes needed to build from source
 	p="$p libncurses5-dev"
-	p="$p libzmq-dev libpng-dev libfreetype6-dev"
-	p="$p libxcb1-dev libxcb-util-dev libxkbcommon-dev libxkbcommon-x11-dev libxcb-keysyms1-dev libxcb-cursor-dev"
-	p="$p libxcb-randr0-dev libxcb-icccm4-dev libxcb-xinerama0-dev"
-	p="$p libev-dev libyajl-dev libpcre3-dev libstartup-notification0-dev libpango1.0-dev libcairo-dev"
-
-	apt-get --quiet --yes install $p
-	pip3 install --upgrade pyserial ipython[notebook] pyzmq jinja2 tornado jsonschema matplotlib
+	apt-get --quiet --ignore-missing --yes install $p
+	apt-get --quiet --ignore-missing --no-install-recommends --yes install $q
 	echo "NOTE: Install global via source, debian is out of date"
 elif [ "${OSTYPE:0:6}" == 'darwin' ]; then
 	brew update
