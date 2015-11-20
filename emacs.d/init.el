@@ -82,6 +82,7 @@
 			(interactive)
 			(save-some-buffers t)))
 (setq sentence-end-double-space nil)                        ; sentences end with one space
+(setq c-electric-pound-behavior 'alignleft)                 ; cpp directives aligned to left
 
 (use-package whitespace
 	:init
