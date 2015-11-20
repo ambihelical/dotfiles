@@ -311,6 +311,16 @@
 ;	:requires company
 ;	:requires helm)
 
+;; So far this is the simplest way I've found to define a keybinding
+;; for evil prefix key sequences like "+. source:
+;; http://emacs.stackexchange.com/a/13433/9367
+(defun simulate-evil-clipboard-register ()
+  (interactive)
+  (setq unread-command-events (listify-key-sequence (read-kbd-macro "\" +"))))
+
+(defun simulate-evil-selection-register ()
+  (interactive)
+  (setq unread-command-events (listify-key-sequence (read-kbd-macro "\" *"))))
 
 ;; N.B. evil-mode must be enabled after global-evil-leader-mode
 (use-package evil
@@ -366,6 +376,10 @@
 			(lambda () (interactive)  (evil-scroll-line-down 1) (evil-next-visual-line 0)))
 		(define-key evil-normal-state-map (kbd "C-k")
 			(lambda () (interactive) (evil-scroll-line-up 1) (evil-previous-visual-line 0)))
+		; easier to type clipboard and selection register prefixes
+		(define-key evil-normal-state-map (kbd "SPC c") 'simulate-evil-clipboard-register)
+		(define-key evil-normal-state-map (kbd "SPC s") 'simulate-evil-selection-register)
+
 		(evil-mode 1)
 	) ; evil
 
