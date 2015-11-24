@@ -82,7 +82,6 @@
 			(interactive)
 			(save-some-buffers t)))
 (setq sentence-end-double-space nil)                        ; sentences end with one space
-(setq c-electric-pound-behavior 'alignleft)                 ; cpp directives aligned to left
 
 (use-package whitespace
 	:init
@@ -233,6 +232,7 @@
 	:init
 		(setq c-default-style "k&r" c-basic-offset=3)
 		(setq show-paren-mode 0)
+		(setq c-electric-pound-behavior (quote (alignleft)))        ; cpp directives aligned to left
 	:config
 		(define-key c-mode-base-map (kbd "RET") 'newline-and-indent)
 	:mode
