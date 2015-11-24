@@ -12,6 +12,7 @@
 [ -d ~/bin/${OSTYPE} ] && PATH=~/bin/${OSTYPE}:"${PATH}"                    # my utilities, os specific
 
 # ccache config
+export CCACHE_MAXSIZE=10G
 export CCACHE_DIR=${XDG_CACHE_HOME}/ccache
 [ -d ${CCACHE_DIR} ] || mkdir -p ${CCACHE_DIR}
 
