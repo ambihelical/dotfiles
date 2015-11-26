@@ -355,9 +355,10 @@
 				(display-time-mode t)
 			)
 		(evil-set-initial-state 'git-rebase-mode 'emacs)
-		(evil-set-initial-state 'git-commit-mode 'insert)
 		(evil-set-initial-state 'deft-mode 'insert)
 		(evil-set-initial-state 'magit-branch-manager-mode 'emacs)
+		; note evil-set-initial-state didn't work for this mode
+		(add-hook 'with-editor-mode-hook 'evil-insert-state)
 		(define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
 		(define-key evil-outer-text-objects-map "a" 'evil-outer-arg)
 		(define-key evil-inner-text-objects-map "b" 'evil-textobj-anyblock-inner-block)
