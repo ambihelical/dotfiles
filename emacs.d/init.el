@@ -344,7 +344,6 @@
 					"w" 'save-buffer
 					"x" 'kill-buffer
 					"e" 'pp-eval-last-sexp
-					"gb" 'vc-annotate
 					"v"  'exchange-point-and-mark
 					"c" 'use-evil-clipboard-register
 					"s" 'use-evil-selection-register
