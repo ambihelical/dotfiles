@@ -357,6 +357,10 @@
 				(powerline-default-theme)
 				(display-time-mode t)
 			)
+		; use SPC prefix before motion to see helpers
+		(use-package evil-easymotion
+			:config
+			(evilem-default-keybindings "SPC"))
 		(evil-set-initial-state 'git-rebase-mode 'emacs)
 		(evil-set-initial-state 'deft-mode 'insert)
 		(evil-set-initial-state 'magit-branch-manager-mode 'emacs)
