@@ -75,21 +75,26 @@
 (visual-line-mode t)                                        ; edit visual lines
 (setq default-tab-width 3)                                  ; ideal tab setting :)
 (setq x-select-enable-clipboard nil)                        ; make cut/paste function correctly
-;(add-hook 'text-mode-hook (                                ; Hard-wrap text when in plaintext mode
-;		lambda () (turn-on-auto-fill)))
 (add-hook 'focus-out-hook (                                 ; save on focus lost
 		lambda ()
 			(interactive)
 			(save-some-buffers t)))
 (setq sentence-end-double-space nil)                        ; sentences end with one space
+(setq-default fill-column 120)                              ; auto-wrap only very long lines
+(electric-indent-mode +1)                                   ; turn on electric mode globally
 
 (use-package whitespace
 	:init
-		(setq whitespace-line-column 120)
+		(setq whitespace-line-column 80)                      ; highlight columns past 80
 		(setq whitespace-style '(face trailing tabs tab-mark lines-tail space-before-tab))
 		(setq  whitespace-display-mappings '((tab-mark 9 [9657 9] [92 9])))
 		(global-whitespace-mode t)
 	:diminish global-whitespace-mode)
+
+(use-package fill-column-indicator
+	:config
+		(setq fci-rule-color "white smoke")
+		(add-hook 'after-change-major-mode-hook (lambda () (if buffer-file-name (fci-mode 1)))))
 
 (use-package leuven-theme
 	:config
@@ -233,8 +238,6 @@
 		(setq c-default-style "k&r" c-basic-offset=3)
 		(setq show-paren-mode 0)
 		(setq c-electric-pound-behavior (quote (alignleft)))        ; cpp directives aligned to left
-	:config
-		(define-key c-mode-base-map (kbd "RET") 'newline-and-indent)
 	:mode
 		("\\.c\\'" . cc-mode)
 		("\\.cpp\\'" . c++-mode)
