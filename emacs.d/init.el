@@ -106,10 +106,10 @@
 	(interactive)
 	(switch-to-buffer (other-buffer (current-buffer) 1)))
 
-(use-package semantic
-  :config
-    (semantic-mode t)
-  :defer 3)
+;(use-package semantic
+;  :config
+;    (semantic-mode t)
+;  :defer 3)
 
 (use-package helm
 	:init
