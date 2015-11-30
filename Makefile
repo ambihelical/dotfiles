@@ -6,13 +6,15 @@ ETC=/etc
 
 SHELL_FILES = ~/.bashrc ~/.bash_profile ${CFG}/readline ~/.profile
 DIR_FILES = ~/bin
-APP_FILES = ${CFG}/screen ${CFG}/ack ~/.Xresources $(CFG)/globalrc $(CFG)/pythonrc
+BIN_FILES=$(foreach bin,$(notdir $(wildcard ${PWD}/bin/*)),~/bin/${bin})
+XORG_FILES = ${CFG}/xsettingsd ~/.Xresources
+APP_FILES = ${CFG}/screen ${CFG}/ack $(CFG)/globalrc $(CFG)/pythonrc
 GIT_FILES = ${CFG}/git/config  ${CFG}/git/ignore
-I3_FILES = ${CFG}/i3/config ${CFG}/i3/i3status.config ${CFG}/dunst/dunstrc ${CFG}/gsimplecal/config \
-            ${CFG}/i3/split-layout.json
+I3_FILES = ${CFG}/i3/config ${CFG}/i3/i3status.config ${CFG}/dunst/dunstrc \
+           ${CFG}/gsimplecal/config ${CFG}/i3/split-layout.json \
+           ${CFG}/i3/local-setup
 VIM_FILES = ~/.vimrc ${CFG}/vim  ${CACHE}/vim
 BAREX_FILES = ~/.xsession ~/.Xmodmap
-BIN_FILES=$(foreach bin,$(notdir $(wildcard ${PWD}/bin/*)),~/bin/${bin})
 EMACS_FILES = ~/.emacs.d $(CACHE)/emacs
 ETC_FILES = ${ETC}/sysctl.d/99-edb-sysctl.conf
 
@@ -31,7 +33,7 @@ help:
 	@echo "   root       - sudo needed for these"
 	@echo "   barex      - install .xsession, .Xmodmap"
 
-base: ${SHELL_FILES} ${DIR_FILES} ${BIN_FILES}
+base: ${SHELL_FILES} ${DIR_FILES} ${BIN_FILES} ${XORG_FILES}
 	@echo "base configured"
 
 dev: ${VIM_FILES} ${APP_FILES} ${GIT_FILES} ${EMACS_FILES}
@@ -66,10 +68,6 @@ defaults:
 	-gsettings set org.nemo.preferences show-image-thumbnails 'never'
 	-gsettings set org.nemo.preferences show-advanced-permissions true
 	-gsettings set org.nemo.preferences size-prefixes base-2
-	# Make capslock Hyper, R-Alt as Compose, keep Window keys as Super(s)
-	# see /usr/share/X11/xkb/rules/evdev.lst, etc
-	-gsettings set org.gnome.libgnomekbd.keyboard options "['caps\tcaps:hyper', 'Compose key\tcompose:ralt']"
-	-gsettings set org.gnome.settings-daemon.plugins.xsettings hinting full
 	-gsettings set org.gnome.desktop.media-handling autorun-never true
 	-gsettings set org.gnome.desktop.wm.preferences audible-bell false
 	-gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout 3600

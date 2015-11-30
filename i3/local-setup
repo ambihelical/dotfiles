@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# local configuration for i3
+
+# use caps lock for hyper and right alt for compose
+setxkbmap -option 'caps:hyper' -option 'compose:ralt'
+
+# host specific setup
+host=$(uname -n)
+if [ "$host" == "hum" ]; then
+	 xrandr --output DVI-I-1 --left-of HDMI-1
+	 xrandr --output DVI-I-1 --primary
+	 dropbox start -i
+else
+	echo "Unknown host |$host|"
+fi

@@ -243,12 +243,12 @@ assign [class="Thunderbird"] 10:Admin
 assign [class="Pidgin"] 9:IM
 
 # startup programs
-exec --no-startup-id unity-settings-daemon || gnome-settings-daemon   # bring over desktop settings
+# first run host-specific setup, then invariants
+exec --no-startup-id ~/.config/i3/local-setup
+exec --no-startup-id xsettingsd -c ~/.config/xsettingsd
 exec --no-startup-id /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1  # gui authentication
 exec --no-startup-id nm-applet
-exec --no-startup-id dropbox start -i
 exec --no-startup-id clipit
-exec --no-startup-id mintupdate-launcher
 exec --no-startup-id pithos
 exec --no-startup-id thunderbird
 exec --no-startup-id urxvt -name scratch
