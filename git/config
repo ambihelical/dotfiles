@@ -57,3 +57,7 @@
   cmd = meld --auto-merge --output $MERGED $LOCAL $BASE $REMOTE --diff $BASE $LOCAL --diff $BASE $REMOTE
 [push]
 	default = simple
+[diff]
+	submodule = log
+[status]
+	submoduleSummary = true
