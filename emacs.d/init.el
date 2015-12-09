@@ -74,6 +74,8 @@
 ;; Text handling
 (visual-line-mode t)                                        ; edit visual lines
 (setq default-tab-width 3)                                  ; ideal tab setting :)
+(setq standard-indent 3)                                    ; ideal indent :)
+(setq lisp-body-indent 3)                                   ; indent elisp by 3
 (setq x-select-enable-clipboard nil)                        ; make cut/paste function correctly
 (add-hook 'focus-out-hook (                                 ; save on focus lost
 		lambda ()
@@ -223,6 +225,8 @@
 	)
 
 (use-package cmake-mode
+	:init
+		(setq cmake-tab-width 3)
 	:mode
 		("CMakeLists\\.txt\\'" . cmake-mode)
 		("\\.cmake\\'" . cmake-mode)
@@ -235,7 +239,7 @@
 
 (use-package cc-mode
 	:init
-		(setq c-default-style "k&r" c-basic-offset=3)
+		(setq c-default-style "k&r" c-basic-offset 3)
 		(setq show-paren-mode 0)
 		(setq c-electric-pound-behavior (quote (alignleft)))        ; cpp directives aligned to left
 	:mode
