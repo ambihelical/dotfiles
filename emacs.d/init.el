@@ -73,9 +73,9 @@
 
 ;; Text handling
 (visual-line-mode t)                                        ; edit visual lines
-(setq default-tab-width 3)                                  ; ideal tab setting :)
+(setq-default tab-width 3)                                  ; ideal tab width
+(setq-default indent-tabs-mode nil)                         ; disable tabs for most files
 (setq standard-indent 3)                                    ; ideal indent :)
-(setq lisp-body-indent 3)                                   ; indent elisp by 3
 (setq x-select-enable-clipboard nil)                        ; make cut/paste function correctly
 (add-hook 'focus-out-hook (                                 ; save on focus lost
 		lambda ()
@@ -84,6 +84,12 @@
 (setq sentence-end-double-space nil)                        ; sentences end with one space
 (setq-default fill-column 120)                              ; auto-wrap only very long lines
 (electric-indent-mode +1)                                   ; turn on electric mode globally
+
+; elisp mode settings
+(add-hook 'emacs-lisp-mode-hook
+	(lambda ()
+		(setq lisp-body-indent 3)                   ; indent elisp by 3
+		(setq indent-tabs-mode t)))                 ; use tabs dammit
 
 (use-package whitespace
 	:init
@@ -239,9 +245,16 @@
 
 (use-package cc-mode
 	:init
-		(setq c-default-style "k&r" c-basic-offset 3)
 		(setq show-paren-mode 0)
+		(setq c-default-style "ellemtel")                           ; similar to allman style
 		(setq c-electric-pound-behavior (quote (alignleft)))        ; cpp directives aligned to left
+
+   :config
+	(add-hook 'c-mode-common-hook
+		(lambda ()
+			(setq c-basic-offset 3)
+			(setq indent-tabs-mode t)))
+
 	:mode
 		("\\.c\\'" . cc-mode)
 		("\\.cpp\\'" . c++-mode)
