@@ -447,7 +447,7 @@
 	:defer 3
 	:init
 	(setq guide-key/guide-key-sequence '(
-		"<SPC>" "C-x" "C-h" "C-w"
+		"<SPC>" "C-x" "C-h" "C-w" "C-c"
 		"<f4>" "<f6>" "<f7>" "z" "g" ))
 	:config
 		(guide-key-mode 1)
