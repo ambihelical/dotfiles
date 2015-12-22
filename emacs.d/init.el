@@ -254,6 +254,9 @@
 		(lambda ()
 			(setq c-basic-offset 3)
 			(setq indent-tabs-mode t)))
+	(add-hook 'c++-mode-hook
+		(lambda ()
+			(c-set-offset 'innamespace [0])))                        ; no indentation in namespace
 
 	:mode
 		("\\.c\\'" . cc-mode)
