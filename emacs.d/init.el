@@ -89,7 +89,7 @@
 ;; Text handling
 (visual-line-mode t)                                        ; edit visual lines
 (setq-default tab-width 3)                                  ; ideal tab width
-(setq-default indent-tabs-mode nil)                         ; disable tabs for most files
+(setq-default indent-tabs-mode t)                           ; enable tabs for most files
 (setq standard-indent 3)                                    ; ideal indent :)
 (setq x-select-enable-clipboard nil)                        ; make cut/paste function correctly
 (add-hook 'focus-out-hook (                                 ; save on focus lost
@@ -103,8 +103,7 @@
 ; elisp mode settings
 (add-hook 'emacs-lisp-mode-hook
 	(lambda ()
-		(setq lisp-body-indent 3)                   ; indent elisp by 3
-		(setq indent-tabs-mode t)))                 ; use tabs dammit
+		(setq lisp-body-indent 3)))                           ; indent elisp by 3
 
 (use-package whitespace
 	:init
@@ -267,8 +266,7 @@
    :config
 	(add-hook 'c-mode-common-hook
 		(lambda ()
-			(setq c-basic-offset 3)
-			(setq indent-tabs-mode t)))
+			(setq c-basic-offset 3)))
 	(add-hook 'c++-mode-hook
 		(lambda ()
 			(c-set-offset 'innamespace [0])))                        ; no indentation in namespace
@@ -290,7 +288,6 @@
 		(add-hook 'python-mode-hook
 			(lambda ()
 				(semantic-mode t)
-				(setq indent-tabs-mode t)
 				(setq tab-width 4)))
 	:defer 3)
 
