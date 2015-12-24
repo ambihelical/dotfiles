@@ -1,5 +1,5 @@
 [alias]
-	st = status
+	st = status -sb
 	ci = commit
 	cia = commit --amend
 	co = checkout
@@ -8,15 +8,18 @@
 	lo = log --shortstat --relative-date
 	di = diff --color
 	dc = diff --color --cached
-	unadd = rm --cached
+	ds = diff --stat
+	unadd = reset -- HEAD
 	glog = log --pretty=format:'%h : %s' --graph
 	lg = log --graph --all --pretty=format:'%Cred%h%Creset - %Cgreen(%cr)%Creset %s%C(yellow)%d%Creset' --abbrev-commit --date=relative
-	gdiff = diff --stat
 	rbi = rebase -i
 	rbc = rebase --continue
 	rba = rebase --abort
 	fap = fetch --all --prune
 	pick = cherry-pick
+	picks = cherry -v
+	last = log -1 HEAD
+	where = name-rev --name-only
 
 [color]
 	status = true
@@ -59,5 +62,6 @@
 	default = simple
 [diff]
 	submodule = log
+	mnemonicprefix = true
 [status]
 	submoduleSummary = true
