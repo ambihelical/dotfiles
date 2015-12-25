@@ -369,6 +369,20 @@
 	(interactive)
 	(evil-execute-macro 1 "\"+"))
 
+
+(defun me/evil-shift-left-visual ()
+  (interactive)
+  (evil-shift-left (region-beginning) (region-end))
+  (evil-normal-state)
+  (evil-visual-restore))
+
+(defun me/evil-shift-right-visual ()
+  (interactive)
+  (evil-shift-right (region-beginning) (region-end))
+  (evil-normal-state)
+  (evil-visual-restore))
+
+
 ;; N.B. evil-mode must be enabled after global-evil-leader-mode
 (use-package evil
 	:init
@@ -429,6 +443,11 @@
 			(lambda () (interactive)  (evil-scroll-line-down 1) (evil-next-visual-line 0)))
 		(define-key evil-normal-state-map (kbd "C-k")
 			(lambda () (interactive) (evil-scroll-line-up 1) (evil-previous-visual-line 0)))
+		; Overload shifts so that they don't lose the selection
+		(define-key evil-visual-state-map (kbd ">") 'me/evil-shift-right-visual)
+		(define-key evil-visual-state-map (kbd "<") 'me/evil-shift-left-visual)
+		(define-key evil-visual-state-map [tab] 'me/evil-shift-right-visual)
+		(define-key evil-visual-state-map [S-tab] 'me/evil-shift-left-visual)
 		(evil-mode 1)
 	) ; evil
 
