@@ -100,6 +100,20 @@
 (setq-default fill-column 120)                              ; auto-wrap only very long lines
 (electric-indent-mode +1)                                   ; turn on electric mode globally
 
+;; Align with spaces only
+(defadvice align-regexp (around align-regexp-with-spaces)
+  "Never use tabs for alignment."
+  (let ((indent-tabs-mode nil))
+    ad-do-it))
+(ad-activate 'align-regexp)
+
+(defadvice align (around align-with-spaces)
+  "Never use tabs for alignment."
+  (let ((indent-tabs-mode nil))
+    ad-do-it))
+(ad-activate 'align)
+
+
 ; elisp mode settings
 (add-hook 'emacs-lisp-mode-hook
 	(lambda ()
@@ -382,6 +396,7 @@
 					"v"  'exchange-point-and-mark
 					"c" 'use-evil-clipboard-register
 					"s" 'use-evil-selection-register
+					"a" 'align
 					)
 			)  ; evil-leader
 		(use-package powerline-evil
