@@ -341,6 +341,7 @@
   (progn
     (add-hook 'deft-mode-hook
               (lambda ()
+                (define-key deft-mode-map (kbd "<f4> n") 'quit-window)
                 (define-key deft-mode-map (kbd "<C-return>") 'deft-new-file)
                 (define-key deft-mode-map (kbd "<C-backspace>") 'deft-filter-clear))))
   :bind
