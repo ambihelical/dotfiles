@@ -520,3 +520,9 @@
    ("<f7> b" . magit-blame)
    ("<f7> a" . magit-run-git-gui-blame)))
 
+(use-package sr-speedbar
+  :config
+  (progn
+    (setq sr-speedbar-right-side nil))
+  :bind
+  (("<f4> s" . sr-speedbar-toggle)))
