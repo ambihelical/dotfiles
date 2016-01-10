@@ -234,9 +234,6 @@
    ("<f7> f"    . helm-projectile-ag))
   :defer 3)
 
-(defun me:update-all-tags ( )
-  (interactive)
-  (let ((current-prefix-arg 4)) (call-interactively 'helm-gtags-update-tags)))
 
 (use-package helm-gtags
   :init
@@ -246,6 +243,9 @@
           helm-gtags-ignore-case t))
   :config
   (progn
+    (defun me:update-all-tags ()
+      (interactive)
+      (let ((current-prefix-arg 4)) (call-interactively 'helm-gtags-update-tags)))
     (add-hook 'dired-mode-hook 'helm-gtags-mode)
     (add-hook 'eshell-mode-hook 'helm-gtags-mode)
     (add-hook 'c-mode-hook 'helm-gtags-mode)
@@ -310,7 +310,9 @@
         (semantic-mode t)
         (setq tab-width 4)))
     (add-hook 'python-mode-hook 'guess-style-guess-tabs-mode))
-  :defer 3)
+  :mode
+  (("\\.py\\'" . python-mode)
+   ("\\.py3\\'" . python-mode)))
 
 (use-package git-gutter
   :config
@@ -348,14 +350,15 @@
   ("<f4> n" . deft))
 
 (use-package company
-  :config
+  :init
   (progn
     (add-hook 'after-init-hook 'global-company-mode))
+  :config
   :diminish company-mode)
 
 ; enable code folding (evil has bindings)
 (use-package hideshow
-  :config
+  :init
   (progn
     (add-hook 'c-mode-common-hook   'hs-minor-mode)
     (add-hook 'c++-mode-hook        'hs-minor-mode)
@@ -511,5 +514,5 @@
   :bind
   (("<f7> g" . magit-status)
    ("<f7> b" . magit-blame)
-   ("<f7> a" . magit-run-git-gui-blame))
-  :defer t)
+   ("<f7> a" . magit-run-git-gui-blame)))
+
