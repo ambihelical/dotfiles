@@ -37,20 +37,6 @@
 (column-number-mode t)                                      ; display column/row of cursor in mode-line
 (display-time-mode t)                                       ; display time in mode-line
 
-;; compilation
-(setq compilation-scroll-output 'first-error
-      compilation-auto-jump-to-first-error t)
-(add-hook 'compilation-mode-hook
-  (lambda ()
-    (next-error-follow-minor-mode t)
-    (local-set-key (kbd "k") 'compilation-previous-error)
-    (local-set-key (kbd "j") 'compilation-next-error)
-    (local-set-key (kbd "C-k") 'compilation-previous-file)
-    (local-set-key (kbd "C-j") 'compilation-next-file)
-    (local-set-key (kbd "<prior>") 'compilation-previous-error)
-    (local-set-key (kbd "<next>") 'compilation-next-error)
-    (local-set-key (kbd "<home>") 'compilation-previous-file)
-    (local-set-key (kbd "<end>") 'compilation-next-file)))
 
 
 (defun me:replace-prefix (prefix input)
@@ -298,6 +284,24 @@
    ("\\.cxx\\'" . c++-mode)
    ("\\.h\\'"   . c++-mode)
    ("\\.hpp\\'" . c++-mode)))
+
+(use-package compile
+  :init
+  (progn
+    (setq compilation-scroll-output 'first-error
+          compilation-auto-jump-to-first-error t)
+    (add-hook 'compilation-mode-hook
+      (lambda ()
+        (next-error-follow-minor-mode t)
+        (local-set-key (kbd "k") 'compilation-previous-error)
+        (local-set-key (kbd "j") 'compilation-next-error)
+        (local-set-key (kbd "C-k") 'compilation-previous-file)
+        (local-set-key (kbd "C-j") 'compilation-next-file)
+        (local-set-key (kbd "<prior>") 'compilation-previous-error)
+        (local-set-key (kbd "<next>") 'compilation-next-error)
+        (local-set-key (kbd "<home>") 'compilation-previous-file)
+        (local-set-key (kbd "<end>") 'compilation-next-file))))
+  :defer 3)
 
 (use-package python-mode
   :config
