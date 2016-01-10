@@ -102,8 +102,10 @@
           (lambda ()
             (setq tab-width 2
                   standard-indent 2
-                  indent-tabs-mode nil                           ; no tabs
-                  lisp-body-indent 2)))                           ; indent elisp by 2
+                  indent-tabs-mode nil                      ; no tabs
+                  evil-shift-width 2                        ; need this since no tabs
+                  lisp-body-indent 2)))                     ; indent elisp by 2
+
 
 (use-package whitespace
   :init
@@ -261,6 +263,7 @@
 (use-package smart-tabs-mode
   :config
   (progn
+    (smart-tabs-insinuate 'python)
     (smart-tabs-insinuate 'c 'c++)))
 
 (use-package cc-mode
@@ -304,16 +307,15 @@
   :defer 3)
 
 (use-package python-mode
-  :config
+  :init
   (progn
-    (smart-tabs-advice py-indent-line py-indent-offset)
-    (smart-tabs-advice py-newline-and-indent py-indent-offset)
-    (smart-tabs-advice py-indent-region py-indent-offset)
     (add-hook 'python-mode-hook
       (lambda ()
         (semantic-mode t)
-        (setq tab-width 4)))
-    (add-hook 'python-mode-hook 'guess-style-guess-tabs-mode))
+        (setq evil-shift-width 4)
+        (setq python-indent-offset 4)
+        (setq python-indent-guess-indent-offset t)
+        (setq tab-width 4))))
   :mode
   (("\\.py\\'" . python-mode)
    ("\\.py3\\'" . python-mode)))
@@ -404,9 +406,9 @@
 (use-package evil
   :init
   (progn
-    (setq-default evil-symbol-word-search t)
-    (setq evil-shift-width 3
-          evil-search-module 'evil-search))
+    (setq-default evil-symbol-word-search t
+                  evil-shift-width 3)
+    (setq evil-search-module 'evil-search))
   :config
   (progn
     (use-package evil-args)
