@@ -514,16 +514,13 @@
   :bind
   ("<f8>" . shell-pop))
 
-(use-package guide-key
-  :defer 3
-  :init
-  (progn
-    (setq guide-key/guide-key-sequence '("<SPC>" "C-x" "C-h" "C-w" "C-c"
-                                         "<f4>" "<f6>" "<f7>" "z" "g" )))
+(use-package which-key
   :config
   (progn
-    (guide-key-mode 1))
-  :diminish guide-key-mode)
+    (which-key-mode)
+    (which-key-setup-side-window-right))
+  :defer 2
+  :diminish which-key-mode)
 
 (use-package magit
   :init
