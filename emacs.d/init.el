@@ -502,6 +502,7 @@
   :config
   (progn
     (ws-butler-global-mode t))
+  :diminish ws-butler-mode
   :defer 3)
 
 (use-package shell-pop
