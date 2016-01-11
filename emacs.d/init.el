@@ -360,6 +360,12 @@
   (progn
     (add-hook 'after-init-hook 'global-company-mode))
   :config
+  (progn
+    ;(use-package helm-company :defer 3)
+    (use-package company-irony
+      :config
+      (progn
+        (add-to-list 'company-backends 'company-irony))))
   :diminish company-mode)
 
 ; N.B. to use, need to run irony-install-server, which requires libclang-dev
@@ -391,11 +397,6 @@
     (add-hook 'python-mode-hook     'hs-minor-mode))
   :diminish hs-minor-mode)
 
-
-;broken due to changes in helm
-;(use-package helm-company
-;   :requires company
-;   :requires helm)
 
 
 (defun me:use-evil-selection-register ()
