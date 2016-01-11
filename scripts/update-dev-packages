@@ -26,6 +26,8 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	p="$p clang gcc-doc glibc-doc"
 	p="$p autoconf automake libtool gettext intltool"
 	p="$p ruby"
+  # for emacs irony-mode package
+	p="$p libclang-dev"
   # version control
 	p="$p meld git-gui mercurial subversion "
   # libraries sometimes needed to build from source
