@@ -291,8 +291,7 @@
 (use-package compile
   :init
   (progn
-    (setq compilation-scroll-output 'first-error
-          compilation-auto-jump-to-first-error t)
+    (setq compilation-scroll-output t)
     (add-hook 'compilation-mode-hook
       (lambda ()
         (next-error-follow-minor-mode t)
