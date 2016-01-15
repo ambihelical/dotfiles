@@ -382,8 +382,19 @@
       (define-key irony-mode-map [remap complete-symbol]
         'irony-completion-at-point-async))
     (add-hook 'irony-mode-hook 'me:irony-mode-hook)
-    (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)))
+    (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
+  :config
+  (progn
+    (use-package flycheck-irony
+      :config
+      (progn
+        (add-hook 'flycheck-mode-hook #'flycheck-irony-setup)))))
 
+
+(use-package flycheck
+  :config
+  (progn
+    (global-flycheck-mode)))
 
 ; enable code folding (evil has bindings)
 (use-package hideshow
