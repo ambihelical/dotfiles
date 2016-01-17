@@ -530,7 +530,7 @@
   :config
   (progn
     (which-key-mode)
-    (which-key-setup-side-window-right))
+    (which-key-setup-side-window-bottom))
   :defer 2
   :diminish which-key-mode)
 
@@ -555,3 +555,13 @@
     (setq sr-speedbar-right-side nil))
   :bind
   (("<f4> s" . sr-speedbar-toggle)))
+
+(use-package popwin
+  :init
+  (progn
+    (setq display-buffer-function 'popwin:display-buffer))
+  :config
+  (progn
+    (push '("*Completions*" :stick t :noselect t) popwin:special-display-config)
+    (push '("*Help*" :stick t :noselect t) popwin:special-display-config)
+    (popwin-mode 1)))
