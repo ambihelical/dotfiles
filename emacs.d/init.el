@@ -260,6 +260,15 @@
   (("CMakeLists\\.txt\\'" . cmake-mode)
    ("\\.cmake\\'" . cmake-mode)))
 
+(use-package adoc-mode
+  :mode
+  (("\\.ad\\'" . adoc-mode)
+   ("\\.adoc\\'" . adoc-mode)
+   ("\\.asciidoc\\'" . adoc-mode))
+  :config
+  (progn
+    (add-hook 'adoc-mode-hook (lambda () (buffer-face-mode t)))))
+
 (use-package smart-tabs-mode
   :config
   (progn
