@@ -366,6 +366,7 @@
 (use-package company
   :init
   (progn
+    (setq company-minimum-prefix-length 1)
     (add-hook 'after-init-hook 'global-company-mode))
   :config
   (progn
