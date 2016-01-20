@@ -113,8 +113,8 @@
     (setq whitespace-line-column 80                      ; highlight columns past 80
           whitespace-style '(face trailing tabs tab-mark lines-tail space-before-tab)
           whitespace-display-mappings '((tab-mark 9 [9657 9] [92 9])))
-    (global-whitespace-mode t))
-  :diminish global-whitespace-mode)
+    (add-hook 'prog-mode-hook 'whitespace-mode))
+  :diminish whitespace-mode)
 
 (use-package fill-column-indicator
   :config
@@ -125,6 +125,7 @@
 (use-package leuven-theme
   :config
   (progn
+    (set-face-attribute 'whitespace-line nil :foreground 'unspecified :background "lemon chiffon")
     (set-face-attribute 'whitespace-tab nil :foreground "gainsboro" :background "white" )
     (set-face-attribute 'whitespace-trailing nil :foreground "black" :background "red" )))
 
@@ -260,14 +261,13 @@
   (("CMakeLists\\.txt\\'" . cmake-mode)
    ("\\.cmake\\'" . cmake-mode)))
 
+; n.b. buffer-face-mode screws up completion popups
+; may be fixed in 25.1 or so
 (use-package adoc-mode
   :mode
   (("\\.ad\\'" . adoc-mode)
    ("\\.adoc\\'" . adoc-mode)
-   ("\\.asciidoc\\'" . adoc-mode))
-  :config
-  (progn
-    (add-hook 'adoc-mode-hook (lambda () (buffer-face-mode t)))))
+   ("\\.asciidoc\\'" . adoc-mode)))
 
 (use-package smart-tabs-mode
   :config
