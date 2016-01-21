@@ -71,7 +71,7 @@
 
 
 ;; Text handling
-(visual-line-mode t)                                        ; edit visual lines
+(global-visual-line-mode t)                                        ; edit visual lines
 (setq-default tab-width 3                                   ; ideal tab width
               indent-tabs-mode t                            ; enable tabs for most files
               fill-column 120)                              ; auto-wrap only very long lines
@@ -117,10 +117,18 @@
   :diminish whitespace-mode)
 
 (use-package fill-column-indicator
+  :disabled
   :config
   (progn
     (add-hook 'after-change-major-mode-hook (lambda () (if buffer-file-name (fci-mode 1))))
     (setq fci-rule-color "white smoke")))
+
+(use-package adaptive-wrap
+  :init
+  (setq-default adaptive-wrap-extra-indent 3)
+  (setq-default wrap-prefix "⤷ ")
+  :config
+  (adaptive-wrap-prefix-mode t))
 
 (use-package leuven-theme
   :config
