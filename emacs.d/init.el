@@ -479,6 +479,7 @@
           "x" 'kill-buffer
           "e" 'pp-eval-last-sexp
           "v"  'exchange-point-and-mark
+          "m" 'projectile-compile-project
           "c" 'me:use-evil-clipboard-register
           "s" 'me:use-evil-selection-register
           "a" 'align)))
