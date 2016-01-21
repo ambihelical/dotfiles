@@ -526,6 +526,8 @@
 (use-package diminish
   :config
   (progn
+    (diminish 'visual-line-mode)
+    (diminish 'auto-revert-mode)
     (diminish 'undo-tree-mode)))
 
 (use-package ws-butler
