@@ -556,6 +556,7 @@
   :init
   :config
   (progn
+    (add-hook 'with-editor-mode-hook (lambda () (setq fill-column 70)))
     ;get out of magit blame mode
     (define-key magit-blame-mode-map (kbd "<f7> b") 'magit-blame-quit)
     ; keep me accidently hitting k key due to evil habits
