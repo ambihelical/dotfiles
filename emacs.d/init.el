@@ -43,7 +43,8 @@
   (replace-regexp-in-string ( concat "^" (regexp-quote prefix)) "" input))
 
 (setq frame-title-format '((:eval (if (buffer-file-name)
-                                      (me:replace-prefix (abbreviate-file-name default-directory) (abbreviate-file-name buffer-file-name))
+                                      (me:replace-prefix (abbreviate-file-name default-directory)
+                                                         (abbreviate-file-name buffer-file-name))
                                     "%b"))
                            " %* ["
                            (:eval (abbreviate-file-name default-directory))
