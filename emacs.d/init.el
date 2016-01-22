@@ -563,10 +563,7 @@
     (add-hook 'with-editor-mode-hook (lambda () (setq fill-column 70)))
     ;get out of magit blame mode
     (define-key magit-blame-mode-map (kbd "<f7> b") 'magit-blame-quit)
-    ; keep me accidently hitting k key due to evil habits
-    ; this should suffice until magit mapping is figured out
-    (define-key magit-mode-map (kbd "<DEL>") 'magit-delete-thing)
-    (define-key magit-mode-map "k" nil))
+    (use-package evil-magit))
   :bind
   (("<f7> g" . magit-status)
    ("<f7> b" . magit-blame)
