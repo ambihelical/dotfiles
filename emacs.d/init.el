@@ -37,8 +37,6 @@
 (column-number-mode t)                                      ; display column/row of cursor in mode-line
 (display-time-mode t)                                       ; display time in mode-line
 
-
-
 (defun me:replace-prefix (prefix input)
   (replace-regexp-in-string ( concat "^" (regexp-quote prefix)) "" input))
 
@@ -588,3 +586,14 @@
     (push '("*Completions*" :stick t :noselect t) popwin:special-display-config)
     (push '("*Help*" :stick t :noselect t) popwin:special-display-config)
     (popwin-mode 1)))
+
+(use-package linum-relative
+  :init
+  (progn
+    (setq linum-relative-current-symbol ""))   ; show current line #
+  :bind
+  (("<f4> 3" . linum-relative-mode)))
+
+(use-package ruler-mode
+  :bind
+  (("<f4> 6" . ruler-mode)))
