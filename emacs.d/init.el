@@ -73,6 +73,8 @@
 
 ;; Text handling
 (global-visual-line-mode t)                                        ; edit visual lines
+(setq visual-line-fringe-indicators '(left-curly-arrow nil))
+
 (setq-default tab-width 3                                   ; ideal tab width
               indent-tabs-mode t                            ; enable tabs for most files
               fill-column 120)                              ; auto-wrap only very long lines
@@ -126,10 +128,11 @@
 
 (use-package adaptive-wrap
   :init
-  (setq-default adaptive-wrap-extra-indent 3)
-  (setq-default wrap-prefix "⤷ ")
+  (progn
+    (setq-default adaptive-wrap-extra-indent 3))
   :config
-  (adaptive-wrap-prefix-mode t))
+  (progn
+    (add-hook 'visual-line-mode-hook #'adaptive-wrap-prefix-mode)))
 
 (use-package leuven-theme
   :config
