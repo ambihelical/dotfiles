@@ -266,6 +266,9 @@ state SimpleMotion {
 	state SimpleMotion: ""**+**      //count// display lines down, on the first non-blank character""
 	state SimpleMotion: ""**_**      //count//-1 display lines down, on the first non-blank character""
 	state SimpleMotion: ""**gn**     next search search pattern match""
+	state SimpleMotion: ""**gN**     previous search search pattern match""
+	state SimpleMotion: ""**n**     next search search pattern match""
+	state SimpleMotion: ""**N**     previous search search pattern match""
 	state SimpleMotion: ""**g;**     //count// older position in change list""
 	state SimpleMotion: ""**g,**     //count// newer position in change list""
 
