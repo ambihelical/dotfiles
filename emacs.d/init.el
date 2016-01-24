@@ -403,6 +403,7 @@
     (add-hook 'python-mode-hook     'hs-minor-mode))
   :diminish hs-minor-mode)
 
+(use-package avy :defer 3)
 
 ;; N.B. evil-mode must be enabled after global-evil-leader-mode
 (use-package evil
@@ -437,6 +438,23 @@
     (use-package evil-commentary
       :config (evil-commentary-mode)
       :diminish evil-commentary-mode)
+    ; evil-snipe, but change keybindings to be a text-object motion  (i.e. op [ia] [zZ] cc)
+    ; to make it easier to remember.  Also, disable normal-mode s/S override, and
+    ; use leader-[zZ] instead.
+    (use-package evil-snipe
+      :init
+      (progn
+        (setq evil-snipe-auto-disable-substitute nil))          ; disable override of s operator
+      :diminish evil-snipe-mode
+      :config
+      (progn
+        (add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode)
+        (define-key evil-inner-text-objects-map "z" 'evil-snipe-x)
+        (define-key evil-outer-text-objects-map "z" 'evil-snipe-s)
+        (define-key evil-inner-text-objects-map "Z" 'evil-snipe-X)
+        (define-key evil-outer-text-objects-map "Z" 'evil-snipe-S)
+        (evil-snipe-override-mode 1)
+        (evil-snipe-mode 1)))
     (use-package evil-leader
       :init
       (progn
@@ -452,10 +470,13 @@
           "a" 'align
           "c" 'me:use-evil-clipboard-register
           "e" 'pp-eval-last-sexp
+          "f" 'avy-goto-char-2
           "s" 'me:use-evil-selection-register
           "v"  'exchange-point-and-mark
           "w" 'save-buffer
-          "x" 'kill-buffer)))
+          "x" 'kill-buffer
+          "z" 'evil-snipe-s
+          "Z" 'evil-snipe-S)))
     (use-package powerline-evil
       :config
       (progn
