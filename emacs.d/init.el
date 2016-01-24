@@ -139,38 +139,16 @@
     (set-face-attribute 'whitespace-tab nil :foreground "gainsboro" :background "white" )
     (set-face-attribute 'whitespace-trailing nil :foreground "black" :background "red" )))
 
-(defun me:switch-to-previous-buffer ()
-  (interactive)
-  (switch-to-buffer (other-buffer (current-buffer) 1)))
-
-;(use-package semantic
-;  :config
-;    (semantic-mode t)
-;  :defer 3)
-
 (use-package helm
   :init
   (progn
     (setq helm-split-window-in-side-p           t
           helm-split-window-default-side        'other
-          helm-apropos-fuzzy-match              t
-          helm-bookmark-show-location           t
-          helm-buffers-fuzzy-matching           t
-          helm-completion-in-region-fuzzy-match t
-                                        ; helm-ff-search-library-in-sexp        t
-          helm-file-cache-fuzzy-match           t
-          helm-imenu-fuzzy-match                t
-          helm-locate-fuzzy-match               nil          ; not useful
-          helm-mode-fuzzy-match                 t
           helm-move-to-line-cycle-in-source     t
-          helm-M-x-fuzzy-match                  t
           helm-quick-update                     nil          ; ui flashing occurs
-          helm-recentf-fuzzy-match              t
-          helm-semantic-fuzzy-match             t
           helm-input-idle-delay                 0.1
           helm-idle-delay                       0.0
-          helm-buffer-max-length                40
-          helm-candidate-number-limit           200
+          helm-candidate-number-limit           100
           helm-scroll-amount                    8
           ;; set the sources for helm-for-files
           helm-for-files-preferred-list '( helm-source-recentf
@@ -188,13 +166,13 @@
    ("<f3>"      . helm-for-files)
    ("<S-f3>"    . dired-jump)
    ("<f4> a"    . helm-apropos)
-   ("<f4> j"    . helm-all-mark-ring)
    ("<f4> i"    . helm-info-at-point)
+   ("<f4> j"    . helm-all-mark-rings)
    ("<f4> k"    . helm-show-kill-ring)
+   ("<f4> l"    . helm-locate)
    ("<f4> m"    . helm-man-woman)
    ("<f4> p"    . helm-list-elisp-packages-no-fetch)
    ("<f4> x"    . helm-top)
-   ("<f4> l"    . helm-locate)
    ("<f4> <f4>" . helm-resume))
   :defer 2)
 
@@ -230,9 +208,7 @@
    ("<f7> o"    . projectile-multi-occur)
    ("<f7> u"    . projectile-invalidate-cache)
    ("<f7> k"    . projectile-kill-buffers)
-   ("<f7> f"    . helm-projectile-ag))
-  :defer 3)
-
+   ("<f7> f"    . helm-projectile-ag)))
 
 (use-package helm-gtags
   :init
@@ -428,29 +404,6 @@
   :diminish hs-minor-mode)
 
 
-
-(defun me:use-evil-selection-register ()
-  (interactive)
-  (evil-execute-macro 1 "\"*"))
-
-(defun me:use-evil-clipboard-register ()
-  (interactive)
-  (evil-execute-macro 1 "\"+"))
-
-
-(defun me:evil-shift-left-visual ()
-  (interactive)
-  (evil-shift-left (region-beginning) (region-end))
-  (evil-normal-state)
-  (evil-visual-restore))
-
-(defun me:evil-shift-right-visual ()
-  (interactive)
-  (evil-shift-right (region-beginning) (region-end))
-  (evil-normal-state)
-  (evil-visual-restore))
-
-
 ;; N.B. evil-mode must be enabled after global-evil-leader-mode
 (use-package evil
   :init
@@ -460,6 +413,25 @@
     (setq evil-search-module 'evil-search))
   :config
   (progn
+    (defun me:use-evil-selection-register ()
+      (interactive)
+      (evil-execute-macro 1 "\"*"))
+    (defun me:use-evil-clipboard-register ()
+      (interactive)
+      (evil-execute-macro 1 "\"+"))
+    (defun me:evil-shift-left-visual ()
+      (interactive)
+      (evil-shift-left (region-beginning) (region-end))
+      (evil-normal-state)
+      (evil-visual-restore))
+    (defun me:evil-shift-right-visual ()
+      (interactive)
+      (evil-shift-right (region-beginning) (region-end))
+      (evil-normal-state)
+      (evil-visual-restore))
+    (defun me:switch-to-previous-buffer ()
+      (interactive)
+      (switch-to-buffer (other-buffer (current-buffer) 1)))
     (use-package evil-args)
     (use-package evil-textobj-anyblock)
     (use-package evil-commentary
@@ -473,27 +445,22 @@
       (progn
         (global-evil-leader-mode t)
         (evil-leader/set-leader "<SPC>")
+        (add-hook 'projectile-mode-hook (lambda () (evil-leader/set-key "m" 'projectile-compile-project)))
         (evil-leader/set-key
           ";" 'evil-jump-forward
           "," 'evil-jump-backward
-          "w" 'save-buffer
-          "x" 'kill-buffer
-          "e" 'pp-eval-last-sexp
-          "v"  'exchange-point-and-mark
-          "m" 'projectile-compile-project
+          "a" 'align
           "c" 'me:use-evil-clipboard-register
+          "e" 'pp-eval-last-sexp
           "s" 'me:use-evil-selection-register
-          "a" 'align)))
+          "v"  'exchange-point-and-mark
+          "w" 'save-buffer
+          "x" 'kill-buffer)))
     (use-package powerline-evil
       :config
       (progn
         (powerline-default-theme)
         (display-time-mode t)))
-    ; use SPC prefix before motion to see helpers
-    (use-package evil-easymotion
-      :config
-      (progn
-        (evilem-default-keybindings "SPC")))
 
     (evil-set-initial-state 'git-rebase-mode 'emacs)
     (evil-set-initial-state 'deft-mode 'insert)
