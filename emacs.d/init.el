@@ -560,12 +560,24 @@
    ("<f7> b" . magit-blame)
    ("<f7> a" . magit-run-git-gui-blame)))
 
-(use-package sr-speedbar
+(use-package neotree
   :config
   (progn
-    (setq sr-speedbar-right-side nil))
+    (when neo-persist-show
+        (add-hook 'popwin:before-popup-hook
+                  (lambda () (setq neo-persist-show nil)))
+        (add-hook 'popwin:after-popup-hook
+                  (lambda () (setq neo-persist-show t))))
+    (add-hook 'neotree-mode-hook
+              (lambda ()
+                (define-key evil-normal-state-local-map (kbd "TAB") 'neotree-enter)
+                (define-key evil-normal-state-local-map (kbd "SPC") 'neotree-enter)
+                (define-key evil-normal-state-local-map (kbd "q") 'neotree-hide)
+                (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)))
+    )
   :bind
-  (("<f4> s" . sr-speedbar-toggle)))
+  (("<f4> /" . neotree-toggle)
+   ("<f7> /" . neotree-projectile-action)))
 
 (use-package popwin
   :init
