@@ -384,13 +384,15 @@
     (use-package flycheck-irony
       :config
       (progn
-        (add-hook 'flycheck-mode-hook #'flycheck-irony-setup)))))
+        (add-hook 'flycheck-mode-hook #'flycheck-irony-setup))))
+  :diminish irony-mode)
 
 
 (use-package flycheck
   :config
   (progn
-    (global-flycheck-mode)))
+    (global-flycheck-mode))
+  :defer 4)
 
 ; enable code folding (evil has bindings)
 (use-package hideshow
@@ -445,7 +447,7 @@
       :init
       (progn
         (setq evil-snipe-auto-disable-substitute nil))          ; disable override of s operator
-      :diminish evil-snipe-mode
+      :diminish evil-snipe-local-mode
       :config
       (progn
         (add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode)
