@@ -140,12 +140,11 @@
     (set-face-attribute 'whitespace-trailing nil :foreground "black" :background "red" )))
 
 (use-package flyspell
-  :config
+  :init
   (progn
     (add-hook 'prog-mode-hook 'flyspell-prog-mode)
     (add-hook 'text-mode-hook 'flyspell-mode))
-  :diminish flyspell-mode
-  :defer 4)
+  :diminish flyspell-mode)
 
 (use-package helm
   :init
