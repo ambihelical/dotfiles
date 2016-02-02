@@ -285,7 +285,7 @@
               (lambda ()
                 (c-set-offset 'innamespace [0]))))                       ; no indentation in namespace
   :mode
-  (("\\.c\\'"   . cc-mode)
+  (("\\.c\\'"   . c-mode)
    ("\\.cpp\\'" . c++-mode)
    ("\\.cxx\\'" . c++-mode)
    ("\\.h\\'"   . c++-mode)
