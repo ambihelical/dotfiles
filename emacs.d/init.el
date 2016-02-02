@@ -139,6 +139,14 @@
     (set-face-attribute 'whitespace-tab nil :foreground "gainsboro" :background "white" )
     (set-face-attribute 'whitespace-trailing nil :foreground "black" :background "red" )))
 
+(use-package flyspell
+  :config
+  (progn
+    (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+    (add-hook 'text-mode-hook 'flyspell-mode))
+  :diminish flyspell-mode
+  :defer 4)
+
 (use-package helm
   :init
   (progn
