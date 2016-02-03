@@ -222,17 +222,17 @@
   (progn
     (setq helm-gtags-auto-update t
           helm-gtags-use-input-at-cursor t
-          helm-gtags-ignore-case t))
-  :config
-  (progn
-    (defun me:update-all-tags ()
-      (interactive)
-      (let ((current-prefix-arg 4)) (call-interactively 'helm-gtags-update-tags)))
+          helm-gtags-ignore-case t)
     (add-hook 'dired-mode-hook 'helm-gtags-mode)
     (add-hook 'eshell-mode-hook 'helm-gtags-mode)
     (add-hook 'c-mode-hook 'helm-gtags-mode)
     (add-hook 'c++-mode-hook 'helm-gtags-mode)
     (add-hook 'asm-mode-hook 'helm-gtags-mode))
+  :config
+  (progn
+    (defun me:update-all-tags ()
+      (interactive)
+      (let ((current-prefix-arg 4)) (call-interactively 'helm-gtags-update-tags))))
   :bind
   (("<f6> <f6>" . helm-gtags-dwim)
    ("<f6> d"    . helm-gtags-find-tag)
@@ -271,18 +271,17 @@
 (use-package cc-mode
   :init
   (progn
-    (setq c-default-style "ellemtel"                           ; similar to allman style
-          c-electric-pound-behavior (quote (alignleft))        ; cpp directives aligned to left
-          show-paren-mode 0))
-
-  :config
-  (progn
     (add-hook 'c-mode-common-hook
               (lambda ()
                 (setq c-basic-offset 3)))
     (add-hook 'c++-mode-hook
               (lambda ()
-                (c-set-offset 'innamespace [0]))))                       ; no indentation in namespace
+                (c-set-offset 'innamespace [0])))              ; no indentation in namespace
+    (setq c-default-style "ellemtel"                           ; similar to allman style
+          c-electric-pound-behavior (quote (alignleft))        ; cpp directives aligned to left
+          show-paren-mode 0))
+
+  :config
   :mode
   (("\\.c\\'"   . c-mode)
    ("\\.cpp\\'" . c++-mode)
@@ -343,11 +342,7 @@
           deft-default-extension "md"
           deft-extensions '("md" "txt" "text" "markdown" "mmd" "org")
                                         ; deft auto-save interferes with whitespace-butler, so disable
-          deft-auto-save-interval 0))
-
-
-  :config
-  (progn
+          deft-auto-save-interval 0)
     (add-hook 'deft-mode-hook
               (lambda ()
                 (define-key deft-mode-map (kbd "<f4> n") 'quit-window)
@@ -556,9 +551,10 @@
 
 (use-package magit
   :init
+  (progn
+    (add-hook 'with-editor-mode-hook (lambda () (setq fill-column 70))))
   :config
   (progn
-    (add-hook 'with-editor-mode-hook (lambda () (setq fill-column 70)))
     ;get out of magit blame mode
     (define-key magit-blame-mode-map (kbd "<f7> b") 'magit-blame-quit)
     (use-package evil-magit))
@@ -568,20 +564,18 @@
    ("<f7> a" . magit-run-git-gui-blame)))
 
 (use-package neotree
-  :config
+  :init
   (progn
-    (when neo-persist-show
-        (add-hook 'popwin:before-popup-hook
-                  (lambda () (setq neo-persist-show nil)))
-        (add-hook 'popwin:after-popup-hook
-                  (lambda () (setq neo-persist-show t))))
+    (add-hook 'popwin:before-popup-hook
+              (lambda () (setq neo-persist-show nil)))
+    (add-hook 'popwin:after-popup-hook
+              (lambda () (setq neo-persist-show t)))
     (add-hook 'neotree-mode-hook
               (lambda ()
                 (define-key evil-normal-state-local-map (kbd "TAB") 'neotree-enter)
                 (define-key evil-normal-state-local-map (kbd "SPC") 'neotree-enter)
                 (define-key evil-normal-state-local-map (kbd "q") 'neotree-hide)
-                (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)))
-    )
+                (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter))))
   :bind
   (("<f4> /" . neotree-toggle)
    ("<f7> /" . neotree-projectile-action)))
