@@ -563,7 +563,10 @@
    ("<f7> b" . magit-blame)
    ("<f7> a" . magit-run-git-gui-blame)))
 
+;; N.B. disabling this because once neotree is popped up once, tab completion in mini-buffer
+;; is screwed up.
 (use-package neotree
+  :disabled
   :init
   (progn
     (add-hook 'popwin:before-popup-hook
