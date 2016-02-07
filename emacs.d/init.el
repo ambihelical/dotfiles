@@ -293,6 +293,13 @@
   :init
   (progn
     (setq compilation-scroll-output t)
+    (setq compilation-finish-functions
+          (lambda (buf str)
+            (if (null (string-match ".*exited abnormally.*" str))
+                ;;no errors, make the compilation window go away in a few seconds
+                (progn
+                  (run-at-time "2 sec" nil 'delete-windows-on (get-buffer-create "*compilation*"))
+                  (message "No Compilation Errors!")))))
     (add-hook 'compilation-mode-hook
       (lambda ()
         (next-error-follow-minor-mode t)
