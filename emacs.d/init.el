@@ -257,6 +257,13 @@
 ; n.b. buffer-face-mode screws up completion popups
 ; may be fixed in 25.1 or so
 (use-package adoc-mode
+  :init
+  (progn
+    (add-hook 'adoc-mode-hook
+              (lambda ()
+                (setq evil-shift-width 4)          ; set tabs 4 spaces
+                (setq tab-width 4)
+                (setq indent-tabs-mode nil))))
   :mode
   (("\\.ad\\'" . adoc-mode)
    ("\\.adoc\\'" . adoc-mode)
