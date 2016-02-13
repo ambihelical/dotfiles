@@ -289,6 +289,16 @@
   (("\\.py\\'" . python-mode)
    ("\\.py3\\'" . python-mode)))
 
+(use-package ruby-mode
+  :mode
+  (("\\.\\(?:cap\\|gemspec\\|irbrc\\|gemrc\\|rake\\|rb\\|ru\\|thor\\)\\'" . ruby-mode)
+   ("\\(?:Brewfile\\|Capfile\\|Gemfile\\(?:\\.[a-zA-Z0-9._-]+\\)?\\|[rR]akefile\\)\\'" . ruby-mode)))
+
+(use-package js2-mode
+  :mode
+  (("\\.js\\'" . js-mode)
+   ("\\.json\\'" . js-mode)))
+
 (use-package cc-mode
   :init
   (progn
