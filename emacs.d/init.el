@@ -241,6 +241,12 @@
    ("<f6> m"    . helm-semantic-or-imenu))
   :diminish helm-gtags-mode)
 
+(use-package smart-tabs-mode
+  :config
+  (progn
+    (smart-tabs-insinuate 'python)
+    (smart-tabs-insinuate 'c 'c++)))
+
 (use-package markdown-mode
   :mode
   (("\\.markdown\\'" . markdown-mode)
@@ -269,11 +275,19 @@
    ("\\.adoc\\'" . adoc-mode)
    ("\\.asciidoc\\'" . adoc-mode)))
 
-(use-package smart-tabs-mode
-  :config
+(use-package python-mode
+  :init
   (progn
-    (smart-tabs-insinuate 'python)
-    (smart-tabs-insinuate 'c 'c++)))
+    (add-hook 'python-mode-hook
+      (lambda ()
+        (semantic-mode t)
+        (setq evil-shift-width 4)
+        (setq python-indent-offset 4)
+        (setq python-indent-guess-indent-offset t)
+        (setq tab-width 4))))
+  :mode
+  (("\\.py\\'" . python-mode)
+   ("\\.py3\\'" . python-mode)))
 
 (use-package cc-mode
   :init
@@ -319,20 +333,6 @@
         (local-set-key (kbd "<home>") 'compilation-previous-file)
         (local-set-key (kbd "<end>") 'compilation-next-file))))
   :defer 3)
-
-(use-package python-mode
-  :init
-  (progn
-    (add-hook 'python-mode-hook
-      (lambda ()
-        (semantic-mode t)
-        (setq evil-shift-width 4)
-        (setq python-indent-offset 4)
-        (setq python-indent-guess-indent-offset t)
-        (setq tab-width 4))))
-  :mode
-  (("\\.py\\'" . python-mode)
-   ("\\.py3\\'" . python-mode)))
 
 (use-package git-gutter
   :config
