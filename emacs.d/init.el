@@ -49,15 +49,10 @@
                            "]")
       icon-title-format frame-title-format)                 ; use same title for unselected frame
 
-;; tame scrolling
-(setq scroll-margin 5                                       ; leave 5 lines at top/bottom
-      scroll-conservatively 100                             ; scroll # to bring point in view
-      scroll-preserve-screen-position 'always               ; move cursor when scrolling
-      mouse-wheel-scroll-amount '(3 ((shift) . 9))          ; 3 lines, or 9 line when shift held
+;; tame scroll wheel
+(setq mouse-wheel-scroll-amount '(3 ((shift) . 9))          ; 3 lines, or 9 line when shift held
       mouse-wheel-follow-mouse 't                           ; scroll window under mouse
       mouse-wheel-progressive-speed nil)                    ; don't speed up
-(setq-default scroll-up-aggressively 0.01
-              scroll-down-aggressively 0.01)
 
 ;; Operational preferences
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -107,6 +102,11 @@
                   evil-shift-width 2                        ; need this since no tabs
                   lisp-body-indent 2)))                     ; indent elisp by 2
 
+(use-package smooth-scrolling
+  :init
+  (progn
+    (setq smooth-scroll-margin 5
+          smooth-scroll-strict-margins t)))
 
 (use-package whitespace
   :init
