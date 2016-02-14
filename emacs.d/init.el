@@ -139,6 +139,7 @@
     (set-face-attribute 'whitespace-tab nil :foreground "gainsboro" :background "white" )
     (set-face-attribute 'whitespace-trailing nil :foreground "black" :background "red" )))
 
+
 (use-package flyspell
   :init
   (progn
@@ -265,6 +266,23 @@
 (use-package adoc-mode
   :init
   (progn
+    (defun me:adoc-mode-flyspell-verify ()
+      "flyspell function to ignore certain asciidoc markup"
+      (and
+       (not (save-excursion
+              (let ((this (point)))
+                (and
+                 (re-search-backward "^\\([\\.\\+-]\\{4,\\}\\|`\\{3,\\}\\)" nil t)
+                 (> this (point))
+                 (progn
+                   (forward-line 1)
+                   (re-search-forward (concat "^" (regexp-quote (match-string 1))) nil t))))))
+       (not (save-excursion
+              (let ((count 0))
+                (eq 1 (progn (while (re-search-backward "`" (line-beginning-position) t)
+                               (setq count (1+ count)))
+                             (- count (* 2 (/ count 2))))))))))
+    (put 'adoc-mode 'flyspell-mode-predicate 'me:adoc-mode-flyspell-verify)
     (add-hook 'adoc-mode-hook
               (lambda ()
                 (setq evil-shift-width 4)          ; set tabs 4 spaces
