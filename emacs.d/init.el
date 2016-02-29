@@ -102,6 +102,10 @@
                   evil-shift-width 2                        ; need this since no tabs
                   lisp-body-indent 2)))                     ; indent elisp by 2
 
+(use-package dash-functional
+  :init
+  (setq dash-enable-font-lock t))
+
 (use-package smooth-scrolling
   :init
   (progn
@@ -479,6 +483,21 @@
     (defun me:switch-to-previous-buffer ()
       (interactive)
       (switch-to-buffer (other-buffer (current-buffer) 1)))
+    ;; Select the nth buffer in the buffer list
+    (defun me:select-nth-other-buffer (n)
+      (let ((buffer (nth n (-filter 'buffer-file-name (buffer-list)))))
+        (if buffer
+            (switch-to-buffer buffer))))
+    (defun me:select-1st-other-buffer ()
+      (interactive)
+      (me:select-nth-other-buffer 1 ))
+    (defun me:select-2nd-other-buffer ()
+      (interactive)
+      (me:select-nth-other-buffer 2 ))
+    (defun me:select-3rd-other-buffer ()
+      (interactive)
+      (me:select-nth-other-buffer 3))
+
     (use-package evil-args)
     (use-package evil-textobj-anyblock)
     (use-package evil-commentary
@@ -512,6 +531,9 @@
         (add-hook 'projectile-mode-hook (lambda () (evil-leader/set-key "m" 'projectile-compile-project)))
         (evil-leader/set-key
           "<SPC>" 'me:switch-to-previous-buffer
+          "1" 'me:select-1st-other-buffer
+          "2" 'me:select-2nd-other-buffer
+          "3" 'me:select-3rd-other-buffer
           ";" 'evil-jump-forward
           "," 'evil-jump-backward
           "a" 'align
