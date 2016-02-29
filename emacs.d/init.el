@@ -511,6 +511,7 @@
         (evil-leader/set-leader "<SPC>")
         (add-hook 'projectile-mode-hook (lambda () (evil-leader/set-key "m" 'projectile-compile-project)))
         (evil-leader/set-key
+          "<SPC>" 'me:switch-to-previous-buffer
           ";" 'evil-jump-forward
           "," 'evil-jump-backward
           "a" 'align
@@ -540,8 +541,6 @@
     (define-key evil-outer-text-objects-map "b" 'evil-textobj-anyblock-a-block)
     (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
     (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
-    ; buffer swapping, next/previous
-    (define-key evil-normal-state-map (kbd "<RET>") 'me:switch-to-previous-buffer)
     ; esc key (from WikEmacs)
     (define-key evil-normal-state-map [escape] 'keyboard-quit)
     (define-key evil-visual-state-map [escape] 'keyboard-quit)
