@@ -60,7 +60,7 @@
 (setq custom-file "~/.cache/emacs/customize")               ; put customizations here
 (global-auto-revert-mode t)                                 ; revert unchanged files automatically
 
-; make some keys available for use
+;; make some keys available for use
 (global-unset-key (kbd "<f4>"))
 
 
@@ -93,7 +93,7 @@
     ad-do-it))
 (ad-activate 'align)
 
-; elisp mode settings
+;; elisp mode settings
 (add-hook 'emacs-lisp-mode-hook
           (lambda ()
             (setq tab-width 2
@@ -266,8 +266,8 @@
   (("CMakeLists\\.txt\\'" . cmake-mode)
    ("\\.cmake\\'" . cmake-mode)))
 
-; n.b. buffer-face-mode screws up completion popups
-; may be fixed in 25.1 or so
+;; n.b. buffer-face-mode screws up completion popups
+;; may be fixed in 25.1 or so
 (use-package adoc-mode
   :init
   (progn
@@ -383,7 +383,6 @@
           deft-file-naming-rules '((nospace . "_")
                                    (noslash . "_")
                                    (case-fn . downcase))
-          deft-text-mode 'markdown-mode
           ; first extension in list seems to be used for new files.  Not sure
           ; what deft-default-extesion does
           deft-default-extension "md"
@@ -412,7 +411,7 @@
         (add-to-list 'company-backends 'company-irony))))
   :diminish company-mode)
 
-; N.B. to use, need to run irony-install-server, which requires libclang-dev
+;; N.B. to use, need to run irony-install-server, which requires libclang-dev
 (use-package irony
   :init
   (progn
@@ -443,7 +442,7 @@
     (global-flycheck-mode))
   :defer 4)
 
-; enable code folding (evil has bindings)
+;; enable code folding (evil has bindings)
 (use-package hideshow
   :init
   (progn
