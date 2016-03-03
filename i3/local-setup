@@ -11,6 +11,9 @@ if [ "$host" == "hum" ]; then
 	 xrandr --output DVI-I-1 --left-of HDMI-1
 	 xrandr --output DVI-I-1 --primary
 	 dropbox start -i
+elif [ "$host" == "jh-rvueb" ]; then
+	xrandr --output HDMI1 --left-of DP2
+	xrandr --output DP2 --primary
 else
 	echo "Unknown host |$host|"
 fi
