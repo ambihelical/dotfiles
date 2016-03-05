@@ -12,7 +12,7 @@ APP_FILES = ${CFG}/screen ${CFG}/ack $(CFG)/globalrc $(CFG)/pythonrc
 GIT_FILES = ${CFG}/git/config  ${CFG}/git/ignore
 I3_FILES = ${CFG}/i3/config ${CFG}/i3/i3status.config ${CFG}/dunst/dunstrc \
            ${CFG}/gsimplecal/config ${CFG}/i3/split-layout.json \
-           ${CFG}/i3/local-setup
+           ${CFG}/i3/local-setup ${CFG}/i3/xmodmap
 VIM_FILES = ~/.vimrc ${CFG}/vim  ${CACHE}/vim
 BAREX_FILES = ~/.xsession ~/.Xmodmap
 EMACS_FILES = ~/.emacs.d $(CACHE)/emacs
