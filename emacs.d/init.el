@@ -356,7 +356,7 @@
                   (message "No Compilation Errors!")))))
     (add-hook 'compilation-mode-hook
       (lambda ()
-        (next-error-follow-minor-mode t)
+        (local-set-key (kbd "f") 'next-error-follow-minor-mode)
         (local-set-key (kbd "k") 'compilation-previous-error)
         (local-set-key (kbd "j") 'compilation-next-error)
         (local-set-key (kbd "C-k") 'compilation-previous-file)
