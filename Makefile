@@ -16,7 +16,7 @@ I3_FILES = ${CFG}/i3/config ${CFG}/i3/i3status.config ${CFG}/dunst/dunstrc \
 VIM_FILES = ~/.vimrc ${CFG}/vim  ${CACHE}/vim
 BAREX_FILES = ~/.xsession ~/.Xmodmap
 EMACS_FILES = ~/.emacs.d $(CACHE)/emacs
-ETC_FILES = ${ETC}/sysctl.d/99-edb-sysctl.conf
+ETC_FILES = ${ETC}/sysctl.d/99-edb-sysctl.conf ${ETC}/udev/rules.d/10-usb-mount.rules
 
 
 .PHONY: help base dev i3 all defaults
@@ -45,6 +45,7 @@ i3: ${I3_FILES}
 barex: ${BAREX_FILES}
 
 root: ${ETC_FILES}
+	udevadm control --reload-rules
 
 # fix some annoying default settings
 defaults:
