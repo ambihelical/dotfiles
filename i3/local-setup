@@ -14,6 +14,7 @@ if [ "$host" == "hum" ]; then
 elif [ "$host" == "jh-rvueb" ]; then
 	xrandr --output HDMI1 --left-of DP2
 	xrandr --output DP2 --primary
+	setxkbmap -option 'altwin:swap_alt_win'
 else
 	echo "Unknown host |$host|"
 fi
