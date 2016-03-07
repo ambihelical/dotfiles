@@ -253,6 +253,7 @@ exec --no-startup-id pithos
 exec --no-startup-id thunderbird
 exec --no-startup-id urxvt -name scratch
 exec --no-startup-id xmodmap ~/.config/i3/xmodmap
+exec --no-startup-id devmon
 
 # special window handling
 for_window [class="Gcalctool"] floating enable
