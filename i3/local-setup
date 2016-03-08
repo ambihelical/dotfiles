@@ -2,19 +2,25 @@
 
 # local configuration for i3
 
-# use caps lock for hyper and right alt for compose
-setxkbmap -option 'caps:hyper' -option 'compose:ralt'
-
 # host specific setup
 host=$(uname -n)
 if [ "$host" == "hum" ]; then
+	 # Apple Alum
+	 # - caps is hyper
+	 # - compose is right alt
+	 setxkbmap -option 'caps:hyper' -option 'compose:ralt'
 	 xrandr --output DVI-I-1 --left-of HDMI-1
 	 xrandr --output DVI-I-1 --primary
 	 dropbox start -i
 elif [ "$host" == "jh-rvueb" ]; then
 	xrandr --output HDMI1 --left-of DP2
 	xrandr --output DP2 --primary
-	setxkbmap -option 'altwin:swap_alt_win'
+	# Realforce 87U
+	# - caps is hyper
+	# - swap alt/win so window keys next to spacebar
+	# - and make compose key be the old windows key
+	setxkbmap -option 'caps:hyper' -option 'altwin:swap_alt_win' -option 'compose:rwin'
 else
 	echo "Unknown host |$host|"
+	setxkbmap -option 'caps:hyper' -option 'compose:ralt'
 fi
