@@ -12,14 +12,15 @@ APP_FILES = ${CFG}/screen ${CFG}/ack $(CFG)/globalrc $(CFG)/pythonrc
 GIT_FILES = ${CFG}/git/config  ${CFG}/git/ignore
 I3_FILES = ${CFG}/i3/config ${CFG}/i3/i3status.config ${CFG}/dunst/dunstrc \
            ${CFG}/gsimplecal/config ${CFG}/i3/split-layout.json \
-           ${CFG}/i3/local-setup ${CFG}/i3/xmodmap
+           ${CFG}/i3/local-setup
 VIM_FILES = ~/.vimrc ${CFG}/vim  ${CACHE}/vim
 BAREX_FILES = ~/.xsession ~/.Xmodmap
 EMACS_FILES = ~/.emacs.d $(CACHE)/emacs
 ETC_FILES = ${ETC}/sysctl.d/99-edb-sysctl.conf
+XKB_FILE = /usr/share/X11/xkb/symbols/pc
 
 
-.PHONY: help base dev i3 all defaults
+.PHONY: help base dev i3 all defaults fix-xkb
 
 help:
 	@echo "The following targets can be used"
@@ -44,8 +45,15 @@ i3: ${I3_FILES}
 
 barex: ${BAREX_FILES}
 
-root: ${ETC_FILES}
+root: ${ETC_FILES} fix-xkb
 	udevadm control --reload-rules   # for udev rules
+
+# This puts Super_L and Super_R into mod3 so that they are separate from Hyper_L
+# This is ugly, but not as ugly as xkb.
+# It's sad that either xkb or its documentation is so bad that
+# this seems to be the easiest way to perform a simple overriding of the defaults.
+fix-xkb:
+	sed --in-place -e 's/modifier_map Mod4[ ]\+{[ ]\+Super_L,[ ]\+Super_R/modifier_map Mod3 { Super_L, Super_R/' ${XKB_FILE}
 
 # fix some annoying default settings
 defaults:
