@@ -20,6 +20,7 @@ export GNOME22_USER_DIR=${XDG_CONFIG_HOME}/gnome2.2
 export GTK2_RC_FILES="${XDG_CONFIG_HOME}/gtk-2.0/gtkrc"
 export GIMP2_DIRECTORY=${XDG_CONFIG_HOME}/gimp2
 export GTAGSCONF=${XDG_CONFIG_HOME}/globalrc
+export GTAGS_OPTIONS=--skip-unreadable
 export GNUPGHOME=${XDG_CONFIG_HOME}/gnupg
 export __GL_SHADER_DISK_CACHE_PATH=${XDG_CACHE_HOME}/nv
 export CUDA_CACHE_PATH=${XDG_CACHE_HOME}/nv 
