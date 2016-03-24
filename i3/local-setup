@@ -13,13 +13,12 @@ if [ "$host" == "hum" ]; then
 	 xrandr --output DVI-I-1 --primary
 	 dropbox start -i
 elif [ "$host" == "jh-rvueb" ]; then
-	xrandr --output HDMI1 --left-of DP2
-	xrandr --output DP2 --primary
 	# Realforce 87U
 	# - caps is hyper
 	# - swap alt/win so window keys next to spacebar
 	# - and make compose key be the old windows key
 	setxkbmap -option 'caps:hyper' -option 'altwin:swap_alt_win' -option 'compose:rwin'
+	xrandr --output HDMI-0 --primary
 else
 	echo "Unknown host |$host|"
 	setxkbmap -option 'caps:hyper' -option 'compose:ralt'
