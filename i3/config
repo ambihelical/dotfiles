@@ -238,9 +238,7 @@ bindsym $mod+minus scratchpad show
 
 # assignments
 
-assign [class="Pithos"] 10:Admin
-assign [class="Thunderbird"] 10:Admin
-assign [class="Pidgin"] 9:IM
+assign [class="Pithos"] 1:Admin
 
 # startup programs
 # first run host-specific setup, then invariants
