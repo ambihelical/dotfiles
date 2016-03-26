@@ -1,33 +1,33 @@
 [submodule "vimdir/bundle/a.vim"]
-	path = vimdir/bundle/a.vim
+	path = vim/bundle/a.vim
 	url = https://github.com/nacitar/a.vim.git
 [submodule "vimdir/bundle/bufexplorer"]
-	path = vimdir/bundle/bufexplorer
+	path = vim/bundle/bufexplorer
 	url = https://github.com/jlanzarotta/bufexplorer.git
 [submodule "vimdir/bundle/nerdtree"]
-	path = vimdir/bundle/nerdtree
+	path = vim/bundle/nerdtree
 	url = https://github.com/scrooloose/nerdtree.git
 [submodule "vimdir/bundle/vim-pathogen"]
-	path = vimdir/bundle/vim-pathogen
+	path = vim/bundle/vim-pathogen
 	url = https://github.com/tpope/vim-pathogen.git
 [submodule "vimdir/bundle/bufmru.vim"]
-	path = vimdir/bundle/bufmru.vim
+	path = vim/bundle/bufmru.vim
 	url = https://github.com/vim-scripts/bufmru.vim.git
 [submodule "vimdir/bundle/bufkill.vim"]
-	path = vimdir/bundle/bufkill.vim
+	path = vim/bundle/bufkill.vim
 	url = https://github.com/vim-scripts/bufkill.vim.git
 [submodule "vimdir/bundle/argtextobj.vim"]
-	path = vimdir/bundle/argtextobj.vim
+	path = vim/bundle/argtextobj.vim
 	url = https://github.com/inkarkat/argtextobj.vim.git
 [submodule "vimdir/bundle/tcomment_vim"]
-	path = vimdir/bundle/tcomment_vim
+	path = vim/bundle/tcomment_vim
 	url = https://github.com/tomtom/tcomment_vim.git
 [submodule "vimdir/bundle/vim-repeat"]
-	path = vimdir/bundle/vim-repeat
+	path = vim/bundle/vim-repeat
 	url = https://github.com/tpope/vim-repeat.git
 [submodule "vimdir/bundle/vim-gitgutter"]
-	path = vimdir/bundle/vim-gitgutter
+	path = vim/bundle/vim-gitgutter
 	url = https://github.com/airblade/vim-gitgutter.git
 [submodule "vimdir/bundle/vim-airline"]
-	path = vimdir/bundle/vim-airline
+	path = vim/bundle/vim-airline
 	url = https://github.com/bling/vim-airline.git

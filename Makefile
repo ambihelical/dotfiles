@@ -92,7 +92,7 @@ all: base dev i3 defaults
 ~/bin:
 	mkdir -p ~/bin
 
-${CFG}/vim: ${PWD}/vimdir
+${CFG}/vim: ${PWD}/vim
 	${LN} $< $@
 
 # files in bin directory
