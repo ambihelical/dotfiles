@@ -170,6 +170,10 @@
                                            helm-source-locate )))
   :config
   (progn
+    ;; swap tab/c-z as recommended by tuhdo
+    (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to do persistent action
+    (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
+    (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
     (define-key helm-map [escape] 'helm-keyboard-quit))
 
   :bind
@@ -440,8 +444,12 @@
 
 
 (use-package flycheck
+  :init
+  (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
   :config
   (progn
+    (set-face-attribute 'flycheck-warning nil :foreground 'unspecified :background "light pink")
+    (set-face-attribute 'flycheck-error nil :foreground 'unspecified :background "red")
     (global-flycheck-mode))
   :defer 4)
 
@@ -608,6 +616,8 @@
   ("<f8>" . shell-pop))
 
 (use-package which-key
+  :init
+    (setq which-key-max-description-length nil)
   :config
   (progn
     (which-key-mode)
