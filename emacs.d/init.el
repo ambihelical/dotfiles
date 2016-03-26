@@ -23,9 +23,6 @@
 
 ;; configure the chrome
 (set-default-font "DejaVu Sans Mono 9")
-(cond
- ((string-equal system-type "darwin")
-  (set-default-font "Menlo Regular 12")))
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
 (menu-bar-mode t)
@@ -39,6 +36,9 @@
 
 (defun me:replace-prefix (prefix input)
   (replace-regexp-in-string ( concat "^" (regexp-quote prefix)) "" input))
+
+(defun me:replace-all (input from to)
+  (replace-regexp-in-string (regexp-quote from) to input nil))
 
 (setq frame-title-format '((:eval (if (buffer-file-name)
                                       (me:replace-prefix (abbreviate-file-name default-directory)
@@ -669,3 +669,15 @@
 (use-package ruler-mode
   :bind
   (("<f4> 6" . ruler-mode)))
+
+;; Load system-dependent init file if it exists
+;; will be in emacs.d/init-<prefix>-<ident>.el
+(defun me:load-init-file (prefix ident)
+  (let ((file-name (expand-file-name (concat "init-" prefix "-" (me:replace-all ident "/" "-") ".el") user-emacs-directory)))
+  (message "looking for %s" file-name)
+  (when (file-exists-p file-name)
+    (message "loading %s" file-name)
+    (load-file file-name))))
+
+(me:load-init-file "system" (symbol-name system-type))
+(me:load-init-file "host" system-name)
