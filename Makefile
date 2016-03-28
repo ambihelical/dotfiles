@@ -7,7 +7,7 @@ ETC=/etc
 SHELL_FILES = ~/.bashrc ~/.bash_profile ${CFG}/readline ~/.profile
 DIR_FILES = ~/bin
 BIN_FILES=$(foreach bin,$(notdir $(wildcard ${PWD}/bin/*)),~/bin/${bin})
-XORG_FILES = ${CFG}/xsettingsd ~/.Xresources
+XORG_FILES = ${CFG}/xsettingsd ~/.Xresources ${CFG}/xkb/symbols/local
 APP_FILES = ${CFG}/screen ${CFG}/ack $(CFG)/globalrc $(CFG)/pythonrc
 GIT_FILES = ${CFG}/git/config  ${CFG}/git/ignore
 I3_FILES = ${CFG}/i3/config ${CFG}/i3/i3status.config ${CFG}/dunst/dunstrc \
@@ -17,10 +17,9 @@ VIM_FILES = ~/.vimrc ${CFG}/vim  ${CACHE}/vim
 BAREX_FILES = ~/.xsession ~/.Xmodmap
 EMACS_FILES = ~/.emacs.d $(CACHE)/emacs
 ETC_FILES = ${ETC}/sysctl.d/99-edb-sysctl.conf
-XKB_FILE = /usr/share/X11/xkb/symbols/pc
 
 
-.PHONY: help base dev i3 all defaults fix-xkb
+.PHONY: help base dev i3 all defaults
 
 help:
 	@echo "The following targets can be used"
@@ -45,15 +44,8 @@ i3: ${I3_FILES}
 
 barex: ${BAREX_FILES}
 
-root: ${ETC_FILES} fix-xkb
+root: ${ETC_FILES}
 	udevadm control --reload-rules   # for udev rules
-
-# This puts Super_L and Super_R into mod3 so that they are separate from Hyper_L
-# This is ugly, but not as ugly as xkb.
-# It's sad that either xkb or its documentation is so bad that
-# this seems to be the easiest way to perform a simple overriding of the defaults.
-fix-xkb:
-	sed --in-place -e 's/modifier_map Mod4[ ]\+{[ ]\+Super_L,[ ]\+Super_R/modifier_map Mod3 { Super_L, Super_R/' ${XKB_FILE}
 
 # fix some annoying default settings
 defaults:

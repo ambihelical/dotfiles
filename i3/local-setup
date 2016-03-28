@@ -23,3 +23,7 @@ else
 	echo "Unknown host |$host|"
 	setxkbmap -option 'caps:hyper' -option 'compose:ralt'
 fi
+xkb=${HOME}/.config/xkb
+if [ -r "${xkb}" ]; then
+	setxkbmap -print | sed -e '/xkb_symbols/s/"[[:space:]]/+local&/' | xkbcomp -I${xkb} - ${DISPLAY}
+fi
