@@ -467,7 +467,7 @@
   :config
   (progn
     (set-face-attribute 'flycheck-warning nil :foreground 'unspecified :background "light pink")
-    (set-face-attribute 'flycheck-error nil :foreground 'unspecified :background "red")
+    (set-face-attribute 'flycheck-error nil :foreground 'unspecified :background "red1")
     (global-flycheck-mode))
   :defer 4)
 
