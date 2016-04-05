@@ -54,6 +54,14 @@
       mouse-wheel-follow-mouse 't                           ; scroll window under mouse
       mouse-wheel-progressive-speed nil)                    ; don't speed up
 
+;; abort mini-buffer when mouse click outside
+(defun me:stop-using-minibuffer ()
+  "kill the minibuffer"
+  (when (and (>= (recursion-depth) 1) (active-minibuffer-window))
+    (abort-recursive-edit)))
+(add-hook 'mouse-leave-buffer-hook 'me:stop-using-minibuffer)
+
+
 ;; Operational preferences
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq backup-directory-alist '(("." . "~/.cache/emacs")))
@@ -62,7 +70,6 @@
 
 ;; make some keys available for use
 (global-unset-key (kbd "<f4>"))
-
 
 ;; Text handling
 (global-visual-line-mode t)                                        ; edit visual lines
