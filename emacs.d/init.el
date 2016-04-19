@@ -376,7 +376,8 @@
 (use-package compile
   :init
   (progn
-    (setq compilation-scroll-output t)
+    (setq compilation-scroll-output t
+          compilation-ask-about-save nil)    ; save all modified
     (setq compilation-finish-functions
           (lambda (buf str)
             (if (null (string-match ".*exited abnormally.*" str))
