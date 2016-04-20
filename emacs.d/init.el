@@ -559,7 +559,7 @@
           "a" 'align
           "c" 'me:use-evil-clipboard-register
           "e" 'pp-eval-last-sexp
-          "f" 'avy-goto-char-2
+          "f" 'avy-goto-char
           "s" 'me:use-evil-selection-register
           "v"  'exchange-point-and-mark
           "w" 'save-buffer
