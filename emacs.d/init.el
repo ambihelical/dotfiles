@@ -674,6 +674,7 @@
     (setq display-buffer-function 'popwin:display-buffer))
   :config
   (progn
+    (push '("*Async Shell Command*" :noselect t) popwin:special-display-config)
     (push '("*Completions*" :stick t :noselect t) popwin:special-display-config)
     (push '("*Help*" :stick t :noselect t) popwin:special-display-config)
     (popwin-mode 1)))
