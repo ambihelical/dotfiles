@@ -320,9 +320,11 @@
     (put 'adoc-mode 'flyspell-mode-predicate 'me:adoc-mode-flyspell-verify)
     (add-hook 'adoc-mode-hook
               (lambda ()
-                (setq evil-shift-width 4)          ; set tabs 4 spaces
-                (setq tab-width 4)
-                (setq indent-tabs-mode nil))))
+                (setq company-dabbrev-downcase nil     ; don't downcase completions
+                      company-dabbrev-ignore-case nil  ; don't keep prefix
+                      evil-shift-width 4               ; set tabs 4 spaces
+                      tab-width 4
+                      indent-tabs-mode nil))))
   :mode
   (("\\.ad\\'" . adoc-mode)
    ("\\.adoc\\'" . adoc-mode)
