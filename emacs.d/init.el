@@ -543,6 +543,8 @@
         (define-key evil-outer-text-objects-map "Z" 'evil-snipe-S)
         (evil-snipe-override-mode 1)
         (evil-snipe-mode 1)))
+    (use-package evil-surround
+      :config (global-evil-surround-mode 1))
     (use-package evil-leader
       :init
       (progn
