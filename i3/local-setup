@@ -27,3 +27,5 @@ xkb=${HOME}/.config/xkb
 if [ -r "${xkb}" ]; then
 	setxkbmap -print | sed -e '/xkb_symbols/s/"[[:space:]]/+local&/' | xkbcomp -I${xkb} - ${DISPLAY}
 fi
+xsettingsd -c ~/.config/xsettingsd &
+/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1  # gui authentication

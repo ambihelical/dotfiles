@@ -244,8 +244,6 @@ assign [class="Pithos"] 1:Admin
 # startup programs
 # first run host-specific setup, then invariants
 exec --no-startup-id ~/.config/i3/local-setup
-exec --no-startup-id xsettingsd -c ~/.config/xsettingsd
-exec --no-startup-id /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1  # gui authentication
 exec --no-startup-id nm-applet
 exec --no-startup-id clipit
 exec --no-startup-id pithos
