@@ -362,6 +362,9 @@
                 (setq c-basic-offset 3)))
     (add-hook 'c++-mode-hook
               (lambda ()
+                (define-key c++-mode-map ":" 'self-insert-command)
+                (define-key c++-mode-map ")" 'self-insert-command)
+                (define-key c++-mode-map ";" 'self-insert-command)
                 (c-set-offset 'innamespace [0])))              ; no indentation in namespace
     (setq c-default-style "ellemtel"                           ; similar to allman style
           c-electric-pound-behavior (quote (alignleft))        ; cpp directives aligned to left
