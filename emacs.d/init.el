@@ -476,8 +476,8 @@
   (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
   :config
   (progn
-    (set-face-attribute 'flycheck-warning nil :foreground 'unspecified :background "light pink")
-    (set-face-attribute 'flycheck-error nil :foreground 'unspecified :background "red1")
+    (set-face-attribute 'flycheck-warning nil :foreground 'unspecified :background "khaki1")
+    (set-face-attribute 'flycheck-error nil :foreground 'unspecified :background "light pink")
     (global-flycheck-mode))
   :defer 4)
 
@@ -579,6 +579,7 @@
     (evil-set-initial-state 'git-rebase-mode 'emacs)
     (evil-set-initial-state 'deft-mode 'insert)
     (evil-set-initial-state 'magit-branch-manager-mode 'emacs)
+    (evil-set-initial-state 'flycheck-error-list-mode 'emacs)
     ; note evil-set-initial-state didn't work for this mode
     (add-hook 'with-editor-mode-hook 'evil-insert-state)
     (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
