@@ -301,7 +301,7 @@ bindsym $mod+Shift+apostrophe exec --no-startup-id xclip -selection c -o | gvim 
 bindsym $mod+c exec --no-startup-id xclip -o | xclip -i -selection c
 
 
-set $Locker i3lock -t -i ~/.config/i3/background.png && sleep 1 
+set $Locker ~/bin/i3wm-screen-lock
 
 set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
 mode "$mode_system" {

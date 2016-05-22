@@ -4,6 +4,8 @@
 
 # host specific setup
 host=$(uname -n)
+lockminutes=30
+offminutes=60
 if [ "$host" == "hum" ]; then
 	 # Apple Alum
 	 # - caps is hyper
@@ -12,6 +14,7 @@ if [ "$host" == "hum" ]; then
 	 xrandr --output DVI-I-1 --left-of HDMI-1
 	 xrandr --output DVI-I-1 --primary
 	 dropbox start -i
+	 lockminutes=0
 elif [ "$host" == "jh-rvueb" ]; then
 	# Realforce 87U
 	# - caps is hyper
@@ -19,6 +22,7 @@ elif [ "$host" == "jh-rvueb" ]; then
 	# - and make compose key be the old windows key
 	setxkbmap -option 'caps:hyper' -option 'altwin:swap_alt_win' -option 'compose:rwin'
 	xrandr --output HDMI-0 --primary
+	lockminutes=15
 else
 	echo "Unknown host |$host|"
 	setxkbmap -option 'caps:hyper' -option 'compose:ralt'
@@ -29,3 +33,12 @@ if [ -r "${xkb}" ]; then
 fi
 xsettingsd -c ~/.config/xsettingsd &
 /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1  # gui authentication
+killall xautolock
+if [ ${lockminutes} -gt 0 ]; then
+	xautolock -detectsleep -time ${lockminutes} -locker '~/bin/i3wm-screen-lock' -notify 15 -notifier 'notify-send "Screen lock will occur in 15 seconds"' &
+else
+	 echo "Auto screen lock disabled"
+fi
+if [ ${offminutes} -gt 0 ]; then
+	 xset dpms 0 0 $((offminutes * 60))
+fi

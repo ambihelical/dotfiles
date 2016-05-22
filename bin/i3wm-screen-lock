@@ -1,0 +1,11 @@
+#!/bin/sh -e
+
+png=~/.config/i3/background.png
+
+scrot ${png}
+convert ${png} -blur 0x6 ${png}
+i3lock -t -i ${png}
+sleep 1
+
+# Turn the screen off after a delay.
+#sleep 60; pgrep i3lock && xset dpms force off

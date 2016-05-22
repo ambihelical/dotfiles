@@ -31,7 +31,7 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	p="$p python-dev python-pip"
  # desktop related
 	p="$p i3 i3-wm i3lock i3status xsettingsd udevil"
-	p="$p gsimplecal clipit gnome-alsamixer"
+	p="$p gsimplecal clipit gnome-alsamixer scrot xautolock"
  # nice to have apps & related
 	p="$p pithos"
 	p="$p qalculate"
