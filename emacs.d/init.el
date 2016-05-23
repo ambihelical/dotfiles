@@ -209,6 +209,7 @@
    ("<f4> a"    . helm-apropos)
    ("<f4> b"    . helm-all-mark-rings)
    ("<f4> d"    . dired-jump)
+   ("<f4> f"    . helm-grep-do-git-grep)
    ("<f4> i"    . helm-info-at-point)
    ("<f4> k"    . helm-show-kill-ring)
    ("<f4> l"    . helm-locate)
