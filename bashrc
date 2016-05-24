@@ -247,7 +247,9 @@ linux*)
     alias lyx='lyx -geometry 800x1075-15+0'
     alias gless=gmore
     # allow core dumps
-    #ulimit -c unlimited
+	 if [	"$(uname -n)" == "jh-rvueb" ]; then
+		ulimit -c unlimited
+    fi
     ;;
 
 darwin*)  # OSX
