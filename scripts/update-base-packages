@@ -23,7 +23,7 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
  # fonts
 	p="$p ttf-mscorefonts-installer otf-stix unifont"
  # cli tools
-	p="$p git-core gitk git-doc git-gui"
+	p="$p git-core gitk git-doc git-gui gpp"
 	p="$p ack-grep silversearcher-ag autojump htop screen unzip"
 	p="$p curl wget suckless-tools tree xclip realpath a2ps"
  # python
