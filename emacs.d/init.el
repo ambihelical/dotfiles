@@ -21,6 +21,11 @@
       use-package-minimum-reported-time 0.03
       use-package-verbose t)
 
+;; set some personal variables
+(setq me:notes-path (if (file-readable-p "~/Dropbox/Notes")
+                        "~/Dropbox/Notes"
+                        "~/Notes"))
+
 ;; configure the chrome
 (set-default-font "DejaVu Sans Mono 9")
 (tool-bar-mode 0)
@@ -416,7 +421,7 @@
 (use-package deft
   :init
   (progn
-    (setq deft-directory "~/Dropbox/Notes"
+    (setq deft-directory me:notes-path
           deft-recursive t
           deft-use-filter-string-for-filename t
           deft-file-naming-rules '((nospace . "_")
