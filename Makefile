@@ -96,8 +96,15 @@ all: base dev i3 defaults
 ${CFG}/vim: ${PWD}/vim
 	${LN} $< $@
 
+# preprocess xsettingsd
 ${CFG}/xsettingsd: ${PWD}/xsettingsd
 	${GPP} $< > $@
+
+# copy git config and then run private startup
+# to customize
+${CFG}/git/config: ${PWD}/git/config
+	cp -f $< $@
+	i3wm-private-startup || true
 
 # files in bin directory
 ~/bin/% : ${PWD}/bin/%
