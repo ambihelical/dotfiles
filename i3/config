@@ -243,13 +243,14 @@ assign [class="Pithos"] 1:Admin
 
 # startup programs
 # first run host-specific setup, then invariants
-exec --no-startup-id ~/.config/i3/local-setup
+exec --no-startup-id ~/bin/i3wm-local-startup
 exec --no-startup-id nm-applet
 exec --no-startup-id clipit
 exec --no-startup-id pithos
 exec --no-startup-id thunderbird
 exec --no-startup-id urxvt -name scratch
 exec --no-startup-id devmon
+exec --no-startup-id i3wm-private-startup || true
 
 # special window handling
 for_window [class="Gcalctool"] floating enable

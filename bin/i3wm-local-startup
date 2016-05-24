@@ -32,7 +32,7 @@ if [ -r "${xkb}" ]; then
 	setxkbmap -print | sed -e '/xkb_symbols/s/"[[:space:]]/+local&/' | xkbcomp -I${xkb} - ${DISPLAY}
 fi
 xsettingsd -c ~/.config/xsettingsd &
-/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1  # gui authentication
+/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &  # gui authentication
 killall xautolock
 if [ ${lockminutes} -gt 0 ]; then
 	xautolock -detectsleep -time ${lockminutes} -locker '~/bin/i3wm-screen-lock' -notify 15 -notifier 'notify-send "Screen lock will occur in 15 seconds"' &
