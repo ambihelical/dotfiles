@@ -1,16 +1,15 @@
 Xft/Antialias 1
 @@ifeq HOST jh-rvueb
 Xft/DPI 105000
+Gtk/FontName "Ubuntu 12"
 @@else
 Xft/DPI 98304
+Gtk/FontName "Ubuntu 10"
 @@endif
 Xft/Hinting 1
 Xft/HintStyle "hintfull"
 Xft/RGBA "rgb"
-
-# Gtk
 Gtk/Modules "canberra-gtk-module"
-Gtk/FontName "Ubuntu 12"
 Gtk/TimeoutInitial 200
 Gtk/TimeoutRepeat 20
 Net/FallbackIconTheme "gnome"
