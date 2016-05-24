@@ -4,6 +4,16 @@ CFG = ~/.config
 CACHE=~/.cache
 ETC=/etc
 
+# gpp processing
+# @@ starts meta macro (e.g. @@ifeq)
+# @[ starts macro call (e.g. @[HOST]@)
+# OS, HOST and KERNEL are defined
+
+HOST := $(shell uname -n)
+OS := $(shell uname -o)
+KERNEL := $(shell uname -s)
+GPP := gpp -DOS=${OS} -DHOST=${HOST} -DKERNEL=${KERNEL} -n -U '@[' ']@' '(' ',' ')' '(' ')' '\#' '' -M '@@' '\n' ' ' ' ' '\n' '(' ')'
+
 SHELL_FILES = ~/.bashrc ~/.bash_profile ${CFG}/readline ~/.profile
 DIR_FILES = ~/bin
 BIN_FILES=$(foreach bin,$(notdir $(wildcard ${PWD}/bin/*)),~/bin/${bin})
@@ -86,6 +96,9 @@ all: base dev i3 defaults
 
 ${CFG}/vim: ${PWD}/vim
 	${LN} $< $@
+
+${CFG}/xsettingsd: ${PWD}/xsettingsd
+	${GPP} $< > $@
 
 # files in bin directory
 ~/bin/% : ${PWD}/bin/%
