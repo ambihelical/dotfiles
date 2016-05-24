@@ -265,6 +265,12 @@ augroup vimrc
 	if version >= 702
 	  autocmd BufWinLeave * call clearmatches()
 	endif
+
+   " work settings
+	if hostname() == "jh-rvueb"
+		autocmd! FileType python setl shiftwidth=4 tabstop=4 noexpandtab
+		autocmd! FileType cpp,c setl shiftwidth=4 tabstop=4 noexpandtab
+	endif
 augroup END
 
 
