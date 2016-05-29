@@ -24,19 +24,18 @@
       use-package-verbose t)
 
 ;; set some personal variables
+(defvar me:notes-path "~/Notes")
 (setq me:notes-path (if (file-readable-p "~/Dropbox/Notes")
-                        "~/Dropbox/Notes"
-                        "~/Notes"))
+                        "~/Dropbox/Notes"))
 
 ;; configure the chrome
-(set-default-font "DejaVu Sans Mono 9")
+(set-frame-font "DejaVu Sans Mono 9")
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
 (menu-bar-mode t)
 (setq inhibit-splash-screen t
       inhibit-startup-echo-area-message t
       inhibit-startup-message t)
-(setq gdb-many-windows t)                                   ; use more complex gdb layout
 (mouse-avoidance-mode 'animate)                             ; move mouse pointer out of way
 (column-number-mode t)                                      ; display column/row of cursor in mode-line
 (display-time-mode t)                                       ; display time in mode-line
@@ -217,9 +216,7 @@
     (setq helm-split-window-in-side-p           t
           helm-split-window-default-side        'other
           helm-move-to-line-cycle-in-source     t
-          helm-quick-update                     nil          ; ui flashing occurs
           helm-input-idle-delay                 0.1
-          helm-idle-delay                       0.0
           helm-candidate-number-limit           100
           helm-scroll-amount                    8
           helm-buffer-max-length                40           ; for displayed file names
