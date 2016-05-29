@@ -40,6 +40,10 @@
 (mouse-avoidance-mode 'animate)                             ; move mouse pointer out of way
 (column-number-mode t)                                      ; display column/row of cursor in mode-line
 (display-time-mode t)                                       ; display time in mode-line
+;; Set scratch to be text only. This disables loading of any packages
+;; which are loaded for prog-mode and makes startup faster.
+(setq initial-scratch-message nil)
+(setq initial-major-mode 'text-mode)
 
 (defun me:replace-prefix (prefix input)
   (replace-regexp-in-string ( concat "^" (regexp-quote prefix)) "" input))
@@ -116,24 +120,6 @@
                   evil-shift-width 2                        ; need this since no tabs
                   lisp-body-indent 2)))                     ; indent elisp by 2
 
-;; setup spell check, prefer hunspell
-(cond
- ;; try hunspell at first
- ;; if hunspell does NOT exist, use aspell
- ((executable-find "hunspell")
-  (setq ispell-program-name "hunspell")
-  (setq ispell-local-dictionary "en_US")
-  (setq ispell-local-dictionary-alist
-        ;; Please note the list `("-d" "en_US")` contains ACTUAL parameters passed to hunspell
-        ;; You could use `("-d" "en_US,en_US-med")` to check with multiple dictionaries
-        '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8)
-          )))
-
- ((executable-find "aspell")
-  (setq ispell-program-name "aspell")
-  ;; Please note ispell-extra-args contains ACTUAL parameters passed to aspell
-  (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))))
-
 (use-package dash-functional)
 
 ;; Select the nth buffer in the buffer list
@@ -162,6 +148,7 @@
           smooth-scroll-strict-margins t)))
 
 (use-package whitespace
+  :commands whitespace-mode
   :init
   (progn
     (setq whitespace-line-column 80                      ; highlight columns past 80
@@ -186,24 +173,43 @@
     (add-hook 'visual-line-mode-hook #'adaptive-wrap-prefix-mode)))
 
 (use-package leuven-theme
-  :config
-  (progn
+  :init
+  (add-hook 'whitespace-mode-hook (lambda ()
     (set-face-attribute 'whitespace-line nil :foreground 'unspecified :background "lemon chiffon")
     (set-face-attribute 'whitespace-tab nil :foreground "gainsboro" :background "white" )
-    (set-face-attribute 'whitespace-trailing nil :foreground "black" :background "red" )))
+    (set-face-attribute 'whitespace-trailing nil :foreground "black" :background "red" ))))
 
 (use-package flyspell
+  :commands flyspell-prog-mode
+  :commands flyspell-mode
   :init
   (progn
     (add-hook 'prog-mode-hook 'flyspell-prog-mode)
     (add-hook 'text-mode-hook 'flyspell-mode))
   :config
   (progn
-    (use-package helm-flyspell))
+    ;; setup spell check, prefer hunspell
+    (cond
+      ((executable-find "hunspell")
+        (setq ispell-program-name "hunspell")
+        (setq ispell-local-dictionary "en_US")
+        (setq ispell-local-dictionary-alist
+              ;; Please note the list `("-d" "en_US")` contains ACTUAL parameters passed to hunspell
+              ;; You could use `("-d" "en_US,en_US-med")` to check with multiple dictionaries
+              '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8)
+                )))
+      ((executable-find "aspell")
+        (setq ispell-program-name "aspell")
+        ;; Please note ispell-extra-args contains ACTUAL parameters passed to aspell
+        (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US")))))
   :bind
-  (("s-f" . flyspell-auto-correct-previous-word)
-   ("s-s" . helm-flyspell-correct))
-  :diminish flyspell-mode)
+  (("s-f" . flyspell-auto-correct-previous-word))
+  :diminish flyspell-mode
+  :defer 4)
+
+  (use-package helm-flyspell
+    :bind
+    (("s-s" . helm-flyspell-correct)))
 
 (use-package helm
   :init
@@ -246,8 +252,7 @@
    ("<f4> p"    . helm-list-elisp-packages-no-fetch)
    ("<f4> r"    . helm-recentf)
    ("<f4> x"    . helm-top)
-   ("<f4> <f4>" . helm-resume))
-  :defer 2)
+   ("<f4> <f4>" . helm-resume)))
 
 (use-package projectile
   :init
@@ -284,6 +289,7 @@
    ("<f7> f"    . helm-projectile-ag)))
 
 (use-package helm-gtags
+  :commands helm-gtags-mode
   :init
   (progn
     (setq helm-gtags-auto-update t
@@ -466,21 +472,16 @@
   ("<f4> n" . deft))
 
 (use-package company
+  :commands global-company-mode
   :init
   (progn
     (setq company-minimum-prefix-length 1)
     (add-hook 'after-init-hook 'global-company-mode))
-  :config
-  (progn
-    ;(use-package helm-company :defer 3)
-    (use-package company-irony
-      :config
-      (progn
-        (add-to-list 'company-backends 'company-irony))))
   :diminish company-mode)
 
 ;; N.B. to use, need to run irony-install-server, which requires libclang-dev
 (use-package irony
+  :commands irony-mode
   :init
   (progn
     (add-hook 'c++-mode-hook 'irony-mode)
@@ -497,7 +498,12 @@
     (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
   :config
   (progn
+    (use-package company-irony
+      :config
+      (progn
+        (add-to-list 'company-backends 'company-irony)))
     (use-package flycheck-irony
+      :commands flycheck-irony-setup
       :config
       (progn
         (add-hook 'flycheck-mode-hook #'flycheck-irony-setup))))
@@ -505,17 +511,19 @@
 
 
 (use-package flycheck
+  :commands flycheck-mode
   :init
-  (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
+  (progn
+    (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
+    (add-hook 'prog-mode-hook 'flycheck-mode))
   :config
   (progn
     (set-face-attribute 'flycheck-warning nil :foreground 'unspecified :background "khaki1")
-    (set-face-attribute 'flycheck-error nil :foreground 'unspecified :background "light pink")
-    (global-flycheck-mode))
-  :defer 4)
+    (set-face-attribute 'flycheck-error nil :foreground 'unspecified :background "light pink")))
 
 ;; enable code folding (evil has bindings)
 (use-package hideshow
+  :commands hs-minor-mode
   :init
   (progn
     (add-hook 'c-mode-common-hook   'hs-minor-mode)
