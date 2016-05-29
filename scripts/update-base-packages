@@ -38,6 +38,7 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	p="$p gparted nemo nemo-fileroller"
 	p="$p vim-gnome rxvt-unicode-256color"
 	p="$p hunspell"
+	p="$p nemo-dropbox"
  # support for python stuff below
 	p="$p libiw-dev"
 
@@ -45,10 +46,8 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	if [ "$linux" == "Ubuntu" ]; then
 		if [ $version -ge 1510 ]; then
 			p="$p ttf-ancient-fonts-symbola"
-			# no nemo-dropbox yet...
 		elif [ $version -lt 1510 ]; then
 			p="$p ttf-ancient-fonts"
-			p="$p nemo-dropbox"
 		fi
 	fi
 	apt-get --ignore-missing --quiet --yes install $p
