@@ -17,6 +17,8 @@
   (require 'use-package))
 (require 'diminish)                ;; if you use :diminish
 (require 'bind-key)                ;; if you use any :bind variant
+(require 'cl)                      ;; needed for helm-flyspell
+
 (setq use-package-always-ensure t
       use-package-minimum-reported-time 0.03
       use-package-verbose t)
@@ -114,6 +116,23 @@
                   evil-shift-width 2                        ; need this since no tabs
                   lisp-body-indent 2)))                     ; indent elisp by 2
 
+;; setup spell check, prefer hunspell
+(cond
+ ;; try hunspell at first
+ ;; if hunspell does NOT exist, use aspell
+ ((executable-find "hunspell")
+  (setq ispell-program-name "hunspell")
+  (setq ispell-local-dictionary "en_US")
+  (setq ispell-local-dictionary-alist
+        ;; Please note the list `("-d" "en_US")` contains ACTUAL parameters passed to hunspell
+        ;; You could use `("-d" "en_US,en_US-med")` to check with multiple dictionaries
+        '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8)
+          )))
+
+ ((executable-find "aspell")
+  (setq ispell-program-name "aspell")
+  ;; Please note ispell-extra-args contains ACTUAL parameters passed to aspell
+  (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))))
 
 (use-package dash-functional)
 
@@ -173,12 +192,17 @@
     (set-face-attribute 'whitespace-tab nil :foreground "gainsboro" :background "white" )
     (set-face-attribute 'whitespace-trailing nil :foreground "black" :background "red" )))
 
-
 (use-package flyspell
   :init
   (progn
     (add-hook 'prog-mode-hook 'flyspell-prog-mode)
     (add-hook 'text-mode-hook 'flyspell-mode))
+  :config
+  (progn
+    (use-package helm-flyspell))
+  :bind
+  (("s-f" . flyspell-auto-correct-previous-word)
+   ("s-s" . helm-flyspell-correct))
   :diminish flyspell-mode)
 
 (use-package helm

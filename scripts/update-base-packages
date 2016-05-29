@@ -37,6 +37,7 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	p="$p qalculate"
 	p="$p gparted nemo nemo-fileroller"
 	p="$p vim-gnome rxvt-unicode-256color"
+	p="$p hunspell"
  # support for python stuff below
 	p="$p libiw-dev"
 
