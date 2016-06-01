@@ -1,3 +1,5 @@
+(let ((file-name-handler-alist nil))
+(setq gc-cons-threshold 100000000)
 
 (require 'package)
 
@@ -744,3 +746,6 @@
 
 (me:load-init-file "system" (symbol-name system-type))
 (me:load-init-file "host" system-name)
+
+;; restore a normal gc threshold
+(setq gc-cons-threshold 1000000))
