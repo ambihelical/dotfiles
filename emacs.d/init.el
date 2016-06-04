@@ -288,6 +288,7 @@
    ("<f7> f"    . helm-projectile-ag)))
 
 (use-package helm-gtags
+  :disabled
   :commands helm-gtags-mode
   :init
   (progn
@@ -478,8 +479,35 @@
     (add-hook 'after-init-hook 'global-company-mode))
   :diminish company-mode)
 
+(use-package rtags
+  :init
+  (progn
+    (defun me:flycheck-rtags-setup ()
+      (require 'flycheck-rtags)
+      (flycheck-select-checker 'rtags)
+      (setq-local flycheck-highlighting-mode nil) ;; RTags creates more accurate overlays.
+      (setq-local flycheck-check-syntax-automatically nil))
+    (setq rtags-autostart-diagnostics t
+          rtags-use-helm t
+          rtags-process-flags "--config ~/.config/rtags/config"
+          rtags-completions-enabled t)
+    (add-hook 'c-mode-common-hook 'rtags-start-process-unless-running)
+    (add-hook 'c-mode-common-hook #'me:flycheck-rtags-setup)
+    (rtags-enable-standard-keybindings))
+  :diminish rtags-mode
+  :bind
+  (("<f6> <f6>" . rtags-find-symbol-at-point)
+   ("<f6> d"    . rtags-find-symbol)
+   ("<f6> r"    . rtags-find-references-at-point)
+   ("<f6> v"    . rtags-find-virtuals-at-point)
+   ("<f6> c"    . rtags-rename-symbol)
+   ("<f6> ["    . rtags-location-stack-back)
+   ("<f6> ]"    . rtags-location-stack-forward)
+   ("<f6> m"    . helm-semantic-or-imenu)))
+
 ;; N.B. to use, need to run irony-install-server, which requires libclang-dev
 (use-package irony
+  :disabled
   :commands irony-mode
   :init
   (progn
@@ -620,6 +648,7 @@
     (evil-set-initial-state 'deft-mode 'insert)
     (evil-set-initial-state 'magit-branch-manager-mode 'emacs)
     (evil-set-initial-state 'flycheck-error-list-mode 'emacs)
+    (evil-set-initial-state 'rtags-mode 'emacs)
     ; note evil-set-initial-state didn't work for this mode
     (add-hook 'with-editor-mode-hook 'evil-insert-state)
     (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
