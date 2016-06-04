@@ -623,7 +623,6 @@
       (progn
         (global-evil-leader-mode t)
         (evil-leader/set-leader "<SPC>")
-        (add-hook 'projectile-mode-hook (lambda () (evil-leader/set-key "m" 'projectile-compile-project)))
         (evil-leader/set-key
           "<SPC>" 'me:switch-to-previous-buffer
           ";" 'evil-jump-forward
@@ -632,6 +631,7 @@
           "c" 'me:use-evil-clipboard-register
           "e" 'pp-eval-last-sexp
           "f" 'avy-goto-char
+          "m" 'projectile-compile-project
           "s" 'me:use-evil-selection-register
           "v"  'exchange-point-and-mark
           "w" 'save-buffer
