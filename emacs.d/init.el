@@ -487,12 +487,16 @@
       (flycheck-select-checker 'rtags)
       (setq-local flycheck-highlighting-mode nil) ;; RTags creates more accurate overlays.
       (setq-local flycheck-check-syntax-automatically nil))
+    (defun me:company-rtags-setup ()
+      (require 'company-rtags)
+      (add-to-list 'company-backends 'company-rtags))
     (setq rtags-autostart-diagnostics t
           rtags-use-helm t
           rtags-process-flags "--config ~/.config/rtags/config"
           rtags-completions-enabled t)
     (add-hook 'c-mode-common-hook 'rtags-start-process-unless-running)
     (add-hook 'c-mode-common-hook #'me:flycheck-rtags-setup)
+    (add-hook 'company-mode-hook  #'me:company-rtags-setup)
     (rtags-enable-standard-keybindings))
   :diminish rtags-mode
   :bind
