@@ -496,7 +496,10 @@
           rtags-completions-enabled t)
     (add-hook 'c-mode-common-hook 'rtags-start-process-unless-running)
     (add-hook 'c-mode-common-hook #'me:flycheck-rtags-setup)
-    (add-hook 'company-mode-hook  #'me:company-rtags-setup)
+    (add-hook 'company-mode-hook  #'me:company-rtags-setup))
+  :config
+  (progn
+    (rtags-diagnostics)
     (rtags-enable-standard-keybindings))
   :diminish rtags-mode
   :bind
