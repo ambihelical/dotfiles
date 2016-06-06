@@ -639,6 +639,7 @@
           "e" 'pp-eval-last-sexp
           "f" 'avy-goto-char
           "m" 'projectile-compile-project
+          "r" 'recompile
           "s" 'me:use-evil-selection-register
           "v"  'exchange-point-and-mark
           "w" 'save-buffer
