@@ -500,6 +500,7 @@
   :config
   (progn
     (rtags-diagnostics)
+    (rtags-set-periodic-reparse-timeout 1)
     (rtags-enable-standard-keybindings))
   :diminish rtags-mode
   :bind
