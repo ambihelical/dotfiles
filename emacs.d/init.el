@@ -71,7 +71,7 @@
   "kill the minibuffer"
   (when (and (>= (recursion-depth) 1) (active-minibuffer-window))
     (abort-recursive-edit)))
-(add-hook 'mouse-leave-buffer-hook 'me:stop-using-minibuffer)
+(add-hook 'mouse-leave-buffer-hook #'me:stop-using-minibuffer)
 
 
 ;; Operational preferences
@@ -104,13 +104,13 @@
   "Never use tabs for alignment."
   (let ((indent-tabs-mode nil))
     ad-do-it))
-(ad-activate 'align-regexp)
+(ad-activate #'align-regexp)
 
 (defadvice align (around align-with-spaces)
   "Never use tabs for alignment."
   (let ((indent-tabs-mode nil))
     ad-do-it))
-(ad-activate 'align)
+(ad-activate #'align)
 
 ;; elisp mode settings
 (add-hook 'emacs-lisp-mode-hook
@@ -138,9 +138,9 @@
   (interactive)
   (me:select-nth-other-buffer 3))
 
-(global-set-key (kbd "s-1") 'me:select-1st-other-buffer)
-(global-set-key (kbd "s-2") 'me:select-2nd-other-buffer)
-(global-set-key (kbd "s-3") 'me:select-3rd-other-buffer)
+(global-set-key (kbd "s-1") #'me:select-1st-other-buffer)
+(global-set-key (kbd "s-2") #'me:select-2nd-other-buffer)
+(global-set-key (kbd "s-3") #'me:select-3rd-other-buffer)
 
 (use-package smooth-scrolling
   :init
@@ -155,7 +155,7 @@
     (setq whitespace-line-column 80                      ; highlight columns past 80
           whitespace-style '(face trailing tabs tab-mark lines-tail space-before-tab)
           whitespace-display-mappings '((tab-mark 9 [9657 9] [92 9])))
-    (add-hook 'prog-mode-hook 'whitespace-mode))
+    (add-hook 'prog-mode-hook #'whitespace-mode))
   :diminish whitespace-mode)
 
 (use-package fill-column-indicator
@@ -185,8 +185,8 @@
   :commands flyspell-mode
   :init
   (progn
-    (add-hook 'prog-mode-hook 'flyspell-prog-mode)
-    (add-hook 'text-mode-hook 'flyspell-mode))
+    (add-hook 'prog-mode-hook #'flyspell-prog-mode)
+    (add-hook 'text-mode-hook #'flyspell-mode))
   :config
   (progn
     ;; setup spell check, prefer hunspell
@@ -230,10 +230,10 @@
   :config
   (progn
     ;; swap tab/c-z as recommended by tuhdo
-    (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to do persistent action
-    (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
-    (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
-    (define-key helm-map [escape] 'helm-keyboard-quit))
+    (define-key helm-map (kbd "<tab>") #'helm-execute-persistent-action) ; rebind tab to do persistent action
+    (define-key helm-map (kbd "C-i") #'helm-execute-persistent-action) ; make TAB works in terminal
+    (define-key helm-map (kbd "C-z")  #'helm-select-action) ; list actions using C-z
+    (define-key helm-map [escape] #'helm-keyboard-quit))
 
   :bind
   (("M-x"       . helm-M-x)
@@ -295,16 +295,16 @@
     (setq helm-gtags-auto-update t
           helm-gtags-use-input-at-cursor t
           helm-gtags-ignore-case t)
-    (add-hook 'dired-mode-hook 'helm-gtags-mode)
-    (add-hook 'eshell-mode-hook 'helm-gtags-mode)
-    (add-hook 'c-mode-hook 'helm-gtags-mode)
-    (add-hook 'c++-mode-hook 'helm-gtags-mode)
-    (add-hook 'asm-mode-hook 'helm-gtags-mode))
+    (add-hook 'dired-mode-hook #'helm-gtags-mode)
+    (add-hook 'eshell-mode-hook #'helm-gtags-mode)
+    (add-hook 'c-mode-hook #'helm-gtags-mode)
+    (add-hook 'c++-mode-hook #'helm-gtags-mode)
+    (add-hook 'asm-mode-hook #'helm-gtags-mode))
   :config
   (progn
     (defun me:update-all-tags ()
       (interactive)
-      (let ((current-prefix-arg 4)) (call-interactively 'helm-gtags-update-tags))))
+      (let ((current-prefix-arg 4)) (call-interactively #'helm-gtags-update-tags))))
   :bind
   (("<f6> <f6>" . helm-gtags-dwim)
    ("<f6> d"    . helm-gtags-find-tag)
@@ -353,7 +353,7 @@
                 (eq 1 (progn (while (re-search-backward "`" (line-beginning-position) t)
                                (setq count (1+ count)))
                              (- count (* 2 (/ count 2))))))))))
-    (put 'adoc-mode 'flyspell-mode-predicate 'me:adoc-mode-flyspell-verify)
+    (put 'adoc-mode 'flyspell-mode-predicate #'me:adoc-mode-flyspell-verify)
     (add-hook 'adoc-mode-hook
               (lambda ()
                 (setq company-dabbrev-downcase nil     ; don't downcase completions
@@ -398,9 +398,9 @@
                 (setq c-basic-offset 3)))
     (add-hook 'c++-mode-hook
               (lambda ()
-                (define-key c++-mode-map ":" 'self-insert-command)
-                (define-key c++-mode-map ")" 'self-insert-command)
-                (define-key c++-mode-map ";" 'self-insert-command)
+                (define-key c++-mode-map ":" #'self-insert-command)
+                (define-key c++-mode-map ")" #'self-insert-command)
+                (define-key c++-mode-map ";" #'self-insert-command)
                 (c-set-offset 'innamespace [0])))              ; no indentation in namespace
     (setq c-default-style "ellemtel"                           ; similar to allman style
           c-electric-pound-behavior (quote (alignleft))        ; cpp directives aligned to left
@@ -430,15 +430,15 @@
                 (delete-other-windows (get-buffer-window "*compilation*")))))
     (add-hook 'compilation-mode-hook
       (lambda ()
-        (local-set-key (kbd "f") 'next-error-follow-minor-mode)
-        (local-set-key (kbd "k") 'compilation-previous-error)
-        (local-set-key (kbd "j") 'compilation-next-error)
-        (local-set-key (kbd "C-k") 'compilation-previous-file)
-        (local-set-key (kbd "C-j") 'compilation-next-file)
-        (local-set-key (kbd "<prior>") 'compilation-previous-error)
-        (local-set-key (kbd "<next>") 'compilation-next-error)
-        (local-set-key (kbd "<home>") 'compilation-previous-file)
-        (local-set-key (kbd "<end>") 'compilation-next-file))))
+        (local-set-key (kbd "f") #'next-error-follow-minor-mode)
+        (local-set-key (kbd "k") #'compilation-previous-error)
+        (local-set-key (kbd "j") #'compilation-next-error)
+        (local-set-key (kbd "C-k") #'compilation-previous-file)
+        (local-set-key (kbd "C-j") #'compilation-next-file)
+        (local-set-key (kbd "<prior>") #'compilation-previous-error)
+        (local-set-key (kbd "<next>") #'compilation-next-error)
+        (local-set-key (kbd "<home>") #'compilation-previous-file)
+        (local-set-key (kbd "<end>") #'compilation-next-file))))
   :defer 3)
 
 (use-package git-gutter
@@ -465,9 +465,9 @@
           deft-auto-save-interval 0)
     (add-hook 'deft-mode-hook
               (lambda ()
-                (define-key deft-mode-map (kbd "<f4> n") 'quit-window)
-                (define-key deft-mode-map (kbd "<C-return>") 'deft-new-file)
-                (define-key deft-mode-map (kbd "<C-backspace>") 'deft-filter-clear))))
+                (define-key deft-mode-map (kbd "<f4> n") #'quit-window)
+                (define-key deft-mode-map (kbd "<C-return>") #'deft-new-file)
+                (define-key deft-mode-map (kbd "<C-backspace>") #'deft-filter-clear))))
   :bind
   ("<f4> n" . deft))
 
@@ -476,7 +476,7 @@
   :init
   (progn
     (setq company-minimum-prefix-length 1)
-    (add-hook 'after-init-hook 'global-company-mode))
+    (add-hook 'after-init-hook #'global-company-mode))
   :diminish company-mode)
 
 (use-package rtags
@@ -494,7 +494,7 @@
           rtags-use-helm t
           rtags-process-flags "--config ~/.config/rtags/config"
           rtags-completions-enabled t)
-    (add-hook 'c-mode-common-hook 'rtags-start-process-unless-running)
+    (add-hook 'c-mode-common-hook #'rtags-start-process-unless-running)
     (add-hook 'c-mode-common-hook #'me:flycheck-rtags-setup)
     (add-hook 'company-mode-hook  #'me:company-rtags-setup))
   :config
@@ -519,24 +519,24 @@
   :commands irony-mode
   :init
   (progn
-    (add-hook 'c++-mode-hook 'irony-mode)
-    (add-hook 'c-mode-hook 'irony-mode)
-    (add-hook 'objc-mode-hook 'irony-mode)
+    (add-hook 'c++-mode-hook #'irony-mode)
+    (add-hook 'c-mode-hook #'irony-mode)
+    (add-hook 'objc-mode-hook #'irony-mode)
     ;; replace the `completion-at-point' and `complete-symbol' bindings in
     ;; irony-mode's buffers by irony-mode's function
     (defun me:irony-mode-hook ()
       (define-key irony-mode-map [remap completion-at-point]
-        'irony-completion-at-point-async)
+        #'irony-completion-at-point-async)
       (define-key irony-mode-map [remap complete-symbol]
-        'irony-completion-at-point-async))
-    (add-hook 'irony-mode-hook 'me:irony-mode-hook)
-    (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
+        #'irony-completion-at-point-async))
+    (add-hook 'irony-mode-hook #'me:irony-mode-hook)
+    (add-hook 'irony-mode-hook #'irony-cdb-autosetup-compile-options))
   :config
   (progn
     (use-package company-irony
       :config
       (progn
-        (add-to-list 'company-backends 'company-irony)))
+        (add-to-list 'company-backends #'company-irony)))
     (use-package flycheck-irony
       :commands flycheck-irony-setup
       :config
@@ -550,7 +550,7 @@
   :init
   (progn
     (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
-    (add-hook 'prog-mode-hook 'flycheck-mode))
+    (add-hook 'prog-mode-hook #'flycheck-mode))
   :config
   (progn
     (set-face-attribute 'flycheck-warning nil :foreground 'unspecified :background "khaki1")
@@ -561,11 +561,11 @@
   :commands hs-minor-mode
   :init
   (progn
-    (add-hook 'c-mode-common-hook   'hs-minor-mode)
-    (add-hook 'c++-mode-hook        'hs-minor-mode)
-    (add-hook 'emacs-lisp-mode-hook 'hs-minor-mode)
-    (add-hook 'sh-mode-hook         'hs-minor-mode)
-    (add-hook 'python-mode-hook     'hs-minor-mode))
+    (add-hook 'c-mode-common-hook   #'hs-minor-mode)
+    (add-hook 'c++-mode-hook        #'hs-minor-mode)
+    (add-hook 'emacs-lisp-mode-hook #'hs-minor-mode)
+    (add-hook 'sh-mode-hook         #'hs-minor-mode)
+    (add-hook 'python-mode-hook     #'hs-minor-mode))
   :diminish hs-minor-mode)
 
 (use-package avy :defer 3)
@@ -576,7 +576,7 @@
   (progn
     (setq-default evil-symbol-word-search t
                   evil-shift-width 3)
-    (setq evil-search-module 'evil-search))
+    (setq evil-search-module #'evil-search))
   :config
   (progn
     (defun me:use-evil-selection-register ()
@@ -614,11 +614,11 @@
       :diminish evil-snipe-local-mode
       :config
       (progn
-        (add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode)
-        (define-key evil-inner-text-objects-map "z" 'evil-snipe-x)
-        (define-key evil-outer-text-objects-map "z" 'evil-snipe-s)
-        (define-key evil-inner-text-objects-map "Z" 'evil-snipe-X)
-        (define-key evil-outer-text-objects-map "Z" 'evil-snipe-S)
+        (add-hook 'magit-mode-hook #'turn-off-evil-snipe-override-mode)
+        (define-key evil-inner-text-objects-map "z" #'evil-snipe-x)
+        (define-key evil-outer-text-objects-map "z" #'evil-snipe-s)
+        (define-key evil-inner-text-objects-map "Z" #'evil-snipe-X)
+        (define-key evil-outer-text-objects-map "Z" #'evil-snipe-S)
         (evil-snipe-override-mode 1)
         (evil-snipe-mode 1)))
     (use-package evil-surround
@@ -632,21 +632,21 @@
         (global-evil-leader-mode t)
         (evil-leader/set-leader "<SPC>")
         (evil-leader/set-key
-          "<SPC>" 'me:switch-to-previous-buffer
-          ";" 'evil-jump-forward
-          "," 'evil-jump-backward
-          "a" 'align
-          "c" 'me:use-evil-clipboard-register
-          "e" 'pp-eval-last-sexp
-          "f" 'avy-goto-char
-          "m" 'projectile-compile-project
-          "r" 'recompile
-          "s" 'me:use-evil-selection-register
-          "v"  'exchange-point-and-mark
-          "w" 'save-buffer
-          "x" 'kill-buffer
-          "z" 'evil-snipe-s
-          "Z" 'evil-snipe-S)))
+          "<SPC>" #'me:switch-to-previous-buffer
+          ";" #'evil-jump-forward
+          "," #'evil-jump-backward
+          "a" #'align
+          "c" #'me:use-evil-clipboard-register
+          "e" #'pp-eval-last-sexp
+          "f" #'avy-goto-char
+          "m" #'projectile-compile-project
+          "r" #'recompile
+          "s" #'me:use-evil-selection-register
+          "v" #'exchange-point-and-mark
+          "w" #'save-buffer
+          "x" #'kill-buffer
+          "z" #'evil-snipe-s
+          "Z" #'evil-snipe-S)))
     (use-package powerline-evil
       :config
       (progn
@@ -660,25 +660,25 @@
     (evil-set-initial-state 'rtags-mode 'emacs)
     ; note evil-set-initial-state didn't work for this mode
     (add-hook 'with-editor-mode-hook 'evil-insert-state)
-    (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
-    (define-key evil-outer-text-objects-map "a" 'evil-outer-arg)
-    (define-key evil-inner-text-objects-map "b" 'evil-textobj-anyblock-inner-block)
-    (define-key evil-outer-text-objects-map "b" 'evil-textobj-anyblock-a-block)
-    (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
-    (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
+    (define-key evil-inner-text-objects-map "a" #'evil-inner-arg)
+    (define-key evil-outer-text-objects-map "a" #'evil-outer-arg)
+    (define-key evil-inner-text-objects-map "b" #'evil-textobj-anyblock-inner-block)
+    (define-key evil-outer-text-objects-map "b" #'evil-textobj-anyblock-a-block)
+    (define-key evil-normal-state-map (kbd "j") #'evil-next-visual-line)
+    (define-key evil-normal-state-map (kbd "k") #'evil-previous-visual-line)
     ; esc key (from WikEmacs)
-    (define-key evil-normal-state-map [escape] 'keyboard-quit)
-    (define-key evil-visual-state-map [escape] 'keyboard-quit)
+    (define-key evil-normal-state-map [escape] #'keyboard-quit)
+    (define-key evil-visual-state-map [escape] #'keyboard-quit)
     ; scroll keeping cursor in place
     (define-key evil-normal-state-map (kbd "C-j")
       (lambda () (interactive)  (evil-scroll-line-down 1) (evil-next-visual-line 0)))
     (define-key evil-normal-state-map (kbd "C-k")
       (lambda () (interactive) (evil-scroll-line-up 1) (evil-previous-visual-line 0)))
     ; Overload shifts so that they don't lose the selection
-    (define-key evil-visual-state-map (kbd ">") 'me:evil-shift-right-visual)
-    (define-key evil-visual-state-map (kbd "<") 'me:evil-shift-left-visual)
-    (define-key evil-visual-state-map [tab] 'me:evil-shift-right-visual)
-    (define-key evil-visual-state-map [S-tab] 'me:evil-shift-left-visual)
+    (define-key evil-visual-state-map (kbd ">") #'me:evil-shift-right-visual)
+    (define-key evil-visual-state-map (kbd "<") #'me:evil-shift-left-visual)
+    (define-key evil-visual-state-map [tab] #'me:evil-shift-right-visual)
+    (define-key evil-visual-state-map [S-tab] #'me:evil-shift-left-visual)
     (evil-mode 1)))
 
 
@@ -724,7 +724,7 @@
   :config
   (progn
     ;get out of magit blame mode
-    (define-key magit-blame-mode-map (kbd "<f7> b") 'magit-blame-quit)
+    (define-key magit-blame-mode-map (kbd "<f7> b") #'magit-blame-quit)
     (use-package evil-magit))
   :bind
   (("<f7> g" . magit-status)
@@ -744,10 +744,10 @@
               (lambda () (setq neo-persist-show t)))
     (add-hook 'neotree-mode-hook
               (lambda ()
-                (define-key evil-normal-state-local-map (kbd "TAB") 'neotree-enter)
-                (define-key evil-normal-state-local-map (kbd "SPC") 'neotree-enter)
-                (define-key evil-normal-state-local-map (kbd "q") 'neotree-hide)
-                (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter))))
+                (define-key evil-normal-state-local-map (kbd "TAB") #'neotree-enter)
+                (define-key evil-normal-state-local-map (kbd "SPC") #'neotree-enter)
+                (define-key evil-normal-state-local-map (kbd "q") #'neotree-hide)
+                (define-key evil-normal-state-local-map (kbd "RET") #'neotree-enter))))
   :bind
   (("<f4> /" . neotree-toggle)
    ("<f7> /" . neotree-projectile-action)))
@@ -755,7 +755,7 @@
 (use-package popwin
   :init
   (progn
-    (setq display-buffer-function 'popwin:display-buffer))
+    (setq display-buffer-function #'popwin:display-buffer))
   :config
   (progn
     (push '("*Async Shell Command*" :noselect t) popwin:special-display-config)
