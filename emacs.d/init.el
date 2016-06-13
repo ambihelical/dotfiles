@@ -26,9 +26,9 @@
       use-package-verbose t)
 
 ;; set some personal variables
-(defvar me:notes-path "~/Notes")
-(setq me:notes-path (if (file-readable-p "~/Dropbox/Notes")
-                        "~/Dropbox/Notes"))
+(defconst me:notes-path (if (file-readable-p "~/Dropbox/Notes")
+                            "~/Dropbox/Notes"
+                          "~/Notes") "Location of note files")
 
 ;; configure the chrome
 (set-frame-font "DejaVu Sans Mono 9")
