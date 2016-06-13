@@ -729,6 +729,7 @@
   :bind
   (("<f7> g" . magit-status)
    ("<f7> b" . magit-blame)
+   ("<f7> B" . magit-blame)                ; for drilling deeper
    ("<f7> a" . magit-run-git-gui-blame)))
 
 ;; N.B. disabling this because once neotree is popped up once, tab completion in mini-buffer
