@@ -658,8 +658,12 @@
     (evil-set-initial-state 'magit-branch-manager-mode 'emacs)
     (evil-set-initial-state 'flycheck-error-list-mode 'emacs)
     (evil-set-initial-state 'rtags-mode 'emacs)
-    ; note evil-set-initial-state didn't work for this mode
-    (add-hook 'with-editor-mode-hook 'evil-insert-state)
+    ;; note evil-set-initial-state didn't work for these modes
+    ;; I'm not sure why...
+    (add-hook 'with-editor-mode-hook #'evil-insert-state)
+    (add-hook 'magit-log-mode-hook #'evil-emacs-state)
+    (add-hook 'magit-revision-mode-hook #'evil-emacs-state)
+    ;;
     (define-key evil-inner-text-objects-map "a" #'evil-inner-arg)
     (define-key evil-outer-text-objects-map "a" #'evil-outer-arg)
     (define-key evil-inner-text-objects-map "b" #'evil-textobj-anyblock-inner-block)
