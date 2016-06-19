@@ -288,32 +288,6 @@
    ("<f7> k"    . projectile-kill-buffers)
    ("<f7> f"    . helm-projectile-ag)))
 
-(use-package helm-gtags
-  :disabled
-  :commands helm-gtags-mode
-  :init
-  (progn
-    (setq helm-gtags-auto-update t
-          helm-gtags-use-input-at-cursor t
-          helm-gtags-ignore-case t)
-    (add-hook 'dired-mode-hook #'helm-gtags-mode)
-    (add-hook 'eshell-mode-hook #'helm-gtags-mode)
-    (add-hook 'c-mode-hook #'helm-gtags-mode)
-    (add-hook 'c++-mode-hook #'helm-gtags-mode)
-    (add-hook 'asm-mode-hook #'helm-gtags-mode))
-  :config
-  (progn
-    (defun me:update-all-tags ()
-      (interactive)
-      (let ((current-prefix-arg 4)) (call-interactively #'helm-gtags-update-tags))))
-  :bind
-  (("<f6> <f6>" . helm-gtags-dwim)
-   ("<f6> d"    . helm-gtags-find-tag)
-   ("<f6> r"    . helm-gtags-find-rtag)
-   ("<f6> u"    . me:update-all-tags )
-   ("<f6> m"    . helm-semantic-or-imenu))
-  :diminish helm-gtags-mode)
-
 (use-package smart-tabs-mode
   :config
   (progn
@@ -481,6 +455,25 @@
     (add-hook 'after-init-hook #'global-company-mode))
   :diminish company-mode)
 
+(use-package helm-gtags
+  :commands helm-gtags-mode
+  :init
+  (progn
+    (setq helm-gtags-auto-update t
+          helm-gtags-use-input-at-cursor t
+          helm-gtags-ignore-case t)
+    (add-hook 'dired-mode-hook #'helm-gtags-mode)
+    (add-hook 'eshell-mode-hook #'helm-gtags-mode)
+    (add-hook 'c-mode-hook #'helm-gtags-mode)
+    (add-hook 'c++-mode-hook #'helm-gtags-mode)
+    (add-hook 'asm-mode-hook #'helm-gtags-mode))
+  :config
+  (progn
+    (defun me:update-all-tags ()
+      (interactive)
+      (let ((current-prefix-arg 4)) (call-interactively #'helm-gtags-update-tags))))
+  :diminish helm-gtags-mode)
+
 (use-package rtags
   :init
   (progn
@@ -492,6 +485,29 @@
     (defun me:company-rtags-setup ()
       (require 'company-rtags)
       (add-to-list 'company-backends 'company-rtags))
+    (defun me:use-rtags (&optional useFileManager)
+      (and (rtags-executable-find "rc")
+          (cond ((and (not (eq major-mode 'c++-mode))
+                      (not (eq major-mode 'c-mode))) (rtags-has-filemanager))
+                (useFileManager (rtags-has-filemanager))
+                (t (rtags-is-indexed)))))
+    (defun me:tags-find-symbol-at-point (&optional prefix)
+      (interactive "P")
+      (if (or (not (rtags-find-symbol-at-point prefix)) rtags-last-request-not-indexed)
+          (call-interactively #'helm-gtags-dwim)))
+    (defun me:tags-find-references-at-point (&optional prefix)
+      (interactive "P")
+      (if (or (not (rtags-find-references-at-point prefix)) rtags-last-request-not-indexed)
+          (call-interactively #'helm-gtags-find-rtag)))
+    (defun me:tags-find-symbol ()
+      (interactive)
+      (call-interactively (if (me:use-rtags) #'rtags-find-symbol #'helm-gtags-find-symbol)))
+    (defun me:tags-find-references ()
+      (interactive)
+      (call-interactively (if (me:use-rtags) #'rtags-find-references #'helm-gtags-find-rtag)))
+    (defun me:tags-find-file ()
+      (interactive)
+      (call-interactively (if (me:use-rtags t) #'rtags-find-file #'helm-gtags-find-files)))
     (setq rtags-autostart-diagnostics t
           rtags-use-helm t
           rtags-process-flags "--config ~/.config/rtags/config"
@@ -506,9 +522,11 @@
     (rtags-enable-standard-keybindings))
   :diminish rtags-mode
   :bind
-  (("<f6> <f6>" . rtags-find-symbol-at-point)
-   ("<f6> d"    . rtags-find-symbol)
-   ("<f6> r"    . rtags-find-references-at-point)
+  (("<f6> <f6>" . me:tags-find-symbol-at-point)
+   ("<f6> d"    . me:tags-find-symbol)
+   ("<f6> r"    . me:tags-find-references-at-point)
+   ("<f6> R"    . me:tags-find-references)
+   ("<f6> f"    . me:tags-find-file)
    ("<f6> v"    . rtags-find-virtuals-at-point)
    ("<f6> c"    . rtags-rename-symbol)
    ("<f6> ["    . rtags-location-stack-back)
