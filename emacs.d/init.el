@@ -396,6 +396,7 @@
   (progn
     (add-hook 'c-mode-common-hook
               (lambda ()
+                (modify-syntax-entry ?_ "w")                   ; underscores are parts of words
                 (setq c-basic-offset 3)))
     (add-hook 'c++-mode-hook
               (lambda ()
