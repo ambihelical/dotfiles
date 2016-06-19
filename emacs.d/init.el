@@ -41,6 +41,7 @@
 (mouse-avoidance-mode 'animate)                             ; move mouse pointer out of way
 (column-number-mode t)                                      ; display column/row of cursor in mode-line
 (display-time-mode t)                                       ; display time in mode-line
+(global-hl-line-mode t)                                     ; highlight current line
 ;; Set scratch to be text only. This disables loading of any packages
 ;; which are loaded for prog-mode and makes startup faster.
 (setq initial-scratch-message nil)
@@ -648,6 +649,9 @@
           "z" #'evil-snipe-s
           "Z" #'evil-snipe-S)))
     (use-package powerline-evil
+      :init
+      (progn
+        (setq powerline-default-separator 'wave))
       :config
       (progn
         (powerline-default-theme)
