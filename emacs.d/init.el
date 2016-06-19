@@ -639,7 +639,8 @@
           "a" #'align
           "c" #'me:use-evil-clipboard-register
           "e" #'pp-eval-last-sexp
-          "f" #'avy-goto-char
+          "f" #'evil-avy-goto-char
+          "g" #'evil-avy-goto-char-2
           "m" #'projectile-compile-project
           "r" #'recompile
           "s" #'me:use-evil-selection-register
