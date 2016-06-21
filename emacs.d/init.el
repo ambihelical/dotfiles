@@ -31,7 +31,7 @@
                           "~/Notes") "Location of note files")
 
 ;; configure the chrome
-(set-frame-font "Fantasque Sans Mono 12")
+(set-frame-font "Fantasque Sans Mono 12" t t)
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
 (menu-bar-mode t)
