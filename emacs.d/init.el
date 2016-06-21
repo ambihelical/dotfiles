@@ -517,6 +517,8 @@
     (add-hook 'company-mode-hook  #'me:company-rtags-setup))
   :config
   (progn
+    (set-face-attribute 'rtags-warnline nil :foreground 'unspecified :background "khaki1")
+    (set-face-attribute 'rtags-errline nil :foreground 'unspecified :background "light pink")
     (rtags-diagnostics)
     (rtags-set-periodic-reparse-timeout 1)
     (rtags-enable-standard-keybindings))
