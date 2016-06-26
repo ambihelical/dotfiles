@@ -677,8 +677,7 @@
         (setq powerline-default-separator 'wave))
       :config
       (progn
-        (powerline-default-theme)
-        (display-time-mode t)))
+        (powerline-default-theme)))
 
     (evil-set-initial-state 'git-rebase-mode 'emacs)
     (evil-set-initial-state 'deft-mode 'insert)
@@ -795,6 +794,7 @@
     (popwin-mode 1)))
 
 (use-package linum-relative
+  :diminish linum-relative-mode
   :init
   (progn
     (setq linum-relative-current-symbol ""))   ; show current line #
