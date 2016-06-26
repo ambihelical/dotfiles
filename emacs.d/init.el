@@ -138,10 +138,15 @@
 (defun me:select-3rd-other-buffer ()
   (interactive)
   (me:select-nth-other-buffer 3))
+(defun me:select-4th-other-buffer ()
+  (interactive)
+  (me:select-nth-other-buffer 4))
 
-(global-set-key (kbd "s-1") #'me:select-1st-other-buffer)
-(global-set-key (kbd "s-2") #'me:select-2nd-other-buffer)
-(global-set-key (kbd "s-3") #'me:select-3rd-other-buffer)
+(global-set-key (kbd "s-1") #'helm-projectile-find-other-file)
+(global-set-key (kbd "s-2") #'me:select-1st-other-buffer)
+(global-set-key (kbd "s-3") #'me:select-2nd-other-buffer)
+(global-set-key (kbd "s-4") #'me:select-3rd-other-buffer)
+(global-set-key (kbd "s-5") #'me:select-4th-other-buffer)
 
 (use-package smooth-scrolling
   :init
