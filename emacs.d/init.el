@@ -510,6 +510,8 @@
       (call-interactively (if (me:use-rtags t) #'rtags-find-file #'helm-gtags-find-files)))
     (setq rtags-autostart-diagnostics t
           rtags-use-helm t
+          rtags-tooltips-enabled nil
+          rtags-display-current-error-as-message nil
           rtags-process-flags "--config ~/.config/rtags/config"
           rtags-completions-enabled t)
     (add-hook 'c-mode-common-hook #'rtags-start-process-unless-running)
@@ -520,7 +522,7 @@
     (set-face-attribute 'rtags-warnline nil :foreground 'unspecified :background "khaki1")
     (set-face-attribute 'rtags-errline nil :foreground 'unspecified :background "light pink")
     (rtags-diagnostics)
-    (rtags-set-periodic-reparse-timeout 1)
+    (rtags-set-periodic-reparse-timeout 2)
     (rtags-enable-standard-keybindings))
   :diminish rtags-mode
   :bind
@@ -533,7 +535,8 @@
    ("<f6> c"    . rtags-rename-symbol)
    ("<f6> ["    . rtags-location-stack-back)
    ("<f6> ]"    . rtags-location-stack-forward)
-   ("<f6> m"    . helm-semantic-or-imenu)))
+   ("<f6> m"    . helm-semantic-or-imenu)
+   ("s-d"   . company-complete)))
 
 ;; N.B. to use, need to run irony-install-server, which requires libclang-dev
 (use-package irony
@@ -575,6 +578,9 @@
     (add-hook 'prog-mode-hook #'flycheck-mode))
   :config
   (progn
+    (use-package flycheck-pos-tip
+      :config
+      (flycheck-pos-tip-mode t))
     (set-face-attribute 'flycheck-warning nil :foreground 'unspecified :background "khaki1")
     (set-face-attribute 'flycheck-error nil :foreground 'unspecified :background "light pink")))
 
