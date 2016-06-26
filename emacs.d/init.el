@@ -141,12 +141,18 @@
 (defun me:select-4th-other-buffer ()
   (interactive)
   (me:select-nth-other-buffer 4))
+(defun me:rotate-fill-column ()
+  (interactive)
+  (setq fill-column (cond ((= fill-column 80) 120)
+                          ((= fill-column 120) 80)
+                          (t 120))))
 
 (global-set-key (kbd "s-1") #'helm-projectile-find-other-file)
 (global-set-key (kbd "s-2") #'me:select-1st-other-buffer)
 (global-set-key (kbd "s-3") #'me:select-2nd-other-buffer)
 (global-set-key (kbd "s-4") #'me:select-3rd-other-buffer)
 (global-set-key (kbd "s-5") #'me:select-4th-other-buffer)
+(global-set-key (kbd "<f5> c") #'me:rotate-fill-column)
 
 (use-package smooth-scrolling
   :init
@@ -285,8 +291,7 @@
                                            helm-source-locate))
     (projectile-global-mode 1))
   :bind
-  (("<f5>"      . helm-projectile-find-other-file)
-   ("<f7> <f7>" . helm-projectile-switch-project)
+  (("<f7> <f7>" . helm-projectile-switch-project)
    ("<f7> c"    . projectile-compile-project)
    ("<f7> o"    . projectile-multi-occur)
    ("<f7> u"    . projectile-invalidate-cache)
@@ -794,11 +799,11 @@
   (progn
     (setq linum-relative-current-symbol ""))   ; show current line #
   :bind
-  (("<f4> 3" . linum-relative-mode)))
+  (("<f5> l" . linum-relative-mode)))
 
 (use-package ruler-mode
   :bind
-  (("<f4> 6" . ruler-mode)))
+  (("<f5> r" . ruler-mode)))
 
 ;; Load system-dependent init file if it exists
 ;; will be in emacs.d/init-<prefix>-<ident>.el
