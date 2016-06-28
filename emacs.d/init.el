@@ -42,6 +42,7 @@
 (column-number-mode t)                                      ; display column/row of cursor in mode-line
 (display-time-mode t)                                       ; display time in mode-line
 (global-hl-line-mode t)                                     ; highlight current line
+(set-face-attribute 'hl-line nil :foreground 'unspecified :background "gainsboro")
 ;; Set scratch to be text only. This disables loading of any packages
 ;; which are loaded for prog-mode and makes startup faster.
 (setq initial-scratch-message nil)
@@ -537,6 +538,7 @@
   (progn
     (set-face-attribute 'rtags-warnline nil :foreground 'unspecified :background "khaki1")
     (set-face-attribute 'rtags-errline nil :foreground 'unspecified :background "light pink")
+    (set-face-attribute 'rtags-fixitline nil :foreground 'unspecified :background "lemon chiffon")
     (rtags-diagnostics)
     (rtags-set-periodic-reparse-timeout 2)
     (rtags-enable-standard-keybindings))
