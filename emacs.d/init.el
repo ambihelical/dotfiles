@@ -143,16 +143,22 @@
   (me:select-nth-other-buffer 4))
 (defun me:rotate-fill-column ()
   (interactive)
-  (setq fill-column (cond ((= fill-column 80) 120)
-                          ((= fill-column 120) 80)
-                          (t 120))))
+  (setq fill-column (cond ((= fill-column 70) 80)
+                          ((= fill-column 80) 90)
+                          ((= fill-column 90) 100)
+                          ((= fill-column 100) 110)
+                          ((= fill-column 110) 120)
+                          ((= fill-column 120) 70)
+                          (t 120)))
+  (whitespace-mode -1)
+  (whitespace-mode))
 
 (global-set-key (kbd "s-1") #'helm-projectile-find-other-file)
 (global-set-key (kbd "s-2") #'me:select-1st-other-buffer)
 (global-set-key (kbd "s-3") #'me:select-2nd-other-buffer)
 (global-set-key (kbd "s-4") #'me:select-3rd-other-buffer)
 (global-set-key (kbd "s-5") #'me:select-4th-other-buffer)
-(global-set-key (kbd "<f5> c") #'me:rotate-fill-column)
+(global-set-key (kbd "s-c") #'me:rotate-fill-column)
 
 (use-package smooth-scrolling
   :init
@@ -164,7 +170,7 @@
   :commands whitespace-mode
   :init
   (progn
-    (setq whitespace-line-column 80                      ; highlight columns past 80
+    (setq whitespace-line-column nil                      ; highlight past fill-column
           whitespace-style '(face trailing tabs tab-mark lines-tail space-before-tab)
           whitespace-display-mappings '((tab-mark 9 [9657 9] [92 9])))
     (add-hook 'prog-mode-hook #'whitespace-mode))
@@ -803,7 +809,9 @@
 
 (use-package ruler-mode
   :bind
-  (("<f5> r" . ruler-mode)))
+  (("<f5> r" . ruler-mode))
+  :init
+  (add-hook 'prog-mode-hook #'ruler-mode))
 
 ;; Load system-dependent init file if it exists
 ;; will be in emacs.d/init-<prefix>-<ident>.el
