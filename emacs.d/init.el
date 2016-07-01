@@ -411,6 +411,7 @@
   :init
   (progn
     (setq compilation-scroll-output t
+          compilation-auto-jump-to-first-error t
           compilation-ask-about-save nil)    ; save all modified
     (setq compilation-finish-functions
           (lambda (buf str)
@@ -529,7 +530,7 @@
           rtags-use-helm t
           rtags-tooltips-enabled nil
           rtags-display-current-error-as-message nil
-          rtags-process-flags "--config ~/.config/rtags/config"
+          rtags-process-flags "--block-argument -march= --config ~/.config/rtags/config"
           rtags-completions-enabled t)
     (add-hook 'c-mode-common-hook #'rtags-start-process-unless-running)
     (add-hook 'c-mode-common-hook #'me:flycheck-rtags-setup)
@@ -761,13 +762,10 @@
     (add-hook 'with-editor-mode-hook (lambda () (setq fill-column 70))))
   :config
   (progn
-    ;get out of magit blame mode
-    (define-key magit-blame-mode-map (kbd "<f7> b") #'magit-blame-quit)
     (use-package evil-magit))
   :bind
   (("<f7> g" . magit-status)
    ("<f7> b" . magit-blame)
-   ("<f7> B" . magit-blame)                ; for drilling deeper
    ("<f7> a" . magit-run-git-gui-blame)))
 
 ;; N.B. disabling this because once neotree is popped up once, tab completion in mini-buffer
