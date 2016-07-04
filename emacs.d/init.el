@@ -42,7 +42,7 @@
 (column-number-mode t)                                      ; display column/row of cursor in mode-line
 (display-time-mode t)                                       ; display time in mode-line
 (global-hl-line-mode t)                                     ; highlight current line
-(set-face-attribute 'hl-line nil :foreground 'unspecified :background "gainsboro")
+
 ;; Set scratch to be text only. This disables loading of any packages
 ;; which are loaded for prog-mode and makes startup faster.
 (setq initial-scratch-message nil)
@@ -160,6 +160,7 @@
 (global-set-key (kbd "s-4") #'me:select-3rd-other-buffer)
 (global-set-key (kbd "s-5") #'me:select-4th-other-buffer)
 (global-set-key (kbd "s-c") #'me:rotate-fill-column)
+(global-set-key (kbd "<f5> h") #'global-hl-line-mode)
 
 (use-package smooth-scrolling
   :init
@@ -197,7 +198,9 @@
   (add-hook 'whitespace-mode-hook (lambda ()
     (set-face-attribute 'whitespace-line nil :foreground 'unspecified :background "lemon chiffon")
     (set-face-attribute 'whitespace-tab nil :foreground "gainsboro" :background "white" )
-    (set-face-attribute 'whitespace-trailing nil :foreground "black" :background "red" ))))
+    (set-face-attribute 'whitespace-trailing nil :foreground "black" :background "red" )))
+  :config
+  (set-face-attribute 'hl-line nil :foreground 'unspecified :background "gainsboro"))
 
 (use-package flyspell
   :commands flyspell-prog-mode
