@@ -533,7 +533,7 @@
           rtags-use-helm t
           rtags-tooltips-enabled nil
           rtags-display-current-error-as-message nil
-          rtags-process-flags "--block-argument -march= --config ~/.config/rtags/config"
+          rtags-process-flags "--config ~/.config/rtags/config"
           rtags-completions-enabled t)
     (add-hook 'c-mode-common-hook #'rtags-start-process-unless-running)
     (add-hook 'c-mode-common-hook #'me:flycheck-rtags-setup)
