@@ -477,7 +477,8 @@
   :bind
   ("s-d"   . company-complete)
   :config
-  (global-company-mode)
+  (progn
+    (global-company-mode))
   :diminish company-mode)
 
 (use-package helm-gtags
@@ -624,9 +625,11 @@
   :diminish hs-minor-mode)
 
 (use-package avy
+  :commands avy-goto-char
+  :commands avy-goto-char-2
+  :commands avy-goto-char-in-line
   :init
-  (setq avy-all-windows 'all-frames)
-  :defer 3)
+  (setq avy-all-windows 'all-frames))
 
 ;; N.B. evil-mode must be enabled after global-evil-leader-mode
 (use-package evil
