@@ -598,8 +598,12 @@
   :config
   (progn
     (use-package flycheck-pos-tip
+      :init
+      (progn
+        (setq flycheck-pos-tip-timeout 2))
       :config
-      (flycheck-pos-tip-mode t))
+      (progn
+        (flycheck-pos-tip-mode t)))
     (set-face-attribute 'flycheck-warning nil :foreground 'unspecified :background "khaki1")
     (set-face-attribute 'flycheck-error nil :foreground 'unspecified :background "light pink")))
 
