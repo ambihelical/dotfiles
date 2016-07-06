@@ -153,6 +153,9 @@
                           (t 120)))
   (whitespace-mode -1)
   (whitespace-mode))
+(defun me:switch-to-compile-buffer ()
+  (interactive)
+  (switch-to-buffer "*compilation*"))
 
 (global-set-key (kbd "s-1") #'helm-projectile-find-other-file)
 (global-set-key (kbd "s-2") #'me:select-1st-other-buffer)
@@ -416,9 +419,11 @@
   (progn
     (setq compilation-scroll-output t
           compilation-auto-jump-to-first-error t
+          compilation-skip-threshold 2
           compilation-ask-about-save nil)    ; save all modified
     (setq compilation-finish-functions
           (lambda (buf str)
+            (compilation-set-skip-threshold 1)
             (if (null (string-match ".*exited abnormally.*" str))
                 ;;if no errors, make the compilation window go away in a few seconds
                 ;;if errors, make it full sized
@@ -426,6 +431,8 @@
                   (run-at-time "2 sec" nil 'delete-windows-on (get-buffer-create "*compilation*"))
                   (message "No Compilation Errors!"))
                 (delete-other-windows (get-buffer-window "*compilation*")))))
+    (add-hook 'compilation-start-hook
+              (lambda (proc) (compilation-set-skip-threshold 2)))
     (add-hook 'compilation-mode-hook
       (lambda ()
         (local-set-key (kbd "f") #'next-error-follow-minor-mode)
@@ -686,6 +693,7 @@
           "g" #'evil-avy-goto-char-2
           "l" #'evil-avy-goto-char-in-line
           "m" #'projectile-compile-project
+          "o" #'me:switch-to-compile-buffer
           "r" #'recompile
           "s" #'me:use-evil-selection-register
           "v" #'exchange-point-and-mark
