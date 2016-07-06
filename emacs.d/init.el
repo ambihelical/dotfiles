@@ -411,6 +411,7 @@
    ("\\.hpp\\'" . c++-mode)))
 
 (use-package compile
+  :commands compile
   :init
   (progn
     (setq compilation-scroll-output t
@@ -435,8 +436,7 @@
         (local-set-key (kbd "<prior>") #'compilation-previous-error)
         (local-set-key (kbd "<next>") #'compilation-next-error)
         (local-set-key (kbd "<home>") #'compilation-previous-file)
-        (local-set-key (kbd "<end>") #'compilation-next-file))))
-  :defer 3)
+        (local-set-key (kbd "<end>") #'compilation-next-file)))))
 
 (use-package git-gutter
   :config
