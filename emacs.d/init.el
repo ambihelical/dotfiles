@@ -470,10 +470,14 @@
 
 (use-package company
   :commands global-company-mode
+  :commands company-complete
   :init
   (progn
-    (setq company-minimum-prefix-length 1)
-    (add-hook 'after-init-hook #'global-company-mode))
+    (setq company-minimum-prefix-length 1))
+  :bind
+  ("s-d"   . company-complete)
+  :config
+  (global-company-mode)
   :diminish company-mode)
 
 (use-package helm-gtags
@@ -555,7 +559,7 @@
    ("<f6> ["    . rtags-location-stack-back)
    ("<f6> ]"    . rtags-location-stack-forward)
    ("<f6> m"    . helm-semantic-or-imenu)
-   ("s-d"   . company-complete)))
+   ))
 
 ;; N.B. to use, need to run irony-install-server, which requires libclang-dev
 (use-package irony
