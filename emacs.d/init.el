@@ -238,6 +238,7 @@
     (("s-s" . helm-flyspell-correct)))
 
 (use-package helm
+  :commands helm-semantic-or-imenu
   :init
   (progn
     (setq helm-split-window-in-side-p           t
@@ -515,6 +516,14 @@
   :diminish helm-gtags-mode)
 
 (use-package rtags
+  :commands me:tags-find-symbol-at-point
+  :commands me:tags-find-symbol
+  :commands me:tags-find-references-at-point
+  :commands me:tags-find-file
+  :commands rtags-find-virtuals-at-point
+  :commands rtags-rename-symbol
+  :commands rtags-location-stack-back
+  :commands rtags-location-stack-forward
   :init
   (progn
     (defun me:flycheck-rtags-setup ()
@@ -542,9 +551,6 @@
     (defun me:tags-find-symbol ()
       (interactive)
       (call-interactively (if (me:use-rtags) #'rtags-find-symbol #'helm-gtags-find-symbol)))
-    (defun me:tags-find-references ()
-      (interactive)
-      (call-interactively (if (me:use-rtags) #'rtags-find-references #'helm-gtags-find-rtag)))
     (defun me:tags-find-file ()
       (interactive)
       (call-interactively (if (me:use-rtags t) #'rtags-find-file #'helm-gtags-find-files)))
@@ -567,7 +573,6 @@
   (("<f6> <f6>" . me:tags-find-symbol-at-point)
    ("<f6> d"    . me:tags-find-symbol)
    ("<f6> r"    . me:tags-find-references-at-point)
-   ("<f6> R"    . me:tags-find-references)
    ("<f6> f"    . me:tags-find-file)
    ("<f6> v"    . rtags-find-virtuals-at-point)
    ("<f6> c"    . rtags-rename-symbol)
@@ -703,6 +708,15 @@
           "o" #'me:switch-to-compile-buffer
           "r" #'recompile
           "s" #'me:use-evil-selection-register
+          "tt" #'me:tags-find-symbol-at-point
+          "ts" #'me:tags-find-symbol
+          "tr" #'me:tags-find-references-at-point
+          "tf" #'me:tags-find-file
+          "tv" #'rtags-find-virtuals-at-point
+          "tc" #'rtags-rename-symbol
+          "t," #'rtags-location-stack-back
+          "t;" #'rtags-location-stack-forward
+          "tm" #'helm-semantic-or-imenu
           "v" #'exchange-point-and-mark
           "w" #'save-buffer
           "x" #'kill-buffer)))
