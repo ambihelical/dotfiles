@@ -417,6 +417,12 @@
   :commands compile
   :init
   (progn
+    (defun me:rotate-skip-threshold ()
+      (interactive)
+      (compilation-set-skip-threshold
+       (cond ((= compilation-skip-threshold 1) 2)
+             ((= compilation-skip-threshold 2) 0)
+             (t 1))))
     (setq compilation-scroll-output t
           compilation-auto-jump-to-first-error t
           compilation-skip-threshold 2
@@ -435,6 +441,7 @@
               (lambda (proc) (compilation-set-skip-threshold 2)))
     (add-hook 'compilation-mode-hook
       (lambda ()
+        (local-set-key (kbd "<tab>") #'me:rotate-skip-threshold)
         (local-set-key (kbd "f") #'next-error-follow-minor-mode)
         (local-set-key (kbd "k") #'compilation-previous-error)
         (local-set-key (kbd "j") #'compilation-next-error)
