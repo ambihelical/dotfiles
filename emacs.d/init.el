@@ -279,7 +279,14 @@
    ("<f4> x"    . helm-top)
    ("<f4> <f4>" . helm-resume)))
 
+(use-package perspective
+  :commands persp-switch
+  :config
+  (persp-mode))
+
 (use-package projectile
+  :commands projectile-compile-project
+  :commands projectile-switch-project
   :init
   (progn
     (setq projectile-completion-system 'helm
@@ -293,6 +300,7 @@
       (progn
         (helm-projectile-on)
         (setq projectile-switch-project-action 'helm-for-files)))
+    (use-package persp-projectile)
     (use-package ag)
     (use-package helm-ag)
     (use-package grep)
@@ -305,8 +313,8 @@
                                            helm-source-locate))
     (projectile-global-mode 1))
   :bind
-  (("<f7> <f7>" . helm-projectile-switch-project)
-   ("<f7> c"    . projectile-compile-project)
+  (("<f7> c"    . projectile-compile-project)
+   ("<f7> <f7>" . projectile-persp-switch-project)
    ("<f7> o"    . projectile-multi-occur)
    ("<f7> u"    . projectile-invalidate-cache)
    ("<f7> k"    . projectile-kill-buffers)
