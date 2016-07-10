@@ -17,9 +17,7 @@
 
 (eval-when-compile
   (require 'use-package))
-(require 'diminish)                ;; if you use :diminish
 (require 'bind-key)                ;; if you use any :bind variant
-(require 'cl)                      ;; needed for helm-flyspell
 
 (setq use-package-always-ensure t
       use-package-minimum-reported-time 0.03
@@ -40,7 +38,6 @@
       inhibit-startup-message t)
 (mouse-avoidance-mode 'animate)                             ; move mouse pointer out of way
 (column-number-mode t)                                      ; display column/row of cursor in mode-line
-(display-time-mode t)                                       ; display time in mode-line
 (global-hl-line-mode t)                                     ; highlight current line
 
 ;; Set scratch to be text only. This disables loading of any packages
@@ -123,6 +120,15 @@
                   evil-shift-width 2                        ; need this since no tabs
                   lisp-body-indent 2)))                     ; indent elisp by 2
 
+(use-package diminish
+  :init
+  ;; some of these need to be run after init file has loaded
+  ;; to actually be diminished
+  (add-hook 'after-init-hook (lambda ()
+    (diminish 'visual-line-mode)
+    (diminish 'auto-revert-mode)
+    (diminish 'undo-tree-mode))))
+
 (use-package dash-functional)
 
 ;; Select the nth buffer in the buffer list
@@ -181,6 +187,7 @@
     (add-hook 'prog-mode-hook #'whitespace-mode))
   :diminish whitespace-mode)
 
+;; N.B. Disabled because it seems to interfere with popups
 (use-package fill-column-indicator
   :disabled
   :config
@@ -194,7 +201,8 @@
     (setq-default adaptive-wrap-extra-indent 3))
   :config
   (progn
-    (add-hook 'visual-line-mode-hook #'adaptive-wrap-prefix-mode)))
+    (add-hook 'visual-line-mode-hook #'adaptive-wrap-prefix-mode))
+  :defer 4)
 
 (use-package leuven-theme
   :init
@@ -204,6 +212,27 @@
     (set-face-attribute 'whitespace-trailing nil :foreground "black" :background "red" )))
   :config
   (set-face-attribute 'hl-line nil :foreground 'unspecified :background "gainsboro"))
+
+(use-package git-gutter
+  :config
+  (progn
+    (global-git-gutter-mode t))
+  :defer 4
+  :diminish git-gutter-mode)
+
+(use-package linum-relative
+  :diminish linum-relative-mode
+  :init
+  (progn
+    (setq linum-relative-current-symbol ""))   ; show current line #
+  :bind
+  (("<f5> l" . linum-relative-mode)))
+
+(use-package ruler-mode
+  :bind
+  (("<f5> r" . ruler-mode))
+  :init
+  (add-hook 'prog-mode-hook #'ruler-mode))
 
 (use-package flyspell
   :commands flyspell-prog-mode
@@ -230,8 +259,7 @@
         (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US")))))
   :bind
   (("s-f" . flyspell-auto-correct-previous-word))
-  :diminish flyspell-mode
-  :defer 4)
+  :diminish flyspell-mode)
 
   (use-package helm-flyspell
     :bind
@@ -460,13 +488,6 @@
         (local-set-key (kbd "<next>") #'compilation-next-error)
         (local-set-key (kbd "<home>") #'compilation-previous-file)
         (local-set-key (kbd "<end>") #'compilation-next-file)))))
-
-(use-package git-gutter
-  :config
-  (progn
-    (global-git-gutter-mode t))
-  :defer 3
-  :diminish git-gutter-mode)
 
 (use-package deft
   :init
@@ -768,14 +789,6 @@
     (define-key evil-visual-state-map [S-tab] #'me:evil-shift-left-visual)
     (evil-mode 1)))
 
-
-(use-package diminish
-  :config
-  (progn
-    (diminish 'visual-line-mode)
-    (diminish 'auto-revert-mode)
-    (diminish 'undo-tree-mode)))
-
 (use-package ws-butler
   :config
   (progn
@@ -845,21 +858,8 @@
     (push '("*Async Shell Command*" :noselect t) popwin:special-display-config)
     (push '("*Completions*" :stick t :noselect t) popwin:special-display-config)
     (push '("*Help*" :stick t :noselect t) popwin:special-display-config)
-    (popwin-mode 1)))
-
-(use-package linum-relative
-  :diminish linum-relative-mode
-  :init
-  (progn
-    (setq linum-relative-current-symbol ""))   ; show current line #
-  :bind
-  (("<f5> l" . linum-relative-mode)))
-
-(use-package ruler-mode
-  :bind
-  (("<f5> r" . ruler-mode))
-  :init
-  (add-hook 'prog-mode-hook #'ruler-mode))
+    (popwin-mode 1))
+  :defer 2)
 
 ;; Load system-dependent init file if it exists
 ;; will be in emacs.d/init-<prefix>-<ident>.el
