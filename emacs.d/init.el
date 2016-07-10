@@ -310,7 +310,10 @@
 (use-package perspective
   :commands persp-switch
   :config
-  (persp-mode))
+  (persp-mode)
+  :bind
+  (("s-." . persp-next)
+   ("s-," . persp-prev)))
 
 (use-package projectile
   :commands projectile-compile-project
