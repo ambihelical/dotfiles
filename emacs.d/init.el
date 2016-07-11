@@ -770,6 +770,7 @@
     (add-hook 'with-editor-mode-hook #'evil-insert-state)
     (add-hook 'magit-log-mode-hook #'evil-emacs-state)
     (add-hook 'magit-revision-mode-hook #'evil-emacs-state)
+    (add-hook 'magit-mode-hook #'evil-emacs-state)
     ;;
     (define-key evil-inner-text-objects-map "a" #'evil-inner-arg)
     (define-key evil-outer-text-objects-map "a" #'evil-outer-arg)
