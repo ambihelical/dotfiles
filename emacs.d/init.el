@@ -624,7 +624,7 @@
     (use-package flycheck-pos-tip
       :init
       (progn
-        (setq flycheck-pos-tip-timeout 2))
+        (setq flycheck-pos-tip-timeout 3))
       :config
       (progn
         (flycheck-pos-tip-mode t)))
