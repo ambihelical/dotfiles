@@ -163,12 +163,16 @@
   (interactive)
   (switch-to-buffer "*compilation*"))
 
+(winner-mode t)                                             ; c-c left, c-c right to change windows
+
 (global-set-key (kbd "s-1") #'helm-projectile-find-other-file)
 (global-set-key (kbd "s-2") #'me:select-1st-other-buffer)
 (global-set-key (kbd "s-3") #'me:select-2nd-other-buffer)
 (global-set-key (kbd "s-4") #'me:select-3rd-other-buffer)
 (global-set-key (kbd "s-5") #'me:select-4th-other-buffer)
 (global-set-key (kbd "s-c") #'me:rotate-fill-column)
+(global-set-key (kbd "s-]") #'winner-redo)
+(global-set-key (kbd "s-[") #'winner-undo)
 (global-set-key (kbd "<f5> h") #'global-hl-line-mode)
 
 (use-package smooth-scrolling
