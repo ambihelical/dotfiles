@@ -32,7 +32,7 @@
 (set-frame-font "Fantasque Sans Mono 12" t t)
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
-(menu-bar-mode t)
+(menu-bar-mode 0)
 (setq inhibit-splash-screen t
       inhibit-startup-echo-area-message t
       inhibit-startup-message t)
@@ -174,6 +174,7 @@
 (global-set-key (kbd "s-]") #'winner-redo)
 (global-set-key (kbd "s-[") #'winner-undo)
 (global-set-key (kbd "<f5> h") #'global-hl-line-mode)
+(global-set-key (kbd "<f5> m") #'menu-bar-mode)
 
 (use-package smooth-scrolling
   :init
