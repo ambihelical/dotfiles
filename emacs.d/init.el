@@ -235,9 +235,7 @@
 
 (use-package ruler-mode
   :bind
-  (("<f5> r" . ruler-mode))
-  :init
-  (add-hook 'prog-mode-hook #'ruler-mode))
+  (("<f5> r" . ruler-mode)))
 
 (use-package flyspell
   :commands flyspell-prog-mode
