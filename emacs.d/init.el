@@ -21,7 +21,7 @@
 
 (setq use-package-always-ensure t
       use-package-minimum-reported-time 0.03
-      use-package-verbose t)
+      use-package-verbose nil)
 
 ;; set some personal variables
 (defconst me:notes-path (if (file-readable-p "~/Dropbox/Notes")
@@ -119,6 +119,7 @@
                   indent-tabs-mode nil                      ; no tabs
                   evil-shift-width 2                        ; need this since no tabs
                   lisp-body-indent 2)))                     ; indent elisp by 2
+(add-hook 'after-init-hook (lambda () (message "Time to initialize: %s" (emacs-init-time))))
 
 (use-package diminish
   :init
