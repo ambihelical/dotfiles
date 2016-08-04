@@ -174,6 +174,8 @@
 (global-set-key (kbd "s-c") #'me:rotate-fill-column)
 (global-set-key (kbd "s-]") #'winner-redo)
 (global-set-key (kbd "s-[") #'winner-undo)
+(global-set-key (kbd "s-;") #'evil-jump-forward)
+(global-set-key (kbd "s-,") #'evil-jump-backward)
 (global-set-key (kbd "s-`") #'previous-buffer)
 (global-set-key (kbd "<s-tab>") #'next-buffer)
 (global-set-key (kbd "<f5> h") #'global-hl-line-mode)
@@ -318,8 +320,8 @@
   :config
   (persp-mode)
   :bind
-  (("s-." . persp-next)
-   ("s-," . persp-prev)))
+  (("s-}" . persp-next)
+   ("s-{" . persp-prev)))
 
 (use-package projectile
   :commands projectile-compile-project
