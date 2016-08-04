@@ -667,7 +667,8 @@
           evil-want-C-i-jump nil)             ; need TAB for other things
     (setq-default evil-symbol-word-search t
                   evil-shift-width 3)
-    (setq evil-search-module #'evil-search))
+    (setq evil-search-module #'evil-search
+          evil-want-C-i-jump nil))
   :config
   (progn
     (defun me:use-evil-selection-register ()
