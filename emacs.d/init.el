@@ -284,6 +284,7 @@
           helm-candidate-number-limit           100
           helm-scroll-amount                    8
           helm-buffer-max-length                40           ; for displayed file names
+          helm-follow-mode-persistent           t            ; follow-mode persists across sessions
           ;; set the sources for helm-for-files
           helm-for-files-preferred-list '( helm-source-recentf
                                            helm-source-buffers-list
