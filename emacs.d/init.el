@@ -45,6 +45,9 @@
 (setq initial-scratch-message nil)
 (setq initial-major-mode 'text-mode)
 
+;; clear out very old buffers every hour
+(run-at-time "1 hour" 3600 #'clean-buffer-list)
+
 (defun me:replace-prefix (prefix input)
   (replace-regexp-in-string ( concat "^" (regexp-quote prefix)) "" input))
 
