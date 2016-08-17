@@ -287,6 +287,8 @@
           helm-candidate-number-limit           100
           helm-scroll-amount                    8
           helm-buffer-max-length                40           ; for displayed file names
+          helm-autoresize-max-height            33           ; 33% of frame (requires autoresize mode)
+          helm-autoresize-min-height            20           ; 20% of frame (requires autoresize mode)
           helm-follow-mode-persistent           t            ; follow-mode persists across sessions
           ;; set the sources for helm-for-files
           helm-for-files-preferred-list '( helm-source-recentf
@@ -295,6 +297,7 @@
                                            helm-source-locate )))
   :config
   (progn
+    (helm-autoresize-mode t)
     ;; swap tab/c-z as recommended by tuhdo
     (define-key helm-map (kbd "<tab>") #'helm-execute-persistent-action) ; rebind tab to do persistent action
     (define-key helm-map (kbd "C-i") #'helm-execute-persistent-action) ; make TAB works in terminal
