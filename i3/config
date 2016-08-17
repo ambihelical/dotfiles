@@ -75,14 +75,14 @@ bindsym $mod+Shift+Control+Up move workspace to output up
 bindsym $mod+Shift+Control+Right move workspace to output right
 
 # splitting horiZontal or Vertical
-bindsym $mod+Shift+z split h
-bindsym $mod+Shift+v split v
+bindsym $mod+z split h
+bindsym $mod+v split v
 
 # focus on parent first and then split: new
 # window goes at parent level instead at current
 # windows.
-bindsym $mod+z focus parent, split h
-bindsym $mod+v focus parent, split v
+bindsym $mod+Shift+z focus parent, split h
+bindsym $mod+Shift+v focus parent, split v
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen
