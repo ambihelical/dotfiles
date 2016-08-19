@@ -563,12 +563,6 @@
   :diminish helm-gtags-mode)
 
 (use-package rtags
-  :commands me:tags-find-symbol-at-point
-  :commands me:tags-find-symbol
-  :commands me:tags-find-references-at-point
-  :commands me:tags-find-file
-  :commands rtags-find-virtuals-at-point
-  :commands rtags-rename-symbol
   :commands rtags-location-stack-back
   :commands rtags-location-stack-forward
   :init
@@ -623,8 +617,7 @@
    ("<f6> f"    . me:tags-find-file)
    ("<f6> v"    . rtags-find-virtuals-at-point)
    ("<f6> c"    . rtags-rename-symbol)
-   ("<f6> ["    . rtags-location-stack-back)
-   ("<f6> ]"    . rtags-location-stack-forward)
+   ("<f6> i"    . rtags-find-functions-called-by-this-function)
    ("<f6> m"    . helm-semantic-or-imenu)
    ))
 
@@ -727,15 +720,6 @@
           "o" #'me:switch-to-compile-buffer
           "r" #'recompile
           "s" #'me:use-evil-selection-register
-          "tt" #'me:tags-find-symbol-at-point
-          "ts" #'me:tags-find-symbol
-          "tr" #'me:tags-find-references-at-point
-          "tf" #'me:tags-find-file
-          "tv" #'rtags-find-virtuals-at-point
-          "tc" #'rtags-rename-symbol
-          "t," #'rtags-location-stack-back
-          "t;" #'rtags-location-stack-forward
-          "tm" #'helm-semantic-or-imenu
           "v" #'exchange-point-and-mark
           "w" #'save-buffer
           "x" #'kill-buffer)))
