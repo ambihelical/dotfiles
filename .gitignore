@@ -1,1 +1,3 @@
-emacs.d/*
+# ignore everything in emacs.d except top-level elisp files
+/emacs.d/**
+!/emacs.d/*.el
