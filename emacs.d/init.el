@@ -338,7 +338,7 @@
     (setq projectile-completion-system 'helm
           projectile-use-git-grep t
           projectile-mode-line '(:eval (format " [%s]" (projectile-project-name)))
-          projectile-enable-caching t))
+          projectile-enable-caching nil))
   :config
   (progn
     (use-package helm-projectile
