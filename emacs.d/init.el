@@ -226,6 +226,20 @@
   :config
   (set-face-attribute 'hl-line nil :foreground 'unspecified :background "gainsboro"))
 
+(use-package spaceline
+  :init
+  (progn
+    (require 'spaceline-config)
+    (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state))
+  :config
+  (progn
+    (use-package powerline
+      :init
+      (progn
+        (setq powerline-default-separator 'wave)))
+    (spaceline-spacemacs-theme)))
+
+
 (use-package git-gutter
   :config
   (progn
@@ -724,13 +738,6 @@
           "v" #'exchange-point-and-mark
           "w" #'save-buffer
           "x" #'kill-buffer)))
-    (use-package powerline-evil
-      :init
-      (progn
-        (setq powerline-default-separator 'wave))
-      :config
-      (progn
-        (powerline-default-theme)))
 
     (evil-set-initial-state 'git-rebase-mode 'emacs)
     (evil-set-initial-state 'deft-mode 'insert)
