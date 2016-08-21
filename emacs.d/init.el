@@ -652,7 +652,7 @@
   :diminish hs-minor-mode)
 
 (use-package avy
-  :commands avy-goto-char
+  :commands avy-goto-word-1
   :commands avy-goto-char-2
   :commands avy-goto-char-in-line
   :init
@@ -713,7 +713,7 @@
           "a" #'align
           "c" #'me:use-evil-clipboard-register
           "e" #'pp-eval-last-sexp
-          "f" #'evil-avy-goto-char
+          "f" #'evil-avy-goto-word-1
           "g" #'evil-avy-goto-char-2
           "l" #'evil-avy-goto-char-in-line
           "m" #'projectile-compile-project
