@@ -333,6 +333,7 @@
 (use-package projectile
   :commands projectile-compile-project
   :commands projectile-switch-project
+  :defer 2
   :init
   (progn
     (setq projectile-completion-system 'helm
