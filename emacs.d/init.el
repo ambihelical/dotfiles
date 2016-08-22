@@ -341,8 +341,8 @@
   :config
   (persp-mode)
   :bind
-  (("s-}" . persp-next)
-   ("s-{" . persp-prev)))
+  (("s-<prior>" . persp-next)
+   ("s-<next>" . persp-prev)))
 
 (use-package projectile
   :commands projectile-compile-project
