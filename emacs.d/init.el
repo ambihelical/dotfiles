@@ -302,7 +302,7 @@
           helm-scroll-amount                    8
           helm-buffer-max-length                40           ; for displayed file names
           helm-autoresize-max-height            33           ; 33% of frame (requires autoresize mode)
-          helm-autoresize-min-height            20           ; 20% of frame (requires autoresize mode)
+          helm-autoresize-min-height            33           ; 33% of frame (requires autoresize mode)
           helm-follow-mode-persistent           t            ; follow-mode persists across sessions
           ;; set the sources for helm-for-files
           helm-for-files-preferred-list '( helm-source-recentf
