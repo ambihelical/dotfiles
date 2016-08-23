@@ -555,6 +555,9 @@
   ("s-d"   . company-complete)
   :config
   (progn
+    (use-package company-quickhelp
+      :config
+      (company-quickhelp-mode 1))
     (global-company-mode))
   :diminish company-mode)
 
