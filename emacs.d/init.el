@@ -239,13 +239,14 @@
         (setq powerline-default-separator 'wave)))
     (spaceline-spacemacs-theme)))
 
-
-(use-package git-gutter
-  :config
+(use-package diff-hl
+  :init
   (progn
-    (global-git-gutter-mode t))
-  :defer 4
-  :diminish git-gutter-mode)
+    (setq diff-hl-fringe-bmp-function 'diff-hl-fringe-bmp-from-type)
+    (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
+  :config
+  (global-diff-hl-mode 1)
+  :defer 4)
 
 (use-package linum-relative
   :diminish linum-relative-mode
