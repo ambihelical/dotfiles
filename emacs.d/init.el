@@ -185,6 +185,8 @@
 (global-set-key (kbd "<f5> m") #'menu-bar-mode)
 
 (use-package smooth-scrolling
+  :config
+  (smooth-scrolling-mode t)
   :init
   (progn
     (setq smooth-scroll-margin 5
