@@ -93,6 +93,7 @@
               indent-tabs-mode t                            ; enable tabs for most files
               fill-column 120)                              ; auto-wrap only very long lines
 (setq standard-indent 3                                     ; ideal indent :)
+      split-width-threshold 240                             ; 2x ideal line width :)
       x-select-enable-clipboard nil                         ; make cut/paste function correctly
       sentence-end-double-space nil)                        ; sentences end with one space
 (add-hook 'focus-out-hook
