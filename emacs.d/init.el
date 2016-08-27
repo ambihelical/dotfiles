@@ -246,9 +246,14 @@
   :init
   (progn
     (setq diff-hl-fringe-bmp-function 'diff-hl-fringe-bmp-from-type)
+    (add-hook 'dired-mode-hook 'diff-hl-dired-mode)
     (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
   :config
-  (global-diff-hl-mode 1)
+  (progn
+    (when (not (display-graphic-p))
+      (diff-hl-margin-mode 1))
+    (diff-hl-flydiff-mode 1)       ; needs 24.4 or newer
+    (global-diff-hl-mode 1))
   :defer 4)
 
 (use-package linum-relative
