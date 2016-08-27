@@ -24,10 +24,12 @@
       use-package-verbose nil)
 
 ;; set some personal variables
+(defconst me:data-directory (if (getenv "XDG_DATA_HOME") (getenv "XDG_DATA_HOME") "~/.local/share"))
+(defconst me:cache-directory (if (getenv "XDG_CACHE_HOME") (getenv "XDG_CACHE_HOME") "~/.cache"))
+(defconst me:emacs-backup-directory (expand-file-name "emacs" me:cache-directory))
 (defconst me:notes-path (if (file-readable-p "~/Dropbox/Notes")
                             "~/Dropbox/Notes"
                           "~/Notes") "Location of note files")
-
 ;; configure the chrome
 (set-frame-font "Fantasque Sans Mono 12" t t)
 (tool-bar-mode 0)
@@ -78,8 +80,9 @@
 
 ;; Operational preferences
 (fset 'yes-or-no-p 'y-or-n-p)
-(setq backup-directory-alist '(("." . "~/.cache/emacs")))
-(setq custom-file "~/.cache/emacs/customize")               ; put customizations here
+(setq backup-directory-alist `((".*" . ,me:emacs-backup-directory)))
+(make-directory me:emacs-backup-directory t)
+(setq custom-file "/dev/null")                              ; disable customizations
 (global-auto-revert-mode t)                                 ; revert unchanged files automatically
 
 ;; make some keys available for use
