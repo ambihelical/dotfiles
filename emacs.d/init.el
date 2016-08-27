@@ -105,6 +105,13 @@
             (save-some-buffers t)))         ; save on focus lost
 (electric-indent-mode +1)                                   ; turn on electric mode globally
 
+;; highlight some keywords in programming modes
+(add-hook #'prog-mode-hook
+          (lambda ()
+            (font-lock-add-keywords nil
+                                    '(("\\<\\(FIXME\\|BUG\\|WARN\\|HACK\\):" 1 font-lock-warning-face t)
+                                      ("\\<\\(TODO\\|TBD\\):" 1 font-lock-keyword-face t)))))
+
 ;; Align with spaces only
 (defadvice align-regexp (around align-regexp-with-spaces)
   "Never use tabs for alignment."
