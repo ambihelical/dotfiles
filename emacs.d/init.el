@@ -279,8 +279,7 @@
   (("<f5> r" . ruler-mode)))
 
 (use-package flyspell
-  :commands flyspell-prog-mode
-  :commands flyspell-mode
+  :commands ( flyspell-prog-mode flyspell-mode )
   :init
   (progn
     (add-hook 'prog-mode-hook #'flyspell-prog-mode)
@@ -364,8 +363,7 @@
    ("s-<next>" . persp-prev)))
 
 (use-package projectile
-  :commands projectile-compile-project
-  :commands projectile-switch-project
+  :commands ( projectile-compile-project projectile-switch-project )
   :defer 2
   :init
   (progn
@@ -565,8 +563,7 @@
   ("<f4> n" . deft))
 
 (use-package company
-  :commands global-company-mode
-  :commands company-complete
+  :commands ( global-company-mode company-complete )
   :init
   (progn
     (setq company-minimum-prefix-length 1))
@@ -600,8 +597,7 @@
   :diminish helm-gtags-mode)
 
 (use-package rtags
-  :commands rtags-location-stack-back
-  :commands rtags-location-stack-forward
+  :commands ( rtags-location-stack-back rtags-location-stack-forward )
   :init
   (progn
     (defun me:flycheck-rtags-setup ()
@@ -689,9 +685,7 @@
   :diminish hs-minor-mode)
 
 (use-package avy
-  :commands avy-goto-word-1
-  :commands avy-goto-char-2
-  :commands avy-goto-char-in-line
+  :commands ( avy-goto-word-1 avy-goto-char-2 avy-goto-char-in-line )
   :init
   (setq avy-all-windows 'all-frames))
 
