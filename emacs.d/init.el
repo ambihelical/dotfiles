@@ -87,6 +87,8 @@
 
 ;; make some keys available for use
 (global-unset-key (kbd "<f4>"))
+(global-unset-key (kbd "<f10>"))                            ; was menu-bar-open
+(global-unset-key (kbd "<f11>"))                            ; was fullscreen mode
 
 ;; Text handling
 (global-visual-line-mode t)                                        ; edit visual lines
@@ -194,6 +196,8 @@
 (global-set-key (kbd "<s-tab>") #'next-buffer)
 (global-set-key (kbd "<f5> h") #'global-hl-line-mode)
 (global-set-key (kbd "<f5> m") #'menu-bar-mode)
+(global-set-key (kbd "<f5> <f5>") #'menu-bar-open)
+(global-set-key (kbd "<f5> f") #'toggle-frame-fullscreen)
 
 (use-package smooth-scrolling
   :config
