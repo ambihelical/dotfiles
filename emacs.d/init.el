@@ -831,9 +831,9 @@
           shell-pop-term-shell "/bin/bash"
           shell-pop-window-size 40
           shell-pop-window-position "top"
-          shell-pop-universal-key "<f8>"))
+          shell-pop-universal-key "<f4> t"))
   :bind
-  ("<f8>" . shell-pop))
+  ("<f4> t" . shell-pop))
 
 (use-package which-key
   :init
