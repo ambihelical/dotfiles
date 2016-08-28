@@ -202,6 +202,7 @@
 (use-package smooth-scrolling
   :config
   (smooth-scrolling-mode t)
+  :defer 3
   :init
   (progn
     (setq smooth-scroll-margin 5
@@ -246,10 +247,11 @@
 (use-package spaceline
   :init
   (progn
-    (require 'spaceline-config)
     (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state))
+  :defer 1
   :config
   (progn
+    (require 'spaceline-config)
     (use-package powerline
       :init
       (progn
@@ -430,6 +432,7 @@
    ("<f7> f"    . helm-projectile-ag)))
 
 (use-package smart-tabs-mode
+  :defer 3
   :config
   (progn
     (smart-tabs-insinuate 'python)
@@ -722,6 +725,7 @@
 
 ;; N.B. evil-mode must be enabled after global-evil-leader-mode
 (use-package evil
+  :defer 1
   :init
   (progn
     (setq evil-want-C-w-delete nil            ; want C-w it for windows commands
@@ -753,12 +757,16 @@
       (interactive)
       (switch-to-buffer (other-buffer (current-buffer) 1)))
 
-    (use-package evil-args)
-    (use-package evil-textobj-anyblock)
+    (use-package evil-args
+      :defer 3)
+    (use-package evil-textobj-anyblock
+      :defer 3)
     (use-package evil-commentary
+      :defer 3
       :config (evil-commentary-mode)
       :diminish evil-commentary-mode)
     (use-package evil-surround
+      :defer 3
       :config (global-evil-surround-mode 1))
     (use-package evil-leader
       :init
