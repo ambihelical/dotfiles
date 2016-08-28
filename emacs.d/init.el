@@ -372,6 +372,7 @@
    ("<f4> b"    . helm-all-mark-rings)
    ("<f4> f"    . helm-grep-do-git-grep)
    ("<f4> i"    . helm-info-at-point)
+   ("<f4> j"    . helm-bookmarks)
    ("<f4> k"    . helm-show-kill-ring)
    ("<f4> l"    . helm-locate)
    ("<f4> m"    . helm-man-woman)
