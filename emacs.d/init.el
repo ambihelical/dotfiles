@@ -278,6 +278,33 @@
   :bind
   (("<f5> r" . ruler-mode)))
 
+(use-package dired
+  :ensure nil
+  :init
+  (progn
+    (setq dired-recursive-deletes 'always
+          dired-recursive-copies 'always
+          dired-dwim-target t))             ; use existing dired buffer, if exists
+  :config
+  (progn
+    (use-package peep-dired
+      :bind (:map dired-mode-map
+              ("C-f" . peep-dired)))
+    (use-package dired-narrow
+      :bind (:map dired-mode-map
+                  ("/" . dired-narrow)))
+    (use-package dired+
+      :defer 2
+      :init
+      (progn
+        (setq font-lock-maximum-decoration (quote ((dired-mode . nil) (t . t))))   ; turn off barf colors
+        (setq diredp-hide-details-initially_flag t
+              diredp-image-preview-in-tooltip 400
+              diredp-auto-focus-frame-for-thumbnail-tooltip-flag t))))
+  :bind
+  (("<f4> d" . dired-jump))
+  :defer t)
+
 (use-package flyspell
   :commands ( flyspell-prog-mode flyspell-mode )
   :init
@@ -343,7 +370,6 @@
    ("<f3>"      . helm-for-files)
    ("<f4> a"    . helm-apropos)
    ("<f4> b"    . helm-all-mark-rings)
-   ("<f4> d"    . dired-jump)
    ("<f4> f"    . helm-grep-do-git-grep)
    ("<f4> i"    . helm-info-at-point)
    ("<f4> k"    . helm-show-kill-ring)
@@ -760,6 +786,9 @@
     (evil-set-initial-state 'magit-branch-manager-mode 'emacs)
     (evil-set-initial-state 'flycheck-error-list-mode 'emacs)
     (evil-set-initial-state 'rtags-mode 'emacs)
+    (evil-set-initial-state 'dired-mode 'emacs)
+    (evil-set-initial-state 'image-mode 'emacs)
+    (evil-set-initial-state 'image-dired-thumbnail-mode 'emacs)
     ;; note evil-set-initial-state didn't work for these modes
     ;; I'm not sure why...
     (add-hook 'with-editor-mode-hook #'evil-insert-state)
