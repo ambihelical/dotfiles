@@ -355,6 +355,7 @@
           helm-autoresize-max-height            33           ; 33% of frame (requires autoresize mode)
           helm-autoresize-min-height            33           ; 33% of frame (requires autoresize mode)
           helm-follow-mode-persistent           t            ; follow-mode persists across sessions
+          helm-ff-skip-boring-files             t            ; don't show boring files
           ;; set the sources for helm-for-files
           helm-for-files-preferred-list '( helm-source-recentf
                                            helm-source-buffers-list
