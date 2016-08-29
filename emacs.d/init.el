@@ -248,7 +248,6 @@
   :init
   (progn
     (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state))
-  :defer 1
   :config
   (progn
     (require 'spaceline-config)
