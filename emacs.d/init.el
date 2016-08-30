@@ -392,8 +392,9 @@
   :config
   (persp-mode)
   :bind
-  (("s-<prior>" . persp-next)
-   ("s-<next>" . persp-prev)))
+  (("<f7> r" . persp-rename)
+   ("s-<right>" . persp-next)
+   ("s-<left>" . persp-prev)))
 
 (use-package projectile
   :commands ( projectile-compile-project projectile-switch-project )
