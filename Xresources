@@ -1,7 +1,7 @@
 URxvt*background: #2B2B2B
 URxvt*foreground: #DEDEDE
-URxvt*font: xft:Ubuntu Mono:size=11
-URxvt*boldFont: xft:Ubuntu Mono:bold:size=11
+URxvt*font: xft:Ubuntu Mono:size=9
+URxvt*boldFont: xft:Ubuntu Mono:bold:size=9
 URxvt*saveLines: 12000
 URxvt*scrollBar: false
 URxvt*scrollstyle: rxvt
