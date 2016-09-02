@@ -126,6 +126,13 @@ elif [ -d /usr/local/etc/bash_completion.d ]; then
 		. $file
 	done
 fi
+# Also pick up completions in /usr/local/share
+if [ -d /usr/local/share/bash-completion/completions ]; then
+	for file in /usr/local/share/bash-completion/completions/*; do
+		. $file
+	done
+fi
+
 
 # Enable autojump
 if [ -e /usr/share/autojump/autojump.sh ]; then
