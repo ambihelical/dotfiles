@@ -369,6 +369,10 @@
                                            helm-source-locate )))
   :config
   (progn
+    (use-package helm-descbinds             ; Describe key bindings with Helm
+      :defer 3
+      :config
+      (helm-descbinds-mode))
     (helm-autoresize-mode t)
     ;; swap tab/c-z as recommended by tuhdo
     (define-key helm-map (kbd "<tab>") #'helm-execute-persistent-action) ; rebind tab to do persistent action
@@ -386,12 +390,13 @@
    ("<f4> f"    . helm-grep-do-git-grep)
    ("<f4> i"    . helm-info-at-point)
    ("<f4> j"    . helm-bookmarks)
-   ("<f4> k"    . helm-show-kill-ring)
+   ("<f4> k"    . helm-descbinds)
    ("<f4> l"    . helm-locate)
    ("<f4> m"    . helm-man-woman)
    ("<f4> p"    . helm-list-elisp-packages-no-fetch)
    ("<f4> r"    . helm-recentf)
    ("<f4> x"    . helm-top)
+   ("<f4> y"    . helm-show-kill-ring)
    ("<f4> <f4>" . helm-resume)))
 
 (use-package perspective
@@ -445,6 +450,11 @@
   (progn
     (smart-tabs-insinuate 'python)
     (smart-tabs-insinuate 'c 'c++)))
+
+(use-package rainbow-delimiters         ; Highlight delimiters by depth
+  :init
+  (progn
+    (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)))
 
 (use-package markdown-mode
   :mode
