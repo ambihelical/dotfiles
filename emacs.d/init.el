@@ -226,6 +226,13 @@
     (add-hook 'after-change-major-mode-hook (lambda () (if buffer-file-name (fci-mode 1))))
     (setq fci-rule-color "white smoke")))
 
+;; Highlight cursor position in buffer
+(use-package beacon
+  :defer 3
+  :config
+  (beacon-mode 1)
+  :diminish beacon-mode)
+
 (use-package adaptive-wrap
   :init
   (progn
