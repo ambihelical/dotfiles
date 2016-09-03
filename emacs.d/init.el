@@ -290,6 +290,21 @@
   :bind
   (("<f5> r" . ruler-mode)))
 
+;; better package manager
+(use-package paradox
+  :commands paradox-list-packages
+  :init
+  (setq paradox-spinner-type 'moon
+        paradox-execute-asynchronously nil
+        paradox-display-download-count t
+        paradox-display-star-count t
+        paradox-github-token t                ; Dont't ask, don't integrate
+        paradox-automatically-star nil        ; Don't star automatically
+        paradox-hide-wiki-packages t)
+  :bind
+  (("<f4> p" . paradox-list-packages)))
+
+
 (use-package dired
   :ensure nil
   :init
@@ -393,7 +408,6 @@
    ("<f4> k"    . helm-descbinds)
    ("<f4> l"    . helm-locate)
    ("<f4> m"    . helm-man-woman)
-   ("<f4> p"    . helm-list-elisp-packages-no-fetch)
    ("<f4> r"    . helm-recentf)
    ("<f4> x"    . helm-top)
    ("<f4> y"    . helm-show-kill-ring)
@@ -820,6 +834,8 @@
     (evil-set-initial-state 'dired-mode 'emacs)
     (evil-set-initial-state 'image-mode 'emacs)
     (evil-set-initial-state 'image-dired-thumbnail-mode 'emacs)
+    (evil-set-initial-state 'paradox-menu-mode 'emacs)
+
     ;; note evil-set-initial-state didn't work for these modes
     ;; I'm not sure why...
     (add-hook 'with-editor-mode-hook #'evil-insert-state)
