@@ -91,8 +91,6 @@
 (global-unset-key (kbd "<f11>"))                            ; was fullscreen mode
 
 ;; Text handling
-(global-visual-line-mode t)                                        ; edit visual lines
-(setq visual-line-fringe-indicators '(left-curly-arrow nil))
 
 (setq-default tab-width 3                                   ; ideal tab width
               indent-tabs-mode t                            ; enable tabs for most files
@@ -129,9 +127,7 @@
   ;; some of these need to be run after init file has loaded
   ;; to actually be diminished
   (add-hook 'after-init-hook (lambda ()
-    (diminish 'visual-line-mode)
-    (diminish 'auto-revert-mode)
-    (diminish 'undo-tree-mode))))
+                               (diminish 'auto-revert-mode))))
 
 (use-package dash-functional)
 
@@ -185,6 +181,14 @@
 (global-set-key (kbd "<f5> m") #'menu-bar-mode)
 (global-set-key (kbd "<f5> <f5>") #'menu-bar-open)
 (global-set-key (kbd "<f5> f") #'toggle-frame-fullscreen)
+
+(use-package visual-line
+  :ensure nil
+  :init
+  (setq visual-line-fringe-indicators '(left-curly-arrow nil))
+  :config
+  (global-visual-line-mode t)                                 ; edit visual lines
+  :diminish visual-line-mode)
 
 (use-package smooth-scrolling
   :config
@@ -290,6 +294,13 @@
         paradox-hide-wiki-packages t)
   :bind
   (("<f4> p" . paradox-list-packages)))
+
+(use-package recentf
+  :config (recentf-mode)
+  :init
+  (setq recentf-max-saved-items 200
+        recentf-max-menu-items 15
+        recentf-auto-cleanup 300))           ; wait 5m before 1st cleanup
 
 
 (use-package dired
