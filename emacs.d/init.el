@@ -77,12 +77,12 @@
     (abort-recursive-edit)))
 (add-hook 'mouse-leave-buffer-hook #'me:stop-using-minibuffer)
 
-
 ;; Operational preferences
 (fset 'yes-or-no-p 'y-or-n-p)
-(setq backup-directory-alist `((".*" . ,me:emacs-backup-directory)))
 (make-directory me:emacs-backup-directory t)
-(setq custom-file "/dev/null")                              ; disable customizations
+(setq backup-directory-alist `((".*" . ,me:emacs-backup-directory))
+      custom-file "/dev/null"                               ; disable customizations
+      view-read-only t)                                     ; show r/o files in view mode
 (global-auto-revert-mode t)                                 ; revert unchanged files automatically
 
 ;; make some keys available for use
@@ -98,7 +98,11 @@
 (setq standard-indent 3                                     ; ideal indent :)
       split-width-threshold 240                             ; 2x ideal line width :)
       x-select-enable-clipboard nil                         ; make cut/paste function correctly
+      kill-ring-max 200                                     ; More killed items
+      kill-do-not-save-duplicates t                         ; No duplicates in kill ring
+      save-interprogram-paste-before-kill t                 ; save clipboard before killing
       sentence-end-double-space nil)                        ; sentences end with one space
+
 (add-hook 'focus-out-hook
           (lambda ()
             (interactive)
