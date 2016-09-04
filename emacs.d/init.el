@@ -29,10 +29,11 @@
                             "~/Dropbox/Notes"
                           "~/Notes") "Location of note files")
 
-;; some useful functions
+;; replace prefix part of a string
 (defun me:replace-prefix (prefix input)
   (replace-regexp-in-string ( concat "^" (regexp-quote prefix)) "" input))
 
+;; replace any matches in a string
 (defun me:replace-all (input from to)
   (replace-regexp-in-string (regexp-quote from) to input nil))
 
@@ -42,29 +43,20 @@
   (when (and (>= (recursion-depth) 1) (active-minibuffer-window))
     (abort-recursive-edit)))
 
+;; save any dirty buffers
 (defun me:save-dirty-buffers ()
   "Save any dirty buffers"
   (interactive)
   (save-some-buffers t))
 
-;; Select the nth buffer in the buffer list
-;; TODO: must be a better way...
-(defun me:select-nth-other-buffer (n)
-  (let ((buffer (nth n (-filter 'buffer-file-name (buffer-list)))))
+;; select the nth other buffer
+(defun me:select-nth-other-buffer (arg)
+  (interactive "p")
+  (let ((buffer (nth arg (-filter 'buffer-file-name (buffer-list)))))
     (if buffer
         (switch-to-buffer buffer))))
-(defun me:select-1st-other-buffer ()
-  (interactive)
-  (me:select-nth-other-buffer 1 ))
-(defun me:select-2nd-other-buffer ()
-  (interactive)
-  (me:select-nth-other-buffer 2 ))
-(defun me:select-3rd-other-buffer ()
-  (interactive)
-  (me:select-nth-other-buffer 3))
-(defun me:select-4th-other-buffer ()
-  (interactive)
-  (me:select-nth-other-buffer 4))
+
+;; rotate the current fill-column
 (defun me:rotate-fill-column ()
   (interactive)
   (setq fill-column (cond ((= fill-column 70) 80)
@@ -76,6 +68,8 @@
                           (t 120)))
   (whitespace-mode -1)
   (whitespace-mode))
+
+;; switch to the compile buffer
 (defun me:switch-to-compile-buffer ()
   (interactive)
   (switch-to-buffer "*compilation*"))
@@ -146,10 +140,11 @@
 (global-unset-key (kbd "<f10>"))                            ; was menu-bar-open
 (global-unset-key (kbd "<f11>"))                            ; was fullscreen mode
 (global-set-key (kbd "s-1") #'helm-projectile-find-other-file)
-(global-set-key (kbd "s-2") #'me:select-1st-other-buffer)
-(global-set-key (kbd "s-3") #'me:select-2nd-other-buffer)
-(global-set-key (kbd "s-4") #'me:select-3rd-other-buffer)
-(global-set-key (kbd "s-5") #'me:select-4th-other-buffer)
+(global-set-key (kbd "s-#") 'me:select-nth-other-buffer)    ; base mapping for the following...
+(global-set-key (kbd "s-2") (kbd "C-u 1 s-#"))
+(global-set-key (kbd "s-3") (kbd "C-u 2 s-#"))
+(global-set-key (kbd "s-4") (kbd "C-u 3 s-#"))
+(global-set-key (kbd "s-5") (kbd "C-u 4 s-#"))
 (global-set-key (kbd "s-c") #'me:rotate-fill-column)
 (global-set-key (kbd "s-]") #'winner-redo)
 (global-set-key (kbd "s-[") #'winner-undo)
