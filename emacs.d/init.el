@@ -839,6 +839,7 @@
     (evil-set-initial-state 'rtags-mode 'emacs)
     (evil-set-initial-state 'dired-mode 'emacs)
     (evil-set-initial-state 'image-mode 'emacs)
+    (evil-set-initial-state 'finder-mode 'emacs)
     (evil-set-initial-state 'image-dired-thumbnail-mode 'emacs)
     (evil-set-initial-state 'paradox-menu-mode 'emacs)
 
@@ -847,7 +848,6 @@
     (add-hook 'with-editor-mode-hook #'evil-insert-state)
     (add-hook 'magit-log-mode-hook #'evil-emacs-state)
     (add-hook 'magit-revision-mode-hook #'evil-emacs-state)
-    (add-hook 'magit-mode-hook #'evil-emacs-state)
     ;;
     (define-key evil-inner-text-objects-map "a" #'evil-inner-arg)
     (define-key evil-outer-text-objects-map "a" #'evil-outer-arg)
@@ -904,7 +904,9 @@
     (add-hook 'with-editor-mode-hook (lambda () (setq fill-column 70))))
   :config
   (progn
-    (use-package evil-magit))
+    (use-package evil-magit
+      :init
+      (setq evil-magit-state 'normal)))
   :bind
   (("<f7> g" . magit-status)
    ("<f7> b" . magit-blame)
