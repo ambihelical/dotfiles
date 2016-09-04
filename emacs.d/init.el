@@ -1,24 +1,21 @@
 (let ((file-name-handler-alist nil))
 (setq gc-cons-threshold 100000000)
 
+;; package management
+
 (require 'package)
 
 (setq package-archives '(("melpa" . "http://melpa.milkbox.net/packages/")
                          ("org"   . "http://orgmode.org/elpa/")
                          ("gnu"   . "http://elpa.gnu.org/packages/")))
-
 (package-initialize)
-
 (when (not package-archive-contents)
   (package-refresh-contents))
-
 (when (not (package-installed-p 'use-package ))
   (package-install 'use-package))
-
 (eval-when-compile
   (require 'use-package))
 (require 'bind-key)                ;; if you use any :bind variant
-
 (setq use-package-always-ensure t
       use-package-minimum-reported-time 0.03
       use-package-verbose nil)
@@ -30,113 +27,27 @@
 (defconst me:notes-path (if (file-readable-p "~/Dropbox/Notes")
                             "~/Dropbox/Notes"
                           "~/Notes") "Location of note files")
-;; configure the chrome
-(set-frame-font "Fantasque Sans Mono 12" t t)
-(tool-bar-mode 0)
-(scroll-bar-mode 0)
-(menu-bar-mode 0)
-(setq inhibit-splash-screen t
-      inhibit-startup-echo-area-message t
-      inhibit-startup-message t)
-(mouse-avoidance-mode 'animate)                             ; move mouse pointer out of way
-(column-number-mode t)                                      ; display column/row of cursor in mode-line
-(global-hl-line-mode t)                                     ; highlight current line
 
-;; Set scratch to be text only. This disables loading of any packages
-;; which are loaded for prog-mode and makes startup faster.
-(setq initial-scratch-message nil)
-(setq initial-major-mode 'text-mode)
-
-;; clear out very old buffers every hour
-(run-at-time "1 hour" 3600 #'clean-buffer-list)
-
+;; some useful functions
 (defun me:replace-prefix (prefix input)
   (replace-regexp-in-string ( concat "^" (regexp-quote prefix)) "" input))
 
 (defun me:replace-all (input from to)
   (replace-regexp-in-string (regexp-quote from) to input nil))
 
-(setq frame-title-format '((:eval (if (buffer-file-name)
-                                      (me:replace-prefix (abbreviate-file-name default-directory)
-                                                         (abbreviate-file-name buffer-file-name))
-                                    "%b"))
-                           " %* ["
-                           (:eval (abbreviate-file-name default-directory))
-                           "]")
-      icon-title-format frame-title-format)                 ; use same title for unselected frame
-
-;; tame scroll wheel
-(setq mouse-wheel-scroll-amount '(3 ((shift) . 9))          ; 3 lines, or 9 line when shift held
-      mouse-wheel-follow-mouse 't                           ; scroll window under mouse
-      mouse-wheel-progressive-speed nil)                    ; don't speed up
-
-;; abort mini-buffer when mouse click outside
-(defun me:stop-using-minibuffer ()
+;; abort mini-buffer
+(defun me:kill-minibuffer ()
   "kill the minibuffer"
   (when (and (>= (recursion-depth) 1) (active-minibuffer-window))
     (abort-recursive-edit)))
-(add-hook 'mouse-leave-buffer-hook #'me:stop-using-minibuffer)
 
-;; Operational preferences
-(fset 'yes-or-no-p 'y-or-n-p)
-(make-directory me:emacs-backup-directory t)
-(setq backup-directory-alist `((".*" . ,me:emacs-backup-directory))
-      custom-file "/dev/null"                               ; disable customizations
-      view-read-only t)                                     ; show r/o files in view mode
-(global-auto-revert-mode t)                                 ; revert unchanged files automatically
-
-;; make some keys available for use
-(global-unset-key (kbd "<f4>"))
-(global-unset-key (kbd "<f10>"))                            ; was menu-bar-open
-(global-unset-key (kbd "<f11>"))                            ; was fullscreen mode
-
-;; Text handling
-
-(setq-default tab-width 3                                   ; ideal tab width
-              indent-tabs-mode t                            ; enable tabs for most files
-              fill-column 120)                              ; auto-wrap only very long lines
-(setq standard-indent 3                                     ; ideal indent :)
-      split-width-threshold 240                             ; 2x ideal line width :)
-      x-select-enable-clipboard nil                         ; make cut/paste function correctly
-      kill-ring-max 200                                     ; More killed items
-      kill-do-not-save-duplicates t                         ; No duplicates in kill ring
-      save-interprogram-paste-before-kill t                 ; save clipboard before killing
-      sentence-end-double-space nil)                        ; sentences end with one space
-
-(add-hook 'focus-out-hook
-          (lambda ()
-            (interactive)
-            (save-some-buffers t)))         ; save on focus lost
-(electric-indent-mode +1)                                   ; turn on electric mode globally
-
-;; highlight some keywords in programming modes
-(add-hook #'prog-mode-hook
-          (lambda ()
-            (font-lock-add-keywords nil
-                                    '(("\\<\\(FIXME\\|BUG\\|WARN\\|HACK\\):" 1 font-lock-warning-face t)
-                                      ("\\<\\(TODO\\|TBD\\):" 1 font-lock-keyword-face t)))))
-
-;; elisp mode settings
-(add-hook 'emacs-lisp-mode-hook
-          (lambda ()
-            (setq tab-width 2
-                  standard-indent 2
-                  indent-tabs-mode nil                      ; no tabs
-                  evil-shift-width 2                        ; need this since no tabs
-                  lisp-body-indent 2)))                     ; indent elisp by 2
-(add-hook 'after-init-hook (lambda () (message "Time to initialize: %s" (emacs-init-time))))
-
-(use-package diminish
-  :init
-  ;; some of these need to be run after init file has loaded
-  ;; to actually be diminished
-  (add-hook 'after-init-hook (lambda ()
-                               (diminish 'abbrev-mode)
-                               (diminish 'auto-revert-mode))))
-
-(use-package dash-functional)
+(defun me:save-dirty-buffers ()
+  "Save any dirty buffers"
+  (interactive)
+  (save-some-buffers t))
 
 ;; Select the nth buffer in the buffer list
+;; TODO: must be a better way...
 (defun me:select-nth-other-buffer (n)
   (let ((buffer (nth n (-filter 'buffer-file-name (buffer-list)))))
     (if buffer
@@ -168,8 +79,71 @@
   (interactive)
   (switch-to-buffer "*compilation*"))
 
-(winner-mode t)                                             ; c-c left, c-c right to change windows
+;; configuration I haven't figured out how to wedge into
+;; use-package
 
+(setq-default tab-width 3                                   ; ideal tab width
+              indent-tabs-mode t                            ; enable tabs for most files
+              fill-column 120)                              ; auto-wrap only very long lines
+(setq backup-directory-alist
+         `((".*" . ,me:emacs-backup-directory))             ; use my backup directory
+      inhibit-splash-screen t                               ; no splash
+      inhibit-startup-echo-area-message t                   ; no startup message
+      inhibit-startup-message t                             ; no startup message
+      frame-title-format
+        '((:eval (if (buffer-file-name)
+                    (me:replace-prefix (abbreviate-file-name default-directory)
+                                        (abbreviate-file-name buffer-file-name))
+                  "%b"))
+          " %* ["
+          (:eval (abbreviate-file-name default-directory))
+          "]")                                              ; fancy title
+      icon-title-format frame-title-format                  ; use same title for unselected frame
+      mouse-wheel-scroll-amount '(3 ((shift) . 9))          ; 3 lines, or 9 line when shift held
+      mouse-wheel-follow-mouse 't                           ; scroll window under mouse
+      mouse-wheel-progressive-speed nil                     ; don't speed up
+      custom-file "/dev/null"                               ; disable customizations
+      initial-scratch-message nil                           ; no scratch message
+      initial-major-mode 'text-mode                         ; no prog-mode at startup
+      kill-ring-max 200                                     ; More killed items
+      kill-do-not-save-duplicates t                         ; No duplicates in kill ring
+      save-interprogram-paste-before-kill t                 ; save clipboard before killing
+      x-select-enable-clipboard nil                         ; make cut/paste function correctly
+      split-width-threshold 240                             ; 2x ideal line width :)
+      indicate-empty-lines t                                ; show empty lines at end of buffer
+      visual-line-fringe-indicators '(left-curly-arrow nil) ; use left curly error for wrapped lines
+      view-read-only t                                      ; show r/o files in view mode
+      standard-indent 3                                     ; ideal indent :)
+      sentence-end-double-space nil)                        ; sentences end with one space
+(add-hook 'focus-out-hook #'me:save-dirty-buffers)          ; save on defocus
+(add-hook 'mouse-leave-buffer-hook #'me:kill-minibuffer)    ; kill minibuffer on click outside
+(add-hook 'after-init-hook                                  ; report init time
+          (lambda ()
+            (message "Time to initialize: %s"
+                     (emacs-init-time))))
+(add-hook #'prog-mode-hook                                  ; keyword highlighting
+          (lambda ()
+            (font-lock-add-keywords nil
+                                    '(("\\<\\(FIXME\\|BUG\\|WARN\\|HACK\\):" 1 font-lock-warning-face t)
+                                      ("\\<\\(TODO\\|TBD\\):" 1 font-lock-keyword-face t)))))
+(set-frame-font "Fantasque Sans Mono 12" t t)               ; nice font
+(tool-bar-mode 0)                                           ; no tool bar
+(scroll-bar-mode 0)                                         ; no scroll bar
+(menu-bar-mode 0)                                           ; no menu bar
+(mouse-avoidance-mode 'animate)                             ; move mouse pointer out of way
+(column-number-mode t)                                      ; display column/row of cursor in mode-line
+(global-hl-line-mode t)                                     ; highlight current line
+(fset 'yes-or-no-p 'y-or-n-p)                               ; change stupid default y/n? y
+(make-directory me:emacs-backup-directory t)                ; make sure backup dir exists
+(global-auto-revert-mode t)                                 ; revert unchanged files automatically
+(electric-indent-mode +1)                                   ; turn on electric mode globally
+(global-visual-line-mode t)                                 ; wrap long lines
+(winner-mode t)                                             ; enable winner mode
+(run-at-time "1 hour" 3600 #'clean-buffer-list)             ; clear out old buffers every hour
+
+(global-unset-key (kbd "<f4>"))
+(global-unset-key (kbd "<f10>"))                            ; was menu-bar-open
+(global-unset-key (kbd "<f11>"))                            ; was fullscreen mode
 (global-set-key (kbd "s-1") #'helm-projectile-find-other-file)
 (global-set-key (kbd "s-2") #'me:select-1st-other-buffer)
 (global-set-key (kbd "s-3") #'me:select-2nd-other-buffer)
@@ -187,13 +161,25 @@
 (global-set-key (kbd "<f5> <f5>") #'menu-bar-open)
 (global-set-key (kbd "<f5> f") #'toggle-frame-fullscreen)
 
-(use-package visual-line
-  :ensure nil
+;; elisp mode settings
+(add-hook 'emacs-lisp-mode-hook
+          (lambda ()
+            (setq tab-width 2
+                  standard-indent 2
+                  indent-tabs-mode nil                      ; no tabs
+                  evil-shift-width 2                        ; need this since no tabs
+                  lisp-body-indent 2)))                     ; indent elisp by 2
+
+(use-package diminish
   :init
-  (setq visual-line-fringe-indicators '(left-curly-arrow nil))
-  :config
-  (global-visual-line-mode t)                                 ; edit visual lines
-  :diminish visual-line-mode)
+  ;; some of these need to be run after init file has loaded
+  ;; to actually be diminished
+  (add-hook 'after-init-hook (lambda ()
+                               (diminish 'visual-line-mode)
+                               (diminish 'abbrev-mode)
+                               (diminish 'auto-revert-mode))))
+
+(use-package dash-functional)
 
 (use-package smooth-scrolling
   :config
