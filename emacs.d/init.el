@@ -127,6 +127,7 @@
   ;; some of these need to be run after init file has loaded
   ;; to actually be diminished
   (add-hook 'after-init-hook (lambda ()
+                               (diminish 'abbrev-mode)
                                (diminish 'auto-revert-mode))))
 
 (use-package dash-functional)
@@ -245,7 +246,8 @@
 (use-package spaceline
   :init
   (progn
-    (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state))
+    (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state
+          spaceline-minor-modes-separator " "))
   :config
   (progn
     (require 'spaceline-config)
@@ -354,7 +356,7 @@
         (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US")))))
   :bind
   (("s-f" . flyspell-auto-correct-previous-word))
-  :diminish flyspell-mode)
+  :diminish (flyspell-mode . "Ⓢ"))
 
   (use-package helm-flyspell
     :bind
@@ -411,18 +413,10 @@
    ("<f4> y"    . helm-show-kill-ring)
    ("<f4> <f4>" . helm-resume)))
 
-(use-package perspective
-  :commands persp-switch
-  :config
-  (persp-mode)
-  :bind
-  (("<f7> r" . persp-rename)
-   ("s-<right>" . persp-next)
-   ("s-<left>" . persp-prev)))
-
 (use-package projectile
   :commands ( projectile-compile-project projectile-switch-project )
   :defer 2
+  :diminish projectile-mode
   :init
   (progn
     (setq projectile-completion-system 'helm
@@ -455,6 +449,17 @@
    ("<f7> u"    . projectile-invalidate-cache)
    ("<f7> k"    . projectile-kill-buffers)
    ("<f7> f"    . helm-projectile-ag)))
+
+(use-package perspective
+  :after projectile
+  :config
+  (progn
+    (setq persp-initial-frame-name (projectile-project-name))
+    (persp-mode))
+  :bind
+  (("<f7> r" . persp-rename)
+   ("s-<right>" . persp-next)
+   ("s-<left>" . persp-prev)))
 
 (use-package smart-tabs-mode
   :defer 3
@@ -706,7 +711,6 @@
     (rtags-diagnostics)
     (rtags-set-periodic-reparse-timeout 2)
     (rtags-enable-standard-keybindings))
-  :diminish rtags-mode
   :bind
   (("<f6> <f6>" . me:tags-find-symbol-at-point)
    ("<f6> d"    . me:tags-find-symbol)
@@ -720,6 +724,7 @@
 
 (use-package flycheck
   :commands flycheck-mode
+  :diminish ( flycheck-mode . "ⓒ")
   :init
   (progn
     (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
@@ -746,7 +751,7 @@
     (add-hook 'emacs-lisp-mode-hook #'hs-minor-mode)
     (add-hook 'sh-mode-hook         #'hs-minor-mode)
     (add-hook 'python-mode-hook     #'hs-minor-mode))
-  :diminish hs-minor-mode)
+  :diminish (hs-minor-mode . "ⓕ"))
 
 (use-package avy
   :commands ( avy-goto-word-1 avy-goto-char-2 avy-goto-char-in-line )
