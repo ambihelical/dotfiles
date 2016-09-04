@@ -114,19 +114,6 @@
                                     '(("\\<\\(FIXME\\|BUG\\|WARN\\|HACK\\):" 1 font-lock-warning-face t)
                                       ("\\<\\(TODO\\|TBD\\):" 1 font-lock-keyword-face t)))))
 
-;; Align with spaces only
-(defadvice align-regexp (around align-regexp-with-spaces)
-  "Never use tabs for alignment."
-  (let ((indent-tabs-mode nil))
-    ad-do-it))
-(ad-activate #'align-regexp)
-
-(defadvice align (around align-with-spaces)
-  "Never use tabs for alignment."
-  (let ((indent-tabs-mode nil))
-    ad-do-it))
-(ad-activate #'align)
-
 ;; elisp mode settings
 (add-hook 'emacs-lisp-mode-hook
           (lambda ()
