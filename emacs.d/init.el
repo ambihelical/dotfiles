@@ -388,6 +388,8 @@
       :defer 3
       :config
       (helm-descbinds-mode))
+    (use-package helm-unicode
+      :commands helm-unicode)
     (helm-autoresize-mode t)
     ;; swap tab/c-z as recommended by tuhdo
     (define-key helm-map (kbd "<tab>") #'helm-execute-persistent-action) ; rebind tab to do persistent action
@@ -409,6 +411,7 @@
    ("<f4> l"    . helm-locate)
    ("<f4> m"    . helm-man-woman)
    ("<f4> r"    . helm-recentf)
+   ("<f4> u"    . helm-unicode)
    ("<f4> x"    . helm-top)
    ("<f4> y"    . helm-show-kill-ring)
    ("<f4> <f4>" . helm-resume)))
