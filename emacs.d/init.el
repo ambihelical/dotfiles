@@ -59,13 +59,8 @@
 ;; rotate the current fill-column
 (defun me:rotate-fill-column ()
   (interactive)
-  (setq fill-column (cond ((= fill-column 70) 80)
-                          ((= fill-column 80) 90)
-                          ((= fill-column 90) 100)
-                          ((= fill-column 100) 110)
-                          ((= fill-column 110) 120)
-                          ((= fill-column 120) 70)
-                          (t 120)))
+  (setq fill-column (cond ((< fill-column 120) (+ fill-column 10))
+                          ((>= fill-column 120) 70)))
   (whitespace-mode -1)
   (whitespace-mode))
 
