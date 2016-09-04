@@ -13,12 +13,13 @@
   (package-refresh-contents))
 (when (not (package-installed-p 'use-package ))
   (package-install 'use-package))
+(setq use-package-always-ensure t
+      use-package-enable-imenu-support t
+      use-package-minimum-reported-time 0.03
+      use-package-verbose nil)
 (eval-when-compile
   (require 'use-package))
 (require 'bind-key)                ;; if you use any :bind variant
-(setq use-package-always-ensure t
-      use-package-minimum-reported-time 0.03
-      use-package-verbose nil)
 
 ;; set some personal variables
 (defconst me:data-directory (if (getenv "XDG_DATA_HOME") (getenv "XDG_DATA_HOME") "~/.local/share"))
