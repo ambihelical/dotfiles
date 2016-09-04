@@ -294,6 +294,9 @@
         recentf-max-menu-items 15
         recentf-auto-cleanup 300))           ; wait 5m before 1st cleanup
 
+(use-package undo-tree
+  :init (global-undo-tree-mode)
+  :diminish undo-tree-mode)
 
 (use-package dired
   :ensure nil
