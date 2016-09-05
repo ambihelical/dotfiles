@@ -275,7 +275,10 @@
         recentf-auto-cleanup 300))           ; wait 5m before 1st cleanup
 
 (use-package undo-tree
+  :demand
   :init (global-undo-tree-mode)
+  :bind
+  (("<f4> v" . undo-tree-visualize ))
   :diminish undo-tree-mode)
 
 (use-package dired
@@ -908,6 +911,7 @@
     (push '("*Completions*" :stick t :noselect t) popwin:special-display-config)
     (push '("*Help*" :stick t :noselect t) popwin:special-display-config)
     (push '(Man-mode :stick t :height 20) popwin:special-display-config)
+    (push '("*undo-tree*" :stick t :width 60 :position right) popwin:special-display-config)
     (popwin-mode 1))
   :defer 2)
 
