@@ -141,6 +141,7 @@
 (global-set-key (kbd "s-;") #'rtags-location-stack-forward)
 (global-set-key (kbd "s-,") #'rtags-location-stack-back)
 (global-set-key (kbd "s-`") #'previous-buffer)
+(global-set-key (kbd "<s-return>") 'yas-expand)
 (global-set-key (kbd "<s-tab>") #'next-buffer)
 (global-set-key (kbd "<f5> h") #'global-hl-line-mode)
 (global-set-key (kbd "<f5> m") #'menu-bar-mode)
@@ -694,6 +695,25 @@
    ("<f6> i"    . rtags-find-functions-called-by-this-function)
    ("<f6> m"    . helm-semantic-or-imenu)
    ))
+
+;; yas snippets
+(use-package yasnippet
+  :commands ( yas-expand yas-expand-snippet )
+  :init
+  (progn
+    (setq yas-fallback-behavior 'return-nil)          ; don't try old binding
+    (add-hook 'yas-before-expand-snippet-hook         ; evil-insert at each slot
+              #'(lambda()
+                    (let ((p (point)) (m (mark)))
+                      (evil-insert-state)
+                      (goto-char p)
+                      (set-mark m)))))
+  :config
+  (progn
+    (define-key yas-minor-mode-map (kbd "<tab>") nil) ; don't use <tab>
+    (define-key yas-minor-mode-map (kbd "TAB") nil)   ; don't use TAB
+    (yas-global-mode))
+  :diminish (yas-minor-mode . "Ⓨ"))
 
 (use-package flycheck
   :commands flycheck-mode
