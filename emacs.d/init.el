@@ -640,7 +640,7 @@
   :diminish helm-gtags-mode)
 
 (use-package rtags
-  :commands ( rtags-location-stack-back rtags-location-stack-forward )
+  :commands ( rtags-location-stack-back rtags-location-stack-forward rtags-create-doxygen-comment)
   :init
   (progn
     (defun me:flycheck-rtags-setup ()
@@ -693,8 +693,8 @@
    ("<f6> v"    . rtags-find-virtuals-at-point)
    ("<f6> c"    . rtags-rename-symbol)
    ("<f6> i"    . rtags-find-functions-called-by-this-function)
-   ("<f6> m"    . helm-semantic-or-imenu)
-   ))
+   ("<f6> <RET>" . rtags-create-doxygen-comment)
+   ("<f6> m"    . helm-semantic-or-imenu)))
 
 ;; yas snippets
 (use-package yasnippet
