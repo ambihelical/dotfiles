@@ -393,8 +393,8 @@
 
 (use-package projectile
   :commands ( projectile-compile-project projectile-switch-project )
-  :defer 2
   :diminish projectile-mode
+  :after evil
   :init
   (setq projectile-completion-system 'helm
         projectile-use-git-grep t
