@@ -7,16 +7,16 @@
 
 (setq package-archives '(("melpa" . "http://melpa.milkbox.net/packages/")
                          ("org"   . "http://orgmode.org/elpa/")
-                         ("gnu"   . "http://elpa.gnu.org/packages/")))
+                         ("gnu"   . "http://elpa.gnu.org/packages/"))
+      use-package-always-ensure t                              ; ensure by default
+      use-package-enable-imenu-support t                       ; support for packages in imenu
+      use-package-minimum-reported-time 0.03                   ; minimum time when verbose
+      use-package-verbose nil)                                 ; don't be verbose
 (package-initialize)
 (when (not package-archive-contents)
   (package-refresh-contents))
 (when (not (package-installed-p 'use-package ))
   (package-install 'use-package))
-(setq use-package-always-ensure t
-      use-package-enable-imenu-support t
-      use-package-minimum-reported-time 0.03
-      use-package-verbose nil)
 (eval-when-compile
   (require 'use-package))
 (require 'bind-key)                ;; if you use any :bind variant
@@ -177,9 +177,8 @@
   (smooth-scrolling-mode t)
   :defer 3
   :init
-  (progn
-    (setq smooth-scroll-margin 5
-          smooth-scroll-strict-margins t)))
+  (setq smooth-scroll-margin 5
+        smooth-scroll-strict-margins t))
 
 (use-package whitespace
   :commands whitespace-mode
@@ -208,11 +207,9 @@
 
 (use-package adaptive-wrap
   :init
-  (progn
-    (setq-default adaptive-wrap-extra-indent 3))
+  (setq-default adaptive-wrap-extra-indent 3)
   :config
-  (progn
-    (add-hook 'visual-line-mode-hook #'adaptive-wrap-prefix-mode))
+  (add-hook 'visual-line-mode-hook #'adaptive-wrap-prefix-mode)
   :defer 4)
 
 (use-package leuven-theme
@@ -226,16 +223,14 @@
 
 (use-package spaceline
   :init
-  (progn
-    (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state
-          spaceline-minor-modes-separator " "))
+  (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state
+        spaceline-minor-modes-separator " ")
   :config
   (progn
     (require 'spaceline-config)
     (use-package powerline
       :init
-      (progn
-        (setq powerline-default-separator 'wave)))
+      (setq powerline-default-separator 'wave))
     (spaceline-spacemacs-theme)))
 
 (use-package diff-hl
@@ -255,8 +250,7 @@
 (use-package linum-relative
   :diminish linum-relative-mode
   :init
-  (progn
-    (setq linum-relative-current-symbol ""))   ; show current line #
+  (setq linum-relative-current-symbol "")   ; show current line #
   :bind
   (("<f5> l" . linum-relative-mode)))
 
@@ -292,10 +286,9 @@
 (use-package dired
   :ensure nil
   :init
-  (progn
-    (setq dired-recursive-deletes 'always
-          dired-recursive-copies 'always
-          dired-dwim-target t))             ; use existing dired buffer, if exists
+  (setq dired-recursive-deletes 'always
+        dired-recursive-copies 'always
+        dired-dwim-target t)             ; use existing dired buffer, if exists
   :config
   (progn
     (use-package peep-dired
@@ -307,11 +300,10 @@
     (use-package dired+
       :defer 2
       :init
-      (progn
-        (setq font-lock-maximum-decoration (quote ((dired-mode . nil) (t . t))))   ; turn off barf colors
-        (setq diredp-hide-details-initially_flag t
-              diredp-image-preview-in-tooltip 400
-              diredp-auto-focus-frame-for-thumbnail-tooltip-flag t))))
+      (setq font-lock-maximum-decoration (quote ((dired-mode . nil) (t . t)))   ; turn off barf colors
+            diredp-hide-details-initially_flag t
+            diredp-image-preview-in-tooltip 400
+            diredp-auto-focus-frame-for-thumbnail-tooltip-flag t)))
   :bind
   (("<f4> d" . dired-jump))
   :defer t)
@@ -349,23 +341,22 @@
 (use-package helm
   :commands helm-semantic-or-imenu
   :init
-  (progn
-    (setq helm-split-window-in-side-p           t
-          helm-split-window-default-side        'other
-          helm-move-to-line-cycle-in-source     t
-          helm-input-idle-delay                 0.1
-          helm-candidate-number-limit           100
-          helm-scroll-amount                    8
-          helm-buffer-max-length                40           ; for displayed file names
-          helm-autoresize-max-height            33           ; 33% of frame (requires autoresize mode)
-          helm-autoresize-min-height            33           ; 33% of frame (requires autoresize mode)
-          helm-follow-mode-persistent           t            ; follow-mode persists across sessions
-          helm-ff-skip-boring-files             t            ; don't show boring files
-          ;; set the sources for helm-for-files
-          helm-for-files-preferred-list '( helm-source-recentf
-                                           helm-source-buffers-list
-                                           helm-source-files-in-current-dir
-                                           helm-source-locate )))
+  (setq helm-split-window-in-side-p           t
+        helm-split-window-default-side        'other
+        helm-move-to-line-cycle-in-source     t
+        helm-input-idle-delay                 0.1
+        helm-candidate-number-limit           100
+        helm-scroll-amount                    8
+        helm-buffer-max-length                40           ; for displayed file names
+        helm-autoresize-max-height            33           ; 33% of frame (requires autoresize mode)
+        helm-autoresize-min-height            33           ; 33% of frame (requires autoresize mode)
+        helm-follow-mode-persistent           t            ; follow-mode persists across sessions
+        helm-ff-skip-boring-files             t            ; don't show boring files
+        ;; set the sources for helm-for-files
+        helm-for-files-preferred-list '( helm-source-recentf
+                                         helm-source-buffers-list
+                                         helm-source-files-in-current-dir
+                                         helm-source-locate ))
   :config
   (progn
     (use-package helm-descbinds             ; Describe key bindings with Helm
@@ -405,11 +396,10 @@
   :defer 2
   :diminish projectile-mode
   :init
-  (progn
-    (setq projectile-completion-system 'helm
-          projectile-use-git-grep t
-          projectile-mode-line '(:eval (format " [%s]" (projectile-project-name)))
-          projectile-enable-caching nil))
+  (setq projectile-completion-system 'helm
+        projectile-use-git-grep t
+        projectile-mode-line '(:eval (format " [%s]" (projectile-project-name)))
+        projectile-enable-caching nil)
   :config
   (progn
     (use-package helm-projectile
@@ -509,14 +499,13 @@
 
 (use-package python-mode
   :init
-  (progn
-    (add-hook 'python-mode-hook
-      (lambda ()
-        (semantic-mode t)
-        (setq evil-shift-width 4)
-        (setq python-indent-offset 4)
-        (setq python-indent-guess-indent-offset t)
-        (setq tab-width 4))))
+  (add-hook 'python-mode-hook
+            (lambda ()
+              (semantic-mode t)
+              (setq evil-shift-width 4)
+              (setq python-indent-offset 4)
+              (setq python-indent-guess-indent-offset t)
+              (setq tab-width 4)))
   :mode
   (("\\.py\\'" . python-mode)
    ("\\.py3\\'" . python-mode)))
@@ -569,8 +558,8 @@
     (setq compilation-scroll-output t
           compilation-auto-jump-to-first-error t
           compilation-skip-threshold 2
-          compilation-ask-about-save nil)    ; save all modified
-    (setq compilation-finish-functions
+          compilation-ask-about-save nil    ; save all modified
+          compilation-finish-functions
           (lambda (buf str)
             (compilation-set-skip-threshold 1)
             (if (null (string-match ".*exited abnormally.*" str))
@@ -579,7 +568,7 @@
                 (progn
                   (run-at-time "2 sec" nil 'delete-windows-on (get-buffer-create "*compilation*"))
                   (message "No Compilation Errors!"))
-                (delete-other-windows (get-buffer-window "*compilation*")))))
+              (delete-other-windows (get-buffer-window "*compilation*")))))
     (add-hook 'compilation-start-hook
               (lambda (proc) (compilation-set-skip-threshold 2)))
     (add-hook 'compilation-mode-hook
@@ -621,8 +610,7 @@
 (use-package company
   :commands ( global-company-mode company-complete )
   :init
-  (progn
-    (setq company-minimum-prefix-length 1))
+  (setq company-minimum-prefix-length 1)
   :bind
   ("s-d"   . company-complete)
   :config
@@ -750,13 +738,12 @@
   :defer 1
   :init
   (progn
+    (setq-default evil-symbol-word-search t   ; misnamed: t is search for symbols, not words
+                  evil-shift-width 3)         ; shift by ideal width :)
     (setq evil-want-C-w-delete nil            ; want C-w it for windows commands
           evil-want-C-w-in-emacs-state t      ; ditto
-          evil-want-C-i-jump nil)             ; need TAB for other things
-    (setq-default evil-symbol-word-search t
-                  evil-shift-width 3)
-    (setq evil-search-module #'evil-search
-          evil-want-C-i-jump nil))
+          evil-want-C-i-jump nil              ; need TAB for other things
+          evil-search-module #'evil-search))
   :config
   (progn
     (defun me:use-evil-selection-register ()
@@ -856,25 +843,23 @@
 
 (use-package ws-butler
   :config
-  (progn
-    (ws-butler-global-mode t))
+  (ws-butler-global-mode t)
   :diminish ws-butler-mode
   :defer 3)
 
 (use-package shell-pop
   :init
-  (progn
-    (setq shell-pop-internal-mode "ansi-term"
-          shell-pop-term-shell "/bin/bash"
-          shell-pop-window-size 40
-          shell-pop-window-position "top"
-          shell-pop-universal-key "<f4> t"))
+  (setq shell-pop-internal-mode "ansi-term"
+        shell-pop-term-shell "/bin/bash"
+        shell-pop-window-size 40
+        shell-pop-window-position "top"
+        shell-pop-universal-key "<f4> t")
   :bind
   ("<f4> t" . shell-pop))
 
 (use-package which-key
   :init
-    (setq which-key-max-description-length nil)
+  (setq which-key-max-description-length nil)
   :config
   (progn
     (which-key-mode)
@@ -884,8 +869,7 @@
 
 (use-package magit
   :init
-  (progn
-    (add-hook 'with-editor-mode-hook (lambda () (setq fill-column 70))))
+  (add-hook 'with-editor-mode-hook (lambda () (setq fill-column 70)))
   :config
   (progn
     (use-package evil-magit
