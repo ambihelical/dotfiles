@@ -221,13 +221,13 @@
   :config
   (set-face-attribute 'hl-line nil :foreground 'unspecified :background "gainsboro"))
 
-(use-package spaceline
+(use-package spaceline-config
+  :ensure spaceline
   :init
   (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state
         spaceline-minor-modes-separator " ")
   :config
   (progn
-    (require 'spaceline-config)
     (use-package powerline
       :init
       (setq powerline-default-separator 'wave))
