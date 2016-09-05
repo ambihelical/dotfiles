@@ -64,11 +64,6 @@
   (whitespace-mode -1)
   (whitespace-mode))
 
-;; switch to the compile buffer
-(defun me:switch-to-compile-buffer ()
-  (interactive)
-  (switch-to-buffer "*compilation*"))
-
 ;; configuration I haven't figured out how to wedge into
 ;; use-package
 
@@ -765,6 +760,9 @@
     (defun me:switch-to-previous-buffer ()
       (interactive)
       (switch-to-buffer (other-buffer (current-buffer) 1)))
+    (defun me:switch-to-compile-buffer ()
+      (interactive)
+      (switch-to-buffer "*compilation*"))
 
     (use-package evil-args
       :defer 3)
