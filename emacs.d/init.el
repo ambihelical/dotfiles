@@ -395,12 +395,15 @@
   :diminish projectile-mode
   :after evil
   :init
-  (setq projectile-completion-system 'helm
-        projectile-use-git-grep t
-        projectile-mode-line '(:eval (format " [%s]" (projectile-project-name)))
-        projectile-enable-caching nil)
+  (progn
+    (setq projectile-completion-system 'helm
+          projectile-use-git-grep t
+          projectile-project-root-files-functions #'( projectile-root-local projectile-root-top-down projectile-root-bottom-up projectile-project-root-files-top-down-recurring)
+          projectile-mode-line '(:eval (format " [%s]" (projectile-project-name)))
+          projectile-enable-caching nil))
   :config
   (progn
+    (push "compile_commands.json" projectile-project-root-files)
     (use-package helm-projectile
       :config
       (progn
