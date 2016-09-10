@@ -9,6 +9,7 @@
                          ("org"   . "http://orgmode.org/elpa/")
                          ("gnu"   . "http://elpa.gnu.org/packages/"))
       use-package-always-ensure t                              ; ensure by default
+      use-package-always-defer t                               ; defer by default
       use-package-enable-imenu-support t                       ; support for packages in imenu
       use-package-minimum-reported-time 0.03                   ; minimum time when verbose
       use-package-verbose nil)                                 ; don't be verbose
@@ -64,8 +65,10 @@
   (whitespace-mode -1)
   (whitespace-mode))
 
+
 ;; configuration I haven't figured out how to wedge into
 ;; use-package
+
 
 (setq-default tab-width 3                                   ; ideal tab width
               indent-tabs-mode t                            ; enable tabs for most files
@@ -126,27 +129,126 @@
 (winner-mode t)                                             ; enable winner mode
 (run-at-time "1 hour" 3600 #'clean-buffer-list)             ; clear out old buffers every hour
 
+(global-unset-key (kbd "<f3>"))
 (global-unset-key (kbd "<f4>"))
 (global-unset-key (kbd "<f10>"))                            ; was menu-bar-open
 (global-unset-key (kbd "<f11>"))                            ; was fullscreen mode
-(global-set-key (kbd "s-1") #'helm-projectile-find-other-file)
-(global-set-key (kbd "s-#") 'me:select-nth-other-buffer)    ; base mapping for the following...
-(global-set-key (kbd "s-2") (kbd "C-u 1 s-#"))
-(global-set-key (kbd "s-3") (kbd "C-u 2 s-#"))
-(global-set-key (kbd "s-4") (kbd "C-u 3 s-#"))
-(global-set-key (kbd "s-5") (kbd "C-u 4 s-#"))
-(global-set-key (kbd "s-c") #'me:rotate-fill-column)
-(global-set-key (kbd "s-]") #'winner-redo)
-(global-set-key (kbd "s-[") #'winner-undo)
-(global-set-key (kbd "s-;") #'rtags-location-stack-forward)
-(global-set-key (kbd "s-,") #'rtags-location-stack-back)
-(global-set-key (kbd "s-`") #'previous-buffer)
-(global-set-key (kbd "<s-return>") 'yas-expand)
-(global-set-key (kbd "<s-tab>") #'next-buffer)
-(global-set-key (kbd "<f5> h") #'global-hl-line-mode)
-(global-set-key (kbd "<f5> m") #'menu-bar-mode)
-(global-set-key (kbd "<f5> <f5>") #'menu-bar-open)
-(global-set-key (kbd "<f5> f") #'toggle-frame-fullscreen)
+
+
+;; keymappings
+(use-package general
+  :config
+  (general-evil-setup t)
+  ;; Top level keymaps
+  (general-define-key
+    "<f2>"       #'helm-mini
+    "<f3>"       #'helm-for-files
+    "C-x b"      #'helm-mini
+    "C-h b"      #'helm-descbinds
+    "M-x"        #'helm-M-x
+    "s-1"        #'helm-projectile-find-other-file
+    "s-#"        #'me:select-nth-other-buffer    ; base mapping for the following . ..
+    "s-2"        (kbd "C-u 1 s-#")
+    "s-3"        (kbd "C-u 2 s-#")
+    "s-4"        (kbd "C-u 3 s-#")
+    "s-5"        (kbd "C-u 4 s-#")
+    "s-c"        #'me:rotate-fill-column
+    "s-d"        #'company-complete
+    "s-f"        #'flyspell-auto-correct-previous-word
+    "s-s"        #'helm-flyspell-correct
+    "s-]"        #'winner-redo
+    "s-["        #'winner-undo
+    "s-;"        #'rtags-location-stack-forward
+    "s-,"        #'rtags-location-stack-back
+    "s-`"        #'previous-buffer
+    "s-<right>"  #'persp-next
+    "s-<left>"   #'persp-prev
+    "<s-return>" #'yas-expand
+    "<s-tab>"    #'next-buffer)
+
+  (general-define-key
+   :states '(normal visual emacs)
+   :prefix "<SPC>"
+    "<SPC>"      #'me:switch-to-previous-buffer
+    ";"          #'evil-jump-forward
+    ","          #'evil-jump-backward
+    "a"          #'align
+    "c"          #'me:use-evil-clipboard-register
+    "e"          #'pp-eval-last-sexp
+    "f"          #'evil-avy-goto-word-1
+    "g"          #'evil-avy-goto-char-2
+    "l"          #'evil-avy-goto-char-in-line
+    "m"          #'projectile-compile-project
+    "o"          #'me:switch-to-compile-buffer
+    "r"          #'recompile
+    "s"          #'me:use-evil-selection-register
+    "v"          #'exchange-point-and-mark
+    "w"          #'save-buffer
+    "x"          #'kill-buffer)
+
+  ;; F4
+  (general-define-key
+   :states '(normal visual insert emacs)
+   :prefix "<f4>"
+    "a"     #'helm-apropos
+    "b"     #'helm-all-mark-rings
+    "d"     #'dired-jump
+    "f"     #'helm-grep-do-git-grep
+    "i"     #'helm-info-at-point
+    "j"     #'helm-bookmarks
+    "k"     #'helm-descbinds
+    "l"     #'helm-locate
+    "n"     #'deft
+    "m"     #'helm-man-woman
+    "p"     #'paradox-list-packages
+    "r"     #'helm-recentf
+    "t"     #'shell-pop
+    "u"     #'helm-unicode
+    "v"     #'undo-tree-visualize
+    "x"     #'helm-top
+    "y"     #'helm-show-kill-ring
+    "<f4>"  #'helm-resume)
+
+  ;; F5
+  (general-define-key
+   :states '(normal visual insert emacs)
+   :prefix "<f5>"
+    "f"      #'toggle-frame-fullscreen
+    "h"      #'global-hl-line-mode
+    "l"      #'linum-relative-mode
+    "m"      #'menu-bar-mode
+    "r"      #'ruler-mode
+    "<f5>"   #'menu-bar-open)
+
+  ;; F6
+  (general-define-key
+   :states '(normal visual insert emacs)
+   :prefix "<f6>"
+    "d"     #'me:tags-find-symbol
+    "r"     #'me:tags-find-references-at-point
+    "f"     #'me:tags-find-file
+    "v"     #'rtags-find-virtuals-at-point
+    "c"     #'rtags-rename-symbol
+    "i"     #'rtags-find-functions-called-by-this-function
+    "<RET>"  #'rtags-create-doxygen-comment
+    "m"     #'helm-semantic-or-imenu
+    "<f6>"  #'me:tags-find-symbol-at-point)
+
+  ;; F7
+  (general-define-key
+   :states '(normal visual insert emacs)
+   :prefix "<f7>"
+    "a"     #'magit-run-git-gui-blame
+    "b"     #'magit-blame
+    "c"     #'projectile-compile-project
+    "f"     #'helm-projectile-ag
+    "g"     #'magit-status
+    "k"     #'projectile-kill-buffers
+    "o"     #'projectile-multi-occur
+    "r"     #'persp-rename
+    "u"     #'projectile-invalidate-cache
+    "<f7>"  #'projectile-persp-switch-project)
+  :demand)
 
 ;; elisp mode settings
 (add-hook 'emacs-lisp-mode-hook
@@ -209,6 +311,7 @@
   :defer 4)
 
 (use-package leuven-theme
+  :demand
   :init
   (add-hook 'whitespace-mode-hook (lambda ()
     (set-face-attribute 'whitespace-line nil :foreground 'unspecified :background "lemon chiffon")
@@ -219,16 +322,29 @@
 
 (use-package spaceline-config
   :ensure spaceline
+  :defer 2
   :init
   (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state
         spaceline-minor-modes-separator " ")
   :config
   (progn
     (use-package powerline
+      :demand
       :init
       (setq powerline-default-separator 'wave))
-    (spaceline-spacemacs-theme)))
+    (spaceline-spacemacs-theme)
+    ;; Remove existing buffer local mode line format so that it uses the
+    ;; global one, and then force it to update.
+    (mapc (lambda (buffer)
+            (if (or (buffer-file-name buffer)
+                    (not (equal (substring (buffer-name buffer) 0 1) " ")))
+                (with-current-buffer buffer
+                  (message "Updating %s" buffer);
+                  (kill-local-variable 'mode-line-format)
+                  (force-mode-line-update t))))
+        (buffer-list))))
 
+;; show change indicators in fringe
 (use-package diff-hl
   :init
   (progn
@@ -246,13 +362,9 @@
 (use-package linum-relative
   :diminish linum-relative-mode
   :init
-  (setq linum-relative-current-symbol "")   ; show current line #
-  :bind
-  (("<f5> l" . linum-relative-mode)))
+  (setq linum-relative-current-symbol ""))   ; show current line #
 
-(use-package ruler-mode
-  :bind
-  (("<f5> r" . ruler-mode)))
+(use-package ruler-mode)
 
 ;; better package manager
 (use-package paradox
@@ -264,9 +376,7 @@
         paradox-display-star-count t
         paradox-github-token t                ; Dont't ask, don't integrate
         paradox-automatically-star nil        ; Don't star automatically
-        paradox-hide-wiki-packages t)
-  :bind
-  (("<f4> p" . paradox-list-packages)))
+        paradox-hide-wiki-packages t))
 
 (use-package recentf
   :config (recentf-mode)
@@ -276,14 +386,11 @@
         recentf-auto-cleanup 300))           ; wait 5m before 1st cleanup
 
 (use-package undo-tree
-  :demand
-  :init (global-undo-tree-mode)
-  :bind
-  (("<f4> v" . undo-tree-visualize ))
+  :config
+  (global-undo-tree-mode)
   :diminish undo-tree-mode)
 
 (use-package dired
-  :ensure nil
   :init
   (setq dired-recursive-deletes 'always
         dired-recursive-copies 'always
@@ -303,12 +410,10 @@
             diredp-hide-details-initially_flag t
             diredp-image-preview-in-tooltip 400
             diredp-auto-focus-frame-for-thumbnail-tooltip-flag t)))
-  :bind
-  (("<f4> d" . dired-jump))
-  :defer t)
+  :ensure nil)
 
 (use-package flyspell
-  :commands ( flyspell-prog-mode flyspell-mode )
+  :commands ( flyspell-prog-mode flyspell-mode flyspell-auto-correct-previous-word)
   :init
   (progn
     (add-hook 'prog-mode-hook #'flyspell-prog-mode)
@@ -329,16 +434,12 @@
         (setq ispell-program-name "aspell")
         ;; Please note ispell-extra-args contains ACTUAL parameters passed to aspell
         (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US")))))
-  :bind
-  (("s-f" . flyspell-auto-correct-previous-word))
   :diminish (flyspell-mode . "Ⓢ"))
 
-  (use-package helm-flyspell
-    :bind
-    (("s-s" . helm-flyspell-correct)))
+(use-package helm-flyspell)
 
 (use-package helm
-  :commands helm-semantic-or-imenu
+  :commands ( helm-semantic-or-imenu helm-for-files helm-M-x helm-mini)
   :init
   (setq helm-split-window-in-side-p           t
         helm-split-window-default-side        'other
@@ -358,37 +459,16 @@
                                          helm-source-locate ))
   :config
   (progn
-    (use-package helm-descbinds             ; Describe key bindings with Helm
-      :defer 3
-      :config
-      (helm-descbinds-mode))
-    (use-package helm-unicode
-      :commands helm-unicode)
+    ;; Describe key bindings with Helm. NOTE: this defines an alias for describe-bindings (C-h b),
+    ;; but this won't autoload this extension, so C-h b binding is defined as well
+    (use-package helm-descbinds :commands (helm-descbinds) :config (helm-descbinds-mode))
+    (use-package helm-unicode :commands helm-unicode)
     (helm-autoresize-mode t)
     ;; swap tab/c-z as recommended by tuhdo
     (define-key helm-map (kbd "<tab>") #'helm-execute-persistent-action) ; rebind tab to do persistent action
     (define-key helm-map (kbd "C-i") #'helm-execute-persistent-action) ; make TAB works in terminal
     (define-key helm-map (kbd "C-z")  #'helm-select-action) ; list actions using C-z
-    (define-key helm-map [escape] #'helm-keyboard-quit))
-
-  :bind
-  (("M-x"       . helm-M-x)
-   ("C-x b"     . helm-mini)
-   ("<f2>"      . helm-mini)
-   ("<f3>"      . helm-for-files)
-   ("<f4> a"    . helm-apropos)
-   ("<f4> b"    . helm-all-mark-rings)
-   ("<f4> f"    . helm-grep-do-git-grep)
-   ("<f4> i"    . helm-info-at-point)
-   ("<f4> j"    . helm-bookmarks)
-   ("<f4> k"    . helm-descbinds)
-   ("<f4> l"    . helm-locate)
-   ("<f4> m"    . helm-man-woman)
-   ("<f4> r"    . helm-recentf)
-   ("<f4> u"    . helm-unicode)
-   ("<f4> x"    . helm-top)
-   ("<f4> y"    . helm-show-kill-ring)
-   ("<f4> <f4>" . helm-resume)))
+    (define-key helm-map [escape] #'helm-keyboard-quit)))
 
 (use-package projectile
   :commands ( projectile-compile-project projectile-switch-project )
@@ -405,11 +485,13 @@
   (progn
     (push "compile_commands.json" projectile-project-root-files)
     (use-package helm-projectile
+      :commands helm-for-files
+      :demand
       :config
       (progn
         (helm-projectile-on)
         (setq projectile-switch-project-action 'helm-for-files)))
-    (use-package persp-projectile)
+    (use-package persp-projectile :demand)
     (use-package ag)
     (use-package helm-ag)
     (use-package grep)
@@ -420,28 +502,21 @@
                                            helm-source-projectile-projects
                                            helm-source-files-in-current-dir
                                            helm-source-locate))
-    (projectile-global-mode 1))
-  :bind
-  (("<f7> c"    . projectile-compile-project)
-   ("<f7> <f7>" . projectile-persp-switch-project)
-   ("<f7> o"    . projectile-multi-occur)
-   ("<f7> u"    . projectile-invalidate-cache)
-   ("<f7> k"    . projectile-kill-buffers)
-   ("<f7> f"    . helm-projectile-ag)))
+    (projectile-global-mode 1)))
 
 (use-package perspective
   :after projectile
   :config
   (progn
     (setq persp-initial-frame-name (projectile-project-name))
-    (persp-mode))
-  :bind
-  (("<f7> r" . persp-rename)
-   ("s-<right>" . persp-next)
-   ("s-<left>" . persp-prev)))
+    (persp-mode)))
 
 (use-package smart-tabs-mode
-  :defer 3
+  :commands (smart-tabs-mode)
+  :init
+  (progn
+    (add-hook 'c-mode-common-hook 'smart-tabs-mode)
+    (add-hook 'python-mode-hook 'smart-tabs-mode))
   :config
   (progn
     (smart-tabs-insinuate 'python)
@@ -605,16 +680,12 @@
               (lambda ()
                 (define-key deft-mode-map (kbd "<f4> n") #'quit-window)
                 (define-key deft-mode-map (kbd "<C-return>") #'deft-new-file)
-                (define-key deft-mode-map (kbd "<C-backspace>") #'deft-filter-clear))))
-  :bind
-  ("<f4> n" . deft))
+                (define-key deft-mode-map (kbd "<C-backspace>") #'deft-filter-clear)))))
 
 (use-package company
   :commands ( global-company-mode company-complete )
   :init
   (setq company-minimum-prefix-length 1)
-  :bind
-  ("s-d"   . company-complete)
   :config
   (progn
     (use-package company-quickhelp
@@ -687,17 +758,7 @@
   (progn
     (rtags-diagnostics)
     (rtags-set-periodic-reparse-timeout 2)
-    (rtags-enable-standard-keybindings))
-  :bind
-  (("<f6> <f6>" . me:tags-find-symbol-at-point)
-   ("<f6> d"    . me:tags-find-symbol)
-   ("<f6> r"    . me:tags-find-references-at-point)
-   ("<f6> f"    . me:tags-find-file)
-   ("<f6> v"    . rtags-find-virtuals-at-point)
-   ("<f6> c"    . rtags-rename-symbol)
-   ("<f6> i"    . rtags-find-functions-called-by-this-function)
-   ("<f6> <RET>" . rtags-create-doxygen-comment)
-   ("<f6> m"    . helm-semantic-or-imenu)))
+    (rtags-enable-standard-keybindings)))
 
 ;; yas snippets
 (use-package yasnippet
@@ -791,42 +852,20 @@
       (switch-to-buffer "*compilation*"))
 
     (use-package evil-args
-      :defer 3)
+      :commands (evil-inner-arg evil-outer-arg)
+      :config (message "evil-args loaded"))
     (use-package evil-textobj-anyblock
-      :defer 3)
+      :commands (evil-textobj-anyblock-inner-block evil-textobj-anyblock-a-block)
+      :config (message "evil-textobj-anyblock loaded"))
     (use-package evil-commentary
-      :defer 3
-      :config (evil-commentary-mode)
+      :commands (evil-commentary evil-commentary-yank)
+      :config
+      (evil-commentary-mode)
+      (message "evil-commentary loaded")
       :diminish evil-commentary-mode)
     (use-package evil-surround
-      :defer 3
+      :commands (evil-surround-edit evil-Surround-edit evil-surround-region evil-Surround-region)
       :config (global-evil-surround-mode 1))
-    (use-package evil-leader
-      :init
-      (progn
-        (setq evil-leader/in-all-states 1))
-      :config
-      (progn
-        (global-evil-leader-mode t)
-        (evil-leader/set-leader "<SPC>")
-        (evil-leader/set-key
-          "<SPC>" #'me:switch-to-previous-buffer
-          ";" #'evil-jump-forward
-          "," #'evil-jump-backward
-          "a" #'align
-          "c" #'me:use-evil-clipboard-register
-          "e" #'pp-eval-last-sexp
-          "f" #'evil-avy-goto-word-1
-          "g" #'evil-avy-goto-char-2
-          "l" #'evil-avy-goto-char-in-line
-          "m" #'projectile-compile-project
-          "o" #'me:switch-to-compile-buffer
-          "r" #'recompile
-          "s" #'me:use-evil-selection-register
-          "v" #'exchange-point-and-mark
-          "w" #'save-buffer
-          "x" #'kill-buffer)))
-
     (evil-set-initial-state 'git-rebase-mode 'emacs)
     (evil-set-initial-state 'deft-mode 'insert)
     (evil-set-initial-state 'magit-branch-manager-mode 'emacs)
@@ -843,11 +882,19 @@
     (add-hook 'with-editor-mode-hook #'evil-insert-state)
     (add-hook 'magit-log-mode-hook #'evil-emacs-state)
     (add-hook 'magit-revision-mode-hook #'evil-emacs-state)
-    ;;
+
+    ;; extension key maps, mainly to autoload them
     (define-key evil-inner-text-objects-map "a" #'evil-inner-arg)
     (define-key evil-outer-text-objects-map "a" #'evil-outer-arg)
     (define-key evil-inner-text-objects-map "b" #'evil-textobj-anyblock-inner-block)
     (define-key evil-outer-text-objects-map "b" #'evil-textobj-anyblock-a-block)
+    (define-key evil-normal-state-map "gc" #'evil-commentary)
+    (define-key evil-normal-state-map "gy" #'evil-commentary-yank)
+    (define-key evil-operator-state-map "s" 'evil-surround-edit)
+    (define-key evil-operator-state-map "S" 'evil-Surround-edit)
+    (define-key evil-visual-state-map "S" 'evil-surround-region)
+    (define-key evil-visual-state-map "gS" 'evil-Surround-region)
+
     (define-key evil-normal-state-map (kbd "j") #'evil-next-visual-line)
     (define-key evil-normal-state-map (kbd "k") #'evil-previous-visual-line)
     ; esc key (from WikEmacs)
@@ -877,9 +924,7 @@
         shell-pop-term-shell "/bin/bash"
         shell-pop-window-size 40
         shell-pop-window-position "top"
-        shell-pop-universal-key "<f4> t")
-  :bind
-  ("<f4> t" . shell-pop))
+        shell-pop-universal-key "<f4> t"))
 
 (use-package which-key
   :init
@@ -898,11 +943,7 @@
   (progn
     (use-package evil-magit
       :init
-      (setq evil-magit-state 'normal)))
-  :bind
-  (("<f7> g" . magit-status)
-   ("<f7> b" . magit-blame)
-   ("<f7> a" . magit-run-git-gui-blame)))
+      (setq evil-magit-state 'normal))))
 
 ;; N.B. disabling this because once neotree is popped up once, tab completion in mini-buffer
 ;; is screwed up.
@@ -942,9 +983,9 @@
 ;; will be in emacs.d/init-<prefix>-<ident>.el
 (defun me:load-init-file (prefix ident)
   (let ((file-name (expand-file-name (concat "init-" prefix "-" (me:replace-all ident "/" "-") ".el") user-emacs-directory)))
-  (message "looking for %s" file-name)
+  ;; (message "looking for %s" file-name)
   (when (file-exists-p file-name)
-    (message "loading %s" file-name)
+    ;; (message "loading %s" file-name)
     (load-file file-name))))
 
 (me:load-init-file "system" (symbol-name system-type))

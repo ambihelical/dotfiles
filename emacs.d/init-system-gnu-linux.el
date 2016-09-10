@@ -1,2 +1,2 @@
 ;; Initialization for gnu/linux systems
-(message "gnu/linux initialization")
+;; (message "gnu/linux initialization")

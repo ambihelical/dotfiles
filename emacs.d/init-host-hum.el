@@ -1,2 +1,2 @@
 ;; Initialization for hum host
-(message "hum initialization")
+;; (message "hum initialization")
