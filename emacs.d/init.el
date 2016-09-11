@@ -111,6 +111,7 @@
       kill-do-not-save-duplicates t                         ; No duplicates in kill ring
       save-interprogram-paste-before-kill t                 ; save clipboard before killing
       x-select-enable-clipboard nil                         ; make cut/paste function correctly
+      x-gtk-use-system-tooltips nil                         ; allow tooltip theming
       split-width-threshold 240                             ; 2x ideal line width :)
       visual-line-fringe-indicators '(left-curly-arrow nil) ; use left curly error for wrapped lines
       text-scale-mode-step 1.05                             ; text size increases by 5% (normally 20%)
@@ -708,6 +709,7 @@
   :config
   (progn
     (use-package company-quickhelp
+      :demand
       :config
       (company-quickhelp-mode 1))
     (global-company-mode))
@@ -808,6 +810,7 @@
   :config
   (progn
     (use-package flycheck-pos-tip
+      :demand
       :init
       (progn
         (setq flycheck-pos-tip-timeout 3))
