@@ -263,14 +263,17 @@
     "<f7>"  #'projectile-persp-switch-project)
   :demand)
 
-;; elisp mode settings
-(add-hook 'emacs-lisp-mode-hook
-          (lambda ()
-            (setq tab-width 2
-                  standard-indent 2
-                  indent-tabs-mode nil                      ; no tabs
-                  evil-shift-width 2                        ; need this since no tabs
-                  lisp-body-indent 2)))                     ; indent elisp by 2
+(use-package emacs-lisp-mode
+  :ensure nil
+  :init
+  (add-hook 'emacs-lisp-mode-hook
+            (lambda ()
+              (setq tab-width 2                               ; tab inserts 2 spaces
+                    standard-indent 2                         ; indent by 2
+                    indent-tabs-mode nil                      ; no tabs
+                    evil-shift-width 2                        ; need this since no tabs
+                    lisp-body-indent 2)))                     ; indent elisp by 2
+  :interpreter (("emacs" . emacs-lisp-mode)))
 
 (use-package diminish
   :init
