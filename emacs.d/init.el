@@ -65,6 +65,19 @@
   (whitespace-mode -1)
   (whitespace-mode))
 
+(defconst me:powerline-separators #'( alternate arrow arrow-fade bar box brace butt chamfer contour curve rounded roundstub wave zigzag utf-8))
+(defvar me:current-powerline-separator-index 12)               ; current powerline separator index
+
+;; rotate the powerline seperator style
+(defun me:next-powerline-separator ()
+  (interactive)
+  (if (not me:current-powerline-separator-index)
+      (setq me:current-powerline-separator-index 0))
+  (setq me:current-powerline-separator-index (% (+ me:current-powerline-separator-index 1) (length me:powerline-separators)))
+  (setq powerline-default-separator (nth me:current-powerline-separator-index me:powerline-separators))
+  (message "%s" powerline-default-separator)
+  (spaceline-compile))
+
 
 ;; configuration I haven't figured out how to wedge into
 ;; use-package
@@ -162,6 +175,7 @@
     "s-;"        #'rtags-location-stack-forward
     "s-,"        #'rtags-location-stack-back
     "s-`"        #'previous-buffer
+    "s-\\"       #'me:next-powerline-separator
     "s-<right>"  #'persp-next
     "s-<left>"   #'persp-prev
     "<s-return>" #'yas-expand
@@ -323,6 +337,7 @@
   :config
   (set-face-attribute 'hl-line nil :foreground 'unspecified :background "gainsboro"))
 
+
 (use-package spaceline-config
   :ensure spaceline
   :defer 2
@@ -410,7 +425,7 @@
       :defer 2
       :init
       (setq font-lock-maximum-decoration (quote ((dired-mode . nil) (t . t)))   ; turn off barf colors
-            diredp-hide-details-initially_flag t
+            diredp-hide-details-initially-flag t
             diredp-image-preview-in-tooltip 400
             diredp-auto-focus-frame-for-thumbnail-tooltip-flag t)))
   :ensure nil)
@@ -546,6 +561,7 @@
 ;; n.b. buffer-face-mode screws up completion popups
 ;; may be fixed in 25.1 or so
 (use-package adoc-mode
+  :defines (company-dabbrev-downcase company-dabbrev-ignore-case)
   :init
   (progn
     (defun me:adoc-mode-flyspell-verify ()
@@ -578,6 +594,7 @@
    ("\\.asciidoc\\'" . adoc-mode)))
 
 (use-package python-mode
+  :defines ( python-indent-offset python-indent-guess-indent-offset )
   :init
   (add-hook 'python-mode-hook
             (lambda ()
