@@ -124,11 +124,6 @@
           (lambda ()
             (message "Time to initialize: %s"
                      (emacs-init-time))))
-(add-hook #'prog-mode-hook                                  ; keyword highlighting
-          (lambda ()
-            (font-lock-add-keywords nil
-                                    '(("\\<\\(FIXME\\|BUG\\|WARN\\|HACK\\):" 1 font-lock-warning-face t)
-                                      ("\\<\\(TODO\\|TBD\\):" 1 font-lock-keyword-face t)))))
 (set-frame-font "Fantasque Sans Mono 12" t t)               ; nice font
 (tool-bar-mode 0)                                           ; no tool bar
 (scroll-bar-mode 0)                                         ; no scroll bar
@@ -242,14 +237,15 @@
   (general-define-key
    :states '(normal visual insert emacs)
    :prefix "<f6>"
-    "d"     #'me:tags-find-symbol
-    "r"     #'me:tags-find-references-at-point
-    "f"     #'me:tags-find-file
-    "v"     #'rtags-find-virtuals-at-point
     "c"     #'rtags-rename-symbol
+    "d"     #'me:tags-find-symbol
+    "f"     #'me:tags-find-file
     "i"     #'rtags-find-functions-called-by-this-function
-    "<RET>"  #'rtags-create-doxygen-comment
     "m"     #'helm-semantic-or-imenu
+    "r"     #'me:tags-find-references-at-point
+    "t"     #'hl-todo-occur
+    "v"     #'rtags-find-virtuals-at-point
+    "<RET>"  #'rtags-create-doxygen-comment
     "<f6>"  #'me:tags-find-symbol-at-point)
 
   ;; F7
@@ -376,6 +372,20 @@
     (diff-hl-flydiff-mode 1)       ; needs 24.4 or newer
     (global-diff-hl-mode 1))
   :defer 4)
+
+;; highlight keywords
+(use-package hl-todo
+  :commands ( hl-todo-mode hl-todo-occur )
+  :init
+  (add-hook #'prog-mode-hook 'hl-todo-mode)
+  ;; override the package's keywords with my own:
+  (setq hl-todo-keyword-faces
+        '(("TODO:"   . "red")
+          ("BUG:"    . "red")
+          ("NOTE:"   . "blue")
+          ("HACK:"   . "blue")
+          ("TRICKY:" . "blue")
+          ("FIXME:"  . "red"))))
 
 (use-package linum-relative
   :diminish linum-relative-mode
