@@ -85,6 +85,7 @@
 
 (setq-default tab-width 3                                   ; ideal tab width
               indent-tabs-mode t                            ; enable tabs for most files
+              indicate-empty-lines t                        ; show empty lines at end of buffer
               fill-column 120)                              ; auto-wrap only very long lines
 (setq backup-directory-alist
          `((".*" . ,me:emacs-backup-directory))             ; use my backup directory
@@ -111,7 +112,6 @@
       save-interprogram-paste-before-kill t                 ; save clipboard before killing
       x-select-enable-clipboard nil                         ; make cut/paste function correctly
       split-width-threshold 240                             ; 2x ideal line width :)
-      indicate-empty-lines t                                ; show empty lines at end of buffer
       visual-line-fringe-indicators '(left-curly-arrow nil) ; use left curly error for wrapped lines
       text-scale-mode-step 1.05                             ; text size increases by 5% (normally 20%)
       view-read-only t                                      ; show r/o files in view mode
