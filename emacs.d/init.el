@@ -100,6 +100,7 @@
       split-width-threshold 240                             ; 2x ideal line width :)
       indicate-empty-lines t                                ; show empty lines at end of buffer
       visual-line-fringe-indicators '(left-curly-arrow nil) ; use left curly error for wrapped lines
+      text-scale-mode-step 1.05                             ; text size increases by 5% (normally 20%)
       view-read-only t                                      ; show r/o files in view mode
       standard-indent 3                                     ; ideal indent :)
       sentence-end-double-space nil)                        ; sentences end with one space
@@ -218,6 +219,8 @@
     "l"      #'linum-relative-mode
     "m"      #'menu-bar-mode
     "r"      #'ruler-mode
+    "-"      #'text-scale-adjust
+    "="      #'text-scale-adjust
     "<f5>"   #'menu-bar-open)
 
   ;; F6
