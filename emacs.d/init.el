@@ -257,7 +257,6 @@
    :prefix "<f7>"
     "a"     #'magit-run-git-gui-blame
     "b"     #'magit-blame
-    "c"     #'projectile-compile-project
     "f"     #'helm-projectile-ag
     "g"     #'magit-status
     "k"     #'projectile-kill-buffers
