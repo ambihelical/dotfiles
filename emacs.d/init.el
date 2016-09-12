@@ -977,6 +977,7 @@
   :config
   (progn
     (use-package evil-magit
+      :demand
       :init
       (setq evil-magit-state 'normal))))
 
