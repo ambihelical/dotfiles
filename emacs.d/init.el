@@ -508,24 +508,28 @@
   :init
   (progn
     (setq projectile-completion-system 'helm
+          projectile-globally-ignored-files #'( "TAGS" "GTAGS" "GRTAGS" "GPATH" )
+          projectile-globally-ignored-file-suffixes #'( ".o" ".so" ".a" ".ko" ".jar" ".bc")
           projectile-use-git-grep t
-          projectile-project-root-files-functions #'( projectile-root-local projectile-root-top-down projectile-root-bottom-up projectile-project-root-files-top-down-recurring)
+          projectile-project-root-files-functions
+            #'( projectile-root-local projectile-root-top-down projectile-root-bottom-up projectile-project-root-files-top-down-recurring)
           projectile-mode-line '(:eval (format " [%s]" (projectile-project-name)))
-          projectile-enable-caching nil))
+          projectile-enable-caching t))
   :config
   (progn
     (push "compile_commands.json" projectile-project-root-files)
+    (push "build" projectile-globally-ignored-directories)
     (use-package helm-projectile
-      :commands helm-for-files
+      :commands helm-for-files helm-projectile-ag
       :demand
       :config
       (progn
         (helm-projectile-on)
         (setq projectile-switch-project-action 'helm-for-files)))
     (use-package persp-projectile :demand)
-    (use-package ag)
-    (use-package helm-ag)
-    (use-package grep)
+    (use-package ag :demand)
+    (use-package helm-ag :demand)
+    (use-package grep :demand)
     (setq helm-for-files-preferred-list '( helm-source-projectile-files-list
                                            helm-source-projectile-recentf-list
                                            helm-source-recentf
