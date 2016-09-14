@@ -5,6 +5,7 @@
 	co = checkout
 	br = branch
 	sm = submodule
+	smu = submodule update --init --recursive
 	lo = log --shortstat --relative-date
 	di = diff --color
 	dc = diff --color --cached
