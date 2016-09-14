@@ -467,7 +467,10 @@
         (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US")))))
   :diminish (flyspell-mode . "Ⓢ"))
 
-(use-package helm-flyspell)
+(use-package helm-flyspell :commands helm-flyspell-correct)
+(use-package ag :commands ag)
+(use-package helm-ag :commands helm-ag)
+(use-package grep :commands grep)
 
 (use-package helm
   :commands ( helm-semantic-or-imenu helm-for-files helm-M-x helm-mini)
@@ -527,9 +530,6 @@
         (helm-projectile-on)
         (setq projectile-switch-project-action 'helm-for-files)))
     (use-package persp-projectile :demand)
-    (use-package ag :demand)
-    (use-package helm-ag :demand)
-    (use-package grep :demand)
     (setq helm-for-files-preferred-list '( helm-source-projectile-files-list
                                            helm-source-projectile-recentf-list
                                            helm-source-recentf
