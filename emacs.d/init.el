@@ -152,7 +152,7 @@
   ;; Top level keymaps
   (general-define-key
     "<f2>"       #'helm-mini
-    "<f3>"       #'helm-for-files
+    "<f3>"       #'helm-multi-files
     "C-x b"      #'helm-mini
     "C-h b"      #'helm-descbinds
     "M-x"        #'helm-M-x
