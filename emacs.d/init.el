@@ -244,7 +244,6 @@
     "i"     #'rtags-find-functions-called-by-this-function
     "m"     #'helm-semantic-or-imenu
     "r"     #'me:tags-find-references-at-point
-    "t"     #'hl-todo-occur
     "v"     #'rtags-find-virtuals-at-point
     "<RET>"  #'rtags-create-doxygen-comment
     "<f6>"  #'me:tags-find-symbol-at-point)
@@ -294,6 +293,14 @@
   :init
   (setq smooth-scroll-margin 5
         smooth-scroll-strict-margins t))
+
+;; highlight keywords
+(use-package fic-mode
+  :commands fic-mode
+  :init
+  (progn
+    (setq fic-highlighted-words `( "TODO" "HACK" "KLUDGE" "FIXME" "TRICKY" "BUG" ))
+    (add-hook 'prog-mode-hook 'fic-mode)))
 
 (use-package whitespace
   :commands whitespace-mode
@@ -377,19 +384,6 @@
     (global-diff-hl-mode 1))
   :defer 4)
 
-;; highlight keywords
-(use-package hl-todo
-  :commands ( hl-todo-mode hl-todo-occur )
-  :init
-  (add-hook #'prog-mode-hook 'hl-todo-mode)
-  ;; override the package's keywords with my own:
-  (setq hl-todo-keyword-faces
-        '(("TODO:"   . "red")
-          ("BUG:"    . "red")
-          ("NOTE:"   . "blue")
-          ("HACK:"   . "blue")
-          ("TRICKY:" . "blue")
-          ("FIXME:"  . "red"))))
 
 (use-package linum-relative
   :diminish linum-relative-mode
