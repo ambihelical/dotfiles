@@ -24,7 +24,7 @@ I3_FILES = ${CFG}/i3/config ${CFG}/i3/i3status.config ${CFG}/dunst/dunstrc \
            ${CFG}/gsimplecal/config ${CFG}/i3/split-layout.json
 VIM_FILES = ~/.vimrc ${CFG}/vim  ${CACHE}/vim
 BAREX_FILES = ~/.xsession ~/.Xmodmap
-EMACS_FILES = ~/.emacs.d $(CACHE)/emacs
+EMACS_FILES = ~/.emacs.d $(CACHE)/emacs ${CFG}/hunspell
 ETC_FILES = ${ETC}/sysctl.d/99-edb-sysctl.conf
 
 

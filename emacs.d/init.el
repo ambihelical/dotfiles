@@ -25,6 +25,7 @@
 ;; set some personal variables
 (defconst me:data-directory (if (getenv "XDG_DATA_HOME") (getenv "XDG_DATA_HOME") "~/.local/share"))
 (defconst me:cache-directory (if (getenv "XDG_CACHE_HOME") (getenv "XDG_CACHE_HOME") "~/.cache"))
+(defconst me:config-directory (if (getenv "XDG_CONFIG_HOME") (getenv "XDG_CONFIG_HOME") "~/.config"))
 (defconst me:emacs-backup-directory (expand-file-name "emacs" me:cache-directory))
 (defconst me:notes-path (if (file-readable-p "~/Dropbox/Notes")
                             "~/Dropbox/Notes"
@@ -447,6 +448,7 @@
   :commands ( flyspell-prog-mode flyspell-mode flyspell-auto-correct-previous-word)
   :init
   (progn
+    (setq ispell-personal-dictionary (expand-file-name "hunspell/words" me:config-directory))
     (add-hook 'prog-mode-hook #'flyspell-prog-mode)
     (add-hook 'text-mode-hook #'flyspell-mode))
   :config
