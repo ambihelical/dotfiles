@@ -412,6 +412,15 @@
         recentf-max-menu-items 15
         recentf-auto-cleanup 300))           ; wait 5m before 1st cleanup
 
+;; save buffer positions
+(use-package saveplace
+  :init
+  (setq-default save-place t)
+  (setq save-place-file (expand-file-name "places" user-emacs-directory)
+        save-place-forget-unreadable-files nil)
+  ;; for 25.1 or better, replace with :config (save-place-mode t)
+  (require 'saveplace))
+
 (use-package undo-tree
   :config
   (global-undo-tree-mode)
