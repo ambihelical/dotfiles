@@ -118,6 +118,7 @@
       text-scale-mode-step 1.05                             ; text size increases by 5% (normally 20%)
       view-read-only t                                      ; show r/o files in view mode
       standard-indent 3                                     ; ideal indent :)
+      scroll-margin 5                                       ; show some lines around cursor when possible
       sentence-end-double-space nil)                        ; sentences end with one space
 (add-hook 'focus-out-hook #'me:save-dirty-buffers)          ; save on defocus
 (add-hook 'mouse-leave-buffer-hook #'me:kill-minibuffer)    ; kill minibuffer on click outside
@@ -291,7 +292,7 @@
   (smooth-scrolling-mode t)
   :defer 3
   :init
-  (setq smooth-scroll-margin 5
+  (setq smooth-scroll-margin scroll-margin
         smooth-scroll-strict-margins t))
 
 ;; highlight keywords
