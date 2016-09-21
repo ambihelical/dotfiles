@@ -22,7 +22,6 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 
  # fonts
 	p="$p ttf-mscorefonts-installer otf-stix unifont"
-	p="$p fonts-fantasque-sans"
  # cli tools
 	p="$p git-core gitk git-doc git-gui gpp"
 	p="$p ack-grep silversearcher-ag autojump htop screen unzip"
@@ -47,6 +46,7 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	if [ "$linux" == "Ubuntu" ]; then
 		if [ $version -ge 1510 ]; then
 			p="$p ttf-ancient-fonts-symbola"
+			p="$p fonts-fantasque-sans"
 		elif [ $version -lt 1510 ]; then
 			p="$p ttf-ancient-fonts"
 		fi
