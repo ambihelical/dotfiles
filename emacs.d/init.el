@@ -197,7 +197,7 @@
     "s"          #'me:use-evil-selection-register
     "v"          #'exchange-point-and-mark
     "w"          #'save-buffer
-    "x"          #'kill-buffer)
+    "<DEL>"      #'kill-this-buffer)
 
   ;; F4
   (general-define-key
