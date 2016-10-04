@@ -26,6 +26,10 @@ export __GL_SHADER_DISK_CACHE_PATH=${XDG_CACHE_HOME}/nv
 export CUDA_CACHE_PATH=${XDG_CACHE_HOME}/nv 
 [ -d ${XDG_CACHE_HOME}/nv ] || mkdir -p ${XDG_CACHE_HOME}/nv
 export ICEAUTHORITY=${XDG_CACHE_HOME}/ICEauthority
+export CCACHE_MAXSIZE=10G
+export CCACHE_DIR=${XDG_CACHE_HOME}/ccache
+[ -d ${CCACHE_DIR} ] || mkdir -p ${CCACHE_DIR}
+
 # this doesn't work under mint, suspect mdm is hard coding it
 # it also doesn't work under Ubuntu 15.10, probably lightdm is hard coding it
 #export XAUTHORITY="${XDG_CACHE_HOME}/Xauthority"
