@@ -951,7 +951,20 @@
 
 (use-package ws-butler
   :config
-  (ws-butler-global-mode t)
+  (progn
+    ;; work around current tab replacement behavior
+    (defun ws-butler-clean-region (beg end)
+      "Delete trailing blanks in region BEG END."
+      (interactive "*r")
+      (ws-butler-with-save
+      (narrow-to-region beg end)
+      (goto-char (point-min))
+      (while (not (eobp))
+        (end-of-line)
+        (delete-horizontal-space)
+        (forward-line 1)))
+      nil)
+    (ws-butler-global-mode t))
   :diminish ws-butler-mode
   :defer 3)
 
