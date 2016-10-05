@@ -305,10 +305,11 @@
   :diminish beacon-mode)
 
 (use-package adaptive-wrap
+  :commands adaptive-wrap-prefix-mode
   :init
-  (setq-default adaptive-wrap-extra-indent 3)
-  :config
-  (add-hook 'visual-line-mode-hook #'adaptive-wrap-prefix-mode)
+  (progn
+    (setq-default adaptive-wrap-extra-indent 3)
+    (add-hook 'visual-line-mode-hook #'adaptive-wrap-prefix-mode))
   :defer 4)
 
 (use-package leuven-theme
