@@ -66,20 +66,6 @@
   (whitespace-mode -1)
   (whitespace-mode))
 
-;; go to next error in compilation buffer
-(defun me:next-compile-error ()
-  (interactive)
-  (with-current-buffer "*compilation*"
-    (progn
-      (next-error 1 ))))
-
-;; go to previous error in compilation buffer
-(defun me:previous-compile-error ()
-  (interactive)
-  (with-current-buffer "*compilation*"
-    (progn
-      (next-error -1 ))))
-
 (defconst me:powerline-separators #'( alternate arrow arrow-fade bar box brace butt chamfer contour curve rounded roundstub wave zigzag utf-8))
 (defvar me:current-powerline-separator-index 12)               ; current powerline separator index
 
@@ -188,8 +174,8 @@
     "s-,"        #'rtags-location-stack-back
     "s-`"        #'previous-buffer
     "s-\\"       #'me:next-powerline-separator
-    "s-j"        #'me:next-compile-error
-    "s-k"        #'me:previous-compile-error
+    "s-j"        (kbd "C-u 1 C-x `")
+    "s-k"        (kbd "C-u -1 C-x `")
     "s-<right>"  #'persp-next
     "s-<left>"   #'persp-prev
     "<s-return>" #'yas-expand
