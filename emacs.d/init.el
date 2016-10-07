@@ -66,6 +66,20 @@
   (whitespace-mode -1)
   (whitespace-mode))
 
+;; go to next error in compilation buffer
+(defun me:next-compile-error ()
+  (interactive)
+  (with-current-buffer "*compilation*"
+    (progn
+      (next-error 1 ))))
+
+;; go to previous error in compilation buffer
+(defun me:previous-compile-error ()
+  (interactive)
+  (with-current-buffer "*compilation*"
+    (progn
+      (next-error -1 ))))
+
 (defconst me:powerline-separators #'( alternate arrow arrow-fade bar box brace butt chamfer contour curve rounded roundstub wave zigzag utf-8))
 (defvar me:current-powerline-separator-index 12)               ; current powerline separator index
 
@@ -174,6 +188,8 @@
     "s-,"        #'rtags-location-stack-back
     "s-`"        #'previous-buffer
     "s-\\"       #'me:next-powerline-separator
+    "s-j"        #'me:next-compile-error
+    "s-k"        #'me:previous-compile-error
     "s-<right>"  #'persp-next
     "s-<left>"   #'persp-prev
     "<s-return>" #'yas-expand
@@ -676,19 +692,17 @@
              ((= compilation-skip-threshold 2) 0)
              (t 1))))
     (setq compilation-scroll-output t
-          compilation-auto-jump-to-first-error t
-          compilation-skip-threshold 2
           compilation-ask-about-save nil    ; save all modified
+          compilation-auto-jump-to-first-error t
           compilation-finish-functions
           (lambda (buf str)
             (compilation-set-skip-threshold 1)
             (if (null (string-match ".*exited abnormally.*" str))
                 ;;if no errors, make the compilation window go away in a few seconds
-                ;;if errors, make it full sized
                 (progn
                   (run-at-time "2 sec" nil 'delete-windows-on (get-buffer-create "*compilation*"))
                   (message "No Compilation Errors!"))
-              (delete-other-windows (get-buffer-window "*compilation*")))))
+          compilation-skip-threshold 2)))
     (add-hook 'compilation-start-hook
               (lambda (proc) (compilation-set-skip-threshold 2)))
     (add-hook 'compilation-mode-hook
