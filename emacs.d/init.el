@@ -679,6 +679,19 @@
         (local-set-key (kbd "<home>") #'compilation-previous-file)
         (local-set-key (kbd "<end>") #'compilation-next-file)))))
 
+(use-package doc-view
+  :ensure nil
+  :init
+  (progn
+    (setq doc-view-continuous t
+          doc-view-resolution 144))
+  :bind
+  (:map doc-view-mode-map
+        ("j" . doc-view-next-line-or-next-page)
+        ("k" . doc-view-previous-line-or-previous-page)
+        ("h" . image-backward-hscroll)
+        ("l" . image-forward-hscroll)))
+
 (use-package deft
   :init
   (progn
@@ -894,6 +907,7 @@
     (evil-set-initial-state 'dired-mode 'emacs)
     (evil-set-initial-state 'image-mode 'emacs)
     (evil-set-initial-state 'finder-mode 'emacs)
+    (evil-set-initial-state 'doc-view-mode 'emacs)
     (evil-set-initial-state 'image-dired-thumbnail-mode 'emacs)
     (evil-set-initial-state 'paradox-menu-mode 'emacs)
 
