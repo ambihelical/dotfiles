@@ -179,7 +179,6 @@
 
   ;; F4
   (general-define-key
-   :states '(normal visual insert emacs)
    :prefix "<f4>"
     "a"     #'helm-apropos
     "b"     #'helm-all-mark-rings
@@ -202,7 +201,6 @@
 
   ;; F5
   (general-define-key
-   :states '(normal visual insert emacs)
    :prefix "<f5>"
     "f"      #'toggle-frame-fullscreen
     "h"      #'global-hl-line-mode
@@ -215,7 +213,6 @@
 
   ;; F6
   (general-define-key
-   :states '(normal visual insert emacs)
    :prefix "<f6>"
     "c"     #'rtags-rename-symbol
     "d"     #'me:tags-find-symbol
@@ -229,7 +226,6 @@
 
   ;; F7
   (general-define-key
-   :states '(normal visual insert emacs)
    :prefix "<f7>"
     "a"     #'magit-run-git-gui-blame
     "b"     #'magit-blame
