@@ -145,7 +145,6 @@
     "s-d"        #'company-complete
     "s-f"        #'flyspell-auto-correct-previous-word
     "s-s"        #'flyspell-correct-previous-word-generic
-    "s-w"        #'ace-window
     "s-]"        #'winner-redo
     "s-["        #'winner-undo
     "s-;"        #'rtags-location-stack-forward
@@ -239,6 +238,18 @@
     "r"     #'persp-rename
     "u"     #'projectile-invalidate-cache
     "<f7>"  #'projectile-persp-switch-project)
+
+  ;; F8
+  (general-define-key
+   :prefix "<f8>"
+   "v"      #'evil-window-split
+   "h"      #'evil-window-vsplit
+   "o"      #'delete-other-windows
+   "x"      #'evil-window-delete
+   "d"      #'evil-window-rotate-downwards
+   "u"      #'evil-window-rotate-upwards
+   "r"      #'windresize
+   "<f8>"  #'ace-window)
   :demand)
 
 (use-package emacs-lisp-mode
@@ -399,6 +410,16 @@
 
 (use-package ace-window
   :commands ace-window)
+
+; modal window resizing
+(use-package windresize
+  :commands windresize
+  :bind (:map windresize-map
+              ("q" . windresize-exit)
+              ("h" . windresize-left)
+              ("l" . windresize-right)
+              ("j" . windresize-down)
+              ("k" . windresize-up)))
 
 (use-package undo-tree
   :config
