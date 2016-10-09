@@ -130,12 +130,12 @@
   (general-evil-setup t)
   ;; Top level keymaps
   (general-define-key
-    "<f2>"       #'helm-mini
-    "<f3>"       #'helm-multi-files
-    "C-x b"      #'helm-mini
-    "C-h b"      #'helm-descbinds
-    "M-x"        #'helm-M-x
-    "s-1"        #'helm-projectile-find-other-file
+    "<f2>"       #'ivy-switch-buffer
+    "<f3>"       #'counsel-projectile-find-file
+    "C-x b"      #'ivy-switch-buffer
+    "C-h b"      #'counsel-descbinds
+    "M-x"        #'counsel-M-x
+    "s-1"        #'projectile-find-other-file
     "s-#"        #'me:select-nth-other-buffer    ; base mapping for the following . ..
     "s-2"        (kbd "C-u 1 s-#")
     "s-3"        (kbd "C-u 2 s-#")
@@ -144,7 +144,7 @@
     "s-c"        #'me:rotate-fill-column
     "s-d"        #'company-complete
     "s-f"        #'flyspell-auto-correct-previous-word
-    "s-s"        #'helm-flyspell-correct
+    "s-s"        #'flyspell-correct-previous-word-generic
     "s-w"        #'ace-window
     "s-]"        #'winner-redo
     "s-["        #'winner-undo
@@ -185,21 +185,22 @@
     "a"     #'helm-apropos
     "b"     #'helm-all-mark-rings
     "d"     #'dired-jump
-    "f"     #'helm-grep-do-git-grep
-    "i"     #'helm-info-at-point
-    "j"     #'helm-bookmarks
-    "k"     #'helm-descbinds
-    "l"     #'helm-locate
+    "f"     #'counsel-git-grep
+    "i"     #'counsel-info-lookup-symbol
+    "j"     #'counsel-bookmark
+    "k"     #'counsel-descbinds
+    "l"     #'counsel-locate
     "n"     #'deft
     "m"     #'helm-man-woman
     "p"     #'paradox-list-packages
-    "r"     #'helm-recentf
+    "r"     #'counsel-recentf
+    "s"     #'counsel-ag
     "t"     #'shell-pop
-    "u"     #'helm-unicode
+    "u"     #'counsel-unicode-char
     "v"     #'undo-tree-visualize
     "x"     #'helm-top
-    "y"     #'helm-show-kill-ring
-    "<f4>"  #'helm-resume)
+    "y"     #'counsel-yank-pop
+    "<f4>"  #'ivy-resume)
 
   ;; F5
   (general-define-key
@@ -220,7 +221,7 @@
     "d"     #'me:tags-find-symbol
     "f"     #'me:tags-find-file
     "i"     #'rtags-find-functions-called-by-this-function
-    "m"     #'helm-semantic-or-imenu
+    "m"     #'counsel-imenu
     "r"     #'me:tags-find-references-at-point
     "v"     #'rtags-find-virtuals-at-point
     "<RET>"  #'rtags-create-doxygen-comment
@@ -231,7 +232,7 @@
    :prefix "<f7>"
     "a"     #'magit-run-git-gui-blame
     "b"     #'magit-blame
-    "f"     #'helm-projectile-ag
+    "f"     #'counsel-projectile-find-file
     "g"     #'magit-status
     "k"     #'projectile-kill-buffers
     "o"     #'projectile-multi-occur
@@ -260,8 +261,6 @@
                                (diminish 'visual-line-mode)
                                (diminish 'abbrev-mode)
                                (diminish 'auto-revert-mode))))
-
-(use-package dash-functional)
 
 (use-package smooth-scrolling
   :config
@@ -429,7 +428,7 @@
   :ensure nil)
 
 (use-package flyspell
-  :commands ( flyspell-prog-mode flyspell-mode flyspell-auto-correct-previous-word)
+  :commands ( flyspell-prog-mode flyspell-mode flyspell-auto-correct-previous-word flyspell-correct-previous-word-generic)
   :init
   (progn
     (setq ispell-personal-dictionary (expand-file-name "hunspell/words" me:config-directory))
@@ -437,6 +436,7 @@
     (add-hook 'text-mode-hook #'flyspell-mode))
   :config
   (progn
+    (use-package flyspell-correct-ivy :demand)
     ;; setup spell check, prefer hunspell
     (cond
       ((executable-find "hunspell")
@@ -453,13 +453,31 @@
         (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US")))))
   :diminish (flyspell-mode . "Ⓢ"))
 
-(use-package helm-flyspell :commands helm-flyspell-correct)
-(use-package ag :commands ag)
-(use-package helm-ag :commands helm-ag)
-(use-package grep :commands grep)
+
+(use-package ivy
+  :bind
+  (:map ivy-mode-map
+        ("C-'" . ivy-avy))
+  :config
+  (ivy-mode 1)
+  (setq ivy-use-virtual-buffers t                           ; add ‘recentf-mode’ and bookmarks to ‘ivy-switch-buffer’.
+        ivy-height 15                                       ; number of result lines to display
+        ivy-count-format ""                                 ; does not count candidates
+        ivy-initial-inputs-alist nil                        ; no regexp by default
+        ivy-re-builders-alist
+           '((t . ivy--regex-ignore-order)))                ; allow input not in order
+  :diminish (ivy-mode . ""))
+
+(use-package counsel
+  :commands ( counsel-descbinds counsel-bookmark counsel-file-jump counsel-imenu )
+  :config
+  (counsel-mode 1)
+  :diminish (counsel-mode . ""))
+
+;; allow grep buffers to be editted
+(use-package wgrep)
 
 (use-package helm
-  :commands ( helm-semantic-or-imenu helm-for-files helm-M-x helm-mini)
   :init
   (setq helm-split-window-in-side-p           t
         helm-split-window-default-side        'other
@@ -471,18 +489,9 @@
         helm-autoresize-max-height            33           ; 33% of frame (requires autoresize mode)
         helm-autoresize-min-height            33           ; 33% of frame (requires autoresize mode)
         helm-follow-mode-persistent           t            ; follow-mode persists across sessions
-        helm-ff-skip-boring-files             t            ; don't show boring files
-        ;; set the sources for helm-for-files
-        helm-for-files-preferred-list '( helm-source-recentf
-                                         helm-source-buffers-list
-                                         helm-source-files-in-current-dir
-                                         helm-source-locate ))
+        helm-ff-skip-boring-files             t)            ; don't show boring files
   :config
   (progn
-    ;; Describe key bindings with Helm. NOTE: this defines an alias for describe-bindings (C-h b),
-    ;; but this won't autoload this extension, so C-h b binding is defined as well
-    (use-package helm-descbinds :commands (helm-descbinds) :config (helm-descbinds-mode))
-    (use-package helm-unicode :commands helm-unicode)
     (helm-autoresize-mode t)
     ;; swap tab/c-z as recommended by tuhdo
     (define-key helm-map (kbd "<tab>") #'helm-execute-persistent-action) ; rebind tab to do persistent action
@@ -496,7 +505,7 @@
   :after evil
   :init
   (progn
-    (setq projectile-completion-system 'helm
+    (setq projectile-completion-system 'ivy
           projectile-globally-ignored-files #'( "TAGS" "GTAGS" "GRTAGS" "GPATH" )
           projectile-globally-ignored-file-suffixes #'( ".o" ".so" ".a" ".ko" ".jar" ".bc")
           projectile-use-git-grep t
@@ -508,21 +517,10 @@
   (progn
     (push "compile_commands.json" projectile-project-root-files)
     (push "build" projectile-globally-ignored-directories)
-    (use-package helm-projectile
-      :commands helm-for-files helm-projectile-ag
-      :demand
+    (use-package counsel-projectile
       :config
-      (progn
-        (helm-projectile-on)
-        (setq projectile-switch-project-action 'helm-for-files)))
+      (counsel-projectile-on))
     (use-package persp-projectile :demand)
-    (setq helm-for-files-preferred-list '( helm-source-projectile-files-list
-                                           helm-source-projectile-recentf-list
-                                           helm-source-recentf
-                                           helm-source-buffers-list
-                                           helm-source-projectile-projects
-                                           helm-source-files-in-current-dir
-                                           helm-source-locate))
     (projectile-global-mode 1)))
 
 (use-package perspective
@@ -988,7 +986,9 @@
 
 (use-package magit
   :init
-  (add-hook 'with-editor-mode-hook (lambda () (setq fill-column 70)))
+  (progn
+    (setq magit-completing-read-function 'ivy-completing-read)
+    (add-hook 'with-editor-mode-hook (lambda () (setq fill-column 70))))
   :config
   (progn
     (use-package evil-magit
