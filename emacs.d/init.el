@@ -143,6 +143,7 @@
     "s-d"        #'company-complete
     "s-f"        #'flyspell-auto-correct-previous-word
     "s-s"        #'helm-flyspell-correct
+    "s-w"        #'ace-window
     "s-]"        #'winner-redo
     "s-["        #'winner-undo
     "s-;"        #'rtags-location-stack-forward
@@ -397,6 +398,9 @@
         save-place-forget-unreadable-files nil)
   ;; for 25.1 or better, replace with :config (save-place-mode t)
   (require 'saveplace))
+
+(use-package ace-window
+  :commands ace-window)
 
 (use-package undo-tree
   :config
