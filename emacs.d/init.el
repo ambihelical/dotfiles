@@ -80,6 +80,7 @@
       initial-major-mode 'text-mode                         ; no prog-mode at startup
       kill-ring-max 200                                     ; More killed items
       kill-do-not-save-duplicates t                         ; No duplicates in kill ring
+      history-length 1000                                   ; length of history
       save-interprogram-paste-before-kill t                 ; save clipboard before killing
       x-select-enable-clipboard nil                         ; make cut/paste function correctly
       x-gtk-use-system-tooltips nil                         ; allow tooltip theming
@@ -108,6 +109,7 @@
 (global-auto-revert-mode t)                                 ; revert unchanged files automatically
 (electric-indent-mode +1)                                   ; turn on electric mode globally
 (global-visual-line-mode t)                                 ; wrap long lines
+(savehist-mode t)                                           ; save minibuffer history
 (winner-mode t)                                             ; enable winner mode
 (run-at-time "1 hour" 3600 #'clean-buffer-list)             ; clear out old buffers every hour
 
