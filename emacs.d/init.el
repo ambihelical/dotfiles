@@ -478,10 +478,10 @@
         (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US")))))
   :diminish (flyspell-mode . "Ⓢ"))
 
-
 (use-package ivy
   :bind
   (:map ivy-mode-map
+        ("<escape>" . minibuffer-keyboard-quit)
         ("C-'" . ivy-avy))
   :config
   (ivy-mode 1)
