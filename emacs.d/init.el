@@ -260,6 +260,7 @@
   :init
   (add-hook 'emacs-lisp-mode-hook
             (lambda ()
+              (modify-syntax-entry ?- "w")                    ; hyphens are parts of words
               (setq tab-width 2                               ; tab inserts 2 spaces
                     standard-indent 2                         ; indent by 2
                     indent-tabs-mode nil                      ; no tabs
