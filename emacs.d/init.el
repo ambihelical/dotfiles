@@ -97,6 +97,9 @@
           (lambda ()
             (message "Time to initialize: %s"
                      (emacs-init-time))))
+(add-hook 'prog-mode-hook                                   ; stuff for all programming modes
+          (lambda ()
+             (modify-syntax-entry ?_ "w")))                 ; underscores are parts of words
 (set-frame-font "Fantasque Sans Mono 12" t t)               ; nice font
 (tool-bar-mode 0)                                           ; no tool bar
 (scroll-bar-mode 0)                                         ; no scroll bar
@@ -644,7 +647,6 @@
   (progn
     (add-hook 'c-mode-common-hook
               (lambda ()
-                (modify-syntax-entry ?_ "w")                   ; underscores are parts of words
                 (setq c-basic-offset 3)))
     (add-hook 'c++-mode-hook
               (lambda ()
