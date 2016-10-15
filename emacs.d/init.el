@@ -482,6 +482,8 @@
   :bind
   (:map ivy-mode-map
         ("<escape>" . minibuffer-keyboard-quit)
+        ("C-j" . ivy-next-line-and-call)
+        ("C-k" . ivy-previous-line-and-call)
         ("C-'" . ivy-avy))
   :config
   (ivy-mode 1)
