@@ -578,6 +578,14 @@
   (("\\.markdown\\'" . markdown-mode)
    ("\\.md\\'" . markdown-mode)))
 
+(use-package org
+  :mode
+  (("\\.org\\'" . org-mode))
+  :config
+  (progn
+    (message "config org")
+    (use-package evil-org)))
+
 (use-package cmake-mode
   :init
   (progn
@@ -943,6 +951,12 @@
     (add-hook 'with-editor-mode-hook #'evil-insert-state)
     (add-hook 'magit-log-mode-hook #'evil-emacs-state)
     (add-hook 'magit-revision-mode-hook #'evil-emacs-state)
+
+    ;; Put view-mode in motion-state, this gives us motion
+    ;; keys and not much more, this is good for read-only scenario
+    ;; Since view-mode is combined with other modes, this needs
+    ;; to be a hook.
+    (add-hook 'view-mode-hook #'evil-motion-state)
 
     ;; extension key maps, mainly to autoload them
     (define-key evil-inner-text-objects-map "a" #'evil-inner-arg)
