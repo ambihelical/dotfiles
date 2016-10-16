@@ -88,6 +88,7 @@
       visual-line-fringe-indicators '(left-curly-arrow nil) ; use left curly error for wrapped lines
       text-scale-mode-step 1.05                             ; text size increases by 5% (normally 20%)
       view-read-only t                                      ; show r/o files in view mode
+      enable-recursive-minibuffers t                        ; allow recursive edit
       standard-indent 3                                     ; ideal indent :)
       scroll-margin 5                                       ; show some lines around cursor when possible
       sentence-end-double-space nil)                        ; sentences end with one space
@@ -114,6 +115,7 @@
 (global-visual-line-mode t)                                 ; wrap long lines
 (savehist-mode t)                                           ; save minibuffer history
 (winner-mode t)                                             ; enable winner mode
+(minibuffer-depth-indicate-mode t)                          ; show recursive edit depth
 (run-at-time "1 hour" 3600 #'clean-buffer-list)             ; clear out old buffers every hour
 
 (global-unset-key (kbd "<f3>"))
