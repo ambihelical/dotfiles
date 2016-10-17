@@ -1,4 +1,3 @@
-(let ((file-name-handler-alist nil))
 (setq gc-cons-threshold 100000000)
 
 ;; package management
@@ -1086,4 +1085,4 @@
 (me:load-init-file "host" system-name)
 
 ;; restore a normal gc threshold
-(setq gc-cons-threshold 1000000))
+(setq gc-cons-threshold 1000000)
