@@ -293,7 +293,7 @@
   :init
   (progn
     (setq fic-highlighted-words `( "TODO" "HACK" "KLUDGE" "FIXME" "TRICKY" "BUG" ))
-    (add-hook 'prog-mode-hook 'fic-mode)))
+    (add-hook 'prog-mode-hook #'fic-mode)))
 
 (use-package whitespace
   :commands whitespace-mode
@@ -368,8 +368,8 @@
   :init
   (progn
     (setq diff-hl-fringe-bmp-function 'diff-hl-fringe-bmp-from-type)
-    (add-hook 'dired-mode-hook 'diff-hl-dired-mode)
-    (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
+    (add-hook 'dired-mode-hook #'diff-hl-dired-mode)
+    (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh))
   :config
   (progn
     (when (not (display-graphic-p))
@@ -564,8 +564,8 @@
   :commands (smart-tabs-mode)
   :init
   (progn
-    (add-hook 'c-mode-common-hook 'smart-tabs-mode)
-    (add-hook 'python-mode-hook 'smart-tabs-mode))
+    (add-hook 'c-mode-common-hook #'smart-tabs-mode)
+    (add-hook 'python-mode-hook #'smart-tabs-mode))
   :config
   (progn
     (smart-tabs-insinuate 'python)
