@@ -507,6 +507,7 @@
 (use-package wgrep)
 
 (use-package helm
+  :commands ( helm-top helm-man-woman helm-top helm-all-mark-rings)
   :init
   (setq helm-split-window-in-side-p           t
         helm-split-window-default-side        'other
