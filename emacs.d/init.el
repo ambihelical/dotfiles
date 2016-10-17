@@ -157,6 +157,7 @@
     "s-\\"       #'me:next-powerline-separator
     "s-j"        (kbd "C-u 1 C-x `")
     "s-k"        (kbd "C-u -1 C-x `")
+    "s-w"        #'ace-window
     "s-<right>"  #'persp-next
     "s-<left>"   #'persp-prev
     "<s-return>" #'yas-expand
@@ -253,7 +254,7 @@
    "d"      #'evil-window-rotate-downwards
    "u"      #'evil-window-rotate-upwards
    "r"      #'windresize
-   "<f8>"  #'ace-window)
+   "<f8>"  #'delete-other-windows)
   :demand)
 
 (use-package emacs-lisp-mode
