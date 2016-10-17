@@ -958,7 +958,7 @@
     ;; keys and not much more, this is good for read-only scenario
     ;; Since view-mode is combined with other modes, this needs
     ;; to be a hook.
-    (add-hook 'view-mode-hook #'evil-motion-state)
+    (add-hook 'view-mode-hook (lambda () (if view-mode (evil-motion-state) (evil-normal-state))))
 
     ;; extension key maps, mainly to autoload them
     (define-key evil-inner-text-objects-map "a" #'evil-inner-arg)
