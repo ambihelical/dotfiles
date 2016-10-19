@@ -490,6 +490,7 @@
         ("C-'" . ivy-avy))
   :config
   (ivy-mode 1)
+  :init
   (setq ivy-use-virtual-buffers t                           ; add ‘recentf-mode’ and bookmarks to ‘ivy-switch-buffer’.
         ivy-height 15                                       ; number of result lines to display
         ivy-count-format ""                                 ; does not count candidates
