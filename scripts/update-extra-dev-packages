@@ -18,6 +18,8 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	p="$p libxcb1-dev libxcb-util-dev libxkbcommon-dev libxkbcommon-x11-dev libxcb-keysyms1-dev libxcb-cursor-dev"
 	p="$p libxcb-randr0-dev libxcb-icccm4-dev libxcb-xinerama0-dev"
 	p="$p libev-dev libyajl-dev libpcre3-dev libstartup-notification0-dev libpango1.0-dev libcairo-dev"
+  # emacs building
+   p="$p libgtk-3-dev libtiff5-dev libjpeg-dev libgif-dev libxpm-dev"
 	apt-get --quiet --ignore-missing --yes install $p
 	apt-get --quiet --ignore-missing --no-install-recommends --yes install $q
   # python notebook
