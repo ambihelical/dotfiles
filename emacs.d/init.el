@@ -204,7 +204,7 @@
     "u"     #'counsel-unicode-char
     "v"     #'undo-tree-visualize
     "x"     #'helm-top
-    "y"     #'counsel-yank-pop
+    "y"     #'helm-show-kill-ring
     "<f4>"  #'ivy-resume)
 
   ;; F5
