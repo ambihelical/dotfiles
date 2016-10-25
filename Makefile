@@ -80,6 +80,7 @@ defaults:
 	-gsettings set org.nemo.preferences size-prefixes base-2
 	-gsettings set org.gnome.desktop.media-handling autorun-never true
 	-gsettings set org.gnome.desktop.wm.preferences audible-bell false
+	-gsettings set org.gnome.desktop.interface text-scaling-factor '1.0'
 	-gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout 3600
 	-gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type suspend
 	-gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-timeout 1800
