@@ -108,6 +108,7 @@
 (mouse-avoidance-mode 'animate)                             ; move mouse pointer out of way
 (column-number-mode t)                                      ; display column/row of cursor in mode-line
 (global-hl-line-mode t)                                     ; highlight current line
+(global-eldoc-mode -1)                                      ; turn off annoying eldoc mode
 (fset 'yes-or-no-p 'y-or-n-p)                               ; change stupid default y/n? y
 (make-directory me:emacs-backup-directory t)                ; make sure backup dir exists
 (global-auto-revert-mode t)                                 ; revert unchanged files automatically
