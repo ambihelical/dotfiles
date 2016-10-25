@@ -1,6 +1,6 @@
 Xft/Antialias 1
 @@ifeq @[HOST]@ jh-rvueb
-Xft/DPI 105000
+Xft/DPI 104000
 Gtk/FontName "Ubuntu 12"
 @@else
 Xft/DPI 98304
