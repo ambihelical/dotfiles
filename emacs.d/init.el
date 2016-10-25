@@ -81,7 +81,7 @@
       kill-do-not-save-duplicates t                         ; No duplicates in kill ring
       history-length 1000                                   ; length of history
       save-interprogram-paste-before-kill t                 ; save clipboard before killing
-      x-select-enable-clipboard nil                         ; make cut/paste function correctly
+      select-enable-clipboard nil                           ; make cut/paste function correctly
       x-gtk-use-system-tooltips nil                         ; allow tooltip theming
       load-prefer-newer t                                   ; load source if newer than bytecode
       split-width-threshold 240                             ; 2x ideal line width :)
@@ -91,6 +91,7 @@
       enable-recursive-minibuffers t                        ; allow recursive edit
       standard-indent 3                                     ; ideal indent :)
       scroll-margin 5                                       ; show some lines around cursor when possible
+      fast-but-imprecise-scrolling t                        ; quick and dirty scrolling
       sentence-end-double-space nil)                        ; sentences end with one space
 (add-hook 'focus-out-hook #'me:save-dirty-buffers)          ; save on defocus
 (add-hook 'mouse-leave-buffer-hook #'me:kill-minibuffer)    ; kill minibuffer on click outside
