@@ -21,7 +21,7 @@ XORG_FILES = ${CFG}/xsettingsd ~/.Xresources ${CFG}/xkb/symbols/local
 APP_FILES = ${CFG}/screen ${CFG}/ack $(CFG)/globalrc $(CFG)/pythonrc ${CFG}/rtags ${CACHE}/rtags
 GIT_FILES = ${CFG}/git/config  ${CFG}/git/ignore
 I3_FILES = ${CFG}/i3/config ${CFG}/i3/i3status.config ${CFG}/dunst/dunstrc \
-           ${CFG}/gsimplecal/config ${CFG}/i3/split-layout.json
+           ${CFG}/gsimplecal/config ${CFG}/i3/three-pane.json
 VIM_FILES = ~/.vimrc ${CFG}/vim  ${CACHE}/vim
 BAREX_FILES = ~/.xsession ~/.Xmodmap
 EMACS_FILES = ~/.emacs.d $(CACHE)/emacs ${CFG}/hunspell

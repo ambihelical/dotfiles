@@ -6,14 +6,13 @@ if [[ $1 == "-h" || $# -gt 1 ]]; then
 fi
 
 # create an ide-like layout
-layout="${HOME}/.config/i3/split-layout.json"
+layout="${HOME}/.config/i3/three-pane.json"
 [ ! -e $layout ] && echo "missing layout file \"$layout\"" && exit 1
 msg=""
 [ $# -gt 0 ] && msg+="workspace \"$1\";"
 msg+="append_layout $layout"
 i3-msg ${msg}
-git gui &
-gitk &
-firefox &
+urxvt &
+urxvt &
 urxvt &
 emacs &

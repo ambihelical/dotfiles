@@ -1,0 +1,130 @@
+// vim:ts=4:sw=4:et
+{
+	// splith split container with 3 children
+	"border": "normal",
+	"floating": "auto_off",
+	"layout": "splith",
+	"percent": 1,
+	"type": "con",
+	"nodes": [
+	{
+		// left stack
+		"border": "normal",
+		"floating": "auto_off",
+		"layout": "stacked",
+		"percent": 0.25,
+		"type": "con",
+		"nodes": [
+		{
+			"border": "normal",
+			"current_border_width": 2,
+			"floating": "auto_off",
+			"geometry": {
+				"height": 460,
+				"width": 804,
+				"x": 0,
+				"y": 0
+			},
+			// "name": "",
+			"percent": 1.0,
+			"swallows": [
+			{ "class": "^URxvt$" }
+			],
+				"type": "con"
+		}
+		]
+	},
+	{
+		// middle stack
+		"border": "normal",
+		"floating": "auto_off",
+		"layout": "stacked",
+		"percent": 0.50,
+		"type": "con",
+		"nodes": [
+		{
+			"border": "normal",
+			"current_border_width": 2,
+			"floating": "auto_off",
+			"geometry": {
+				"height": 653,
+				"width": 750,
+				"x": 0,
+				"y": 0
+			},
+			//"name": "",
+			"percent": 1.0,
+			"swallows": [
+			{ "class": "^Emacs$" }
+			],
+				"type": "con"
+		}
+		]
+	},
+	{
+		// right stack
+		"border": "normal",
+		"floating": "auto_off",
+		"layout": "splitv",
+		"percent": 0.25,
+		"type": "con",
+		"nodes": [
+		{
+			// top stack
+			"border": "normal",
+			"floating": "auto_off",
+			"layout": "stacked",
+			"percent": 0.6,
+			"type": "con",
+			"nodes": [
+			{
+				"border": "normal",
+				"current_border_width": 2,
+				"floating": "auto_off",
+				"geometry": {
+					"height": 460,
+					"width": 804,
+					"x": 0,
+					"y": 0
+				},
+				// "name": "",
+				"percent": 0.5,
+				"swallows": [
+				{ "class": "^URxvt$" }
+				],
+					"type": "con"
+			}
+			]
+		},
+		{
+			// bottom stack
+			"border": "normal",
+			"floating": "auto_off",
+			"layout": "stacked",
+			"percent": 0.4,
+			"type": "con",
+			"nodes": [
+			{
+				"border": "normal",
+				"current_border_width": 2,
+				"floating": "auto_off",
+				"geometry": {
+					"height": 460,
+					"width": 804,
+					"x": 0,
+					"y": 0
+				},
+				// "name": "",
+				"percent": 0.5,
+				"swallows": [
+				{ "class": "^URxvt$" }
+				],
+					"type": "con"
+			}
+			]
+		}
+		]
+	}
+	]
+}
+
