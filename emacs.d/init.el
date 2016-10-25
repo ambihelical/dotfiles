@@ -272,6 +272,7 @@
   :interpreter (("emacs" . emacs-lisp-mode)))
 
 (use-package diminish
+  :config
   :init
   ;; some of these need to be run after init file has loaded
   ;; to actually be diminished
@@ -291,6 +292,7 @@
 ;; highlight keywords
 (use-package fic-mode
   :commands fic-mode
+  :config
   :init
   (progn
     (setq fic-highlighted-words `( "TODO" "HACK" "KLUDGE" "FIXME" "TRICKY" "BUG" ))
@@ -298,6 +300,7 @@
 
 (use-package whitespace
   :commands whitespace-mode
+  :config
   :init
   (progn
     (setq whitespace-line-column nil                      ; highlight past fill-column
@@ -323,6 +326,7 @@
 
 (use-package adaptive-wrap
   :commands adaptive-wrap-prefix-mode
+  :config
   :init
   (progn
     (setq-default adaptive-wrap-extra-indent 3)
@@ -349,6 +353,7 @@
   :config
   (progn
     (use-package powerline
+      :config
       :demand
       :init
       (setq powerline-default-separator 'wave))
@@ -381,15 +386,18 @@
 
 
 (use-package linum-relative
+  :config
   :diminish linum-relative-mode
   :init
   (setq linum-relative-current-symbol ""))   ; show current line #
 
-(use-package ruler-mode)
+(use-package ruler-mode
+  :config)
 
 ;; better package manager
 (use-package paradox
   :commands paradox-list-packages
+  :config
   :init
   (setq paradox-spinner-type 'moon
         paradox-execute-asynchronously nil
@@ -417,11 +425,13 @@
   :defer 1)
 
 (use-package ace-window
+  :config
   :commands ace-window)
 
 ; modal window resizing
 (use-package windresize
   :commands windresize
+  :config
   :bind (:map windresize-map
               ("q" . windresize-exit)
               ("h" . windresize-left)
@@ -435,6 +445,7 @@
   :diminish undo-tree-mode)
 
 (use-package dired
+  :commands dired-jump
   :init
   (setq dired-recursive-deletes 'always
         dired-recursive-copies 'always
@@ -442,13 +453,16 @@
   :config
   (progn
     (use-package peep-dired
+      :config
       :bind (:map dired-mode-map
               ("C-f" . peep-dired)))
     (use-package dired-narrow
+      :config
       :bind (:map dired-mode-map
                   ("/" . dired-narrow)))
     (use-package dired+
       :defer 2
+      :config
       :init
       (setq font-lock-maximum-decoration (quote ((dired-mode . nil) (t . t)))   ; turn off barf colors
             diredp-hide-details-initially-flag t
@@ -553,7 +567,7 @@
     (use-package counsel-projectile
       :config
       (counsel-projectile-on))
-    (use-package persp-projectile :demand)
+    (use-package persp-projectile :demand :config)
     (projectile-global-mode 1)))
 
 (use-package perspective
@@ -575,11 +589,13 @@
     (smart-tabs-insinuate 'c 'c++)))
 
 (use-package rainbow-delimiters         ; Highlight delimiters by depth
+  :config
   :init
   (progn
     (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)))
 
 (use-package markdown-mode
+  :config
   :mode
   (("\\.markdown\\'" . markdown-mode)
    ("\\.md\\'" . markdown-mode)))
@@ -589,10 +605,10 @@
   (("\\.org\\'" . org-mode))
   :config
   (progn
-    (message "config org")
-    (use-package evil-org)))
+    (use-package evil-org :config)))
 
 (use-package cmake-mode
+  :config
   :init
   (progn
     (setq cmake-tab-width 3))
@@ -604,6 +620,7 @@
 ;; may be fixed in 25.1 or so
 (use-package adoc-mode
   :defines (company-dabbrev-downcase company-dabbrev-ignore-case)
+  :config
   :init
   (progn
     (defun me:adoc-mode-flyspell-verify ()
@@ -637,6 +654,7 @@
 
 (use-package python-mode
   :defines ( python-indent-offset python-indent-guess-indent-offset )
+  :config
   :init
   (add-hook 'python-mode-hook
             (lambda ()
@@ -650,11 +668,13 @@
    ("\\.py3\\'" . python-mode)))
 
 (use-package ruby-mode
+  :config
   :mode
   (("\\.\\(?:cap\\|gemspec\\|irbrc\\|gemrc\\|rake\\|rb\\|ru\\|thor\\)\\'" . ruby-mode)
    ("\\(?:Brewfile\\|Capfile\\|Gemfile\\(?:\\.[a-zA-Z0-9._-]+\\)?\\|[rR]akefile\\)\\'" . ruby-mode)))
 
 (use-package js2-mode
+  :config
   :mode
   (("\\.js\\'" . js-mode)
    ("\\.json\\'" . js-mode)))
@@ -685,6 +705,7 @@
 
 (use-package compile
   :commands compile
+  :config
   :init
   (progn
     (defun me:rotate-skip-threshold ()
@@ -722,6 +743,7 @@
 
 (use-package doc-view
   :ensure nil
+  :config
   :init
   (progn
     (setq doc-view-continuous t
@@ -734,6 +756,7 @@
         ("l" . image-forward-hscroll)))
 
 (use-package deft
+  :config
   :init
   (progn
     (setq deft-directory me:notes-path
@@ -875,6 +898,7 @@
 ;; enable code folding (evil has bindings)
 (use-package hideshow
   :commands hs-minor-mode
+  :config
   :init
   (progn
     (add-hook 'c-mode-common-hook   #'hs-minor-mode)
@@ -886,6 +910,7 @@
 
 (use-package avy
   :commands ( avy-goto-word-1 avy-goto-char-2 avy-goto-char-in-line )
+  :config
   :init
   (setq avy-all-windows 'all-frames))
 
@@ -927,15 +952,14 @@
 
     (use-package evil-args
       :commands (evil-inner-arg evil-outer-arg)
-      :config (message "evil-args loaded"))
+      :config )
     (use-package evil-textobj-anyblock
       :commands (evil-textobj-anyblock-inner-block evil-textobj-anyblock-a-block)
-      :config (message "evil-textobj-anyblock loaded"))
+      :config )
     (use-package evil-commentary
       :commands (evil-commentary evil-commentary-yank)
       :config
       (evil-commentary-mode)
-      (message "evil-commentary loaded")
       :diminish evil-commentary-mode)
     (use-package evil-surround
       :commands (evil-surround-edit evil-Surround-edit evil-surround-region evil-Surround-region)
@@ -1013,6 +1037,7 @@
   :defer 3)
 
 (use-package shell-pop
+  :config
   :init
   (setq shell-pop-internal-mode "ansi-term"
         shell-pop-term-shell "/bin/bash"
