@@ -412,8 +412,9 @@
   (setq-default save-place t)
   (setq save-place-file (expand-file-name "places" user-emacs-directory)
         save-place-forget-unreadable-files nil)
-  ;; for 25.1 or better, replace with :config (save-place-mode t)
-  (require 'saveplace))
+  :config
+  (save-place-mode t)
+  :defer 1)
 
 (use-package ace-window
   :commands ace-window)
