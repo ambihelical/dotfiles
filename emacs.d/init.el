@@ -50,6 +50,13 @@
   (interactive)
   (save-some-buffers t))
 
+(defun me:find-some-files ()
+  "Find files in project or fallback to current directory"
+  (interactive)
+  (if (projectile-project-p)
+      (counsel-projectile-find-file)
+    (counsel-find-file)))
+
 ;; configuration I haven't figured out how to wedge into
 ;; use-package
 
@@ -138,7 +145,7 @@
   ;; Top level keymaps
   (general-define-key
     "<f2>"       #'ivy-switch-buffer
-    "<f3>"       #'counsel-projectile-find-file
+    "<f3>"       #'me:find-some-files
     "C-x b"      #'ivy-switch-buffer
     "C-h b"      #'counsel-descbinds
     "M-x"        #'counsel-M-x
