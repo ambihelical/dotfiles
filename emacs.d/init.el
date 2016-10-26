@@ -288,8 +288,17 @@
   (smooth-scrolling-mode t)
   :defer 3
   :init
-  (setq smooth-scroll-margin scroll-margin
+  (setq smooth-scroll-margin 5
         smooth-scroll-strict-margins t))
+
+(use-package sublimity
+  :defer 3
+  :init
+  (setq sublimity-scroll-weight 6
+        sublimity-scroll-drift-length 2)
+  (require 'sublimity-scroll)
+  :config
+  (sublimity-mode 1))
 
 ;; highlight keywords
 (use-package fic-mode
@@ -322,6 +331,8 @@
 ;; Highlight cursor position in buffer
 (use-package beacon
   :defer 3
+  :init
+  (setq beacon-blink-when-window-scrolls nil)
   :config
   (beacon-mode 1)
   :diminish beacon-mode)
