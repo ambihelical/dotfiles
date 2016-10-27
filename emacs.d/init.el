@@ -293,17 +293,19 @@
 (use-package smooth-scrolling
   :config
   (smooth-scrolling-mode t)
-  :defer 3
+  :defer 2
   :init
   (setq smooth-scroll-margin 5
         smooth-scroll-strict-margins t))
 
 (use-package sublimity
-  :defer 3
+  :if window-system
+  :defer 1
   :init
   (setq sublimity-scroll-weight 6
         sublimity-scroll-drift-length 2)
-  (require 'sublimity-scroll)
+  (run-with-idle-timer 1 nil (lambda ()
+    (require 'sublimity-scroll)))
   :config
   (sublimity-mode 1))
 
@@ -337,6 +339,7 @@
 
 ;; Highlight cursor position in buffer
 (use-package beacon
+  :if window-system
   :defer 3
   :init
   (setq beacon-blink-when-window-scrolls nil)
@@ -354,7 +357,7 @@
   :defer 4)
 
 (use-package leuven-theme
-  :demand
+  :defer 0
   :init
   (add-hook 'whitespace-mode-hook (lambda ()
     (set-face-attribute 'whitespace-line nil :foreground 'unspecified :background "lemon chiffon")
@@ -365,6 +368,7 @@
 
 
 (use-package spaceline-config
+  :if window-system
   :ensure spaceline
   :defer 2
   :init
@@ -391,6 +395,7 @@
 
 ;; show change indicators in fringe
 (use-package diff-hl
+  :if window-system
   :init
   (progn
     (setq diff-hl-fringe-bmp-function 'diff-hl-fringe-bmp-from-type)
@@ -442,7 +447,7 @@
         save-place-forget-unreadable-files nil)
   :config
   (save-place-mode t)
-  :defer 1)
+  :defer 3)
 
 (use-package ace-window
   :config
@@ -936,9 +941,12 @@
 
 ;; N.B. evil-mode must be enabled after global-evil-leader-mode
 (use-package evil
-  :defer 1
+  :commands evil-mode
+  :defer 3
   :init
   (progn
+    (add-hook 'prog-mode-hook #'evil-mode)
+    (add-hook 'text-mode-hook #'evil-mode)
     (setq-default evil-symbol-word-search t   ; misnamed: t is search for symbols, not words
                   evil-shift-width 3)         ; shift by ideal width :)
     (setq evil-want-C-w-delete nil            ; want C-w it for windows commands
