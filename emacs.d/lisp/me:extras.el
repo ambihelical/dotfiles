@@ -18,6 +18,7 @@
   (interactive)
   (setq fill-column (cond ((< fill-column 120) (+ fill-column 10))
                           ((>= fill-column 120) 70)))
+  (message "fill-column is %s" fill-column)
   (whitespace-mode -1)
   (whitespace-mode))
 
