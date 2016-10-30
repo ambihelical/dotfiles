@@ -126,6 +126,7 @@
 (winner-mode t)                                             ; enable winner mode
 (minibuffer-depth-indicate-mode t)                          ; show recursive edit depth
 (run-at-time "1 hour" 3600 #'clean-buffer-list)             ; clear out old buffers every hour
+(add-to-list 'magic-mode-alist (cons "ELF" 'elf-mode))    ; call elf-mode for elf files
 
 (global-unset-key (kbd "<f3>"))
 (global-unset-key (kbd "<f4>"))
@@ -765,6 +766,10 @@
         (define-key compilation-mode-map (kbd "<next>") #'compilation-next-error)
         (define-key compilation-mode-map (kbd "<home>") #'compilation-previous-file)
         (define-key compilation-mode-map (kbd "<end>") #'compilation-next-file)))))
+
+;; view symbols of libraries
+(use-package elf-mode
+  :config)
 
 (use-package doc-view
   :ensure nil
