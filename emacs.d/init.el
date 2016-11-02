@@ -871,6 +871,7 @@
     (defun me:tags-find-file ()
       (interactive)
       (call-interactively (if (me:use-rtags t) #'rtags-find-file #'helm-gtags-find-files)))
+    (require 'rtags-helm)
     (setq rtags-autostart-diagnostics t
           rtags-use-helm t
           rtags-tooltips-enabled nil
