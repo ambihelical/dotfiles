@@ -810,7 +810,8 @@
 (use-package company
   :commands ( global-company-mode company-complete )
   :init
-  (setq company-minimum-prefix-length 1)
+  (setq company-minimum-prefix-length 1            ; just one char needed
+        company-dabbrev-downcase nil)              ; never downcase
   :config
   (progn
     (use-package company-quickhelp
