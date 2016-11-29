@@ -1,4 +1,5 @@
-# vim:ft=zsh
+#!/bin/bash
+# Keep above line to force syntax highlighting
 
 # include sh/dash profile
 [ -e ${HOME}/.profile ] && source ${HOME}/.profile
@@ -44,25 +45,100 @@ tilde() {
 	echo ${*/${HOME}/\~}
 }
 
-# echo git project:branch
+# Print fancy git prompt information
+# Heavily modified from bash-powerline
+# - For speed, invoke git once instead of several times
+# - add remote branch and change formating
 gprompt() {
-	local out=
-	local branch=$(__git_ps1 "%s")
-	# shorten certain personal branch conventions
-	for pat in "personal/${USER}" "personal/"; do
-		if [[ "${branch}" =~ ^${pat} ]]; then
-			branch=${branch/${pat}/\~}
-			break
-		fi
-	done
-	if [[ -n "${branch}" ]]; then
-		local rdir=$(git rev-parse --show-toplevel 2>/dev/null)
-		local rbase=${rdir##*/}
-		local tbase=$(truncm "$rbase" 8)
-		local tbranch=$(truncm "$branch" 15)
-		out=":${tbase}@${tbranch}"
+	[ -x "$(which git)" ] || return    # git not found
+	local branch_changed_symbol='•'
+	local need_push_symbol='⇡'
+	local need_pull_symbol='⇣'
+
+	local git_eng="env LANG=C git"   # force git output in English to make our work easier
+
+	# get 1st two lines. First will be status line
+	# second may have modification status for first file
+	declare -a lines
+	mapfile -t lines < <($git_eng status --porcelain --branch 2>/dev/null|head -2)
+	[ -n "${lines[0]}" ] || return  # git branch not found
+
+	# how many commits local branch is ahead/behind of remote?
+	# looks like: ## local-branch...remote-branch [ahead 9]
+	#         or: ## local-branch...remote-branch [behind 9]
+	#         or: ## local-branch...remote-branch
+	#         or: ## local-branch
+	#         or: ## HEAD (no branch)
+	#                1             2      3             4   5
+	local regex='^## ([-a-zA-Z/_]+)(\.\.\.([-a-zA-Z/_]+)( \[([^\[]*)\]){0,1}){0,1}$'
+	local detachedRe='^## HEAD[\t\ ]+\(no branch\)$'
+	local marks aheadN behindN
+	if [[ ${lines[0]} =~ $regex ]]; then
+		 lbranch=${BASH_REMATCH[1]}
+		 rbranch=${BASH_REMATCH[3]}
+		 local slippage=${BASH_REMATCH[5]}
+		 local aheadRe='ahead ([0-9]+)'
+		 local behindRe='behind ([0-9]+)'
+		 [[ "$slippage" =~ $aheadRe ]] && aheadN=${BASH_REMATCH[1]}
+		 [[ "$slippage" =~ $behindRe ]] && behindN=${BASH_REMATCH[1]}
+	elif [[ ${lines[0]} =~ $detachedRe ]]; then
+		 lbranch="<detached HEAD>"
 	fi
-	echo $out
+	regex='^ *M'
+	[[ "${lines[1]}" =~ $regex ]] && marks+=" $branch_changed_symbol"
+
+	[ -n "$lbranch" ] && lmarks+="$lbranch"
+	[ -n "$aheadN" ] && lmarks+="$need_push_symbol$aheadN"
+	[ -n "$rbranch" ] && rmarks+=" ➜ $rbranch"
+	[ -n "$behindN" ] && rmarks+="$need_pull_symbol$behindN"
+
+	printf "$1$lmarks$rmarks$marks$2"
+}
+
+# Build fancy, color PS1
+# Heavily modified from bash-powerline
+# colors: black 0  red 1  green 2  yellow 3 blue 4 magenta 5 cyan 6 white 7
+#         add 8 for brighter colors
+ps1() {
+	local result=$?
+	local bold="\[$(tput bold)\]"
+	local reverse="\[$(tput rev)\]"
+	local dim="\[$(tput dim)\]"
+	local reset="\[$(tput sgr0)\]"
+	local fg_base="\[$(tput setaf 15)\]"
+	local st_fail="\[$(tput setaf 1)\]"
+	local st_succeed="\[$(tput setaf 2)\]"
+	local st_host="${fg_base}\[$(tput setab 5)\]"
+	local st_git="${fg_base}\[$(tput setab 6)\]"
+	local st_path="${fg_base}\[$(tput setab 4)\]"
+	local st_exit="$st_succeed"
+
+	# Check the exit code of the previous command and display different
+	# colors in the prompt accordingly.
+	if [ $result -ne 0 ]; then
+		st_exit="$st_fail"
+	fi
+	local host=" ${USER}@${HOSTNAME} "
+	local git=$(gprompt ' ' ' ')
+	local path=" $(tilde ${PWD})"
+	local cols=$(tput cols)
+	local len=$(( ${#path}+${#host}+${#git}+2 ))
+	if [ $len -gt $cols ]; then
+		 host=''
+		 len=$(( ${#path}+${#host}+${#git}+2 ))
+	fi
+	if [ $len -gt $cols ]; then
+		 git=''
+		 len=$(( ${#path}+${#host}+${#git}+2 ))
+	fi
+	if [ $len -gt $cols ]; then
+		 path=$(truncm $path $(( $cols-2 )))
+	fi
+	PS1="${st_exit}┏━${reset}"
+	PS1+="${st_host}${host}${reset}"
+	PS1+="${st_git}${git}${reset}"
+	PS1+="${st_path}${path}${reset}"
+	PS1+="\n${st_exit}┗━⯈${reset} "
 }
 
 # cd relative to current git repo
@@ -215,8 +291,8 @@ if [ "$ecma" == "1" ]; then
 fi
 
 # primary prompt. Color only when ECMA-48 capable terminal
-PS1='\[\033[01;32m\]$(truncm \u)@$(truncm \h)\[\033[00m\]$(gprompt):\[\033[01;34m\]$(truncm "$(tilde \w)" 20)\[\033[00m\]\$ '
-[ "$ecma" != "1" ] && PS1='\u@\h$(gprompt):\w\$ ' && PROMPT_DIRTRIM=2
+# For now assume tput color directives are ignored for non-ecma terminals
+PROMPT_COMMAND=ps1
 
 case "$TERM" in
 xterm*|rxvt*)
