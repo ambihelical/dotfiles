@@ -57,6 +57,15 @@
       (counsel-projectile-find-file)
     (counsel-find-file)))
 
+;; set font attributes after theme loads
+(defun me:set-extra-font-attributes ()
+  (let ((bg (face-attribute 'default :background))
+        (fg (face-attribute 'default :foreground)))
+         (set-face-attribute 'hl-line nil :foreground 'unspecified :background "gainsboro")
+         (set-face-attribute 'whitespace-line nil :foreground 'unspecified :background "lemon chiffon")
+         (set-face-attribute 'whitespace-tab nil :foreground "gainsboro" :background bg )
+         (set-face-attribute 'whitespace-trailing nil :foreground fg :background "red" )))
+
 ;; configuration I haven't figured out how to wedge into
 ;; use-package
 
@@ -327,6 +336,7 @@
     (setq whitespace-line-column nil                      ; highlight past fill-column
           whitespace-style '(face trailing tabs tab-mark lines-tail space-before-tab)
           whitespace-display-mappings '((tab-mark 9 [9657 9] [92 9])))
+    (add-hook 'whitespace-mode-hook 'me:set-extra-font-attributes)
     (add-hook 'prog-mode-hook #'whitespace-mode))
   :diminish whitespace-mode)
 
@@ -357,16 +367,7 @@
     (add-hook 'visual-line-mode-hook #'adaptive-wrap-prefix-mode))
   :defer 4)
 
-(use-package leuven-theme
-  :defer 0
-  :init
-  (add-hook 'whitespace-mode-hook (lambda ()
-    (set-face-attribute 'whitespace-line nil :foreground 'unspecified :background "lemon chiffon")
-    (set-face-attribute 'whitespace-tab nil :foreground "gainsboro" :background "white" )
-    (set-face-attribute 'whitespace-trailing nil :foreground "black" :background "red" )))
-  :config
-  (set-face-attribute 'hl-line nil :foreground 'unspecified :background "gainsboro"))
-
+(use-package leuven-theme :defer 0 :config)
 
 (use-package spaceline-config
   :if window-system
