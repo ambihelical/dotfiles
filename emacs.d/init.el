@@ -104,6 +104,7 @@
       visual-line-fringe-indicators '(left-curly-arrow nil) ; use left curly error for wrapped lines
       text-scale-mode-step 1.05                             ; text size increases by 5% (normally 20%)
       view-read-only t                                      ; show r/o files in view mode
+      auto-revert-check-vc-info t                           ; update branch on auto-revert
       enable-recursive-minibuffers t                        ; allow recursive edit
       standard-indent 3                                     ; ideal indent :)
       scroll-margin 5                                       ; show some lines around cursor when possible
