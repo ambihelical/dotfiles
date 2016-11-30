@@ -153,20 +153,35 @@ shopt -s histappend
 
 #### Store various files in XDG directories
 
+# avoids ~/.bash_history
 export HISTFILE=${XDG_CACHE_HOME}/bash/history
 [ -d ${XDG_CACHE_HOME}/bash ] || mkdir -p ${XDG_CACHE_HOME}/bash
+# avoids ~/.lesshst
 export LESSHISTFILE=${XDG_CACHE_HOME}/less/history
 [ -d ${XDG_CACHE_HOME}/less ] || mkdir -p ${XDG_CACHE_HOME}/less
+# avoids ~/.inputrc
 export INPUTRC=${XDG_CONFIG_HOME}/readline
+# avoids ~/.screenrc
 export SCREENRC=${XDG_CONFIG_HOME}/screen
+# avoids ~/.subversion
 export SUBVERSION_HOME=${XDG_CONFIG_HOME}/subversion
+# avoids ~/.python_history (pythonrc must have code for this though)
 export PYTHONSTARTUP=${XDG_CONFIG_HOME}/pythonrc
+# avoids ~/.pip
 export PIP_CONFIG_FILE=${XDG_CONFIG_HOME}/pip/config
 export PIP_LOG_FILE=${XDG_CACHE_HOME}/pip/log
+# avoids ~/.ipython
 export IPYTHONDIR=${XDG_CONFIG_HOME}/ipython
+# avoids ~/.android
 export ANDROID_SDK_HOME=${XDG_DATA_HOME}/android
+[ -d ${ANDROID_SDK_HOME} ] || mkdir -p ${ANDROID_SDK_HOME}
+[ -d ${ANDROID_SDK_HOME}/.android ] || mkdir -p ${ANDROID_SDK_HOME}/.android
+# avoids ~/aws/config
 export AWS_CONFIG_FILE=${XDG_CONFIG_HOME}/aws/config
-export WIRESHARK_DATA_DIR=${XDG_CONFIG_HOME}/wireshark
+# avoids ~/.mplayer
+export MPLAYER_HOME=${XDG_CONFIG_HOME}/mplayer
+# avoids ~/.gradle
+export GRADLE_USER_HOME=${XDG_CACHE_HOME}/gradle
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
