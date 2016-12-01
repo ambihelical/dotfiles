@@ -383,7 +383,7 @@
       :config
       :demand
       :init
-      (setq powerline-default-separator 'wave))
+      (setq powerline-default-separator 'curve))
     (spaceline-spacemacs-theme)
     ;; Remove existing buffer local mode line format so that it uses the
     ;; global one, and then force it to update.
