@@ -5,12 +5,22 @@
 ;;; Code:
 
 ;;;###autoload
-(defun me:select-nth-other-buffer (arg)
+(defun me:select-nth-other-buffer (arg &optional prefix)
   "Select the nth other buffer"
-  (interactive "p")
+  (interactive "P")
   (let ((buffer (nth arg (-filter 'buffer-file-name (buffer-list)))))
     (if buffer
-        (switch-to-buffer buffer))))
+        (if prefix
+            (switch-to-buffer-other-window buffer)
+          (switch-to-buffer buffer)))))
+
+;;;###autoload
+(defun me:find-other-file (&optional prefix)
+  "Find other file e.g. .h <-> .cpp"
+  (interactive "P")
+  (if prefix
+      (projectile-find-other-file-other-window)
+    (projectile-find-other-file)))
 
 ;;;###autoload
 (defun me:rotate-fill-column ()

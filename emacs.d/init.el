@@ -146,7 +146,10 @@
 ;; some demand loaded commands I wrote
 (use-package me:extras
   :ensure nil
-  :commands (me:select-nth-other-buffer me:rotate-fill-column me:next-powerline-separator)
+  :commands (me:select-nth-other-buffer
+             me:find-other-file
+             me:rotate-fill-column
+             me:next-powerline-separator)
   :load-path "lisp/")
 
 ;; keymappings
@@ -160,12 +163,11 @@
     "C-x b"      #'ivy-switch-buffer
     "C-h b"      #'counsel-descbinds
     "M-x"        #'counsel-M-x
-    "s-1"        #'projectile-find-other-file
-    "s-#"        #'me:select-nth-other-buffer    ; base mapping for the following . ..
-    "s-2"        (kbd "C-u 1 s-#")
-    "s-3"        (kbd "C-u 2 s-#")
-    "s-4"        (kbd "C-u 3 s-#")
-    "s-5"        (kbd "C-u 4 s-#")
+    "s-1"        #'me:find-other-file
+    "s-2"        #'(lambda (&optional prefix) (interactive "P") (me:select-nth-other-buffer 1 prefix))
+    "s-3"        #'(lambda (&optional prefix) (interactive "P") (me:select-nth-other-buffer 2 prefix))
+    "s-4"        #'(lambda (&optional prefix) (interactive "P") (me:select-nth-other-buffer 3 prefix))
+    "s-5"        #'(lambda (&optional prefix) (interactive "P") (me:select-nth-other-buffer 4 prefix))
     "s-c"        #'me:rotate-fill-column
     "s-d"        #'company-complete
     "s-f"        #'flyspell-auto-correct-previous-word
