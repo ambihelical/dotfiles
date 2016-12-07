@@ -138,7 +138,10 @@ ps1() {
 	PS1+="${st_host}${host}${reset}"
 	PS1+="${st_git}${git}${reset}"
 	PS1+="${st_path}${path}${reset}"
-	PS1+="\n${st_exit}┗━⯈${reset} "
+	# This one has better alignment, but symbola
+	# font on 14.04 does not have this glyph:
+	# PS1+="\n${st_exit}┗━⯈${reset} "
+	PS1+="\n${st_exit}┗━▶${reset} "
 }
 
 # cd relative to current git repo
