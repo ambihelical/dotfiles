@@ -18,9 +18,10 @@
 (defun me:find-other-file (&optional prefix)
   "Find other file e.g. .h <-> .cpp"
   (interactive "P")
-  (if prefix
-      (projectile-find-other-file-other-window)
-    (projectile-find-other-file)))
+  (let ((case-fold-search nil))
+    (if prefix
+        (projectile-find-other-file-other-window)
+      (projectile-find-other-file))))
 
 ;;;###autoload
 (defun me:rotate-fill-column ()
