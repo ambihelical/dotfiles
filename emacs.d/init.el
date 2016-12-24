@@ -171,7 +171,11 @@
     "s-c"        #'me:rotate-fill-column
     "s-d"        #'company-complete
     "s-f"        #'flyspell-auto-correct-previous-word
-    "s-s"        #'flyspell-correct-previous-word-generic
+    "s-S-f"      #'flyspell-correct-previous-word-generic
+    "s-h"        #'git-gutter+-next-hunk
+    "s-S-h"      #'git-gutter+-previous-hunk
+    "s-s"        #'git-gutter+-stage-hunks
+    "s-o"        #'git-gutter+-show-hunk-inline-at-point
     "s-]"        #'winner-redo
     "s-["        #'winner-undo
     "s-;"        #'rtags-location-stack-forward
@@ -257,10 +261,7 @@
   ;; F7
   (general-define-key
    :prefix "<f7>"
-    "a"     #'magit-run-git-gui-blame
-    "b"     #'magit-blame
     "f"     #'counsel-projectile-find-file
-    "g"     #'magit-status
     "k"     #'projectile-kill-buffers
     "o"     #'projectile-multi-occur
     "r"     #'persp-rename
@@ -278,6 +279,17 @@
    "u"      #'evil-window-rotate-upwards
    "r"      #'windresize
    "<f8>"  #'delete-other-windows)
+
+  ;; F9
+  (general-define-key
+   :prefix "<f9>"
+    "a"     #'magit-run-git-gui-blame
+    "b"     #'magit-blame
+    "c"     #'magit-commit
+    "i"     #'git-gutter+-show-hunk
+    "l"     #'magit-log-current
+    "<f9>"  #'magit-status)
+
   :demand)
 
 (use-package emacs-lisp-mode
@@ -398,28 +410,20 @@
                   (force-mode-line-update t))))
         (buffer-list))))
 
-;; show change indicators in fringe
-(use-package diff-hl
-  :if window-system
-  :init
-  (progn
-    (setq diff-hl-fringe-bmp-function 'diff-hl-fringe-bmp-from-type)
-    (add-hook 'dired-mode-hook #'diff-hl-dired-mode)
-    (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh))
-  :config
-  (progn
-    (when (not (display-graphic-p))
-      (diff-hl-margin-mode 1))
-    (diff-hl-flydiff-mode 1)       ; needs 24.4 or newer
-    (global-diff-hl-mode 1))
-  :defer 4)
-
-
 (use-package linum-relative
   :config
   :diminish linum-relative-mode
   :init
   (setq linum-relative-current-symbol ""))   ; show current line #
+
+(use-package git-gutter-fringe+
+  :if window-system
+  :init
+  :config
+   (progn
+    (global-git-gutter+-mode t))
+  :defer 1
+  :diminish git-gutter+-mode)
 
 (use-package ruler-mode
   :config)
