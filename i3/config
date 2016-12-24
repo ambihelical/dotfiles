@@ -238,7 +238,6 @@ bindsym $mod+Shift+minus  move scratchpad
 bindsym $mod+minus scratchpad show
 
 # assignments
-
 assign [class="Pithos"] 10:Admin
 
 # startup programs
@@ -246,7 +245,6 @@ assign [class="Pithos"] 10:Admin
 exec --no-startup-id ~/bin/i3wm-extra-startup
 exec --no-startup-id nm-applet
 exec --no-startup-id clipit
-exec --no-startup-id pithos
 exec --no-startup-id thunderbird
 exec --no-startup-id urxvt -name scratch
 exec --no-startup-id devmon
