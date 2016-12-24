@@ -96,6 +96,9 @@
       kill-ring-max 200                                     ; More killed items
       kill-do-not-save-duplicates t                         ; No duplicates in kill ring
       history-length 1000                                   ; length of history
+      undo-limit 1000000                                    ; 1M (default is 80K)
+      undo-strong-limit 1500000                             ; 1.5M (default is 120K)
+      undo-outer-limit 150000000                            ; 150M (default is 12M)
       save-interprogram-paste-before-kill t                 ; save clipboard before killing
       select-enable-clipboard nil                           ; make cut/paste function correctly
       x-gtk-use-system-tooltips nil                         ; allow tooltip theming
