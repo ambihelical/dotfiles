@@ -782,6 +782,12 @@
 (use-package elf-mode
   :config)
 
+(use-package woman
+  :ensure nil
+  :init
+  (setq woman-use-topic-at-point t)                         ; man page on word at point if exists
+  :config)
+
 (use-package doc-view
   :ensure nil
   :config
