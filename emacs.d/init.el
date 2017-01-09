@@ -785,7 +785,8 @@
 (use-package woman
   :ensure nil
   :init
-  (setq woman-use-topic-at-point t)                         ; man page on word at point if exists
+  (setq woman-use-topic-at-point t                          ; man page on word at point if exists
+        Man-notify-method 'aggressive)                      ; show&select man page in other window
   :config)
 
 (use-package doc-view
