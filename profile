@@ -36,3 +36,8 @@ export CCACHE_DIR=${XDG_CACHE_HOME}/ccache
 
 # This disables startup messages about inability to connect to accessibility bus
 export NO_AT_BRIDGE=1
+
+# Default man path includes both /usr/local/man as well as /usr/local/share/man
+# which the former is a symlink to.  This leads to duplication of man pages in
+# e.g. emacs woman, so we will overide all of that:
+export MANPATH=/usr/local/share/man:/usr/share/man

@@ -223,6 +223,9 @@ fi
 export EDITOR=vim
 set -o vi
 
+# use less for paging
+export PAGER=less
+
 # bash history control
 # ignore dups, append, increase size, put history in xdg dir
 export HISTCONTROL=ignoreboth
@@ -284,13 +287,22 @@ fi
 
 # enable color support of ls and also add handy aliases
 if [ "$ecma" == "1" ]; then
-    # define LS_COLORS using dircolors if it exists
-    [ -x /usr/bin/dircolors ] && eval "`dircolors -b`"
-    alias ls="${_PRE_}ls --color=auto"
-    alias dir='${_PRE_}dir --color=auto'
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
+	# define LS_COLORS using dircolors if it exists
+	[ -x /usr/bin/dircolors ] && eval "`dircolors -b`"
+	alias ls="${_PRE_}ls --color=auto"
+	alias dir='${_PRE_}dir --color=auto'
+	alias grep='grep --color=auto'
+	alias fgrep='fgrep --color=auto'
+	alias egrep='egrep --color=auto'
+
+	# colorize less, mainly for manpage output
+	export LESS_TERMCAP_mb=$(tput setab 1)   # mode blink
+	export LESS_TERMCAP_md=$(tput bold)   # mode bold
+	export LESS_TERMCAP_me=$(tput sgr0)  # end mode
+	export LESS_TERMCAP_so=$(tput setab 9)   # standout
+	export LESS_TERMCAP_se=$(tput sgr0)  # end standout
+	export LESS_TERMCAP_us=$(tput setaf 6)    # begin underline
+	export LESS_TERMCAP_ue=$(tput sgr0)  # end underline
 fi
 
 # primary prompt. Color only when ECMA-48 capable terminal
