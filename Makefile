@@ -55,6 +55,7 @@ barex: ${BAREX_FILES}
 
 root: ${ETC_FILES}
 	udevadm control --reload-rules   # for udev rules
+	cd stdman && ./configure && make install && mandb
 
 # fix some annoying default settings
 defaults:
