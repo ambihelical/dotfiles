@@ -286,9 +286,10 @@
   ;; F9
   (general-define-key
    :prefix "<f9>"
-    "a"     #'magit-run-git-gui-blame
     "b"     #'magit-blame
+    "B"     #'magit-run-git-gui-blame
     "c"     #'magit-commit
+    "a"     #'magit-commit-amend
     "i"     #'git-gutter+-show-hunk
     "l"     #'magit-log-current
     "<f9>"  #'magit-status)
