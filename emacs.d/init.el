@@ -788,7 +788,10 @@
   :init
   (setq woman-use-topic-at-point t                          ; man page on word at point if exists
         Man-notify-method 'aggressive)                      ; show&select man page in other window
-  :config)
+  :config
+  (progn
+    (set-face-attribute 'Man-overstrike nil :inherit font-lock-type-face :bold t)
+    (set-face-attribute 'Man-underline nil :inherit font-lock-keyword-face :underline t)))
 
 (use-package doc-view
   :ensure nil
