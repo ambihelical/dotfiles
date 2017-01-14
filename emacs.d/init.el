@@ -981,6 +981,7 @@
     (setq evil-want-C-w-delete nil            ; want C-w it for windows commands
           evil-want-C-w-in-emacs-state t      ; ditto
           evil-want-C-i-jump nil              ; need TAB for other things
+          evil-indent-convert-tabs nil        ; make = work with smart tabs mode
           evil-search-module #'evil-search))
   :config
   (progn
