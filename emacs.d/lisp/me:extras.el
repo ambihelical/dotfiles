@@ -4,11 +4,20 @@
 
 ;;; Code:
 
+;; Return t if buffer can be selected.  This allows
+;; certain non-file buffers to be selected with
+;; me:select-nth-other-buffer.
+(defun me:useful-buffer (buffer)
+  (let ((bufname (buffer-name buffer))
+        (specials `("*scratch*" "*Messages*")))
+    (cond ((car (member bufname specials)) t)
+          ((buffer-file-name buffer) t))))
+
 ;;;###autoload
 (defun me:select-nth-other-buffer (arg &optional prefix)
   "Select the nth other buffer"
   (interactive "P")
-  (let ((buffer (nth arg (-filter 'buffer-file-name (buffer-list)))))
+  (let ((buffer (nth arg (-filter 'me:useful-buffer (buffer-list)))))
     (if buffer
         (if prefix
             (switch-to-buffer-other-window buffer)
