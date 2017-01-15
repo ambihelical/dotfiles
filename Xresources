@@ -12,6 +12,10 @@ URxvt*urlLauncher: sensible-browser
 URxvt*matcher.button: 1
 URxvt*colorUL: #86a2be
 
+! just say no to these
+URxvt.iso14755: false
+URxvt.iso14755_52: false
+
 ! black
 URxvt*color0  : #2E3436
 URxvt*color8  : #555753
