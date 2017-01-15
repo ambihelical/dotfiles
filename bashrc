@@ -313,9 +313,9 @@ case "$TERM" in
 xterm*|rxvt*)
 	# set window title (can override with environment variable TITLE)
 	PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND ;}window_title"
-    ;;
+	;;
 *)
-    ;;
+	;;
 esac
 
 ##### Aliases & Bindings #####
@@ -330,35 +330,40 @@ alias ag='mark && \ag'
 
 case "$OSTYPE" in
 linux-gnuea*)  # raspbian
-    alias ap='aptitude'
-    ;;
+	alias ap='aptitude'
+	;;
 linux*)
-    export DISPLAY=:0.0   # set display for X
-    alias open=gnome-open
-    gterm() { urxvt -geometry 80x200-0-0 -title "$1: $2" -e sh -c "$1 $2"; }
-    gman() { gterm man $1 & }
-    ginfo() { gterm info $1 & }
-    gtail() { gterm less $1 & }
-    # Run commands in a new, temporary terminal window
-    gmore()
-    {
-        if [[ $# == 0 ]]; then
-            file=~/.cache/cat_$$_${RANDOM}
-            cat > $file
-            ( gterm less $file && rm $file )&
-        else
-            gterm less $* &
-        fi
-    }
-    say() { echo "(audio_mode 'async)(SayText \"$*\")" | festival --pipe; }
-    alias vi='gvim -geometry 120x60-0 2>/dev/null'
-    alias lyx='lyx -geometry 800x1075-15+0'
-    alias gless=gmore
-    # allow core dumps
-	 if [	"$(uname -n)" == "jh-rvueb" ]; then
-		ulimit -c unlimited
-    fi
-    ;;
+	export DISPLAY=:0.0   # set display for X
+	# simulate the osx commands:
+	alias open=gnome-open
+	alias pbcopy='xclip -selection clipboard'
+	alias pbpaste='xclip -selection clipboard -o'
+
+	# run commands in new window
+	gterm() { urxvt -geometry 80x200-0-0 -title "$1: $2" -e sh -c "$1 $2"; }
+	gman() { gterm man $1 & }
+	ginfo() { gterm info $1 & }
+	gtail() { gterm less $1 & }
+	gmore()
+	{
+		if [[ $# == 0 ]]; then
+			file=~/.cache/cat_$$_${RANDOM}
+			cat > $file
+			( gterm less $file && rm $file )&
+		else
+			gterm less $* &
+		fi
+	}
+	alias gless=gmore
+	say() { echo "(audio_mode 'async)(SayText \"$*\")" | festival --pipe; }
+	alias vi='gvim -geometry 120x60-0 2>/dev/null'
+	alias lyx='lyx -geometry 800x1075-15+0'
+
+	# allow core dumps
+	if [	"$(uname -n)" == "jh-rvueb" ]; then
+		 ulimit -c unlimited
+	fi
+	;;
 
 darwin*)  # OSX
 	# emacs
@@ -383,8 +388,8 @@ darwin*)  # OSX
 	# By default Macports/Brew prefixes the most common GNU tools with "g".  They can
 	# be aliased to the regular name without cause problem #2, but #1 can still occur.
 	# Put any such aliases here:
-    ;;
+	;;
 
 *)   # Everything else
-    ;;
+	;;
 esac
