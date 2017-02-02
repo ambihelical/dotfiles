@@ -297,9 +297,8 @@ if [ "$ecma" == "1" ]; then
 	export LESS_TERMCAP_ue=$(tput sgr0)  # end underline
 fi
 
-# primary prompt. Color only when ECMA-48 capable terminal
-# For now assume tput color directives are ignored for non-ecma terminals
-PROMPT_COMMAND=ps1
+# add fancy prompt, don't override PROMPT_COMMAND so autojump still works
+PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND ;}ps1"
 
 case "$TERM" in
 xterm*|rxvt*)
