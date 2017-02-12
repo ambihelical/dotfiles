@@ -619,7 +619,8 @@
   :commands (smart-tabs-mode)
   :init
   (progn
-    (add-hook 'c-mode-common-hook #'smart-tabs-mode)
+    (add-hook 'c-mode-hook #'smart-tabs-mode)
+    (add-hook 'c++-mode-hook #'smart-tabs-mode)
     (add-hook 'python-mode-hook #'smart-tabs-mode))
   :config
   (progn
@@ -716,6 +717,20 @@
   :mode
   (("\\.js\\'" . js-mode)
    ("\\.json\\'" . js-mode)))
+
+;; basic setup for java code
+(use-package java-mode
+  :ensure nil
+  :init
+  (add-hook 'java-mode-hook
+            (lambda ()
+              (setq c-basic-offset 4                             ; use common convention
+                    tab-width 8                                  ; 4 spaces indentation
+                    evil-shift-width 4                           ; no tabs
+                    indent-tabs-mode nil)))
+  :config
+  :mode
+  (("\\.java\\'" . java-mode)))
 
 (use-package cc-mode
   :init
@@ -900,8 +915,10 @@
           rtags-tooltips-enabled nil
           rtags-display-current-error-as-message nil
           rtags-completions-enabled t)
-    (add-hook 'c-mode-common-hook #'rtags-start-process-unless-running)
-    (add-hook 'c-mode-common-hook #'me:flycheck-rtags-setup)
+    (add-hook 'c++-mode-hook #'rtags-start-process-unless-running)
+    (add-hook 'c-mode-hook #'rtags-start-process-unless-running)
+    (add-hook 'c++-mode-hook #'me:flycheck-rtags-setup)
+    (add-hook 'c-mode-hook #'me:flycheck-rtags-setup)
     (add-hook 'company-mode-hook  #'me:company-rtags-setup))
   :config
   (progn
@@ -1075,20 +1092,10 @@
     (evil-mode 1)))
 
 (use-package ws-butler
+  :init
+  (setq ws-butler-convert-leading-tabs-or-spaces t)       ; convert according to indent-tabs-mode (but not when smart-tabs-mode on)
   :config
   (progn
-    ;; work around current tab replacement behavior
-    (defun ws-butler-clean-region (beg end)
-      "Delete trailing blanks in region BEG END."
-      (interactive "*r")
-      (ws-butler-with-save
-      (narrow-to-region beg end)
-      (goto-char (point-min))
-      (while (not (eobp))
-        (end-of-line)
-        (delete-horizontal-space)
-        (forward-line 1)))
-      nil)
     (ws-butler-global-mode t))
   :diminish ws-butler-mode
   :defer 3)
