@@ -13,22 +13,51 @@
 [ -d $XDG_CONFIG_HOME ] || mkdir -p $XDG_CONFIG_HOME
 
 # Override certain utilities and programs to use XDG directories
-# These are only things that may be invoked via dash. 
+# Some of these are invoked only via dash, others are invoked
+# by gnome, via .desktop files.  These also circumvent ~/.bashrc
 # Overrides that for programs only run from bash shell
 # (interactive or otherwise) are in bashrc.
+
+# avoid ~/.gnome2
+# (something keeps recreating this dir, but it is empty)
 export GNOME22_USER_DIR=${XDG_CONFIG_HOME}/gnome2.2
+
+# avoid ~/.gtkrc-2.0
 export GTK2_RC_FILES="${XDG_CONFIG_HOME}/gtk-2.0/gtkrc"
+
+# avoid ~/.gimp-2.8 (or later)
 export GIMP2_DIRECTORY=${XDG_CONFIG_HOME}/gimp2
+
+# avoid ~/.globalrc, skip unreadables files by default
 export GTAGSCONF=${XDG_CONFIG_HOME}/globalrc
 export GTAGS_OPTIONS=--skip-unreadable
+
+# avoid ~/.gnupg
 export GNUPGHOME=${XDG_CONFIG_HOME}/gnupg
+
+# avoid ~/.nv
 export __GL_SHADER_DISK_CACHE_PATH=${XDG_CACHE_HOME}/nv
 export CUDA_CACHE_PATH=${XDG_CACHE_HOME}/nv 
 [ -d ${XDG_CACHE_HOME}/nv ] || mkdir -p ${XDG_CACHE_HOME}/nv
+
+# avoid ~/.ICEauthority
 export ICEAUTHORITY=${XDG_CACHE_HOME}/ICEauthority
+
+# avoid ~/.ccache, set max size
 export CCACHE_MAXSIZE=10G
 export CCACHE_DIR=${XDG_CACHE_HOME}/ccache
 [ -d ${CCACHE_DIR} ] || mkdir -p ${CCACHE_DIR}
+
+# avoids ~/.android
+export ANDROID_SDK_HOME=${XDG_DATA_HOME}/android
+[ -d ${ANDROID_SDK_HOME} ] || mkdir -p ${ANDROID_SDK_HOME}
+[ -d ${ANDROID_SDK_HOME}/.android ] || mkdir -p ${ANDROID_SDK_HOME}/.android
+
+# avoids ~/.gradle
+export GRADLE_USER_HOME=${XDG_CACHE_HOME}/gradle
+
+# avoids ~/aws/config
+export AWS_CONFIG_FILE=${XDG_CONFIG_HOME}/aws/config
 
 # this doesn't work under mint, suspect mdm is hard coding it
 # it also doesn't work under Ubuntu 15.10, probably lightdm is hard coding it

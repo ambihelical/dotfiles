@@ -254,16 +254,8 @@ export PIP_CONFIG_FILE=${XDG_CONFIG_HOME}/pip/config
 export PIP_LOG_FILE=${XDG_CACHE_HOME}/pip/log
 # avoids ~/.ipython
 export IPYTHONDIR=${XDG_CONFIG_HOME}/ipython
-# avoids ~/.android
-export ANDROID_SDK_HOME=${XDG_DATA_HOME}/android
-[ -d ${ANDROID_SDK_HOME} ] || mkdir -p ${ANDROID_SDK_HOME}
-[ -d ${ANDROID_SDK_HOME}/.android ] || mkdir -p ${ANDROID_SDK_HOME}/.android
-# avoids ~/aws/config
-export AWS_CONFIG_FILE=${XDG_CONFIG_HOME}/aws/config
 # avoids ~/.mplayer
 export MPLAYER_HOME=${XDG_CONFIG_HOME}/mplayer
-# avoids ~/.gradle
-export GRADLE_USER_HOME=${XDG_CACHE_HOME}/gradle
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
