@@ -225,7 +225,7 @@
     "k"     #'counsel-descbinds
     "l"     #'counsel-locate
     "n"     #'deft
-    "m"     #'helm-man-woman
+    "m"     #'woman
     "p"     #'paradox-list-packages
     "r"     #'counsel-recentf
     "s"     #'counsel-ag
@@ -233,7 +233,7 @@
     "u"     #'counsel-unicode-char
     "v"     #'undo-tree-visualize
     "x"     #'helm-top
-    "y"     #'helm-show-kill-ring
+    "y"     #'counsel-yank-pop
     "<f4>"  #'ivy-resume)
 
   ;; F5
@@ -553,7 +553,9 @@
   :diminish (ivy-mode . ""))
 
 (use-package counsel
-  :commands ( counsel-descbinds counsel-bookmark counsel-file-jump counsel-imenu )
+  :commands ( counsel-descbinds counsel-bookmark counsel-file-jump counsel-imenu counsel-yank-pop)
+  :init
+  (setq counsel-yank-pop-separator "\n---\n")
   :config
   (counsel-mode 1)
   :diminish (counsel-mode . ""))
@@ -562,7 +564,7 @@
 (use-package wgrep)
 
 (use-package helm
-  :commands ( helm-top helm-man-woman helm-top helm-all-mark-rings)
+  :commands ( helm-top helm-all-mark-rings helm-apropos)
   :init
   (setq helm-split-window-in-side-p           t
         helm-split-window-default-side        'other
