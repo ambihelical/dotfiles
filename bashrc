@@ -70,7 +70,7 @@ gprompt() {
 	#         or: ## local-branch
 	#         or: ## HEAD (no branch)
 	#                1             2      3             4   5
-	local regex='^## ([-a-zA-Z/_]+)(\.\.\.([-a-zA-Z/_]+)( \[([^\[]*)\]){0,1}){0,1}$'
+	local regex='^## ([-a-zA-Z0-9/_]+)(\.\.\.([-a-zA-Z0-9/_]+)( \[([^\[]*)\]){0,1}){0,1}$'
 	local detachedRe='^## HEAD[\t\ ]+\(no branch\)$'
 	local marks aheadN behindN
 	if [[ ${lines[0]} =~ $regex ]]; then
@@ -83,6 +83,8 @@ gprompt() {
 		 [[ "$slippage" =~ $behindRe ]] && behindN=${BASH_REMATCH[1]}
 	elif [[ ${lines[0]} =~ $detachedRe ]]; then
 		 lbranch="<detached HEAD>"
+	else
+		 lbranch="<Parse Error>"
 	fi
 	regex='^ *M'
 	[[ "${lines[1]}" =~ $regex ]] && marks+=" $branch_changed_symbol"
