@@ -262,21 +262,22 @@ for_window [instance="scratch"] floating enable, move scratchpad, scratchpad sho
 # title formatting
 for_window [class="Gcalctool"] title_format "<span font='Symbola Bold 12'>Σ</span> %title"
 for_window [class="Qalculate"] title_format "<span font='Symbola Bold 12'>Σ</span> %title"
-for_window [class="Emacs"] title_format "<span foreground='aquamarine1' font_weight='bold'><span font='Symbola Bold 12'>Ɛ</span> %title</span>"
+for_window [class="Emacs"] title_format "<span foreground='aquamarine1' font_weight='bold'><span font='Symbola Bold 12'>ℰ</span> %title</span>"
 for_window [class="URxvt"] title_format "<span foreground='light steel blue' font_weight='bold'><span font='Symbola Bold 12'>↵</span> %title</span>"
 for_window [class="Firefox"] title_format "<span foreground='light salmon'><span font='Symbola Bold 12'>☯</span> %title</span>"
 for_window [class="Pithos"] title_format "<span font='Symbola Bold 12'>♫</span> %title"
-for_window [class="Thunderbird"] title_format "<span font='Symbola Bold 12'>Ⓣ</span> %title"
+for_window [class="Thunderbird"] title_format "<span font='Symbola Bold 12'>ᛋ</span> %title"
 for_window [class="Git-gui"] title_format "<span foreground='plum'><span font='Symbola Bold 12'>Ⓖ</span> %title</span>"
-for_window [class="Gitk"] title_format "<span foreground='plum'><span font='Symbola Bold 12'>⛕</span> %title</span>"
+for_window [class="Gitk"] title_format "<span foreground='plum'><span font='Symbola Bold 12'>⌥</span> %title</span>"
 for_window [class="GVim"] title_format "<span font='Symbola Bold 12'>☢</span> %title"
 for_window [class="Pidgin"] title_format "<span font='Symbola Bold 12'>🐦</span> %title"
-for_window [class="Evince"] title_format "<span font='Symbola Bold 12'>ℰ</span> %title"
+for_window [class="Evince"] title_format "<span font='Symbola Bold 12'>Ⓟ</span> %title"
 for_window [class="Wireshark"] title_format "<span font='Symbola Bold 12'>↔</span> %title"
 for_window [class="Nemo"] title_format "<span font='Symbola Bold 12'>📂</span> %title"
 for_window [class="jetbrains-studio"] title_format "<span font='Symbola Bold 12'>Ⓐ</span> %title"
 for_window [class="chromium-browser"] title_format "<span font='Symbola Bold 12'>Cr</span> %title"
 for_window [class="VirtualBox"] title_format "<span font='Symbola Bold 12'>ⓥ</span> %title"
+for_window [class="Thg"] title_format "<span font='Symbola Bold 12'>Ⓣ</span> %title"
 
 # convenient key bindings
 bindsym $mod+slash exec nemo --no-desktop || nautilus --no-desktop
