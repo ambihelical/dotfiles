@@ -73,8 +73,12 @@
               indent-tabs-mode t                            ; enable tabs for most files
               indicate-empty-lines t                        ; show empty lines at end of buffer
               fill-column 120)                              ; auto-wrap only very long lines
-(setq backup-directory-alist
-         `((".*" . ,me:emacs-backup-directory))             ; use my backup directory
+(setq auto-revert-check-vc-info t                           ; update branch on auto-revert
+      auto-revert-verbose nil                               ; don't tell me about auto reverts
+      auto-save-file-name-transforms
+         `((".*" ,me:emacs-backup-directory t))             ; autosave files in backup directory
+      backup-directory-alist
+         `((".*" . ,me:emacs-backup-directory))             ; backup files in backup directory
       inhibit-splash-screen t                               ; no splash
       inhibit-startup-echo-area-message t                   ; no startup message
       inhibit-startup-message t                             ; no startup message
@@ -107,7 +111,6 @@
       visual-line-fringe-indicators '(left-curly-arrow nil) ; use left curly error for wrapped lines
       text-scale-mode-step 1.05                             ; text size increases by 5% (normally 20%)
       view-read-only t                                      ; show r/o files in view mode
-      auto-revert-check-vc-info t                           ; update branch on auto-revert
       enable-recursive-minibuffers t                        ; allow recursive edit
       standard-indent 3                                     ; ideal indent :)
       scroll-margin 5                                       ; show some lines around cursor when possible
