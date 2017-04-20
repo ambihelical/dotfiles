@@ -178,6 +178,18 @@ window_title() {
 	echo -ne "\033]0;${TITLE:-${def_title}}\007"
 }
 
+# colors for less (mainly for man)
+less_colors() {
+	local colors=''
+	colors+='LESS_TERMCAP_mb=$(tput setab 1) '
+	colors+='LESS_TERMCAP_md=$(tput bold) '
+	colors+='LESS_TERMCAP_me=$(tput sgr0) '
+	colors+='LESS_TERMCAP_so=$(tput setab 9) '
+	colors+='LESS_TERMCAP_se=$(tput sgr0) '
+	colors+='LESS_TERMCAP_us=$(tput setaf 6) '
+	colors+='LESS_TERMCAP_ue=$(tput sgr0)'
+	echo $colors
+}
 
 if [ ${OSTYPE:0:5} == 'linux' ]; then
 	# create ssh agent if needed and add private key identities
@@ -288,15 +300,7 @@ if [ "$ecma" == "1" ]; then
 	alias grep='grep --color=auto'
 	alias fgrep='fgrep --color=auto'
 	alias egrep='egrep --color=auto'
-
-	# colorize less, mainly for manpage output
-	export LESS_TERMCAP_mb=$(tput setab 1)   # mode blink
-	export LESS_TERMCAP_md=$(tput bold)   # mode bold
-	export LESS_TERMCAP_me=$(tput sgr0)  # end mode
-	export LESS_TERMCAP_so=$(tput setab 9)   # standout
-	export LESS_TERMCAP_se=$(tput sgr0)  # end standout
-	export LESS_TERMCAP_us=$(tput setaf 6)    # begin underline
-	export LESS_TERMCAP_ue=$(tput sgr0)  # end underline
+	alias man="$(less_colors) \man"
 fi
 
 # add fancy prompt, don't override PROMPT_COMMAND so autojump still works
