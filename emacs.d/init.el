@@ -597,7 +597,7 @@
   (progn
     (setq projectile-completion-system 'ivy
           projectile-globally-ignored-files #'( "TAGS" "GTAGS" "GRTAGS" "GPATH" )
-          projectile-globally-ignored-file-suffixes #'( ".o" ".so" ".a" ".ko" ".jar" ".bc")
+          projectile-globally-ignored-file-suffixes #'( ".o" ".so" ".a" ".ko" ".jar" ".bc" ".class")
           projectile-use-git-grep t
           projectile-project-root-files-functions
             #'( projectile-root-local projectile-root-top-down projectile-root-bottom-up projectile-project-root-files-top-down-recurring)
