@@ -70,3 +70,10 @@ export NO_AT_BRIDGE=1
 # which the former is a symlink to.  This leads to duplication of man pages in
 # e.g. emacs woman, so we will overide all of that:
 export MANPATH=/usr/local/share/man:/usr/share/man
+
+# avoids ~/.subversion
+export SUBVERSION_HOME=${XDG_CONFIG_HOME}/subversion
+
+# avoids ~/.pip
+export PIP_CONFIG_FILE=${XDG_CONFIG_HOME}/pip/config
+export PIP_LOG_FILE=${XDG_CACHE_HOME}/pip/log

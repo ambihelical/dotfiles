@@ -252,6 +252,7 @@ export HISTTIMEFORMAT="%d%b_%H:%M "
 shopt -s histappend
 
 #### Store various files in XDG directories
+# Anything that might be run from dash is exported in ~/.profile
 
 # avoids ~/.bash_history
 export HISTFILE=${XDG_CACHE_HOME}/bash/history
@@ -263,13 +264,8 @@ export LESSHISTFILE=${XDG_CACHE_HOME}/less/history
 export INPUTRC=${XDG_CONFIG_HOME}/readline
 # avoids ~/.screenrc
 export SCREENRC=${XDG_CONFIG_HOME}/screen
-# avoids ~/.subversion
-export SUBVERSION_HOME=${XDG_CONFIG_HOME}/subversion
 # avoids ~/.python_history (pythonrc must have code for this though)
 export PYTHONSTARTUP=${XDG_CONFIG_HOME}/pythonrc
-# avoids ~/.pip
-export PIP_CONFIG_FILE=${XDG_CONFIG_HOME}/pip/config
-export PIP_LOG_FILE=${XDG_CACHE_HOME}/pip/log
 # avoids ~/.ipython
 export IPYTHONDIR=${XDG_CONFIG_HOME}/ipython
 # avoids ~/.mplayer
