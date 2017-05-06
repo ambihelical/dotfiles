@@ -146,6 +146,10 @@ ps1() {
 	PS1+="\n${st_exit}┗━▶${reset} "
 }
 
+simple_ps1() {
+	 PS1="$(truncm $(tilde ${PWD}) 20)> "
+}
+
 # cd relative to current git repo
 gcd() {
 	local rpath=$1
@@ -303,11 +307,14 @@ if [ "$ecma" == "1" ]; then
 	alias man="$(less_colors) \man"
 fi
 
-# add fancy prompt, don't override PROMPT_COMMAND so autojump still works
-PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND ;}ps1"
 
 case "$TERM" in
+dumb*)
+	PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND ;}simple_ps1"
+	;;
 xterm*|rxvt*)
+# add fancy prompt, don't override PROMPT_COMMAND so autojump still works
+	PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND ;}ps1"
 	# set window title (can override with environment variable TITLE)
 	PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND ;}window_title"
 	;;
