@@ -73,7 +73,7 @@
               indent-tabs-mode t                            ; enable tabs for most files
               indicate-empty-lines t                        ; show empty lines at end of buffer
               fill-column 120)                              ; auto-wrap only very long lines
-(setq auto-revert-check-vc-info t                           ; update branch on auto-revert
+(setq auto-revert-check-vc-info nil                         ; don't update branch on auto-revert
       auto-revert-verbose nil                               ; don't tell me about auto reverts
       auto-save-file-name-transforms
          `((".*" ,me:emacs-backup-directory t))             ; autosave files in backup directory
@@ -484,6 +484,12 @@
   :config
   (global-undo-tree-mode)
   :diminish undo-tree-mode)
+
+(use-package tramp
+  :ensure nil
+  :init
+  (setq tramp-terminal-type "dumb")
+)
 
 (use-package dired
   :commands dired-jump
