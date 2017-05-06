@@ -485,10 +485,13 @@
   (global-undo-tree-mode)
   :diminish undo-tree-mode)
 
+;; remote file editting
 (use-package tramp
   :ensure nil
   :init
-  (setq tramp-terminal-type "dumb")
+  (setq tramp-terminal-type "dumb"                              ; avoid fancy prompts
+        tramp-backup-directory-alist backup-directory-alist     ; keep backups local
+        tramp-default-method "ssh")                             ; use ssh by default
 )
 
 (use-package dired
