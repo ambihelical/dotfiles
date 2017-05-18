@@ -309,6 +309,8 @@ dumb*)
 	PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND ;}simple_ps1"
 	;;
 xterm*|rxvt*)
+# tell aosp not to mess with PROMPT_COMMAND
+	STAY_OFF_MY_LAWN=1
 # add fancy prompt, don't override PROMPT_COMMAND so autojump still works
 	PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND ;}ps1"
 	# set window title (can override with environment variable TITLE)
@@ -320,7 +322,6 @@ esac
 
 ##### Aliases & Bindings #####
 
-alias m="make -k"
 alias cd..="cd .."
 alias ls-x="ls -x"
 alias ack='mark && ack-grep'
