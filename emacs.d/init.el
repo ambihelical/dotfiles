@@ -242,6 +242,7 @@
   ;; F5
   (general-define-key
    :prefix "<f5>"
+    "t"      #'counsel-load-theme
     "f"      #'toggle-frame-fullscreen
     "h"      #'global-hl-line-mode
     "l"      #'linum-relative-mode
@@ -389,7 +390,8 @@
     (add-hook 'visual-line-mode-hook #'adaptive-wrap-prefix-mode))
   :defer 4)
 
-(use-package leuven-theme :defer 0 :config)
+(use-package color-theme-sanityinc-tomorrow :defer 0
+  :config (load-theme 'sanityinc-tomorrow-day t))
 
 (use-package spaceline-config
   :if window-system
