@@ -219,8 +219,8 @@
   ;; F4
   (general-define-key
    :prefix "<f4>"
-    "a"     #'helm-apropos
-    "b"     #'helm-all-mark-rings
+    "a"     #'counsel-apropos
+    "b"     #'counsel-mark-ring
     "d"     #'dired-jump
     "f"     #'counsel-git-grep
     "i"     #'counsel-info-lookup-symbol
