@@ -643,11 +643,19 @@
     (smart-tabs-insinuate 'python)
     (smart-tabs-insinuate 'c 'c++)))
 
-(use-package rainbow-delimiters         ; Highlight delimiters by depth
-  :config
+;; Highlight delimiters by depth
+(use-package rainbow-delimiters
   :init
   (progn
-    (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)))
+    (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+  :config)
+
+;; Highlight cursor's surrounding parentheses
+(use-package highlight-parentheses
+  :diminish highlight-parentheses-mode
+  :init
+  (add-hook 'prog-mode-hook #'highlight-parentheses-mode)
+  :config)
 
 (use-package markdown-mode
   :config
