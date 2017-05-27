@@ -59,6 +59,7 @@
 
 ;; set font attributes after theme loads
 (defun me:set-extra-font-attributes ()
+  (set-face-attribute 'default nil :background "gray99")
   (let ((bg (face-attribute 'default :background))
         (fg (face-attribute 'default :foreground)))
          (set-face-attribute 'hl-line nil :foreground 'unspecified :background "gainsboro")
@@ -398,8 +399,7 @@
     (add-hook 'visual-line-mode-hook #'adaptive-wrap-prefix-mode))
   :defer 4)
 
-(use-package color-theme-sanityinc-tomorrow :defer 0
-  :config (load-theme 'sanityinc-tomorrow-day t))
+(use-package leuven-theme :defer 0 :config)
 
 (use-package spaceline-config
   :if window-system
