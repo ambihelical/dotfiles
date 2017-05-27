@@ -125,7 +125,15 @@
 (add-hook 'prog-mode-hook                                   ; stuff for all programming modes
           (lambda ()
              (modify-syntax-entry ?_ "w")))                 ; underscores are parts of words
-(set-frame-font "Fantasque Sans Mono 12" t t)               ; nice font
+
+;; set font in order of preference
+(if (member "Hack" (font-family-list))
+    (set-frame-font "Hack-11:autohint=true" t t)
+  (if (member "Fantasque Sans Mono" (font-family-list))
+      (set-frame-font "Fantasque Sans Mono-12" t t)
+    (if (member "DejaVu Sans Mono" (font-family-list))
+        (set-frame-font "DejaVu Sans Mono-11" t t))))
+
 (tool-bar-mode 0)                                           ; no tool bar
 (scroll-bar-mode 0)                                         ; no scroll bar
 (menu-bar-mode 0)                                           ; no menu bar

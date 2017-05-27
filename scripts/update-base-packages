@@ -47,6 +47,9 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 		if [ $version -ge 1510 ]; then
 			p="$p ttf-ancient-fonts-symbola"
 			p="$p fonts-fantasque-sans"
+			if [ $version -ge 1604 ]; then
+				p="$p fonts-hack-otf"
+			fi
 		elif [ $version -lt 1510 ]; then
 			p="$p ttf-ancient-fonts"
 		fi
