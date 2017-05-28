@@ -221,8 +221,16 @@
     "o"          #'me:switch-to-compile-buffer
     "r"          #'recompile
     "s"          #'me:use-evil-selection-register
-    "v"          #'exchange-point-and-mark
+    "v"          '(:ignore t :which-key "Multiple Cursors")
+    "va"         #'evil-mc-make-all-cursors
+    "vv"         #'evil-mc-make-and-goto-next-match
+    "vs"         #'evil-mc-skip-and-goto-next-match
+    "vx"         #'evil-mc-undo-all-cursors
+    "v."         #'evil-mc-make-cursor-here
+    "vp"         #'evil-mc-pause-cursors
+    "vr"         #'evil-mc-resume-cursors
     "w"          #'save-buffer
+    "x"          #'exchange-point-and-mark
     "<DEL>"      #'kill-this-buffer)
 
   ;; F4
@@ -1070,6 +1078,14 @@
     (use-package evil-surround
       :commands (evil-surround-edit evil-Surround-edit evil-surround-region evil-Surround-region)
       :config (global-evil-surround-mode 1))
+    (use-package evil-mc
+      :commands (evil-mc-make-all-cursors
+                 evil-mc-make-cursor-here
+                 evil-mc-make-and-goto-next-match
+                 evil-mc-skip-and-goto-next-cursor
+                 evil-mc-make-cursor-here)
+      :config
+      (global-evil-mc-mode 1))
     (evil-set-initial-state 'git-rebase-mode 'emacs)
     (evil-set-initial-state 'deft-mode 'insert)
     (evil-set-initial-state 'magit-branch-manager-mode 'emacs)
