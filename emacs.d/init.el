@@ -127,6 +127,10 @@
           (lambda ()
              (modify-syntax-entry ?_ "w")))                 ; underscores are parts of words
 
+(add-hook 'makefile-mode-hook
+          (lambda ()
+            (modify-syntax-entry ?+ "." )))                  ; + is punctuation
+
 ;; set font in order of preference
 (if (member "Hack" (font-family-list))
     (set-frame-font "Hack-11:autohint=true" t t)
