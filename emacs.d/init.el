@@ -827,16 +827,18 @@
               (lambda (proc) (compilation-set-skip-threshold 2)))
     (add-hook 'compilation-mode-hook
       (lambda ()
+        (define-key compilation-mode-map (kbd "g") nil)
+        (define-key compilation-mode-map (kbd "j") nil)
+        (define-key compilation-mode-map (kbd "k") nil)
+        (define-key compilation-mode-map (kbd "h") nil)
+        (define-key compilation-mode-map (kbd "l") nil)
+        (define-key compilation-mode-map (kbd "<spc>") nil)
         (define-key compilation-mode-map (kbd "<tab>") #'me:rotate-skip-threshold)
-        (define-key compilation-mode-map (kbd "f") #'next-error-follow-minor-mode)
-        (define-key compilation-mode-map (kbd "k") #'compilation-previous-error)
-        (define-key compilation-mode-map (kbd "j") #'compilation-next-error)
-        (define-key compilation-mode-map (kbd "C-k") #'compilation-previous-file)
-        (define-key compilation-mode-map (kbd "C-j") #'compilation-next-file)
-        (define-key compilation-mode-map (kbd "<prior>") #'compilation-previous-error)
-        (define-key compilation-mode-map (kbd "<next>") #'compilation-next-error)
-        (define-key compilation-mode-map (kbd "<home>") #'compilation-previous-file)
-        (define-key compilation-mode-map (kbd "<end>") #'compilation-next-file)))))
+        (define-key compilation-mode-map (kbd ";") #'next-error-follow-minor-mode)
+        (define-key compilation-mode-map (kbd "<up>") #'compilation-previous-error)
+        (define-key compilation-mode-map (kbd "<down>") #'compilation-next-error)
+        (define-key compilation-mode-map (kbd "<prior>") #'compilation-previous-file)
+        (define-key compilation-mode-map (kbd "<next>") #'compilation-next-file)))))
 
 ;; view symbols of libraries
 (use-package elf-mode
