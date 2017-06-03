@@ -80,9 +80,9 @@
          `((".*" ,me:emacs-backup-directory t))             ; autosave files in backup directory
       backup-directory-alist
          `((".*" . ,me:emacs-backup-directory))             ; backup files in backup directory
-      inhibit-splash-screen t                               ; no splash
-      inhibit-startup-echo-area-message t                   ; no startup message
-      inhibit-startup-message t                             ; no startup message
+      custom-file "/dev/null"                               ; disable customizations
+      enable-recursive-minibuffers t                        ; allow recursive edit
+      fast-but-imprecise-scrolling t                        ; quick and dirty scrolling
       frame-title-format
         '((:eval (if (buffer-file-name)
                     (me:replace-prefix (abbreviate-file-name default-directory)
@@ -91,32 +91,34 @@
           " %* ["
           (:eval (abbreviate-file-name default-directory))
           "]")                                              ; fancy title
+      history-length 1000                                   ; length of history
       icon-title-format frame-title-format                  ; use same title for unselected frame
+      inhibit-splash-screen t                               ; no splash
+      inhibit-startup-echo-area-message t                   ; no startup message
+      inhibit-startup-message t                             ; no startup message
+      initial-major-mode 'text-mode                         ; no prog-mode at startup
+      initial-scratch-message nil                           ; no scratch message
+      kill-ring-max 200                                     ; More killed items
+      kill-do-not-save-duplicates t                         ; No duplicates in kill ring
+      load-prefer-newer t                                   ; load source if newer than bytecode
       mouse-wheel-scroll-amount '(3 ((shift) . 9))          ; 3 lines, or 9 line when shift held
       mouse-wheel-follow-mouse 't                           ; scroll window under mouse
       mouse-wheel-progressive-speed nil                     ; don't speed up
-      custom-file "/dev/null"                               ; disable customizations
-      initial-scratch-message nil                           ; no scratch message
-      initial-major-mode 'text-mode                         ; no prog-mode at startup
-      kill-ring-max 200                                     ; More killed items
-      kill-do-not-save-duplicates t                         ; No duplicates in kill ring
-      history-length 1000                                   ; length of history
       undo-limit 1000000                                    ; 1M (default is 80K)
       undo-strong-limit 1500000                             ; 1.5M (default is 120K)
       undo-outer-limit 150000000                            ; 150M (default is 12M)
       save-interprogram-paste-before-kill t                 ; save clipboard before killing
-      select-enable-clipboard nil                           ; make cut/paste function correctly
-      x-gtk-use-system-tooltips nil                         ; allow tooltip theming
-      load-prefer-newer t                                   ; load source if newer than bytecode
-      split-width-threshold 240                             ; 2x ideal line width :)
-      visual-line-fringe-indicators '(left-curly-arrow nil) ; use left curly error for wrapped lines
-      text-scale-mode-step 1.05                             ; text size increases by 5% (normally 20%)
-      view-read-only t                                      ; show r/o files in view mode
-      enable-recursive-minibuffers t                        ; allow recursive edit
-      standard-indent 3                                     ; ideal indent :)
       scroll-margin 5                                       ; show some lines around cursor when possible
-      fast-but-imprecise-scrolling t                        ; quick and dirty scrolling
-      sentence-end-double-space nil)                        ; sentences end with one space
+      select-enable-clipboard nil                           ; make cut/paste function correctly
+      sentence-end-double-space nil                        ; sentences end with one space
+      split-width-threshold 240                             ; 2x ideal line width :)
+      standard-indent 3                                     ; ideal indent :)
+      text-scale-mode-step 1.05                             ; text size increases by 5% (normally 20%)
+      vc-handled-backends nil                               ; magit does everything needed
+      view-read-only t                                      ; show r/o files in view mode
+      visual-line-fringe-indicators '(left-curly-arrow nil) ; use left curly error for wrapped lines
+      x-gtk-use-system-tooltips nil)                        ; allow tooltip theming
+
 (add-hook 'focus-out-hook #'me:save-dirty-buffers)          ; save on defocus
 (add-hook 'mouse-leave-buffer-hook #'me:kill-minibuffer)    ; kill minibuffer on click outside
 (add-hook 'after-init-hook                                  ; report init time
