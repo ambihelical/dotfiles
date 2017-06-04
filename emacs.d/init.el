@@ -581,6 +581,7 @@
   (ivy-mode 1)
   :init
   (setq ivy-use-virtual-buffers t                           ; add ‘recentf-mode’ and bookmarks to ‘ivy-switch-buffer’.
+        ivy-virtual-abbreviate 'full                        ; use full path for abbreviation
         ivy-height 15                                       ; number of result lines to display
         ivy-count-format ""                                 ; does not count candidates
         ivy-initial-inputs-alist nil                        ; no regexp by default
