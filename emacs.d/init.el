@@ -38,12 +38,6 @@
 (defun me:replace-all (input from to)
   (replace-regexp-in-string (regexp-quote from) to input nil))
 
-;; abort mini-buffer
-(defun me:kill-minibuffer ()
-  "kill the minibuffer"
-  (when (and (>= (recursion-depth) 1) (active-minibuffer-window))
-    (abort-recursive-edit)))
-
 ;; save any dirty buffers
 (defun me:save-dirty-buffers ()
   "Save any dirty buffers"
@@ -120,7 +114,6 @@
       x-gtk-use-system-tooltips nil)                        ; allow tooltip theming
 
 (add-hook 'focus-out-hook #'me:save-dirty-buffers)          ; save on defocus
-(add-hook 'mouse-leave-buffer-hook #'me:kill-minibuffer)    ; kill minibuffer on click outside
 (add-hook 'after-init-hook                                  ; report init time
           (lambda ()
             (message "Time to initialize: %s"
