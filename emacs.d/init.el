@@ -320,6 +320,12 @@
     "l"     #'magit-log-current
     "<f9>"  #'magit-status)
 
+  ;; Minibuffer keybindings
+  (general-define-key
+   :keymap minibuffer-local-map
+   :prefix "C-c"
+   "e" #'miniedit)
+
   :demand)
 
 (use-package emacs-lisp-mode
@@ -411,6 +417,12 @@
     (setq-default adaptive-wrap-extra-indent 3)
     (add-hook 'visual-line-mode-hook #'adaptive-wrap-prefix-mode))
   :defer 4)
+
+(use-package miniedit
+  :commands miniedit
+  :config
+  (miniedit-mode t)
+  :init)
 
 (use-package leuven-theme :defer 0 :config)
 
