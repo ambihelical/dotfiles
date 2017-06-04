@@ -907,24 +907,19 @@
     (global-company-mode))
   :diminish company-mode)
 
-(use-package helm-gtags
-  :commands helm-gtags-mode
+(use-package counsel-gtags
+  :commands ( counsel-gtags-find-definition
+              counsel-gtags-find-reference
+              counsel-gtags-find-file
+              counsel-gtags-dwim
+              counsel-gtags-create-tags
+              counsel-gtags-find-symbol)
   :init
   (progn
-    (setq helm-gtags-auto-update t
-          helm-gtags-use-input-at-cursor t
-          helm-gtags-ignore-case t)
-    (add-hook 'dired-mode-hook #'helm-gtags-mode)
-    (add-hook 'eshell-mode-hook #'helm-gtags-mode)
-    (add-hook 'c-mode-hook #'helm-gtags-mode)
-    (add-hook 'c++-mode-hook #'helm-gtags-mode)
-    (add-hook 'asm-mode-hook #'helm-gtags-mode))
+    (add-hook 'c-mode-hook #'counsel-gtags-mode)
+    (add-hook 'c++-mode-hook #'counsel-gtags-mode))
   :config
-  (progn
-    (defun me:update-all-tags ()
-      (interactive)
-      (let ((current-prefix-arg 4)) (call-interactively #'helm-gtags-update-tags))))
-  :diminish helm-gtags-mode)
+  :diminish counsel-gtags-mode)
 
 (use-package rtags
   :commands ( rtags-location-stack-back rtags-location-stack-forward rtags-create-doxygen-comment)
@@ -940,27 +935,31 @@
       (add-to-list 'company-backends 'company-rtags))
     (defun me:use-rtags (&optional useFileManager)
       (and (rtags-executable-find "rc")
-          (cond ((and (not (eq major-mode 'c++-mode))
+           (cond
+            ((not (counsel-gtags--root)) t)
+            ((and (not (eq major-mode 'c++-mode))
                       (not (eq major-mode 'c-mode))) (rtags-has-filemanager))
                 (useFileManager (rtags-has-filemanager))
                 (t (rtags-is-indexed)))))
     (defun me:tags-find-symbol-at-point (&optional prefix)
       (interactive "P")
       (if (not (rtags-find-symbol-at-point prefix))
-          (call-interactively #'helm-gtags-dwim)))
+            (counsel-gtags-dwim)))
     (defun me:tags-find-references-at-point (&optional prefix)
       (interactive "P")
       (if (not (rtags-find-references-at-point prefix))
-          (call-interactively #'helm-gtags-find-rtag)))
+            (counsel-gtags-dwim)))
     (defun me:tags-find-symbol ()
       (interactive)
-      (call-interactively (if (me:use-rtags) #'rtags-find-symbol #'helm-gtags-find-symbol)))
+      (call-interactively (if (me:use-rtags) #'rtags-find-symbol #'counsel-gtags-find-symbol)))
     (defun me:tags-find-file ()
       (interactive)
-      (call-interactively (if (me:use-rtags t) #'rtags-find-file #'helm-gtags-find-files)))
-    (require 'rtags-helm)
+      (call-interactively (if (me:use-rtags t) #'rtags-find-file #'counsel-gtags-find-file)))
+    (defun me:tags-find-file ()
+      (interactive)
+      (call-interactively (if (me:use-rtags t) #'rtags-find-file #'counsel-gtags-find-file)))
     (setq rtags-autostart-diagnostics t
-          rtags-use-helm t
+          rtags-display-result-backend 'ivy
           rtags-tooltips-enabled nil
           rtags-display-current-error-as-message nil
           rtags-completions-enabled t)
