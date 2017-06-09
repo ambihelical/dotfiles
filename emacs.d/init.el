@@ -51,6 +51,7 @@
       (counsel-projectile-find-file)
     (counsel-find-file)))
 
+
 ;; set font attributes after theme loads
 (defun me:set-extra-font-attributes ()
   (set-face-attribute 'default nil :background "gray99")
@@ -594,7 +595,7 @@
   :diminish (ivy-mode . ""))
 
 (use-package counsel
-  :commands ( counsel-descbinds counsel-bookmark counsel-file-jump counsel-imenu counsel-yank-pop)
+  :commands ( counsel-descbinds counsel-bookmark counsel-file-jump counsel-imenu counsel-yank-pop counsel-find-file)
   :init
   (setq counsel-yank-pop-separator "\n---\n")
   :config
@@ -622,11 +623,26 @@
   (progn
     (push "compile_commands.json" projectile-project-root-files)
     (push "build" projectile-globally-ignored-directories)
-    (use-package counsel-projectile
-      :config
-      (counsel-projectile-on))
     (use-package persp-projectile :demand :config)
-    (projectile-global-mode 1)))
+    (projectile-mode 1)))
+
+(use-package counsel-projectile
+  :commands (counsel-projectile-find-file)
+  :config
+  ;; version of counsel-projectile-find-file which uses
+  ;; projectile-current-project-files instead of the fontified
+  ;; counsel-projectile--file-list
+  (defun counsel-projectile-find-file (&optional arg)
+    (interactive "P")
+    (projectile-maybe-invalidate-cache arg)
+    (ivy-read (projectile-prepend-project-name "Find file: ")
+              (projectile-current-project-files)
+              :matcher #'counsel--find-file-matcher
+              :require-match t
+              :keymap counsel-projectile-map
+              :action #'counsel-projectile--find-file-action
+              :caller 'counsel-projectile-find-file))
+  (counsel-projectile-on))
 
 (use-package perspective
   :after projectile
