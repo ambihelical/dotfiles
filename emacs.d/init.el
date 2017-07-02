@@ -784,6 +784,14 @@
    ("\\.h\\'"   . c++-mode)
    ("\\.hpp\\'" . c++-mode)))
 
+;; font lock for newer c++ versions
+(use-package modern-cpp-font-lock
+  :diminish modern-c++-font-lock-mode
+  :config
+  :init
+  (add-hook 'c++-mode-hook #'modern-c++-font-lock-mode))
+
+
 (use-package compile
   :commands compile
   :config
