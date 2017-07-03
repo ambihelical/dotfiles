@@ -15,7 +15,7 @@
 
 ;;;###autoload
 (defun me:select-nth-other-buffer (arg &optional prefix)
-  "Select the nth other buffer"
+  "Select the nth other buffer. Use prefix to put in other window"
   (interactive "P")
   (let ((buffer (nth arg (-filter 'me:useful-buffer (buffer-list)))))
     (if buffer
@@ -25,7 +25,7 @@
 
 ;;;###autoload
 (defun me:find-other-file (&optional prefix)
-  "Find other file e.g. .h <-> .cpp"
+  "Find other file e.g. .h <-> .cpp. Use prefix to put in other window."
   (interactive "P")
   (let ((case-fold-search nil))
     (if prefix
@@ -55,5 +55,42 @@
   (setq powerline-default-separator (nth me:current-powerline-separator-index me:powerline-separators))
   (message "%s" powerline-default-separator)
   (spaceline-compile))
+
+;;;###autoload
+(defun me:ps-two-per-page (&optional prefix)
+  "Print buffer 2-up.  Use prefix to save to file"
+  (interactive "P")
+  (require 'ps-print)
+  (let ((ps-n-up-printing    2)
+        (ps-n-up-border-p    nil)
+        (ps-paper-type      'letter)
+        (ps-font-size        (quote (8 . 11)))
+        (ps-top-margin       -25)
+        (ps-bottom-margin    -35)
+        (ps-left-margin      22)
+        (ps-right-margin     22)
+        (ps-n-up-margin      1)
+        (ps-inter-column     1))
+    (if prefix (ps-print-buffer (read-file-name "file name:"))
+      (ps-print-buffer))))
+
+;;;###autoload
+(defun me:ps-one-per-page (&optional prefix)
+  "Print buffer 1-up.  Use prefix to save to file"
+  (interactive "P")
+  (require 'ps-print)
+  (let ((ps-n-up-printing    1)
+        (ps-n-up-border-p    nil)
+        (ps-paper-type      'letter)
+        (ps-font-size        (quote (7 . 8.5)))
+        (ps-top-margin       20)
+        (ps-bottom-margin    20)
+        (ps-left-margin      20)
+        (ps-right-margin     20)
+        (ps-n-up-margin      1)
+        (ps-inter-column     1))
+    (if prefix (ps-print-buffer (read-file-name "file name:"))
+      (ps-print-buffer))))
+
 
 (provide 'me:extras)

@@ -301,6 +301,8 @@
    "d"      #'evil-window-rotate-downwards
    "u"      #'evil-window-rotate-upwards
    "r"      #'windresize
+   "1"      #'me:ps-one-per-page
+   "2"      #'me:ps-two-per-page
    "<f8>"  #'delete-other-windows)
 
   ;; F9
