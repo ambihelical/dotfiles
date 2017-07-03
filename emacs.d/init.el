@@ -574,6 +574,8 @@
         ("<escape>" . minibuffer-keyboard-quit)
         ("C-j" . ivy-next-line-and-call)
         ("C-k" . ivy-previous-line-and-call)
+        ("C-=" . ivy-minibuffer-grow)
+        ("C--" . ivy-minibuffer-shrink)
         ("C-'" . ivy-avy))
   :config
   (ivy-mode 1)
