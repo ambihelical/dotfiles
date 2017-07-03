@@ -369,29 +369,26 @@
   :commands fic-mode
   :config
   :init
-  (progn
     (setq fic-highlighted-words `( "TODO" "HACK" "KLUDGE" "FIXME" "TRICKY" "BUG" ))
-    (add-hook 'prog-mode-hook #'fic-mode)))
+    (add-hook 'prog-mode-hook #'fic-mode))
 
 (use-package whitespace
   :commands whitespace-mode
   :config
   :init
-  (progn
     (setq whitespace-line-column nil                      ; highlight past fill-column
           whitespace-style '(face trailing tabs tab-mark lines-tail space-before-tab)
           whitespace-display-mappings '((tab-mark 9 [9657 9] [92 9])))
     (add-hook 'whitespace-mode-hook 'me:set-extra-font-attributes)
-    (add-hook 'prog-mode-hook #'whitespace-mode))
+    (add-hook 'prog-mode-hook #'whitespace-mode)
   :diminish whitespace-mode)
 
 ;; N.B. Disabled because it seems to interfere with popups
 (use-package fill-column-indicator
   :disabled
   :config
-  (progn
     (add-hook 'after-change-major-mode-hook (lambda () (if buffer-file-name (fci-mode 1))))
-    (setq fci-rule-color "white smoke")))
+    (setq fci-rule-color "white smoke"))
 
 ;; Highlight cursor position in buffer
 (use-package beacon
@@ -407,9 +404,8 @@
   :commands adaptive-wrap-prefix-mode
   :config
   :init
-  (progn
-    (setq-default adaptive-wrap-extra-indent 3)
-    (add-hook 'visual-line-mode-hook #'adaptive-wrap-prefix-mode))
+  (setq-default adaptive-wrap-extra-indent 3)
+  (add-hook 'visual-line-mode-hook #'adaptive-wrap-prefix-mode)
   :defer 4)
 
 (use-package miniedit
@@ -428,23 +424,22 @@
   (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state
         spaceline-minor-modes-separator " ")
   :config
-  (progn
-    (use-package powerline
-      :config
-      :demand
-      :init
-      (setq powerline-default-separator 'curve))
-    (spaceline-spacemacs-theme)
-    ;; Remove existing buffer local mode line format so that it uses the
-    ;; global one, and then force it to update.
-    (mapc (lambda (buffer)
-            (if (or (buffer-file-name buffer)
-                    (not (equal (substring (buffer-name buffer) 0 1) " ")))
-                (with-current-buffer buffer
-                  (message "Updating %s" buffer);
-                  (kill-local-variable 'mode-line-format)
-                  (force-mode-line-update t))))
-        (buffer-list))))
+  (use-package powerline
+    :config
+    :demand
+    :init
+    (setq powerline-default-separator 'curve))
+  (spaceline-spacemacs-theme)
+  ;; Remove existing buffer local mode line format so that it uses the
+  ;; global one, and then force it to update.
+  (mapc (lambda (buffer)
+          (if (or (buffer-file-name buffer)
+                  (not (equal (substring (buffer-name buffer) 0 1) " ")))
+              (with-current-buffer buffer
+                (message "Updating %s" buffer);
+                (kill-local-variable 'mode-line-format)
+                (force-mode-line-update t))))
+      (buffer-list)))
 
 (use-package linum-relative
   :config
@@ -456,8 +451,7 @@
   :if window-system
   :init
   :config
-   (progn
-    (global-git-gutter+-mode t))
+  (global-git-gutter+-mode t)
   :defer 1
   :diminish git-gutter+-mode)
 
@@ -530,7 +524,6 @@
         dired-recursive-copies 'always
         dired-dwim-target t)             ; use existing dired buffer, if exists
   :config
-  (progn
     (use-package peep-dired
       :config
       :bind (:map dired-mode-map
@@ -546,33 +539,31 @@
       (setq font-lock-maximum-decoration (quote ((dired-mode . nil) (t . t)))   ; turn off barf colors
             diredp-hide-details-initially-flag t
             diredp-image-preview-in-tooltip 400
-            diredp-auto-focus-frame-for-thumbnail-tooltip-flag t)))
+            diredp-auto-focus-frame-for-thumbnail-tooltip-flag t))
   :ensure nil)
 
 (use-package flyspell
   :commands ( flyspell-prog-mode flyspell-mode flyspell-auto-correct-previous-word flyspell-correct-previous-word-generic)
   :init
-  (progn
-    (setq ispell-personal-dictionary (expand-file-name "hunspell/words" me:config-directory))
-    (add-hook 'prog-mode-hook #'flyspell-prog-mode)
-    (add-hook 'text-mode-hook #'flyspell-mode))
+  (setq ispell-personal-dictionary (expand-file-name "hunspell/words" me:config-directory))
+  (add-hook 'prog-mode-hook #'flyspell-prog-mode)
+  (add-hook 'text-mode-hook #'flyspell-mode)
   :config
-  (progn
-    (use-package flyspell-correct-ivy :demand)
-    ;; setup spell check, prefer hunspell
-    (cond
-      ((executable-find "hunspell")
-        (setq ispell-program-name "hunspell")
-        (setq ispell-local-dictionary "en_US")
-        (setq ispell-local-dictionary-alist
-              ;; Please note the list `("-d" "en_US")` contains ACTUAL parameters passed to hunspell
-              ;; You could use `("-d" "en_US,en_US-med")` to check with multiple dictionaries
-              '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8)
-                )))
-      ((executable-find "aspell")
-        (setq ispell-program-name "aspell")
-        ;; Please note ispell-extra-args contains ACTUAL parameters passed to aspell
-        (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US")))))
+  (use-package flyspell-correct-ivy :demand)
+  ;; setup spell check, prefer hunspell
+  (cond
+    ((executable-find "hunspell")
+      (setq ispell-program-name "hunspell")
+      (setq ispell-local-dictionary "en_US")
+      (setq ispell-local-dictionary-alist
+            ;; Please note the list `("-d" "en_US")` contains ACTUAL parameters passed to hunspell
+            ;; You could use `("-d" "en_US,en_US-med")` to check with multiple dictionaries
+            '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8)
+              )))
+    ((executable-find "aspell")
+      (setq ispell-program-name "aspell")
+      ;; Please note ispell-extra-args contains ACTUAL parameters passed to aspell
+      (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))))
   :diminish (flyspell-mode . "Ⓢ"))
 
 (use-package ivy
@@ -610,21 +601,19 @@
   :diminish projectile-mode
   :after evil
   :init
-  (progn
-    (setq projectile-completion-system 'ivy
-          projectile-globally-ignored-files #'( "TAGS" "GTAGS" "GRTAGS" "GPATH" )
-          projectile-globally-ignored-file-suffixes #'( ".o" ".so" ".a" ".ko" ".jar" ".bc" ".class")
-          projectile-use-git-grep t
-          projectile-project-root-files-functions
-            #'( projectile-root-local projectile-root-top-down projectile-root-bottom-up projectile-project-root-files-top-down-recurring)
-          projectile-mode-line '(:eval (format " [%s]" (projectile-project-name)))
-          projectile-enable-caching t))
+  (setq projectile-completion-system 'ivy
+        projectile-globally-ignored-files #'( "TAGS" "GTAGS" "GRTAGS" "GPATH" )
+        projectile-globally-ignored-file-suffixes #'( ".o" ".so" ".a" ".ko" ".jar" ".bc" ".class")
+        projectile-use-git-grep t
+        projectile-project-root-files-functions
+          #'( projectile-root-local projectile-root-top-down projectile-root-bottom-up projectile-project-root-files-top-down-recurring)
+        projectile-mode-line '(:eval (format " [%s]" (projectile-project-name)))
+        projectile-enable-caching t)
   :config
-  (progn
-    (push "compile_commands.json" projectile-project-root-files)
-    (push "build" projectile-globally-ignored-directories)
-    (use-package persp-projectile :demand :config)
-    (projectile-mode 1)))
+  (push "compile_commands.json" projectile-project-root-files)
+  (push "build" projectile-globally-ignored-directories)
+  (use-package persp-projectile :demand :config)
+  (projectile-mode 1))
 
 (use-package counsel-projectile
   :commands (counsel-projectile-find-file)
@@ -647,27 +636,23 @@
 (use-package perspective
   :after projectile
   :config
-  (progn
     (setq persp-initial-frame-name (projectile-project-name))
-    (persp-mode)))
+    (persp-mode))
 
 (use-package smart-tabs-mode
   :commands (smart-tabs-mode)
   :init
-  (progn
-    (add-hook 'c-mode-hook #'smart-tabs-mode)
-    (add-hook 'c++-mode-hook #'smart-tabs-mode)
-    (add-hook 'python-mode-hook #'smart-tabs-mode))
+  (add-hook 'c-mode-hook #'smart-tabs-mode)
+  (add-hook 'c++-mode-hook #'smart-tabs-mode)
+  (add-hook 'python-mode-hook #'smart-tabs-mode)
   :config
-  (progn
-    (smart-tabs-insinuate 'python)
-    (smart-tabs-insinuate 'c 'c++)))
+  (smart-tabs-insinuate 'python)
+  (smart-tabs-insinuate 'c 'c++))
 
 ;; Highlight delimiters by depth
 (use-package rainbow-delimiters
   :init
-  (progn
-    (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+    (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
   :config)
 
 ;; Highlight cursor's surrounding parentheses
@@ -687,14 +672,12 @@
   :mode
   (("\\.org\\'" . org-mode))
   :config
-  (progn
-    (use-package evil-org :config)))
+    (use-package evil-org :config))
 
 (use-package cmake-mode
   :config
   :init
-  (progn
-    (setq cmake-tab-width 3))
+  (setq cmake-tab-width 3)
   :mode
   (("CMakeLists\\.txt\\'" . cmake-mode)
    ("\\.cmake\\'" . cmake-mode)))
@@ -705,31 +688,30 @@
   :defines (company-dabbrev-downcase company-dabbrev-ignore-case)
   :config
   :init
-  (progn
-    (defun me:adoc-mode-flyspell-verify ()
-      "flyspell function to ignore certain asciidoc markup"
-      (and
-       (not (save-excursion
-              (let ((this (point)))
-                (and
-                 (re-search-backward "^\\([\\.\\+-]\\{4,\\}\\|`\\{3,\\}\\)" nil t)
-                 (> this (point))
-                 (progn
-                   (forward-line 1)
-                   (re-search-forward (concat "^" (regexp-quote (match-string 1))) nil t))))))
-       (not (save-excursion
-              (let ((count 0))
-                (eq 1 (progn (while (re-search-backward "`" (line-beginning-position) t)
-                               (setq count (1+ count)))
-                             (- count (* 2 (/ count 2))))))))))
-    (put 'adoc-mode 'flyspell-mode-predicate #'me:adoc-mode-flyspell-verify)
-    (add-hook 'adoc-mode-hook
-              (lambda ()
-                (setq company-dabbrev-downcase nil     ; don't downcase completions
-                      company-dabbrev-ignore-case nil  ; don't keep prefix
-                      evil-shift-width 4               ; set tabs 4 spaces
-                      tab-width 4
-                      indent-tabs-mode nil))))
+  (defun me:adoc-mode-flyspell-verify ()
+    "flyspell function to ignore certain asciidoc markup"
+    (and
+      (not (save-excursion
+            (let ((this (point)))
+              (and
+                (re-search-backward "^\\([\\.\\+-]\\{4,\\}\\|`\\{3,\\}\\)" nil t)
+                (> this (point))
+                (progn
+                  (forward-line 1)
+                  (re-search-forward (concat "^" (regexp-quote (match-string 1))) nil t))))))
+      (not (save-excursion
+            (let ((count 0))
+              (eq 1 (progn (while (re-search-backward "`" (line-beginning-position) t)
+                              (setq count (1+ count)))
+                            (- count (* 2 (/ count 2))))))))))
+  (put 'adoc-mode 'flyspell-mode-predicate #'me:adoc-mode-flyspell-verify)
+  (add-hook 'adoc-mode-hook
+            (lambda ()
+              (setq company-dabbrev-downcase nil     ; don't downcase completions
+                    company-dabbrev-ignore-case nil  ; don't keep prefix
+                    evil-shift-width 4               ; set tabs 4 spaces
+                    tab-width 4
+                    indent-tabs-mode nil)))
   :mode
   (("\\.ad\\'" . adoc-mode)
    ("\\.adoc\\'" . adoc-mode)
@@ -778,20 +760,18 @@
 
 (use-package cc-mode
   :init
-  (progn
-    (add-hook 'c-mode-common-hook
-              (lambda ()
-                (setq c-basic-offset 3)))
-    (add-hook 'c++-mode-hook
-              (lambda ()
-                (define-key c++-mode-map ":" #'self-insert-command)
-                (define-key c++-mode-map ")" #'self-insert-command)
-                (define-key c++-mode-map ";" #'self-insert-command)
-                (c-set-offset 'innamespace [0])))              ; no indentation in namespace
-    (setq c-default-style "ellemtel"                           ; similar to allman style
-          c-electric-pound-behavior (quote (alignleft))        ; cpp directives aligned to left
-          show-paren-mode 0))
-
+  (add-hook 'c-mode-common-hook
+            (lambda ()
+              (setq c-basic-offset 3)))
+  (add-hook 'c++-mode-hook
+            (lambda ()
+              (define-key c++-mode-map ":" #'self-insert-command)
+              (define-key c++-mode-map ")" #'self-insert-command)
+              (define-key c++-mode-map ";" #'self-insert-command)
+              (c-set-offset 'innamespace [0])))              ; no indentation in namespace
+  (setq c-default-style "ellemtel"                           ; similar to allman style
+        c-electric-pound-behavior (quote (alignleft))        ; cpp directives aligned to left
+        show-paren-mode 0)
   :config
   :mode
   (("\\.c\\'"   . c-mode)
@@ -812,41 +792,40 @@
   :commands compile
   :config
   :init
-  (progn
-    (defun me:rotate-skip-threshold ()
-      (interactive)
-      (compilation-set-skip-threshold
-       (cond ((= compilation-skip-threshold 1) 2)
-             ((= compilation-skip-threshold 2) 0)
-             (t 1))))
-    (setq compilation-scroll-output t
-          compilation-ask-about-save nil    ; save all modified
-          compilation-auto-jump-to-first-error t
-          compilation-finish-functions
-          (lambda (buf str)
-            (compilation-set-skip-threshold 1)
-            (if (null (string-match ".*exited abnormally.*" str))
-                ;;if no errors, make the compilation window go away in a few seconds
-                (progn
-                  (run-at-time "2 sec" nil 'delete-windows-on (get-buffer-create "*compilation*"))
-                  (message "No Compilation Errors!"))
-          compilation-skip-threshold 2)))
-    (add-hook 'compilation-start-hook
-              (lambda (proc) (compilation-set-skip-threshold 2)))
-    (add-hook 'compilation-mode-hook
-      (lambda ()
-        (define-key compilation-mode-map (kbd "g") nil)
-        (define-key compilation-mode-map (kbd "j") nil)
-        (define-key compilation-mode-map (kbd "k") nil)
-        (define-key compilation-mode-map (kbd "h") nil)
-        (define-key compilation-mode-map (kbd "l") nil)
-        (define-key compilation-mode-map (kbd "<spc>") nil)
-        (define-key compilation-mode-map (kbd "<tab>") #'me:rotate-skip-threshold)
-        (define-key compilation-mode-map (kbd ";") #'next-error-follow-minor-mode)
-        (define-key compilation-mode-map (kbd "<up>") #'compilation-previous-error)
-        (define-key compilation-mode-map (kbd "<down>") #'compilation-next-error)
-        (define-key compilation-mode-map (kbd "<prior>") #'compilation-previous-file)
-        (define-key compilation-mode-map (kbd "<next>") #'compilation-next-file)))))
+  (defun me:rotate-skip-threshold ()
+    (interactive)
+    (compilation-set-skip-threshold
+      (cond ((= compilation-skip-threshold 1) 2)
+            ((= compilation-skip-threshold 2) 0)
+            (t 1))))
+  (setq compilation-scroll-output t
+        compilation-ask-about-save nil    ; save all modified
+        compilation-auto-jump-to-first-error t
+        compilation-finish-functions
+        (lambda (buf str)
+          (compilation-set-skip-threshold 1)
+          (if (null (string-match ".*exited abnormally.*" str))
+              ;;if no errors, make the compilation window go away in a few seconds
+              (progn
+                (run-at-time "2 sec" nil 'delete-windows-on (get-buffer-create "*compilation*"))
+                (message "No Compilation Errors!"))
+        compilation-skip-threshold 2)))
+  (add-hook 'compilation-start-hook
+            (lambda (proc) (compilation-set-skip-threshold 2)))
+  (add-hook 'compilation-mode-hook
+    (lambda ()
+      (define-key compilation-mode-map (kbd "g") nil)
+      (define-key compilation-mode-map (kbd "j") nil)
+      (define-key compilation-mode-map (kbd "k") nil)
+      (define-key compilation-mode-map (kbd "h") nil)
+      (define-key compilation-mode-map (kbd "l") nil)
+      (define-key compilation-mode-map (kbd "<spc>") nil)
+      (define-key compilation-mode-map (kbd "<tab>") #'me:rotate-skip-threshold)
+      (define-key compilation-mode-map (kbd ";") #'next-error-follow-minor-mode)
+      (define-key compilation-mode-map (kbd "<up>") #'compilation-previous-error)
+      (define-key compilation-mode-map (kbd "<down>") #'compilation-next-error)
+      (define-key compilation-mode-map (kbd "<prior>") #'compilation-previous-file)
+      (define-key compilation-mode-map (kbd "<next>") #'compilation-next-file))))
 
 ;; view symbols of libraries
 (use-package elf-mode
@@ -858,17 +837,15 @@
   (setq woman-use-topic-at-point t                          ; man page on word at point if exists
         Man-notify-method 'aggressive)                      ; show&select man page in other window
   :config
-  (progn
-    (set-face-attribute 'Man-overstrike nil :inherit font-lock-type-face :bold t)
-    (set-face-attribute 'Man-underline nil :inherit font-lock-keyword-face :underline t)))
+  (set-face-attribute 'Man-overstrike nil :inherit font-lock-type-face :bold t)
+  (set-face-attribute 'Man-underline nil :inherit font-lock-keyword-face :underline t))
 
 (use-package doc-view
   :ensure nil
   :config
   :init
-  (progn
-    (setq doc-view-continuous t
-          doc-view-resolution 144))
+  (setq doc-view-continuous t
+        doc-view-resolution 144)
   :bind
   (:map doc-view-mode-map
         ("j" . doc-view-next-line-or-next-page)
@@ -879,24 +856,23 @@
 (use-package deft
   :config
   :init
-  (progn
-    (setq deft-directory me:notes-path
-          deft-recursive t
-          deft-use-filter-string-for-filename t
-          deft-file-naming-rules '((nospace . "_")
-                                   (noslash . "_")
-                                   (case-fn . downcase))
-          ; first extension in list seems to be used for new files.  Not sure
-          ; what deft-default-extesion does
-          deft-default-extension "md"
-          deft-extensions '("md" "txt" "text" "markdown" "mmd" "org")
-                                        ; deft auto-save interferes with whitespace-butler, so disable
-          deft-auto-save-interval 0)
-    (add-hook 'deft-mode-hook
-              (lambda ()
-                (define-key deft-mode-map (kbd "<f4> n") #'quit-window)
-                (define-key deft-mode-map (kbd "<C-return>") #'deft-new-file)
-                (define-key deft-mode-map (kbd "<C-backspace>") #'deft-filter-clear)))))
+  (setq deft-directory me:notes-path
+        deft-recursive t
+        deft-use-filter-string-for-filename t
+        deft-file-naming-rules '((nospace . "_")
+                                  (noslash . "_")
+                                  (case-fn . downcase))
+        ; first extension in list seems to be used for new files.  Not sure
+        ; what deft-default-extesion does
+        deft-default-extension "md"
+        deft-extensions '("md" "txt" "text" "markdown" "mmd" "org")
+                                      ; deft auto-save interferes with whitespace-butler, so disable
+        deft-auto-save-interval 0)
+  (add-hook 'deft-mode-hook
+            (lambda ()
+              (define-key deft-mode-map (kbd "<f4> n") #'quit-window)
+              (define-key deft-mode-map (kbd "<C-return>") #'deft-new-file)
+              (define-key deft-mode-map (kbd "<C-backspace>") #'deft-filter-clear))))
 
 (use-package company
   :commands ( global-company-mode company-complete )
@@ -904,12 +880,11 @@
   (setq company-minimum-prefix-length 1            ; just one char needed
         company-dabbrev-downcase nil)              ; never downcase
   :config
-  (progn
-    (use-package company-quickhelp
-      :demand
-      :config
-      (company-quickhelp-mode 1))
-    (global-company-mode))
+  (use-package company-quickhelp
+    :demand
+    :config
+    (company-quickhelp-mode 1))
+  (global-company-mode)
   :diminish company-mode)
 
 (use-package counsel-gtags
@@ -920,115 +895,107 @@
               counsel-gtags-create-tags
               counsel-gtags-find-symbol)
   :init
-  (progn
-    (add-hook 'c-mode-hook #'counsel-gtags-mode)
-    (add-hook 'c++-mode-hook #'counsel-gtags-mode))
+  (add-hook 'c-mode-hook #'counsel-gtags-mode)
+  (add-hook 'c++-mode-hook #'counsel-gtags-mode)
   :config
   :diminish counsel-gtags-mode)
 
 (use-package rtags
   :commands ( rtags-location-stack-back rtags-location-stack-forward rtags-create-doxygen-comment)
   :init
-  (progn
-    (defun me:flycheck-rtags-setup ()
-      (require 'flycheck-rtags)
-      (flycheck-select-checker 'rtags)
-      (setq-local flycheck-highlighting-mode nil) ;; RTags creates more accurate overlays.
-      (setq-local flycheck-check-syntax-automatically nil))
-    (defun me:company-rtags-setup ()
-      (require 'company-rtags)
-      (add-to-list 'company-backends 'company-rtags))
-    (defun me:use-rtags (&optional useFileManager)
-      (and (rtags-executable-find "rc")
-           (cond
-            ((not (counsel-gtags--root)) t)
-            ((and (not (eq major-mode 'c++-mode))
-                      (not (eq major-mode 'c-mode))) (rtags-has-filemanager))
-                (useFileManager (rtags-has-filemanager))
-                (t (rtags-is-indexed)))))
-    (defun me:tags-find-symbol-at-point (&optional prefix)
-      (interactive "P")
-      (if (not (rtags-find-symbol-at-point prefix))
-            (counsel-gtags-dwim)))
-    (defun me:tags-find-references-at-point (&optional prefix)
-      (interactive "P")
-      (if (not (rtags-find-references-at-point prefix))
-            (counsel-gtags-dwim)))
-    (defun me:tags-find-symbol ()
-      (interactive)
-      (call-interactively (if (me:use-rtags) #'rtags-find-symbol #'counsel-gtags-find-symbol)))
-    (defun me:tags-find-file ()
-      (interactive)
-      (call-interactively (if (me:use-rtags t) #'rtags-find-file #'counsel-gtags-find-file)))
-    (defun me:tags-find-file ()
-      (interactive)
-      (call-interactively (if (me:use-rtags t) #'rtags-find-file #'counsel-gtags-find-file)))
-    (setq rtags-autostart-diagnostics t
-          rtags-display-result-backend 'ivy
-          rtags-tooltips-enabled nil
-          rtags-display-current-error-as-message nil
-          rtags-completions-enabled t)
-    (add-hook 'c++-mode-hook #'rtags-start-process-unless-running)
-    (add-hook 'c-mode-hook #'rtags-start-process-unless-running)
-    (add-hook 'c++-mode-hook #'me:flycheck-rtags-setup)
-    (add-hook 'c-mode-hook #'me:flycheck-rtags-setup)
-    (add-hook 'company-mode-hook  #'me:company-rtags-setup))
+  (defun me:flycheck-rtags-setup ()
+    (require 'flycheck-rtags)
+    (flycheck-select-checker 'rtags)
+    (setq-local flycheck-highlighting-mode nil) ;; RTags creates more accurate overlays.
+    (setq-local flycheck-check-syntax-automatically nil))
+  (defun me:company-rtags-setup ()
+    (require 'company-rtags)
+    (add-to-list 'company-backends 'company-rtags))
+  (defun me:use-rtags (&optional useFileManager)
+    (and (rtags-executable-find "rc")
+          (cond
+          ((not (counsel-gtags--root)) t)
+          ((and (not (eq major-mode 'c++-mode))
+                    (not (eq major-mode 'c-mode))) (rtags-has-filemanager))
+              (useFileManager (rtags-has-filemanager))
+              (t (rtags-is-indexed)))))
+  (defun me:tags-find-symbol-at-point (&optional prefix)
+    (interactive "P")
+    (if (not (rtags-find-symbol-at-point prefix))
+          (counsel-gtags-dwim)))
+  (defun me:tags-find-references-at-point (&optional prefix)
+    (interactive "P")
+    (if (not (rtags-find-references-at-point prefix))
+          (counsel-gtags-dwim)))
+  (defun me:tags-find-symbol ()
+    (interactive)
+    (call-interactively (if (me:use-rtags) #'rtags-find-symbol #'counsel-gtags-find-symbol)))
+  (defun me:tags-find-file ()
+    (interactive)
+    (call-interactively (if (me:use-rtags t) #'rtags-find-file #'counsel-gtags-find-file)))
+  (defun me:tags-find-file ()
+    (interactive)
+    (call-interactively (if (me:use-rtags t) #'rtags-find-file #'counsel-gtags-find-file)))
+  (setq rtags-autostart-diagnostics t
+        rtags-display-result-backend 'ivy
+        rtags-tooltips-enabled nil
+        rtags-display-current-error-as-message nil
+        rtags-completions-enabled t)
+  (add-hook 'c++-mode-hook #'rtags-start-process-unless-running)
+  (add-hook 'c-mode-hook #'rtags-start-process-unless-running)
+  (add-hook 'c++-mode-hook #'me:flycheck-rtags-setup)
+  (add-hook 'c-mode-hook #'me:flycheck-rtags-setup)
+  (add-hook 'company-mode-hook  #'me:company-rtags-setup)
   :config
-  (progn
-    (rtags-diagnostics)
-    (rtags-set-periodic-reparse-timeout 2)
-    (rtags-enable-standard-keybindings)))
+  (rtags-diagnostics)
+  (rtags-set-periodic-reparse-timeout 2)
+  (rtags-enable-standard-keybindings))
 
 ;; yas snippets
 (use-package yasnippet
   :commands ( yas-expand yas-expand-snippet )
   :init
-  (progn
-    (setq yas-fallback-behavior 'return-nil)          ; don't try old binding
-    (add-hook 'yas-before-expand-snippet-hook         ; evil-insert at each slot
-              #'(lambda()
-                    (let ((p (point)) (m (mark)))
-                      (evil-insert-state)
-                      (goto-char p)
-                      (set-mark m)))))
+  (setq yas-fallback-behavior 'return-nil)          ; don't try old binding
+  (add-hook 'yas-before-expand-snippet-hook         ; evil-insert at each slot
+            #'(lambda()
+                  (let ((p (point)) (m (mark)))
+                    (evil-insert-state)
+                    (goto-char p)
+                    (set-mark m))))
   :config
-  (progn
-    (define-key yas-minor-mode-map (kbd "<tab>") nil) ; don't use <tab>
-    (define-key yas-minor-mode-map (kbd "TAB") nil)   ; don't use TAB
-    (yas-global-mode))
+  (define-key yas-minor-mode-map (kbd "<tab>") nil) ; don't use <tab>
+  (define-key yas-minor-mode-map (kbd "TAB") nil)   ; don't use TAB
+  (yas-global-mode)
   :diminish (yas-minor-mode . "Ⓨ"))
 
 (use-package flycheck
   :commands flycheck-mode
   :diminish ( flycheck-mode . "ⓒ")
   :init
-  (progn
-    (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
-    (add-hook 'prog-mode-hook #'flycheck-mode))
+  (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
+  (add-hook 'prog-mode-hook #'flycheck-mode)
   :config
-  (progn
-    (use-package flycheck-pos-tip
-      :demand
-      :init
-      (progn
-        (setq flycheck-pos-tip-timeout 3))
-      :config
-      (progn
-        (flycheck-pos-tip-mode t)))
-    (set-face-attribute 'flycheck-warning nil :foreground 'unspecified :background "khaki1")
-    (set-face-attribute 'flycheck-error nil :foreground 'unspecified :background "light pink")))
+  (use-package flycheck-pos-tip
+    :demand
+    :init
+    (progn
+      (setq flycheck-pos-tip-timeout 3))
+    :config
+    (progn
+      (flycheck-pos-tip-mode t)))
+  (set-face-attribute 'flycheck-warning nil :foreground 'unspecified :background "khaki1")
+  (set-face-attribute 'flycheck-error nil :foreground 'unspecified :background "light pink"))
 
 ;; enable code folding (evil has bindings)
 (use-package hideshow
   :commands hs-minor-mode
   :config
   :init
-  (progn
-    (add-hook 'c-mode-common-hook   #'hs-minor-mode)
-    (add-hook 'c++-mode-hook        #'hs-minor-mode)
-    (add-hook 'emacs-lisp-mode-hook #'hs-minor-mode)
-    (add-hook 'sh-mode-hook         #'hs-minor-mode)
-    (add-hook 'python-mode-hook     #'hs-minor-mode))
+  (add-hook 'c-mode-common-hook   #'hs-minor-mode)
+  (add-hook 'c++-mode-hook        #'hs-minor-mode)
+  (add-hook 'emacs-lisp-mode-hook #'hs-minor-mode)
+  (add-hook 'sh-mode-hook         #'hs-minor-mode)
+  (add-hook 'python-mode-hook     #'hs-minor-mode)
   :diminish (hs-minor-mode . "ⓕ"))
 
 (use-package avy
@@ -1042,122 +1009,119 @@
   :commands evil-mode
   :defer 3
   :init
-  (progn
-    (add-hook 'prog-mode-hook #'evil-mode)
-    (add-hook 'text-mode-hook #'evil-mode)
-    (setq-default evil-symbol-word-search t   ; misnamed: t is search for symbols, not words
-                  evil-shift-width 3)         ; shift by ideal width :)
-    (setq evil-want-C-w-delete nil            ; want C-w it for windows commands
-          evil-want-C-w-in-emacs-state t      ; ditto
-          evil-want-C-i-jump nil              ; need TAB for other things
-          evil-indent-convert-tabs nil        ; make = work with smart tabs mode
-          evil-search-module #'evil-search))
+  (add-hook 'prog-mode-hook #'evil-mode)
+  (add-hook 'text-mode-hook #'evil-mode)
+  (setq-default evil-symbol-word-search t   ; misnamed: t is search for symbols, not words
+                evil-shift-width 3)         ; shift by ideal width :)
+  (setq evil-want-C-w-delete nil            ; want C-w it for windows commands
+        evil-want-C-w-in-emacs-state t      ; ditto
+        evil-want-C-i-jump nil              ; need TAB for other things
+        evil-indent-convert-tabs nil        ; make = work with smart tabs mode
+        evil-search-module #'evil-search)
   :config
-  (progn
-    (defun me:use-evil-selection-register ()
-      (interactive)
-      (evil-execute-macro 1 "\"*"))
-    (defun me:use-evil-clipboard-register ()
-      (interactive)
-      (evil-execute-macro 1 "\"+"))
-    (defun me:evil-shift-left-visual ()
-      (interactive)
-      (evil-shift-left (region-beginning) (region-end))
-      (evil-normal-state)
-      (evil-visual-restore))
-    (defun me:evil-shift-right-visual ()
-      (interactive)
-      (evil-shift-right (region-beginning) (region-end))
-      (evil-normal-state)
-      (evil-visual-restore))
-    (defun me:switch-to-previous-buffer ()
-      (interactive)
-      (switch-to-buffer (other-buffer (current-buffer) 1)))
-    (defun me:switch-to-compile-buffer ()
-      (interactive)
-      (switch-to-buffer "*compilation*"))
+  (defun me:use-evil-selection-register ()
+    (interactive)
+    (evil-execute-macro 1 "\"*"))
+  (defun me:use-evil-clipboard-register ()
+    (interactive)
+    (evil-execute-macro 1 "\"+"))
+  (defun me:evil-shift-left-visual ()
+    (interactive)
+    (evil-shift-left (region-beginning) (region-end))
+    (evil-normal-state)
+    (evil-visual-restore))
+  (defun me:evil-shift-right-visual ()
+    (interactive)
+    (evil-shift-right (region-beginning) (region-end))
+    (evil-normal-state)
+    (evil-visual-restore))
+  (defun me:switch-to-previous-buffer ()
+    (interactive)
+    (switch-to-buffer (other-buffer (current-buffer) 1)))
+  (defun me:switch-to-compile-buffer ()
+    (interactive)
+    (switch-to-buffer "*compilation*"))
 
-    (use-package evil-args
-      :commands (evil-inner-arg evil-outer-arg)
-      :config )
-    (use-package evil-textobj-anyblock
-      :commands (evil-textobj-anyblock-inner-block evil-textobj-anyblock-a-block)
-      :config )
-    (use-package evil-commentary
-      :commands (evil-commentary evil-commentary-yank)
-      :config
-      (evil-commentary-mode)
-      :diminish evil-commentary-mode)
-    (use-package evil-surround
-      :commands (evil-surround-edit evil-Surround-edit evil-surround-region evil-Surround-region)
-      :config (global-evil-surround-mode 1))
-    (use-package evil-mc
-      :commands (evil-mc-make-all-cursors
-                 evil-mc-make-cursor-here
-                 evil-mc-make-and-goto-next-match
-                 evil-mc-skip-and-goto-next-cursor
-                 evil-mc-make-cursor-here)
-      :config
-      (global-evil-mc-mode 1))
-    (evil-set-initial-state 'git-rebase-mode 'emacs)
-    (evil-set-initial-state 'deft-mode 'insert)
-    (evil-set-initial-state 'magit-branch-manager-mode 'emacs)
-    (evil-set-initial-state 'flycheck-error-list-mode 'emacs)
-    (evil-set-initial-state 'rtags-mode 'emacs)
-    (evil-set-initial-state 'dired-mode 'emacs)
-    (evil-set-initial-state 'image-mode 'emacs)
-    (evil-set-initial-state 'finder-mode 'emacs)
-    (evil-set-initial-state 'doc-view-mode 'emacs)
-    (evil-set-initial-state 'image-dired-thumbnail-mode 'emacs)
-    (evil-set-initial-state 'paradox-menu-mode 'emacs)
+  (use-package evil-args
+    :commands (evil-inner-arg evil-outer-arg)
+    :config )
+  (use-package evil-textobj-anyblock
+    :commands (evil-textobj-anyblock-inner-block evil-textobj-anyblock-a-block)
+    :config )
+  (use-package evil-commentary
+    :commands (evil-commentary evil-commentary-yank)
+    :config
+    (evil-commentary-mode)
+    :diminish evil-commentary-mode)
+  (use-package evil-surround
+    :commands (evil-surround-edit evil-Surround-edit evil-surround-region evil-Surround-region)
+    :config (global-evil-surround-mode 1))
+  (use-package evil-mc
+    :commands (evil-mc-make-all-cursors
+                evil-mc-make-cursor-here
+                evil-mc-make-and-goto-next-match
+                evil-mc-skip-and-goto-next-cursor
+                evil-mc-make-cursor-here)
+    :config
+    (global-evil-mc-mode 1))
+  (evil-set-initial-state 'git-rebase-mode 'emacs)
+  (evil-set-initial-state 'deft-mode 'insert)
+  (evil-set-initial-state 'magit-branch-manager-mode 'emacs)
+  (evil-set-initial-state 'flycheck-error-list-mode 'emacs)
+  (evil-set-initial-state 'rtags-mode 'emacs)
+  (evil-set-initial-state 'dired-mode 'emacs)
+  (evil-set-initial-state 'image-mode 'emacs)
+  (evil-set-initial-state 'finder-mode 'emacs)
+  (evil-set-initial-state 'doc-view-mode 'emacs)
+  (evil-set-initial-state 'image-dired-thumbnail-mode 'emacs)
+  (evil-set-initial-state 'paradox-menu-mode 'emacs)
 
-    ;; note evil-set-initial-state didn't work for these modes
-    ;; I'm not sure why...
-    (add-hook 'with-editor-mode-hook #'evil-insert-state)
-    (add-hook 'magit-log-mode-hook #'evil-emacs-state)
-    (add-hook 'magit-revision-mode-hook #'evil-emacs-state)
+  ;; note evil-set-initial-state didn't work for these modes
+  ;; I'm not sure why...
+  (add-hook 'with-editor-mode-hook #'evil-insert-state)
+  (add-hook 'magit-log-mode-hook #'evil-emacs-state)
+  (add-hook 'magit-revision-mode-hook #'evil-emacs-state)
 
-    ;; Put view-mode in motion-state, this gives us motion
-    ;; keys and not much more, this is good for read-only scenario
-    ;; Since view-mode is combined with other modes, this needs
-    ;; to be a hook.
-    (add-hook 'view-mode-hook (lambda () (if view-mode (evil-motion-state) (evil-normal-state))))
+  ;; Put view-mode in motion-state, this gives us motion
+  ;; keys and not much more, this is good for read-only scenario
+  ;; Since view-mode is combined with other modes, this needs
+  ;; to be a hook.
+  (add-hook 'view-mode-hook (lambda () (if view-mode (evil-motion-state) (evil-normal-state))))
 
-    ;; extension key maps, mainly to autoload them
-    (define-key evil-inner-text-objects-map "a" #'evil-inner-arg)
-    (define-key evil-outer-text-objects-map "a" #'evil-outer-arg)
-    (define-key evil-inner-text-objects-map "b" #'evil-textobj-anyblock-inner-block)
-    (define-key evil-outer-text-objects-map "b" #'evil-textobj-anyblock-a-block)
-    (define-key evil-normal-state-map "gc" #'evil-commentary)
-    (define-key evil-normal-state-map "gy" #'evil-commentary-yank)
-    (define-key evil-operator-state-map "s" 'evil-surround-edit)
-    (define-key evil-operator-state-map "S" 'evil-Surround-edit)
-    (define-key evil-visual-state-map "S" 'evil-surround-region)
-    (define-key evil-visual-state-map "gS" 'evil-Surround-region)
+  ;; extension key maps, mainly to autoload them
+  (define-key evil-inner-text-objects-map "a" #'evil-inner-arg)
+  (define-key evil-outer-text-objects-map "a" #'evil-outer-arg)
+  (define-key evil-inner-text-objects-map "b" #'evil-textobj-anyblock-inner-block)
+  (define-key evil-outer-text-objects-map "b" #'evil-textobj-anyblock-a-block)
+  (define-key evil-normal-state-map "gc" #'evil-commentary)
+  (define-key evil-normal-state-map "gy" #'evil-commentary-yank)
+  (define-key evil-operator-state-map "s" 'evil-surround-edit)
+  (define-key evil-operator-state-map "S" 'evil-Surround-edit)
+  (define-key evil-visual-state-map "S" 'evil-surround-region)
+  (define-key evil-visual-state-map "gS" 'evil-Surround-region)
 
-    (define-key evil-normal-state-map (kbd "j") #'evil-next-visual-line)
-    (define-key evil-normal-state-map (kbd "k") #'evil-previous-visual-line)
-    ; esc key (from WikEmacs)
-    (define-key evil-normal-state-map [escape] #'keyboard-quit)
-    (define-key evil-visual-state-map [escape] #'keyboard-quit)
-    ; scroll keeping cursor in place
-    (define-key evil-normal-state-map (kbd "C-j")
-      (lambda () (interactive)  (evil-scroll-line-down 1) (evil-next-visual-line 0)))
-    (define-key evil-normal-state-map (kbd "C-k")
-      (lambda () (interactive) (evil-scroll-line-up 1) (evil-previous-visual-line 0)))
-    ; Overload shifts so that they don't lose the selection
-    (define-key evil-visual-state-map (kbd ">") #'me:evil-shift-right-visual)
-    (define-key evil-visual-state-map (kbd "<") #'me:evil-shift-left-visual)
-    (define-key evil-visual-state-map [tab] #'me:evil-shift-right-visual)
-    (define-key evil-visual-state-map [S-tab] #'me:evil-shift-left-visual)
-    (evil-mode 1)))
+  (define-key evil-normal-state-map (kbd "j") #'evil-next-visual-line)
+  (define-key evil-normal-state-map (kbd "k") #'evil-previous-visual-line)
+  ; esc key (from WikEmacs)
+  (define-key evil-normal-state-map [escape] #'keyboard-quit)
+  (define-key evil-visual-state-map [escape] #'keyboard-quit)
+  ; scroll keeping cursor in place
+  (define-key evil-normal-state-map (kbd "C-j")
+    (lambda () (interactive)  (evil-scroll-line-down 1) (evil-next-visual-line 0)))
+  (define-key evil-normal-state-map (kbd "C-k")
+    (lambda () (interactive) (evil-scroll-line-up 1) (evil-previous-visual-line 0)))
+  ; Overload shifts so that they don't lose the selection
+  (define-key evil-visual-state-map (kbd ">") #'me:evil-shift-right-visual)
+  (define-key evil-visual-state-map (kbd "<") #'me:evil-shift-left-visual)
+  (define-key evil-visual-state-map [tab] #'me:evil-shift-right-visual)
+  (define-key evil-visual-state-map [S-tab] #'me:evil-shift-left-visual)
+  (evil-mode 1))
 
 (use-package ws-butler
   :init
   (setq ws-butler-convert-leading-tabs-or-spaces t)       ; convert according to indent-tabs-mode (but not when smart-tabs-mode on)
   :config
-  (progn
-    (ws-butler-global-mode t))
+  (ws-butler-global-mode t)
   :diminish ws-butler-mode
   :defer 3)
 
@@ -1174,56 +1138,50 @@
   :init
   (setq which-key-max-description-length nil)
   :config
-  (progn
-    (which-key-mode)
-    (which-key-setup-side-window-bottom))
+  (which-key-mode)
+  (which-key-setup-side-window-bottom)
   :defer 2
   :diminish which-key-mode)
 
 (use-package magit
   :init
-  (progn
-    (setq magit-completing-read-function 'ivy-completing-read)
-    (add-hook 'with-editor-mode-hook (lambda () (setq fill-column 70))))
+  (setq magit-completing-read-function 'ivy-completing-read)
+  (add-hook 'with-editor-mode-hook (lambda () (setq fill-column 70)))
   :config
-  (progn
-    (use-package evil-magit
-      :demand
-      :init
-      (setq evil-magit-state 'normal))))
+  (use-package evil-magit
+    :demand
+    :init
+    (setq evil-magit-state 'normal)))
 
 ;; N.B. disabling this because once neotree is popped up once, tab completion in mini-buffer
 ;; is screwed up.
 (use-package neotree
   :disabled
   :init
-  (progn
-    (add-hook 'popwin:before-popup-hook
-              (lambda () (setq neo-persist-show nil)))
-    (add-hook 'popwin:after-popup-hook
-              (lambda () (setq neo-persist-show t)))
-    (add-hook 'neotree-mode-hook
-              (lambda ()
-                (define-key evil-normal-state-local-map (kbd "TAB") #'neotree-enter)
-                (define-key evil-normal-state-local-map (kbd "SPC") #'neotree-enter)
-                (define-key evil-normal-state-local-map (kbd "q") #'neotree-hide)
-                (define-key evil-normal-state-local-map (kbd "RET") #'neotree-enter))))
+  (add-hook 'popwin:before-popup-hook
+            (lambda () (setq neo-persist-show nil)))
+  (add-hook 'popwin:after-popup-hook
+            (lambda () (setq neo-persist-show t)))
+  (add-hook 'neotree-mode-hook
+            (lambda ()
+              (define-key evil-normal-state-local-map (kbd "TAB") #'neotree-enter)
+              (define-key evil-normal-state-local-map (kbd "SPC") #'neotree-enter)
+              (define-key evil-normal-state-local-map (kbd "q") #'neotree-hide)
+              (define-key evil-normal-state-local-map (kbd "RET") #'neotree-enter)))
   :bind
   (("<f4> /" . neotree-toggle)
    ("<f7> /" . neotree-projectile-action)))
 
 (use-package popwin
   :init
-  (progn
-    (setq display-buffer-function #'popwin:display-buffer))
+  (setq display-buffer-function #'popwin:display-buffer)
   :config
-  (progn
-    (push '("*Async Shell Command*" :noselect t) popwin:special-display-config)
-    (push '("*Completions*" :stick t :noselect t) popwin:special-display-config)
-    (push '("*Help*" :stick t ) popwin:special-display-config)
-    (push '(Man-mode :stick t :height 20) popwin:special-display-config)
-    (push '("*undo-tree*" :stick t :width 60 :position right) popwin:special-display-config)
-    (popwin-mode 1))
+  (push '("*Async Shell Command*" :noselect t) popwin:special-display-config)
+  (push '("*Completions*" :stick t :noselect t) popwin:special-display-config)
+  (push '("*Help*" :stick t ) popwin:special-display-config)
+  (push '(Man-mode :stick t :height 20) popwin:special-display-config)
+  (push '("*undo-tree*" :stick t :width 60 :position right) popwin:special-display-config)
+  (popwin-mode 1)
   :defer 2)
 
 ;; Load system-dependent init file if it exists
