@@ -1153,17 +1153,16 @@
     :init
     (setq evil-magit-state 'normal)))
 
-;; N.B. disabling this because once neotree is popped up once, tab completion in mini-buffer
-;; is screwed up.
 (use-package neotree
-  :disabled
   :init
+  (setq neo-window-fixed-size nil)
   (add-hook 'popwin:before-popup-hook
             (lambda () (setq neo-persist-show nil)))
   (add-hook 'popwin:after-popup-hook
             (lambda () (setq neo-persist-show t)))
   (add-hook 'neotree-mode-hook
             (lambda ()
+              (visual-line-mode -1)
               (define-key evil-normal-state-local-map (kbd "TAB") #'neotree-enter)
               (define-key evil-normal-state-local-map (kbd "SPC") #'neotree-enter)
               (define-key evil-normal-state-local-map (kbd "q") #'neotree-hide)
