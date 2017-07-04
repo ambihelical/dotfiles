@@ -13,18 +13,18 @@
       use-package-minimum-reported-time 0.03                   ; minimum time when verbose
       use-package-verbose nil)                                 ; don't be verbose
 (package-initialize)
-(when (not package-archive-contents)
+(unless package-archive-contents
   (package-refresh-contents))
-(when (not (package-installed-p 'use-package ))
+(unless (package-installed-p 'use-package )
   (package-install 'use-package))
 (eval-when-compile
   (require 'use-package))
 (require 'bind-key)                ;; if you use any :bind variant
 
 ;; set some personal variables
-(defconst me:data-directory (if (getenv "XDG_DATA_HOME") (getenv "XDG_DATA_HOME") "~/.local/share"))
-(defconst me:cache-directory (if (getenv "XDG_CACHE_HOME") (getenv "XDG_CACHE_HOME") "~/.cache"))
-(defconst me:config-directory (if (getenv "XDG_CONFIG_HOME") (getenv "XDG_CONFIG_HOME") "~/.config"))
+(defconst me:data-directory (or (getenv "XDG_DATA_HOME") "~/.local/share"))
+(defconst me:cache-directory (or (getenv "XDG_CACHE_HOME")  "~/.cache"))
+(defconst me:config-directory (or (getenv "XDG_CONFIG_HOME")  "~/.config"))
 (defconst me:emacs-backup-directory (expand-file-name "emacs" me:cache-directory))
 (defconst me:notes-path (if (file-readable-p "~/Dropbox/Notes")
                             "~/Dropbox/Notes"
