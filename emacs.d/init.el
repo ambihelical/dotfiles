@@ -253,6 +253,7 @@
     "u"     #'counsel-unicode-char
     "v"     #'undo-tree-visualize
     "y"     #'counsel-yank-pop
+    "/"     #'treemacs-toggle
     "<f4>"  #'ivy-resume)
 
   ;; F5
@@ -289,6 +290,7 @@
     "o"     #'projectile-multi-occur
     "r"     #'persp-rename
     "u"     #'projectile-invalidate-cache
+    "/"     #'treemacs-projectile
     "<f7>"  #'projectile-persp-switch-project)
 
   ;; F8
@@ -1157,23 +1159,21 @@
     :init
     (setq evil-magit-state 'normal)))
 
-(use-package neotree
-  :init
-  (setq neo-window-fixed-size nil)
-  (add-hook 'popwin:before-popup-hook
-            (lambda () (setq neo-persist-show nil)))
-  (add-hook 'popwin:after-popup-hook
-            (lambda () (setq neo-persist-show t)))
-  (add-hook 'neotree-mode-hook
-            (lambda ()
-              (visual-line-mode -1)
-              (define-key evil-normal-state-local-map (kbd "TAB") #'neotree-enter)
-              (define-key evil-normal-state-local-map (kbd "SPC") #'neotree-enter)
-              (define-key evil-normal-state-local-map (kbd "q") #'neotree-hide)
-              (define-key evil-normal-state-local-map (kbd "RET") #'neotree-enter)))
-  :bind
-  (("<f4> /" . neotree-toggle)
-   ("<f7> /" . neotree-projectile-action)))
+(use-package treemacs
+  :commands ( treemacs-toggle treemacs-projectile )
+  :config
+  (use-package treemacs-evil :demand t)
+  (setq treemacs-header-function            #'treemacs--create-header-projectile
+        treemacs-follow-after-init          t
+        treemacs-width                      35
+        treemacs-indentation                2
+        treemacs-git-integration            t
+        treemacs-change-root-without-asking nil
+        treemacs-sorting                    'alphabetic-desc
+        treemacs-show-hidden-files          t
+        treemacs-never-persist              nil)
+  (treemacs-follow-mode t)
+  (treemacs-filewatch-mode t))
 
 (use-package popwin
   :init
