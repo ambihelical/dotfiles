@@ -1162,8 +1162,7 @@
 
 (use-package treemacs
   :commands ( treemacs-toggle treemacs-projectile )
-  :config
-  (use-package treemacs-evil :demand t)
+  :init
   (setq treemacs-header-function            #'treemacs--create-header-projectile
         treemacs-follow-after-init          t
         treemacs-width                      35
@@ -1173,6 +1172,8 @@
         treemacs-sorting                    'alphabetic-desc
         treemacs-show-hidden-files          t
         treemacs-never-persist              nil)
+  :config
+  (use-package treemacs-evil :demand t)
   (treemacs-follow-mode t)
   (treemacs-filewatch-mode t))
 
