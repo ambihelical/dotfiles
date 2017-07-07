@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t -*-
 (setq gc-cons-threshold 100000000)
 
 ;; package management
@@ -38,6 +39,18 @@
 (defun me:replace-all (input from to)
   (replace-regexp-in-string (regexp-quote from) to input nil))
 
+;; run hook function on buffer after a delay
+(defmacro me:add-hook-with-delay (hook delay func)
+    `(add-hook ,hook
+               (lambda ()
+                 (let ((cur-buf (current-buffer)))
+                   (run-at-time ,delay nil
+                                (lambda ()
+                                  (save-current-buffer
+                                    (if (buffer-live-p cur-buf)
+                                        (progn
+                                          (set-buffer cur-buf)
+                                          (funcall ,func))))))))))
 
 ;; configuration I haven't figured out how to wedge into
 ;; use-package
@@ -340,7 +353,7 @@
   :init
   ;; some of these need to be run after init file has loaded
   ;; to actually be diminished
-  (add-hook 'after-init-hook (lambda ()
+  (me:add-hook-with-delay 'after-init-hook 5 (lambda ()
                                (diminish 'visual-line-mode)
                                (diminish 'abbrev-mode)
                                (diminish 'auto-revert-mode))))
@@ -370,7 +383,7 @@
   :config
   :init
     (setq fic-highlighted-words `( "TODO" "HACK" "KLUDGE" "FIXME" "TRICKY" "BUG" ))
-    (add-hook 'prog-mode-hook #'fic-mode))
+    (me:add-hook-with-delay 'prog-mode-hook 10 #'fic-mode))
 
 (use-package whitespace
   :commands whitespace-mode
@@ -380,7 +393,7 @@
           whitespace-style '(face trailing tabs tab-mark lines-tail space-before-tab)
           whitespace-display-mappings '((tab-mark 9 [9657 9] [92 9])))
     (add-hook 'whitespace-mode-hook 'me:set-extra-font-attributes)
-    (add-hook 'prog-mode-hook #'whitespace-mode)
+    (me:add-hook-with-delay 'prog-mode-hook 7 #'whitespace-mode)
   :diminish whitespace-mode)
 
 ;; N.B. Disabled because it seems to interfere with popups
@@ -405,8 +418,7 @@
   :config
   :init
   (setq-default adaptive-wrap-extra-indent 3)
-  (add-hook 'visual-line-mode-hook #'adaptive-wrap-prefix-mode)
-  :defer 4)
+  (me:add-hook-with-delay 'visual-line-mode-hook 3 #'adaptive-wrap-prefix-mode))
 
 (use-package miniedit
   :commands miniedit
@@ -546,8 +558,8 @@
   :commands ( flyspell-prog-mode flyspell-mode flyspell-auto-correct-previous-word flyspell-correct-previous-word-generic)
   :init
   (setq ispell-personal-dictionary (expand-file-name "hunspell/words" me:config-directory))
-  (add-hook 'prog-mode-hook #'flyspell-prog-mode)
-  (add-hook 'text-mode-hook #'flyspell-mode)
+  (me:add-hook-with-delay 'prog-mode-hook 10 #'flyspell-prog-mode)
+  (me:add-hook-with-delay 'text-mode-hook 10 #'flyspell-mode)
   :config
   (use-package flyspell-correct-ivy :demand)
   ;; setup spell check, prefer hunspell
@@ -655,14 +667,14 @@
 ;; Highlight delimiters by depth
 (use-package rainbow-delimiters
   :init
-    (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+    (me:add-hook-with-delay 'prog-mode-hook 8 #'rainbow-delimiters-mode)
   :config)
 
 ;; Highlight cursor's surrounding parentheses
 (use-package highlight-parentheses
   :diminish highlight-parentheses-mode
   :init
-  (add-hook 'prog-mode-hook #'highlight-parentheses-mode)
+  (me:add-hook-with-delay 'prog-mode-hook 8 #'highlight-parentheses-mode)
   :config)
 
 (use-package markdown-mode
@@ -790,7 +802,7 @@
   :diminish modern-c++-font-lock-mode
   :config
   :init
-  (add-hook 'c++-mode-hook #'modern-c++-font-lock-mode))
+  (me:add-hook-with-delay 'c++-mode-hook 10 #'modern-c++-font-lock-mode))
 
 
 (use-package compile
@@ -978,7 +990,7 @@
   :diminish ( flycheck-mode . "ⓒ")
   :init
   (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
-  (add-hook 'prog-mode-hook #'flycheck-mode)
+  (me:add-hook-with-delay 'prog-mode-hook 10 #'flycheck-mode)
   :config
   (use-package flycheck-pos-tip
     :demand
@@ -996,11 +1008,7 @@
   :commands hs-minor-mode
   :config
   :init
-  (add-hook 'c-mode-common-hook   #'hs-minor-mode)
-  (add-hook 'c++-mode-hook        #'hs-minor-mode)
-  (add-hook 'emacs-lisp-mode-hook #'hs-minor-mode)
-  (add-hook 'sh-mode-hook         #'hs-minor-mode)
-  (add-hook 'python-mode-hook     #'hs-minor-mode)
+  (me:add-hook-with-delay 'prog-mode-hook   5 #'hs-minor-mode)
   :diminish (hs-minor-mode . "ⓕ"))
 
 (use-package avy
@@ -1012,7 +1020,6 @@
 ;; N.B. evil-mode must be enabled after global-evil-leader-mode
 (use-package evil
   :commands evil-mode
-  :defer 3
   :init
   (add-hook 'prog-mode-hook #'evil-mode)
   (add-hook 'text-mode-hook #'evil-mode)
