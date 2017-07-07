@@ -693,8 +693,15 @@
 ;; may be fixed in 25.1 or so
 (use-package adoc-mode
   :defines (company-dabbrev-downcase company-dabbrev-ignore-case)
-  :config
   :init
+  (add-hook 'adoc-mode-hook
+            (lambda ()
+              (setq company-dabbrev-downcase nil     ; don't downcase completions
+                    company-dabbrev-ignore-case nil  ; don't keep prefix
+                    evil-shift-width 4               ; set tabs 4 spaces
+                    tab-width 4
+                    indent-tabs-mode nil)))
+  :config
   (defun me:adoc-mode-flyspell-verify ()
     "flyspell function to ignore certain asciidoc markup"
     (and
@@ -712,13 +719,6 @@
                               (setq count (1+ count)))
                             (- count (* 2 (/ count 2))))))))))
   (put 'adoc-mode 'flyspell-mode-predicate #'me:adoc-mode-flyspell-verify)
-  (add-hook 'adoc-mode-hook
-            (lambda ()
-              (setq company-dabbrev-downcase nil     ; don't downcase completions
-                    company-dabbrev-ignore-case nil  ; don't keep prefix
-                    evil-shift-width 4               ; set tabs 4 spaces
-                    tab-width 4
-                    indent-tabs-mode nil)))
   :mode
   (("\\.ad\\'" . adoc-mode)
    ("\\.adoc\\'" . adoc-mode)
@@ -798,13 +798,13 @@
 (use-package compile
   :commands compile
   :config
-  :init
   (defun me:rotate-skip-threshold ()
     (interactive)
     (compilation-set-skip-threshold
       (cond ((= compilation-skip-threshold 1) 2)
             ((= compilation-skip-threshold 2) 0)
             (t 1))))
+  :init
   (setq compilation-scroll-output t
         compilation-ask-about-save nil    ; save all modified
         compilation-auto-jump-to-first-error t
