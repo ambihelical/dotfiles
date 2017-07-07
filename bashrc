@@ -45,6 +45,14 @@ tilde() {
 	echo ${*/${HOME}/\~}
 }
 
+ccolumn()
+{
+	 local COL
+	 local ROW
+	 IFS=';' read -sdR -p $'\E[6n' ROW COL
+	 echo "${COL}"
+}
+
 # Print fancy git prompt information
 # Heavily modified from bash-powerline
 # - For speed, invoke git once instead of several times
@@ -136,7 +144,9 @@ ps1() {
 	if [ $len -gt $cols ]; then
 		 path=$(truncm $path $(( $cols-2 )))
 	fi
-	PS1="${st_exit}┏━${reset}"
+	PS1=""
+	[ $(ccolumn) -gt 1 ] && PS1+="\n";
+	PS1+="${st_exit}┏━${reset}"
 	PS1+="${st_host}${host}${reset}"
 	PS1+="${st_git}${git}${reset}"
 	PS1+="${st_path}${path}${reset}"
