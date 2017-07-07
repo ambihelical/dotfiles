@@ -38,29 +38,6 @@
 (defun me:replace-all (input from to)
   (replace-regexp-in-string (regexp-quote from) to input nil))
 
-;; save any dirty buffers
-(defun me:save-dirty-buffers ()
-  "Save any dirty buffers"
-  (interactive)
-  (save-some-buffers t))
-
-(defun me:find-some-files ()
-  "Find files in project or fallback to current directory"
-  (interactive)
-  (if (projectile-project-p)
-      (counsel-projectile-find-file)
-    (counsel-find-file)))
-
-
-;; set font attributes after theme loads
-(defun me:set-extra-font-attributes ()
-  (set-face-attribute 'default nil :background "gray99")
-  (let ((bg (face-attribute 'default :background))
-        (fg (face-attribute 'default :foreground)))
-         (set-face-attribute 'hl-line nil :foreground 'unspecified :background "gainsboro")
-         (set-face-attribute 'whitespace-line nil :foreground 'unspecified :background "lemon chiffon")
-         (set-face-attribute 'whitespace-tab nil :foreground "gainsboro" :background bg )
-         (set-face-attribute 'whitespace-trailing nil :foreground fg :background "red" )))
 
 ;; configuration I haven't figured out how to wedge into
 ;; use-package
@@ -158,14 +135,32 @@
 (global-unset-key (kbd "<f10>"))                            ; was menu-bar-open
 (global-unset-key (kbd "<f11>"))                            ; was fullscreen mode
 
-;; some demand loaded commands I wrote
-(use-package me:extras
+;; frequently used functions
+(use-package utilities
   :ensure nil
-  :commands (me:select-nth-other-buffer
-             me:find-other-file
-             me:rotate-fill-column
-             me:next-powerline-separator)
+  :commands (me:set-extra-font-attributes
+             me:select-nth-other-buffer
+             me:select-2nd-other-buffer
+             me:select-3rd-other-buffer
+             me:select-4th-other-buffer
+             me:select-5th-other-buffer
+             me:find-some-files
+             me:save-dirty-buffers )
+  :config
   :load-path "lisp/")
+
+
+;; infrequently used functions
+(use-package extras
+  :ensure nil
+  :commands (me:find-other-file
+             me:rotate-fill-column
+             me:ps-one-per-page
+             me:ps-two-per-page
+             me:next-powerline-separator)
+  :config
+  :load-path "lisp/")
+
 
 ;; keymappings
 (use-package general
@@ -179,10 +174,10 @@
     "C-h b"      #'counsel-descbinds
     "M-x"        #'counsel-M-x
     "s-1"        #'me:find-other-file
-    "s-2"        #'(lambda (&optional prefix) (interactive "P") (me:select-nth-other-buffer 1 prefix))
-    "s-3"        #'(lambda (&optional prefix) (interactive "P") (me:select-nth-other-buffer 2 prefix))
-    "s-4"        #'(lambda (&optional prefix) (interactive "P") (me:select-nth-other-buffer 3 prefix))
-    "s-5"        #'(lambda (&optional prefix) (interactive "P") (me:select-nth-other-buffer 4 prefix))
+    "s-2"        #'me:select-2nd-other-buffer
+    "s-3"        #'me:select-3rd-other-buffer
+    "s-4"        #'me:select-4th-other-buffer
+    "s-5"        #'me:select-5th-other-buffer
     "s-c"        #'me:rotate-fill-column
     "s-d"        #'company-complete
     "s-f"        #'flyspell-auto-correct-previous-word

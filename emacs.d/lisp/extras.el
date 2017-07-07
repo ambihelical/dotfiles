@@ -1,27 +1,10 @@
+;;; -*- lexical-binding: t -*-
 ;;; Commentary:
 
-;; Miscellaneous commands which can be demand loaded
+;; Infrequently used commands
 
 ;;; Code:
 
-;; Return t if buffer can be selected.  This allows
-;; certain non-file buffers to be selected with
-;; me:select-nth-other-buffer.
-(defun me:useful-buffer (buffer)
-  (let ((bufname (buffer-name buffer))
-        (specials `("*scratch*" "*Messages*")))
-    (cond ((car (member bufname specials)) t)
-          ((buffer-file-name buffer) t))))
-
-;;;###autoload
-(defun me:select-nth-other-buffer (arg &optional prefix)
-  "Select the nth other buffer. Use prefix to put in other window"
-  (interactive "P")
-  (let ((buffer (nth arg (-filter 'me:useful-buffer (buffer-list)))))
-    (if buffer
-        (if prefix
-            (switch-to-buffer-other-window buffer)
-          (switch-to-buffer buffer)))))
 
 ;;;###autoload
 (defun me:find-other-file (&optional prefix)
@@ -93,4 +76,4 @@
       (ps-print-buffer))))
 
 
-(provide 'me:extras)
+(provide 'extras)
