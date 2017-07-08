@@ -235,6 +235,7 @@
     "b"     #'counsel-mark-ring
     "d"     #'dired-jump
     "f"     #'counsel-git-grep
+    "g"     #'general-describe-keybindings
     "i"     #'counsel-info-lookup-symbol
     "j"     #'counsel-bookmark
     "k"     #'counsel-descbinds
@@ -671,6 +672,8 @@
    ("\\.md\\'" . markdown-mode)))
 
 (use-package org
+  :init
+  (setq org-hide-emphasis-markers t)
   :mode
   (("\\.org\\'" . org-mode))
   :config
@@ -1181,6 +1184,7 @@
   (push '("*Help*" :stick t ) popwin:special-display-config)
   (push '(Man-mode :stick t :height 20) popwin:special-display-config)
   (push '("*undo-tree*" :stick t :width 60 :position right) popwin:special-display-config)
+  (push '("*General Keybindings*" :width 72 :position right) popwin:special-display-config)
   (popwin-mode 1)
   :defer 2)
 
