@@ -1201,4 +1201,4 @@
 (me:load-init-file "host" system-name)
 
 ;; restore a normal gc threshold
-(setq gc-cons-threshold 1000000)
+(run-at-time 10 nil (lambda () (setq gc-cons-threshold 1000000)))
