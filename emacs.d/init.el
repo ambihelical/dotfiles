@@ -1083,7 +1083,6 @@
 
   ;; note evil-set-initial-state didn't work for these modes
   ;; I'm not sure why...
-  (add-hook 'with-editor-mode-hook #'evil-insert-state)
   (add-hook 'magit-log-mode-hook #'evil-emacs-state)
   (add-hook 'magit-revision-mode-hook #'evil-emacs-state)
 
@@ -1148,10 +1147,16 @@
   :defer 2
   :diminish which-key-mode)
 
+(use-package with-editor
+  :init
+  (add-hook 'with-editor-mode-hook (lambda ()
+                                     (evil-insert-state)
+                                     (setq fill-column 70)))
+  :diminish)
+
 (use-package magit
   :init
   (setq magit-completing-read-function 'ivy-completing-read)
-  (add-hook 'with-editor-mode-hook (lambda () (setq fill-column 70)))
   :config
   (use-package evil-magit
     :demand
