@@ -556,12 +556,12 @@
 
 (use-package flyspell
   :commands ( flyspell-prog-mode flyspell-mode flyspell-auto-correct-previous-word flyspell-correct-previous-word-generic)
+  :config
+  (use-package flyspell-correct-ivy :demand)
   :init
   (setq ispell-personal-dictionary (expand-file-name "hunspell/words" me:config-directory))
   (me:add-hook-with-delay 'prog-mode-hook 10 #'flyspell-prog-mode)
   (me:add-hook-with-delay 'text-mode-hook 10 #'flyspell-mode)
-  :config
-  (use-package flyspell-correct-ivy :demand)
   ;; setup spell check, prefer hunspell
   (cond
     ((executable-find "hunspell")
@@ -576,7 +576,7 @@
       (setq ispell-program-name "aspell")
       ;; Please note ispell-extra-args contains ACTUAL parameters passed to aspell
       (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))))
-  :diminish (flyspell-mode . "Ⓢ"))
+  :diminish (flyspell-mode . "ⓢ"))
 
 (use-package ivy
   :bind
