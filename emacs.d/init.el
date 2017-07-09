@@ -20,7 +20,6 @@
   (package-install 'use-package))
 (eval-when-compile
   (require 'use-package))
-(require 'bind-key)                ;; if you use any :bind variant
 
 ;; set some personal variables
 (defconst me:data-directory (or (getenv "XDG_DATA_HOME") "~/.local/share"))
@@ -59,9 +58,7 @@
               indent-tabs-mode t                            ; enable tabs for most files
               indicate-empty-lines t                        ; show empty lines at end of buffer
               fill-column 120)                              ; auto-wrap only very long lines
-(setq auto-revert-check-vc-info nil                         ; don't update branch on auto-revert
-      auto-revert-verbose nil                               ; don't tell me about auto reverts
-      auto-save-file-name-transforms
+(setq auto-save-file-name-transforms
          `((".*" ,me:emacs-backup-directory t))             ; autosave files in backup directory
       backup-directory-alist
          `((".*" . ,me:emacs-backup-directory))             ; backup files in backup directory
@@ -83,25 +80,19 @@
       inhibit-startup-message t                             ; no startup message
       initial-major-mode 'text-mode                         ; no prog-mode at startup
       initial-scratch-message nil                           ; no scratch message
-      kill-ring-max 200                                     ; More killed items
-      kill-do-not-save-duplicates t                         ; No duplicates in kill ring
       load-prefer-newer t                                   ; load source if newer than bytecode
-      mouse-wheel-scroll-amount '(3 ((shift) . 9))          ; 3 lines, or 9 line when shift held
-      mouse-wheel-follow-mouse 't                           ; scroll window under mouse
-      mouse-wheel-progressive-speed nil                     ; don't speed up
+      mouse-wheel-scroll-amount '(3 ((shift) . 9))          ; 3 lines, or 9 line when shift held (mwheel)
+      mouse-wheel-follow-mouse 't                           ; scroll window under mouse (mwheel)
+      mouse-wheel-progressive-speed nil                     ; don't speed up (mwheel)
       undo-limit 1000000                                    ; 1M (default is 80K)
       undo-strong-limit 1500000                             ; 1.5M (default is 120K)
       undo-outer-limit 150000000                            ; 150M (default is 12M)
-      save-interprogram-paste-before-kill t                 ; save clipboard before killing
       scroll-margin 5                                       ; show some lines around cursor when possible
-      select-enable-clipboard nil                           ; make cut/paste function correctly
-      sentence-end-double-space nil                        ; sentences end with one space
+      select-enable-clipboard nil                           ; make cut/paste function correctly (select)
+      sentence-end-double-space nil                         ; sentences end with one space
       split-width-threshold 240                             ; 2x ideal line width :)
       standard-indent 3                                     ; ideal indent :)
-      text-scale-mode-step 1.05                             ; text size increases by 5% (normally 20%)
-      vc-handled-backends nil                               ; magit does everything needed
       view-read-only t                                      ; show r/o files in view mode
-      visual-line-fringe-indicators '(left-curly-arrow nil) ; use left curly error for wrapped lines
       x-gtk-use-system-tooltips nil)                        ; allow tooltip theming
 
 (add-hook 'focus-out-hook #'me:save-dirty-buffers)          ; save on defocus
@@ -125,39 +116,62 @@
     (if (member "DejaVu Sans Mono" (font-family-list))
         (set-frame-font "DejaVu Sans Mono-11" t t))))
 
-(tool-bar-mode 0)                                           ; no tool bar
-(scroll-bar-mode 0)                                         ; no scroll bar
-(menu-bar-mode 0)                                           ; no menu bar
-(mouse-avoidance-mode 'animate)                             ; move mouse pointer out of way
-(column-number-mode t)                                      ; display column/row of cursor in mode-line
-(global-hl-line-mode t)                                     ; highlight current line
-(global-eldoc-mode -1)                                      ; turn off annoying eldoc mode
+(tool-bar-mode 0)                                           ; no tool bar (tool-bar)
+(scroll-bar-mode 0)                                         ; no scroll bar (scroll-bar)
+(mouse-avoidance-mode 'animate)                             ; move mouse pointer out of way (avoid)
+(global-eldoc-mode -1)                                      ; turn off annoying eldoc mode (eldoc)
 (fset 'yes-or-no-p 'y-or-n-p)                               ; change stupid default y/n? y
 (make-directory me:emacs-backup-directory t)                ; make sure backup dir exists
-(global-auto-revert-mode t)                                 ; revert unchanged files automatically
-(electric-indent-mode +1)                                   ; turn on electric mode globally
-(global-visual-line-mode t)                                 ; wrap long lines
-(savehist-mode t)                                           ; save minibuffer history
-(winner-mode t)                                             ; enable winner mode
-(minibuffer-depth-indicate-mode t)                          ; show recursive edit depth
-(run-at-time "1 hour" 3600 #'clean-buffer-list)             ; clear out old buffers every hour
+(electric-indent-mode +1)                                   ; turn on electric mode globally (electric)
+(savehist-mode t)                                           ; save minibuffer history (savehist)
+(minibuffer-depth-indicate-mode t)                          ; show recursive edit depth (mb-depth)
+(run-at-time "1 hour" 3600 #'clean-buffer-list)             ; clear out old buffers every hour (midnight)
 
 (global-unset-key (kbd "<f3>"))
 (global-unset-key (kbd "<f4>"))
 (global-unset-key (kbd "<f10>"))                            ; was menu-bar-open
 (global-unset-key (kbd "<f11>"))                            ; was fullscreen mode
 
+
+;; keymappings
+;; N.B. Other keybindings defined in apropriate use-package
+(use-package general
+  :config
+  (general-evil-setup t)
+  ;; Top level keymaps
+  (general-define-key
+    "s-`"        #'previous-buffer
+    "<s-tab>"    #'next-buffer)
+
+  ;; F4
+  (general-define-key
+   :prefix "<f4>"
+    "g"     #'general-describe-keybindings)
+
+  ;; F5
+  (general-define-key
+   :prefix "<f5>"
+    "f"      #'toggle-frame-fullscreen) ;frame
+
+  ;; F8
+  (general-define-key
+   :prefix "<f8>"
+   "o"      #'delete-other-windows
+   "<f8>"  #'delete-other-windows)
+
+  :demand)
+
 ;; frequently used functions
 (use-package utilities
   :ensure nil
   :commands (me:set-extra-font-attributes
-             me:select-nth-other-buffer
-             me:select-2nd-other-buffer
-             me:select-3rd-other-buffer
-             me:select-4th-other-buffer
-             me:select-5th-other-buffer
-             me:find-some-files
              me:save-dirty-buffers )
+  :general
+    ("s-2"        #'me:select-2nd-other-buffer)
+    ("s-3"        #'me:select-3rd-other-buffer)
+    ("s-4"        #'me:select-4th-other-buffer)
+    ("s-5"        #'me:select-5th-other-buffer)
+    ("<f3>"       #'me:find-some-files)
   :config
   :load-path "lisp/")
 
@@ -165,175 +179,16 @@
 ;; infrequently used functions
 (use-package extras
   :ensure nil
-  :commands (me:find-other-file
-             me:rotate-fill-column
-             me:ps-one-per-page
-             me:ps-two-per-page
-             me:next-powerline-separator)
+  :general
+    ("s-1"     #'me:find-other-file)
+    ("s-c"     #'me:rotate-fill-column)
+    ("<f8> 1"  #'me:ps-one-per-page)
+    ("<f8> 2"  #'me:ps-two-per-page)
+    ("s-\\"    #'me:next-powerline-separator)
   :config
   :load-path "lisp/")
 
-
-;; keymappings
-(use-package general
-  :config
-  (general-evil-setup t)
-  ;; Top level keymaps
-  (general-define-key
-    "<f2>"       #'ivy-switch-buffer
-    "<f3>"       #'me:find-some-files
-    "C-x b"      #'ivy-switch-buffer
-    "C-h b"      #'counsel-descbinds
-    "M-x"        #'counsel-M-x
-    "s-1"        #'me:find-other-file
-    "s-2"        #'me:select-2nd-other-buffer
-    "s-3"        #'me:select-3rd-other-buffer
-    "s-4"        #'me:select-4th-other-buffer
-    "s-5"        #'me:select-5th-other-buffer
-    "s-c"        #'me:rotate-fill-column
-    "s-d"        #'company-complete
-    "s-f"        #'flyspell-auto-correct-previous-word
-    "s-S-f"      #'flyspell-correct-previous-word-generic
-    "s-h"        #'git-gutter+-next-hunk
-    "s-S-h"      #'git-gutter+-previous-hunk
-    "s-s"        #'git-gutter+-stage-hunks
-    "s-o"        #'git-gutter+-show-hunk-inline-at-point
-    "s-]"        #'winner-redo
-    "s-["        #'winner-undo
-    "s-;"        #'rtags-location-stack-forward
-    "s-,"        #'rtags-location-stack-back
-    "s-`"        #'previous-buffer
-    "s-\\"       #'me:next-powerline-separator
-    "s-j"        (kbd "C-u 1 C-x `")
-    "s-k"        (kbd "C-u -1 C-x `")
-    "s-w"        #'ace-window
-    "s-<right>"  #'persp-next
-    "s-<left>"   #'persp-prev
-    "<s-return>" #'yas-expand
-    "<s-tab>"    #'next-buffer)
-
-  (general-define-key
-   :states '(normal visual emacs)
-   :prefix "<SPC>"
-    "<SPC>"      #'me:switch-to-previous-buffer
-    ";"          #'evil-jump-forward
-    ","          #'evil-jump-backward
-    "a"          #'align
-    "c"          #'me:use-evil-clipboard-register
-    "e"          #'pp-eval-last-sexp
-    "f"          #'evil-avy-goto-word-1
-    "g"          #'evil-avy-goto-char-2
-    "l"          #'evil-avy-goto-char-in-line
-    "m"          #'projectile-compile-project
-    "o"          #'me:switch-to-compile-buffer
-    "r"          #'recompile
-    "s"          #'me:use-evil-selection-register
-    "v"          '(:ignore t :which-key "Multiple Cursors")
-    "va"         #'evil-mc-make-all-cursors
-    "vv"         #'evil-mc-make-and-goto-next-match
-    "vs"         #'evil-mc-skip-and-goto-next-match
-    "vx"         #'evil-mc-undo-all-cursors
-    "v."         #'evil-mc-make-cursor-here
-    "vp"         #'evil-mc-pause-cursors
-    "vr"         #'evil-mc-resume-cursors
-    "w"          #'save-buffer
-    "x"          #'exchange-point-and-mark
-    "<DEL>"      #'kill-this-buffer)
-
-  ;; F4
-  (general-define-key
-   :prefix "<f4>"
-    "a"     #'counsel-apropos
-    "b"     #'counsel-mark-ring
-    "d"     #'dired-jump
-    "f"     #'counsel-git-grep
-    "g"     #'general-describe-keybindings
-    "i"     #'counsel-info-lookup-symbol
-    "j"     #'counsel-bookmark
-    "k"     #'counsel-descbinds
-    "l"     #'counsel-locate
-    "n"     #'deft
-    "m"     #'woman
-    "p"     #'paradox-list-packages
-    "r"     #'counsel-recentf
-    "s"     #'counsel-ag
-    "t"     #'shell-pop
-    "u"     #'counsel-unicode-char
-    "v"     #'undo-tree-visualize
-    "y"     #'counsel-yank-pop
-    "/"     #'treemacs-toggle
-    "<f4>"  #'ivy-resume)
-
-  ;; F5
-  (general-define-key
-   :prefix "<f5>"
-    "t"      #'counsel-load-theme
-    "f"      #'toggle-frame-fullscreen
-    "h"      #'global-hl-line-mode
-    "l"      #'linum-relative-mode
-    "m"      #'menu-bar-mode
-    "r"      #'ruler-mode
-    "-"      #'text-scale-adjust
-    "="      #'text-scale-adjust
-    "<f5>"   #'menu-bar-open)
-
-  ;; F6
-  (general-define-key
-   :prefix "<f6>"
-    "c"     #'rtags-rename-symbol
-    "d"     #'me:tags-find-symbol
-    "f"     #'me:tags-find-file
-    "i"     #'rtags-find-functions-called-by-this-function
-    "m"     #'counsel-imenu
-    "r"     #'me:tags-find-references-at-point
-    "v"     #'rtags-find-virtuals-at-point
-    "<RET>"  #'rtags-create-doxygen-comment
-    "<f6>"  #'me:tags-find-symbol-at-point)
-
-  ;; F7
-  (general-define-key
-   :prefix "<f7>"
-    "f"     #'counsel-projectile-find-file
-    "k"     #'projectile-kill-buffers
-    "o"     #'projectile-multi-occur
-    "r"     #'persp-rename
-    "u"     #'projectile-invalidate-cache
-    "/"     #'treemacs-projectile
-    "<f7>"  #'projectile-persp-switch-project)
-
-  ;; F8
-  (general-define-key
-   :prefix "<f8>"
-   "v"      #'evil-window-split
-   "h"      #'evil-window-vsplit
-   "o"      #'delete-other-windows
-   "x"      #'evil-window-delete
-   "d"      #'evil-window-rotate-downwards
-   "u"      #'evil-window-rotate-upwards
-   "r"      #'windresize
-   "1"      #'me:ps-one-per-page
-   "2"      #'me:ps-two-per-page
-   "<f8>"  #'delete-other-windows)
-
-  ;; F9
-  (general-define-key
-   :prefix "<f9>"
-    "b"     #'magit-blame
-    "B"     #'magit-run-git-gui-blame
-    "c"     #'magit-commit
-    "a"     #'magit-commit-amend
-    "i"     #'git-gutter+-show-hunk
-    "l"     #'magit-log-current
-    "<f9>"  #'magit-status)
-
-  ;; Minibuffer keybindings
-  (general-define-key
-   :keymap minibuffer-local-map
-   :prefix "C-c"
-   "e" #'miniedit)
-
-  :demand)
-
+;; built-in emacs-lisp-mode package
 (use-package emacs-lisp-mode
   :ensure nil
   :init
@@ -347,15 +202,86 @@
                     lisp-body-indent 2)))                     ; indent elisp by 2
   :interpreter (("emacs" . emacs-lisp-mode)))
 
-(use-package diminish
-  :config
+;; built-in winner package
+;; N.B. winner-mode must be started early to record window configs
+(use-package winner
+  :ensure nil
+  :general
+    ("s-]"   #'winner-redo)
+    ("s-["   #'winner-undo)
+  :defer 1
   :init
-  ;; some of these need to be run after init file has loaded
-  ;; to actually be diminished
-  (me:add-hook-with-delay 'after-init-hook 5 (lambda ()
-                               (diminish 'visual-line-mode)
-                               (diminish 'abbrev-mode)
-                               (diminish 'auto-revert-mode))))
+  :config
+  (winner-mode t))
+
+;; built-in autorevert package
+(use-package autorevert
+  :ensure nil
+  :defer 2
+  :init
+  (setq auto-revert-check-vc-info nil                         ; don't update branch on auto-revert
+        auto-revert-verbose nil)                              ; don't tell me about auto reverts
+  :config
+  (global-auto-revert-mode t)                                 ; revert unchanged files automatically
+  :diminish auto-revert-mode)
+
+;; built-in "simple" package
+(use-package simple
+  :ensure nil
+  :general
+    ("s-j"        #'next-error)
+    ("s-k"        #'previous-error)
+  :init
+  (setq kill-ring-max 200                      ; More killed items
+        kill-do-not-save-duplicates t          ; No duplicates in kill ring
+        save-interprogram-paste-before-kill t  ; save clipboard before killing
+        visual-line-fringe-indicators
+           '(left-curly-arrow nil))            ; use left curly error for wrapped lines
+  :config
+  (column-number-mode t)                       ; display column/row of cursor in mode-line
+  (global-visual-line-mode t)                  ; wrap long lines
+  :diminish visual-line-mode
+  :defer 1)
+
+;; built-in "abbrev" package
+(use-package abbrev
+  :ensure nil
+  :init
+  :config
+  :diminish abbrev-mode
+  :defer 1)
+
+;; built-in "hl-line" package
+(use-package hl-line
+  :ensure nil
+  :general
+  ("<f5> h" #'global-hl-line-mode)              ; toggle hl-line
+  :init
+  :config
+  (global-hl-line-mode t)                       ; highlight current line (hl-line)
+  :defer 1)
+
+;; built-in "menu-bar" package
+(use-package menu-bar
+  :ensure nil
+  :general
+    ("<f5> m"      #'menu-bar-mode)
+    ("<f5> <f5>"   #'menu-bar-open)
+  :init
+  :config
+  (menu-bar-mode 0)                             ; no menu bar
+  :defer 1)
+
+;; built-in "face-remap" package
+(use-package face-remap
+  :ensure nil
+  :general
+  ("<f5> -" #'text-scale-adjust)
+  ("<f5> =" #'text-scale-adjust)
+  :init
+  (setq text-scale-mode-step 1.05)              ; text size increases by 5% (normally 20%)
+  :config
+  :demand)
 
 (use-package smooth-scrolling
   :config
@@ -420,7 +346,9 @@
   (me:add-hook-with-delay 'visual-line-mode-hook 3 #'adaptive-wrap-prefix-mode))
 
 (use-package miniedit
-  :commands miniedit
+  :general
+  (:keymap minibuffer-local-map
+   "C-c e" #'miniedit)
   :config
   (miniedit-mode t)
   :init)
@@ -454,6 +382,8 @@
 
 (use-package linum-relative
   :config
+  :general
+    ("<f4> l"      #'linum-relative-mode)
   :diminish linum-relative-mode
   :init
   (setq linum-relative-current-symbol ""))   ; show current line #
@@ -461,17 +391,25 @@
 (use-package git-gutter-fringe+
   :if window-system
   :init
+  :general
+    ("s-h"        #'git-gutter+-next-hunk)
+    ("s-S-h"      #'git-gutter+-previous-hunk)
+    ("s-s"        #'git-gutter+-stage-hunks)
+    ("s-o"        #'git-gutter+-show-hunk-inline-at-point)
   :config
   (global-git-gutter+-mode t)
   :defer 1
   :diminish git-gutter+-mode)
 
 (use-package ruler-mode
+  :general
+    ("<f4> r" #'ruler-mode)
   :config)
 
 ;; better package manager
 (use-package paradox
-  :commands paradox-list-packages
+  :general
+    ("<f4> p"     #'paradox-list-packages)
   :config
   :init
   (setq paradox-spinner-type 'moon
@@ -500,23 +438,27 @@
   :defer 3)
 
 (use-package ace-window
-  :config
-  :commands ace-window)
+  :general
+    ("s-w"        #'ace-window)
+  :config)
 
 ; modal window resizing
 (use-package windresize
-  :commands windresize
-  :config
-  :bind (:map windresize-map
-              ("q" . windresize-exit)
-              ("h" . windresize-left)
-              ("l" . windresize-right)
-              ("j" . windresize-down)
-              ("k" . windresize-up)))
+  :general
+    ("<f8> r"      #'windresize)
+    (:keymaps 'windresize-map
+              "q" #'windresize-exit
+              "h" #'windresize-left
+              "l" #'windresize-right
+              "j" #'windresize-down
+              "k" #'windresize-up)
+  :config)
 
 (use-package undo-tree
   :config
   (global-undo-tree-mode)
+  :general
+    ("<f4> v"     #'undo-tree-visualize)
   :diminish undo-tree-mode)
 
 ;; remote file editting
@@ -529,7 +471,8 @@
 )
 
 (use-package dired
-  :commands dired-jump
+  :general
+    ("<f4> d"     #'dired-jump)
   :init
   (setq dired-recursive-deletes 'always
         dired-recursive-copies 'always
@@ -537,12 +480,16 @@
   :config
     (use-package peep-dired
       :config
-      :bind (:map dired-mode-map
-              ("C-f" . peep-dired)))
+      :general
+      (:keymaps 'dired-mode-map
+                "C-f" #'peep-dired))
+
     (use-package dired-narrow
       :config
-      :bind (:map dired-mode-map
-                  ("/" . dired-narrow)))
+      :general
+      (:keymaps 'dired-mode-map
+                  "/" #'dired-narrow))
+
     (use-package dired+
       :defer 2
       :config
@@ -554,7 +501,10 @@
   :ensure nil)
 
 (use-package flyspell
-  :commands ( flyspell-prog-mode flyspell-mode flyspell-auto-correct-previous-word flyspell-correct-previous-word-generic)
+  :commands ( flyspell-prog-mode flyspell-mode )
+  :general
+    ("s-f"        #'flyspell-auto-correct-previous-word)
+    ("s-S-f"      #'flyspell-correct-previous-word-generic)
   :config
   (use-package flyspell-correct-ivy :demand)
   :init
@@ -578,14 +528,17 @@
   :diminish (flyspell-mode . "ⓢ"))
 
 (use-package ivy
-  :bind
-  (:map ivy-mode-map
-        ("<escape>" . minibuffer-keyboard-quit)
-        ("C-j" . ivy-next-line-and-call)
-        ("C-k" . ivy-previous-line-and-call)
-        ("C-=" . ivy-minibuffer-grow)
-        ("C--" . ivy-minibuffer-shrink)
-        ("C-'" . ivy-avy))
+  :general
+    ("<f4> <f4>"  #'ivy-resume)
+    ("<f2>"       #'ivy-switch-buffer)
+    ("C-x b"      #'ivy-switch-buffer)
+    (:keymaps 'ivy-mode-map
+              "<escape>" #'minibuffer-keyboard-quit
+              "C-j" #'ivy-next-line-and-call
+              "C-k" #'ivy-previous-line-and-call
+              "C-=" #'ivy-minibuffer-grow
+              "C--" #'ivy-minibuffer-shrink
+              "C-'" #'ivy-avy)
   :config
   (ivy-mode 1)
   :init
@@ -600,7 +553,23 @@
   :diminish (ivy-mode . ""))
 
 (use-package counsel
-  :commands ( counsel-descbinds counsel-bookmark counsel-file-jump counsel-imenu counsel-yank-pop counsel-find-file)
+  :commands (  counsel-file-jump counsel-find-file)
+  :general
+    ("<f4> a" #'counsel-apropos)
+    ("<f4> b" #'counsel-mark-ring)
+    ("<f4> f" #'counsel-git-grep)
+    ("<f4> i" #'counsel-info-lookup-symbol)
+    ("<f4> j" #'counsel-bookmark)
+    ("<f4> k" #'counsel-descbinds)
+    ("<f4> l" #'counsel-locate)
+    ("<f4> r" #'counsel-recentf)
+    ("<f4> s" #'counsel-ag)
+    ("<f4> u" #'counsel-unicode-char)
+    ("<f4> y" #'counsel-yank-pop)
+    ("C-h b"  #'counsel-descbinds)
+    ("M-x"    #'counsel-M-x)
+    ("<f5> t" #'counsel-load-theme)
+    ("<f6> m" #'counsel-imenu)
   :init
   (setq counsel-yank-pop-separator "\n---\n")
   :config
@@ -611,7 +580,13 @@
 (use-package wgrep)
 
 (use-package projectile
-  :commands ( projectile-compile-project projectile-switch-project )
+  :general
+    ("<f7> k"     #'projectile-kill-buffers)
+    ("<f7> o"     #'projectile-multi-occur)
+    ("<f7> u"     #'projectile-invalidate-cache)
+    (:states '(normal visual emacs)
+    :prefix "<SPC>"
+				 "m"    #'projectile-compile-project)
   :diminish projectile-mode
   :after evil
   :init
@@ -626,11 +601,16 @@
   :config
   (push "compile_commands.json" projectile-project-root-files)
   (push "build" projectile-globally-ignored-directories)
-  (use-package persp-projectile :demand :config)
+  (use-package persp-projectile
+    :demand
+    :general
+      ("<f7> <f7>"  #'projectile-persp-switch-project)
+    :config)
   (projectile-mode 1))
 
 (use-package counsel-projectile
-  :commands (counsel-projectile-find-file)
+  :general
+    ("<f7> f" #'counsel-projectile-find-file)
   :config
   ;; version of counsel-projectile-find-file which uses
   ;; projectile-current-project-files instead of the fontified
@@ -649,6 +629,10 @@
 
 (use-package perspective
   :after projectile
+  :general
+    ("<f7> r"     #'persp-rename)
+    ("s-<right>"  #'persp-next)
+    ("s-<left>"   #'persp-prev)
   :config
     (setq persp-initial-frame-name (projectile-project-name))
     (persp-mode))
@@ -688,7 +672,7 @@
   :mode
   (("\\.org\\'" . org-mode))
   :config
-    (use-package evil-org :config))
+    (use-package evil-org :config :demand))
 
 (use-package cmake-mode
   :config
@@ -806,7 +790,15 @@
 
 (use-package compile
   :commands compile
+  :general
+    (:states '(normal visual emacs)
+    :prefix "<SPC>"
+      "o"          #'me:switch-to-compile-buffer
+      "r"          #'recompile)
   :config
+  (defun me:switch-to-compile-buffer ()
+    (interactive)
+    (switch-to-buffer "*compilation*"))
   (defun me:rotate-skip-threshold ()
     (interactive)
     (compilation-set-skip-threshold
@@ -854,6 +846,8 @@
   :init
   (setq woman-use-topic-at-point t                          ; man page on word at point if exists
         Man-notify-method 'aggressive)                      ; show&select man page in other window
+  :general
+    ("<f4> m" #'woman)
   :config
   (set-face-attribute 'Man-overstrike nil :inherit font-lock-type-face :bold t)
   (set-face-attribute 'Man-underline nil :inherit font-lock-keyword-face :underline t))
@@ -864,15 +858,17 @@
   :init
   (setq doc-view-continuous t
         doc-view-resolution 144)
-  :bind
-  (:map doc-view-mode-map
-        ("j" . doc-view-next-line-or-next-page)
-        ("k" . doc-view-previous-line-or-previous-page)
-        ("h" . image-backward-hscroll)
-        ("l" . image-forward-hscroll)))
+  :general
+  (:keymaps 'doc-view-mode-map
+            "j" #'doc-view-next-line-or-next-page
+            "k" #'doc-view-previous-line-or-previous-page
+            "h" #'image-backward-hscroll
+            "l" #'image-forward-hscroll))
 
 (use-package deft
   :config
+  :general
+    ("<f4> n"     #'deft)
   :init
   (setq deft-directory me:notes-path
         deft-recursive t
@@ -893,7 +889,9 @@
               (define-key deft-mode-map (kbd "<C-backspace>") #'deft-filter-clear))))
 
 (use-package company
-  :commands ( global-company-mode company-complete )
+  :commands ( global-company-mode)
+  :general
+    ("s-d"        #'company-complete)
   :init
   (setq company-minimum-prefix-length 1            ; just one char needed
         company-dabbrev-downcase nil)              ; never downcase
@@ -919,7 +917,6 @@
   :diminish counsel-gtags-mode)
 
 (use-package rtags
-  :commands ( rtags-location-stack-back rtags-location-stack-forward rtags-create-doxygen-comment)
   :init
   (defun me:flycheck-rtags-setup ()
     (require 'flycheck-rtags)
@@ -964,6 +961,17 @@
   (add-hook 'c++-mode-hook #'me:flycheck-rtags-setup)
   (add-hook 'c-mode-hook #'me:flycheck-rtags-setup)
   (add-hook 'company-mode-hook  #'me:company-rtags-setup)
+  :general
+    ("s-;"        #'rtags-location-stack-forward)
+    ("s-,"        #'rtags-location-stack-back)
+    ("<f6> c"     #'rtags-rename-symbol)
+    ("<f6> d"     #'me:tags-find-symbol)
+    ("<f6> f"     #'me:tags-find-file)
+    ("<f6> i"     #'rtags-find-functions-called-by-this-function)
+    ("<f6> r"     #'me:tags-find-references-at-point)
+    ("<f6> v"     #'rtags-find-virtuals-at-point)
+    ("<f6> <RET>"  #'rtags-create-doxygen-comment)
+    ("<f6> <f6>"  #'me:tags-find-symbol-at-point)
   :config
   (rtags-diagnostics)
   (rtags-set-periodic-reparse-timeout 2)
@@ -971,7 +979,9 @@
 
 ;; yas snippets
 (use-package yasnippet
-  :commands ( yas-expand yas-expand-snippet )
+  :commands ( yas-expand-snippet )
+  :general
+    ("<s-return>" #'yas-expand)
   :init
   (setq yas-fallback-behavior 'return-nil)          ; don't try old binding
   (add-hook 'yas-before-expand-snippet-hook         ; evil-insert at each slot
@@ -1018,7 +1028,6 @@
   :init
   (setq avy-all-windows 'all-frames))
 
-;; N.B. evil-mode must be enabled after global-evil-leader-mode
 (use-package evil
   :commands evil-mode
   :init
@@ -1031,68 +1040,107 @@
         evil-want-C-i-jump nil              ; need TAB for other things
         evil-indent-convert-tabs nil        ; make = work with smart tabs mode
         evil-search-module #'evil-search)
+  :general
+    (:states '(normal visual emacs)
+    :prefix "<SPC>"
+      "<SPC>"      #'me:switch-to-previous-buffer
+      ";"          #'evil-jump-forward
+      ","          #'evil-jump-backward
+      "a"          #'align
+      "c"          #'me:use-evil-clipboard-register
+      "e"          #'pp-eval-last-sexp
+      "f"          #'evil-avy-goto-word-1
+      "g"          #'evil-avy-goto-char-2
+      "l"          #'evil-avy-goto-char-in-line
+      "s"          #'me:use-evil-selection-register
+      "w"          #'save-buffer
+      "x"          #'exchange-point-and-mark
+      "<DEL>"      #'kill-this-buffer)
+    ("<f8> v"      #'evil-window-split)
+    ("<f8> h"      #'evil-window-vsplit)
+    ("<f8> x"      #'evil-window-delete)
+    ("<f8> d"      #'evil-window-rotate-downwards)
+    ("<f8> u"      #'evil-window-rotate-upwards)
+    (:keymaps '(normal visual ) "<escape>" #'keyboard-quit)
+
+    ;; Move via visual lines
+    (:keymaps 'normal "j"   #'evil-next-visual-line)
+    (:keymaps 'normal "k"   #'evil-previous-visual-line)
+
+    ;; Scroll keeping cursor stationary
+    (:keymaps 'normal "C-j" #'evil-scroll-line-up)       ; ^y
+    (:keymaps 'normal "C-k" #'evil-scroll-line-down)     ; ^e
+
+    ;; Overload shifts so that they don't lose the selection
+    (:keymaps 'visual
+              ">"           #'me:evil-shift-right-visual
+              "<tab>"       #'me:evil-shift-right-visual)
+    (:keymaps 'visual
+              "<"           #'me:evil-shift-left-visual
+              "<backtab>"   #'me:evil-shift-left-visual)
+
   :config
+
   (defun me:use-evil-selection-register ()
     (interactive)
     (evil-execute-macro 1 "\"*"))
+
   (defun me:use-evil-clipboard-register ()
     (interactive)
     (evil-execute-macro 1 "\"+"))
+
   (defun me:evil-shift-left-visual ()
     (interactive)
     (evil-shift-left (region-beginning) (region-end))
     (evil-normal-state)
     (evil-visual-restore))
+
   (defun me:evil-shift-right-visual ()
     (interactive)
     (evil-shift-right (region-beginning) (region-end))
     (evil-normal-state)
     (evil-visual-restore))
+
   (defun me:switch-to-previous-buffer ()
     (interactive)
     (switch-to-buffer (other-buffer (current-buffer) 1)))
-  (defun me:switch-to-compile-buffer ()
-    (interactive)
-    (switch-to-buffer "*compilation*"))
 
   (use-package evil-args
-    :commands (evil-inner-arg evil-outer-arg)
+    :general
+    (:keymaps 'inner "a"  #'evil-inner-arg)
+    (:keymaps 'outer "a"  #'evil-outer-arg)
     :config )
+
   (use-package evil-textobj-anyblock
-    :commands (evil-textobj-anyblock-inner-block evil-textobj-anyblock-a-block)
+    :general
+    (:keymaps 'inner "b"  #'evil-textobj-anyblock-inner-block)
+    (:keymaps 'outer "b"  #'evil-textobj-anyblock-a-block)
     :config )
+
   (use-package evil-commentary
-    :commands (evil-commentary evil-commentary-yank)
+    :general
+    (:keymaps 'motion "gc" #'evil-commentary)
+    (:keymaps 'motion "gy" #'evil-commentary-yank)
     :config
     (evil-commentary-mode)
     :diminish evil-commentary-mode)
-  (use-package evil-surround
-    :commands (evil-surround-edit evil-Surround-edit evil-surround-region evil-Surround-region)
-    :config (global-evil-surround-mode 1))
-  (use-package evil-mc
-    :commands (evil-mc-make-all-cursors
-                evil-mc-make-cursor-here
-                evil-mc-make-and-goto-next-match
-                evil-mc-skip-and-goto-next-cursor
-                evil-mc-make-cursor-here)
-    :config
-    (global-evil-mc-mode 1))
-  (evil-set-initial-state 'git-rebase-mode 'emacs)
-  (evil-set-initial-state 'deft-mode 'insert)
-  (evil-set-initial-state 'magit-branch-manager-mode 'emacs)
-  (evil-set-initial-state 'flycheck-error-list-mode 'emacs)
-  (evil-set-initial-state 'rtags-mode 'emacs)
-  (evil-set-initial-state 'dired-mode 'emacs)
-  (evil-set-initial-state 'image-mode 'emacs)
-  (evil-set-initial-state 'finder-mode 'emacs)
-  (evil-set-initial-state 'doc-view-mode 'emacs)
-  (evil-set-initial-state 'image-dired-thumbnail-mode 'emacs)
-  (evil-set-initial-state 'paradox-menu-mode 'emacs)
 
-  ;; note evil-set-initial-state didn't work for these modes
-  ;; I'm not sure why...
-  (add-hook 'magit-log-mode-hook #'evil-emacs-state)
-  (add-hook 'magit-revision-mode-hook #'evil-emacs-state)
+  ;; want to start deft in insert mode
+  (evil-set-initial-state 'deft-mode 'insert)
+
+  ;; these modes are better in emacs state
+  (dolist (hook '(git-rebase-mode-hook
+                  flycheck-error-list-mode-hook
+                  rtags-mode-hook
+                  finder-mode-hook
+                  doc-view-mode-hook
+                  image-mode-hook
+                  image-dired-thumbnail-mode-hook
+                  paradox-menu-mode-hook
+                  magit-branch-manager-mode-hook
+                  magit-log-mode-hook
+                  magit-revision-mode-hook))
+           (add-hook hook #'evil-emacs-state))
 
   ;; Put view-mode in motion-state, this gives us motion
   ;; keys and not much more, this is good for read-only scenario
@@ -1100,33 +1148,6 @@
   ;; to be a hook.
   (add-hook 'view-mode-hook (lambda () (if view-mode (evil-motion-state) (evil-normal-state))))
 
-  ;; extension key maps, mainly to autoload them
-  (define-key evil-inner-text-objects-map "a" #'evil-inner-arg)
-  (define-key evil-outer-text-objects-map "a" #'evil-outer-arg)
-  (define-key evil-inner-text-objects-map "b" #'evil-textobj-anyblock-inner-block)
-  (define-key evil-outer-text-objects-map "b" #'evil-textobj-anyblock-a-block)
-  (define-key evil-normal-state-map "gc" #'evil-commentary)
-  (define-key evil-normal-state-map "gy" #'evil-commentary-yank)
-  (define-key evil-operator-state-map "s" 'evil-surround-edit)
-  (define-key evil-operator-state-map "S" 'evil-Surround-edit)
-  (define-key evil-visual-state-map "S" 'evil-surround-region)
-  (define-key evil-visual-state-map "gS" 'evil-Surround-region)
-
-  (define-key evil-normal-state-map (kbd "j") #'evil-next-visual-line)
-  (define-key evil-normal-state-map (kbd "k") #'evil-previous-visual-line)
-  ; esc key (from WikEmacs)
-  (define-key evil-normal-state-map [escape] #'keyboard-quit)
-  (define-key evil-visual-state-map [escape] #'keyboard-quit)
-  ; scroll keeping cursor in place
-  (define-key evil-normal-state-map (kbd "C-j")
-    (lambda () (interactive)  (evil-scroll-line-down 1) (evil-next-visual-line 0)))
-  (define-key evil-normal-state-map (kbd "C-k")
-    (lambda () (interactive) (evil-scroll-line-up 1) (evil-previous-visual-line 0)))
-  ; Overload shifts so that they don't lose the selection
-  (define-key evil-visual-state-map (kbd ">") #'me:evil-shift-right-visual)
-  (define-key evil-visual-state-map (kbd "<") #'me:evil-shift-left-visual)
-  (define-key evil-visual-state-map [tab] #'me:evil-shift-right-visual)
-  (define-key evil-visual-state-map [S-tab] #'me:evil-shift-left-visual)
   (evil-mode 1))
 
 (use-package ws-butler
@@ -1139,6 +1160,8 @@
 
 (use-package shell-pop
   :config
+  :general
+    ("<f4> t"     #'shell-pop)
   :init
   (setq shell-pop-internal-mode "ansi-term"
         shell-pop-term-shell "/bin/bash"
@@ -1164,7 +1187,16 @@
 
 (use-package magit
   :init
-  (setq magit-completing-read-function 'ivy-completing-read)
+  (setq magit-completing-read-function 'ivy-completing-read    ; use ivy
+        vc-handled-backends nil)                               ; magit does everything needed
+  :general
+    ("<f9> b"     #'magit-blame)
+    ("<f9> B"     #'magit-run-git-gui-blame)
+    ("<f9> c"     #'magit-commit)
+    ("<f9> a"     #'magit-commit-amend)
+    ("<f9> i"     #'git-gutter+-show-hunk)
+    ("<f9> l"     #'magit-log-current)
+    ("<f9> <f9>"  #'magit-status)
   :config
   (use-package evil-magit
     :demand
@@ -1172,7 +1204,9 @@
     (setq evil-magit-state 'normal)))
 
 (use-package treemacs
-  :commands ( treemacs-toggle treemacs-projectile )
+  :general
+    ("<f4> /"   #'treemacs-toggle)
+    ("<f7> /"   #'treemacs-projectile)
   :init
   (setq treemacs-header-function            #'treemacs--create-header-projectile
         treemacs-follow-after-init          t
