@@ -447,7 +447,7 @@
           (if (or (buffer-file-name buffer)
                   (not (equal (substring (buffer-name buffer) 0 1) " ")))
               (with-current-buffer buffer
-                (message "Updating %s" buffer);
+                ;(message "Updating %s" buffer);
                 (kill-local-variable 'mode-line-format)
                 (force-mode-line-update t))))
       (buffer-list)))
