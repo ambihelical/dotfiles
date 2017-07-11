@@ -838,7 +838,8 @@
 ;; view symbols of libraries
 (use-package elf-mode
   :init
-  (add-to-list 'magic-mode-alist (cons "ELF" 'elf-mode))    ; call elf-mode for elf files
+  :magic
+  (("ELF" . elf-mode))
   :config)
 
 (use-package woman
