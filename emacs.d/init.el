@@ -552,6 +552,12 @@
            '((t . ivy--regex-ignore-order)))                ; allow input not in order
   :diminish (ivy-mode . ""))
 
+;; add some ivy buffer information
+(use-package ivy-rich
+  :config
+  (ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer)
+  :defer 3)
+
 (use-package counsel
   :commands (  counsel-file-jump counsel-find-file)
   :general
