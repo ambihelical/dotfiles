@@ -1203,6 +1203,7 @@
     ("<f9> a"     #'magit-commit-amend)
     ("<f9> i"     #'git-gutter+-show-hunk)
     ("<f9> l"     #'magit-log-current)
+    ("<f9> f"     #'magit-log-buffer-file)
     ("<f9> <f9>"  #'magit-status)
   :config
   (use-package evil-magit
