@@ -566,7 +566,9 @@
   :diminish (ivy-mode . ""))
 
 ;; add some ivy buffer information
+;; N.B. Disabled until #8 reopened and fixed
 (use-package ivy-rich
+  :disabled
   :config
   (ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer)
   :defer 3)
