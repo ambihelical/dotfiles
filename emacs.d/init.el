@@ -26,9 +26,6 @@
 (defconst me:cache-directory (or (getenv "XDG_CACHE_HOME")  "~/.cache"))
 (defconst me:config-directory (or (getenv "XDG_CONFIG_HOME")  "~/.config"))
 (defconst me:emacs-backup-directory (expand-file-name "emacs" me:cache-directory))
-(defconst me:notes-path (if (file-readable-p "~/Dropbox/Notes")
-                            "~/Dropbox/Notes"
-                          "~/Notes") "Location of note files")
 
 ;; replace prefix part of a string
 (defun me:replace-prefix (prefix input)
@@ -893,10 +890,12 @@
 
 (use-package deft
   :config
+  (if (file-readable-p "~/Dropbox/Notes")
+      (setq deft-directory "~/Dropbox/Notes"))
   :general
     ("<f4> n"     #'deft)
   :init
-  (setq deft-directory me:notes-path
+  (setq deft-directory "~/Notes"   ; can be overridden in config
         deft-recursive t
         deft-use-filter-string-for-filename t
         deft-file-naming-rules '((nospace . "_")
