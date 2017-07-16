@@ -246,6 +246,9 @@
 ;; built-in "abbrev" package
 (use-package abbrev
   :ensure nil
+  :general
+  (:prefix "C-x"
+           "a"  '(:ignore t :which-key "Abbrev→" ))
   :init
   :config
   :diminish abbrev-mode
@@ -592,7 +595,9 @@
     ("<f7> u"     #'projectile-invalidate-cache)
     (:states '(normal visual emacs)
     :prefix "<SPC>"
-				 "m"    #'projectile-compile-project)
+         "m"    #'projectile-compile-project)
+    (:prefix "C-c"
+            "p"  '(:ignore t :which-key "Projectile→" ))
   :diminish projectile-mode
   :after evil
   :init
@@ -639,6 +644,8 @@
     ("<f7> r"     #'persp-rename)
     ("s-<right>"  #'persp-next)
     ("s-<left>"   #'persp-prev)
+    (:prefix "C-x"
+            "x"  '(:ignore t :which-key "Perspective→" ))
   :config
     (setq persp-initial-frame-name (projectile-project-name))
     (persp-mode))
@@ -1009,6 +1016,9 @@
   :init
   (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
   (me:add-hook-with-delay 'prog-mode-hook 10 #'flycheck-mode)
+  :general
+  (:prefix "C-c"
+           "!"  '(:ignore t :which-key "Flycheck→" ))
   :config
   (use-package flycheck-pos-tip
     :demand
