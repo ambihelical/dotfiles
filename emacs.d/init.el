@@ -1075,8 +1075,8 @@
     (:keymaps 'normal "k"   #'evil-previous-visual-line)
 
     ;; Scroll keeping cursor stationary
-    (:keymaps 'normal "C-j" #'evil-scroll-line-up)       ; ^y
-    (:keymaps 'normal "C-k" #'evil-scroll-line-down)     ; ^e
+    (:keymaps '( normal insert visual ) "C-j" #'evil-scroll-line-up)       ; ^y
+    (:keymaps '( normal insert visual )  "C-k" #'evil-scroll-line-down)     ; ^e
 
     ;; Overload shifts so that they don't lose the selection
     (:keymaps 'visual
