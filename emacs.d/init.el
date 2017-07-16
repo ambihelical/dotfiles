@@ -108,6 +108,16 @@
           (lambda ()
             (modify-syntax-entry ?+ "." )))                  ; + is punctuation
 
+;; inhibit messages in echo area when minibuffer enabled
+(add-hook 'minibuffer-setup-hook
+          (lambda ()
+            (setq inhibit-message t)))
+
+;; reenable messages in echo area after last minibuffer popped
+(add-hook 'minibuffer-exit-hook
+          (lambda ()
+            (setq inhibit-message (> (minibuffer-depth) 1))))
+
 ;; set font in order of preference
 (if (member "Hack" (font-family-list))
     (set-frame-font "Hack-11:autohint=true" t t)
