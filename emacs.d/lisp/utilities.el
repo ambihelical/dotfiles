@@ -40,25 +40,25 @@
           (switch-to-buffer buffer)))))
 
 ;;;###autoload
-(defun me:select-2nd-other-buffer (arg &optional prefix)
+(defun me:select-2nd-other-buffer (&optional prefix)
   "Select 2nd other buffer"
   (interactive "P")
   (me:select-nth-other-buffer 1 prefix))
 
 ;;;###autoload
-(defun me:select-3rd-other-buffer (arg &optional prefix)
+(defun me:select-3rd-other-buffer (&optional prefix)
   "Select 2nd other buffer"
   (interactive "P")
   (me:select-nth-other-buffer 2 prefix))
 
 ;;;###autoload
-(defun me:select-4th-other-buffer (arg &optional prefix)
+(defun me:select-4th-other-buffer (&optional prefix)
   "Select 2nd other buffer"
   (interactive "P")
   (me:select-nth-other-buffer 3 prefix))
 
 ;;;###autoload
-(defun me:select-5th-other-buffer (arg &optional prefix)
+(defun me:select-5th-other-buffer (&optional prefix)
   "Select 2nd other buffer"
   (interactive "P")
   (me:select-nth-other-buffer 4 prefix))
