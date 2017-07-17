@@ -583,11 +583,13 @@
     ("<f4> r" #'counsel-recentf)
     ("<f4> s" #'counsel-ag)
     ("<f4> u" #'counsel-unicode-char)
-    ("<f4> y" #'counsel-yank-pop)
     ("C-h b"  #'counsel-descbinds)
     ("M-x"    #'counsel-M-x)
+    ("M-y"    #'counsel-yank-pop)
     ("<f5> t" #'counsel-load-theme)
     ("<f6> m" #'counsel-imenu)
+    (:keymaps 'ivy-minibuffer-map
+              "M-y" #'ivy-next-line)
   :init
   (setq counsel-yank-pop-separator "\n---\n")
   :config
