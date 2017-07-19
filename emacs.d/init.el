@@ -1204,7 +1204,7 @@
   (setq which-key-max-description-length nil)
   :config
   (which-key-mode)
-  (which-key-setup-side-window-bottom)
+  (which-key-setup-side-window-right-bottom)
   :defer 2
   :diminish which-key-mode)
 
