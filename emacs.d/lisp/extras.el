@@ -46,6 +46,8 @@
   (require 'ps-print)
   (let ((ps-n-up-printing    2)
         (ps-n-up-border-p    nil)
+        (ps-spool-duplex     t)
+        (ps-lpr-switches     '( "-o Duplex=DuplexTumble" ))   ;; short-side binding
         (ps-paper-type      'letter)
         (ps-font-size        (quote (8 . 11)))
         (ps-top-margin       -25)
@@ -64,6 +66,7 @@
   (require 'ps-print)
   (let ((ps-n-up-printing    1)
         (ps-n-up-border-p    nil)
+        (ps-spool-duplex     t)
         (ps-paper-type      'letter)
         (ps-font-size        (quote (7 . 8.5)))
         (ps-top-margin       20)
