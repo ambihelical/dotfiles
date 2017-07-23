@@ -60,18 +60,8 @@
       backup-directory-alist
          `((".*" . ,me:emacs-backup-directory))             ; backup files in backup directory
       custom-file "/dev/null"                               ; disable customizations
-      enable-recursive-minibuffers t                        ; allow recursive edit
       fast-but-imprecise-scrolling t                        ; quick and dirty scrolling
-      frame-title-format
-        '((:eval (if (buffer-file-name)
-                    (me:replace-prefix (abbreviate-file-name default-directory)
-                                        (abbreviate-file-name buffer-file-name))
-                  "%b"))
-          " %* ["
-          (:eval (abbreviate-file-name default-directory))
-          "]")                                              ; fancy title
       history-length 1000                                   ; length of history
-      icon-title-format frame-title-format                  ; use same title for unselected frame
       inhibit-splash-screen t                               ; no splash
       inhibit-startup-echo-area-message t                   ; no startup message
       inhibit-startup-message t                             ; no startup message
@@ -87,12 +77,10 @@
       scroll-margin 5                                       ; show some lines around cursor when possible
       select-enable-clipboard nil                           ; make cut/paste function correctly (select)
       sentence-end-double-space nil                         ; sentences end with one space
-      split-width-threshold 240                             ; 2x ideal line width :)
       standard-indent 3                                     ; ideal indent :)
       view-read-only t                                      ; show r/o files in view mode
       x-gtk-use-system-tooltips nil)                        ; allow tooltip theming
 
-(add-hook 'focus-out-hook #'me:save-dirty-buffers)          ; save on defocus
 (add-hook 'after-init-hook                                  ; report init time
           (lambda ()
             (message "Time to initialize: %s"
@@ -105,15 +93,6 @@
           (lambda ()
             (modify-syntax-entry ?+ "." )))                  ; + is punctuation
 
-;; inhibit messages in echo area when minibuffer enabled
-(add-hook 'minibuffer-setup-hook
-          (lambda ()
-            (setq inhibit-message t)))
-
-;; reenable messages in echo area after last minibuffer popped
-(add-hook 'minibuffer-exit-hook
-          (lambda ()
-            (setq inhibit-message (> (minibuffer-depth) 1))))
 
 ;; set font in order of preference
 (if (member "Hack" (font-family-list))
@@ -145,33 +124,17 @@
 (use-package general
   :config
   (general-evil-setup t)
-  ;; Top level keymaps
-  (general-define-key
-    "s-`"        #'previous-buffer
-    "<s-tab>"    #'next-buffer)
-
-  ;; F4
   (general-define-key
    :prefix "<f4>"
     "g"     #'general-describe-keybindings)
-
-  ;; F5
-  (general-define-key
-   :prefix "<f5>"
-    "f"      #'toggle-frame-fullscreen) ;frame
-
-  ;; F8
-  (general-define-key
-   :prefix "<f8>"
-   "o"      #'delete-other-windows
-   "<f8>"  #'delete-other-windows)
-
   :demand)
 
 ;; frequently used functions
 (use-package utilities
   :ensure nil
   :commands (me:set-extra-font-attributes
+             me:minibuffer-setup
+             me:minibuffer-exit
              me:save-dirty-buffers )
   :general
     ("s-2"        #'me:select-2nd-other-buffer)
@@ -189,8 +152,8 @@
   :general
     ("s-1"     #'me:find-other-file)
     ("s-c"     #'me:rotate-fill-column)
-    ("<f8> 1"  #'me:ps-one-per-page)
-    ("<f8> 2"  #'me:ps-two-per-page)
+    ("<f4> 1"  #'me:ps-one-per-page)
+    ("<f4> 2"  #'me:ps-two-per-page)
     ("s-\\"    #'me:next-powerline-separator)
   :config
   :load-path "lisp/")
@@ -209,6 +172,30 @@
                     lisp-body-indent 2)))                     ; indent elisp by 2
   :interpreter (("emacs" . emacs-lisp-mode)))
 
+;; built-in frame package
+;; Because there is no window package, window config is here as well
+(use-package frame
+  :ensure nil
+  :general
+  ("<f5> f"     #'toggle-frame-fullscreen)   ; frame
+  ("s-`"        #'previous-buffer)           ; window
+  ("<s-tab>"    #'next-buffer)               ; window
+  ("s-w"        #'other-window)              ; window
+  :init
+  (add-hook 'focus-out-hook #'me:save-dirty-buffers)          ; save on defocus
+  (setq frame-title-format
+        '((:eval (if (buffer-file-name)
+                    (me:replace-prefix (abbreviate-file-name default-directory)
+                                        (abbreviate-file-name buffer-file-name))
+                  "%b"))
+          " %* ["
+          (:eval (abbreviate-file-name default-directory))
+          "]")                                               ; fancy title
+      split-width-threshold 240                              ; 2x ideal line width :)
+      icon-title-format frame-title-format)                  ; use same title for unselected frame
+  :config
+  :demand)
+
 ;; built-in winner package
 ;; N.B. winner-mode must be started early to record window configs
 (use-package winner
@@ -220,6 +207,29 @@
   :init
   :config
   (winner-mode t))
+
+;; built-in windmove
+(use-package windmove
+  :ensure nil
+  :general
+  ("s-j" #'windmove-down)
+  ("s-k" #'windmove-up)
+  ("s-h" #'windmove-left)
+  ("s-l" #'windmove-right))
+
+
+;; built-in minibuffer package
+(use-package minibuffer
+  :ensure nil
+  :init
+  (setq enable-recursive-minibuffers t)                        ; allow recursive edit
+  (add-hook 'minibuffer-setup-hook #'me:minibuffer-setup)
+  (add-hook 'minibuffer-exit-hook #'me:minibuffer-exit)
+
+  :config
+  (savehist-mode t)                        ; save minibuffer history (savehist)
+  (minibuffer-depth-indicate-mode t)       ; show recursive edit depth (mb-depth)
+  :demand)
 
 ;; built-in autorevert package
 (use-package autorevert
@@ -236,8 +246,8 @@
 (use-package simple
   :ensure nil
   :general
-    ("s-j"        #'next-error)
-    ("s-k"        #'previous-error)
+    ("s-n"        #'next-error)
+    ("s-p"        #'previous-error)
   :init
   (setq kill-ring-max 200                      ; More killed items
         kill-do-not-save-duplicates t          ; No duplicates in kill ring
@@ -402,8 +412,8 @@
   :if window-system
   :init
   :general
-    ("s-h"        #'git-gutter+-next-hunk)
-    ("s-S-h"      #'git-gutter+-previous-hunk)
+    ("s-g"        #'git-gutter+-next-hunk)
+    ("s-S-g"      #'git-gutter+-previous-hunk)
     ("s-s"        #'git-gutter+-stage-hunks)
     ("s-o"        #'git-gutter+-show-hunk-inline-at-point)
   :config
@@ -447,15 +457,11 @@
   (save-place-mode t)
   :defer 3)
 
-(use-package ace-window
-  :general
-    ("s-w"        #'ace-window)
-  :config)
 
 ; modal window resizing
 (use-package windresize
   :general
-    ("<f8> r"      #'windresize)
+    ("<f5> r"      #'windresize)
     (:keymaps 'windresize-map
               "q" #'windresize-exit
               "h" #'windresize-left
@@ -1086,11 +1092,6 @@
       "w"          #'save-buffer
       "x"          #'exchange-point-and-mark
       "<DEL>"      #'kill-this-buffer)
-    ("<f8> v"      #'evil-window-split)
-    ("<f8> h"      #'evil-window-vsplit)
-    ("<f8> x"      #'evil-window-delete)
-    ("<f8> d"      #'evil-window-rotate-downwards)
-    ("<f8> u"      #'evil-window-rotate-upwards)
     (:keymaps '(normal visual ) "<escape>" #'keyboard-quit)
 
     ;; Move via visual lines

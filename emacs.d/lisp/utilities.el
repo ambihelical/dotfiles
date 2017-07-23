@@ -63,8 +63,8 @@
   (interactive "P")
   (me:select-nth-other-buffer 4 prefix))
 
-;;;###autoload
 ;; set font attributes after theme loads
+;;;###autoload
 (defun me:set-extra-font-attributes ()
   (set-face-attribute 'default nil :background "gray99")
   (let ((bg (face-attribute 'default :background))
@@ -74,5 +74,21 @@
          (set-face-attribute 'whitespace-tab nil :foreground "gainsboro" :background bg )
          (set-face-attribute 'whitespace-trailing nil :foreground fg :background "red" )))
 
+;; value of gc-cons-threshold to restore after minibuffer
+(defconst me:normal-gc-cons-threshold gc-cons-threshold)
+
+;; inhibit messages in echo area when minibuffer enabled
+;; and set use large gc-cons-threshold
+;; see http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
+;;;###autoload
+(defun me:minibuffer-setup ()
+  (setq inhibit-message t
+        gc-cons-thresold most-positive-fixnum))
+
+;; undo that done in me:minibuffer-setup
+;;;###autoload
+(defun me:minibuffer-exit ()
+  (setq inhibit-message (> (minibuffer-depth) 1)
+        gc-cons-threshold me:normal-gc-cons-threshold))
 
 (provide 'utilities)
