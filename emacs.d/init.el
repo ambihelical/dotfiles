@@ -143,10 +143,11 @@
     ("s-3"        #'me:select-3rd-other-buffer)
     ("s-4"        #'me:select-4th-other-buffer)
     ("s-5"        #'me:select-5th-other-buffer)
+    ("s-,"        #'me:paste-then-earlier)
+    ("s-."        #'me:paste-then-later)
     ("<f3>"       #'me:find-some-files)
   :config
   :load-path "lisp/")
-
 
 ;; infrequently used functions
 (use-package extras
