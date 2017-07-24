@@ -1,5 +1,6 @@
 ;;; -*- lexical-binding: t -*-
-(setq gc-cons-threshold 100000000)
+
+(setq gc-cons-threshold most-positive-fixnum)
 
 ;; package management
 
@@ -7,12 +8,7 @@
 
 (setq package-archives '(("melpa" . "http://melpa.milkbox.net/packages/")
                          ("org"   . "http://orgmode.org/elpa/")
-                         ("gnu"   . "http://elpa.gnu.org/packages/"))
-      use-package-always-ensure t                              ; ensure by default
-      use-package-always-defer t                               ; defer by default
-      use-package-enable-imenu-support t                       ; support for packages in imenu
-      use-package-minimum-reported-time 0.03                   ; minimum time when verbose
-      use-package-verbose nil)                                 ; don't be verbose
+                         ("gnu"   . "http://elpa.gnu.org/packages/")))
 (package-initialize)
 (unless package-archive-contents
   (package-refresh-contents))
@@ -20,6 +16,13 @@
   (package-install 'use-package))
 (eval-when-compile
   (require 'use-package))
+
+(eval-after-load "use-package"
+  '(setq use-package-always-ensure t                              ; ensure by default
+         use-package-always-defer t                               ; defer by default
+         use-package-enable-imenu-support t                       ; support for packages in imenu
+         use-package-minimum-reported-time 0.03                   ; minimum time when verbose
+         use-package-verbose nil))                                 ; don't be verbose
 
 ;; set some personal variables
 (defconst me:data-directory (or (getenv "XDG_DATA_HOME") "~/.local/share"))
@@ -47,6 +50,26 @@
                                         (progn
                                           (set-buffer cur-buf)
                                           (funcall ,func))))))))))
+
+(defun me:set-preferred-font ()
+  (let ((fonts (font-family-list)))
+    (if (member "Hack" fonts)
+        (set-frame-font "Hack-11:autohint=true" t t)
+      (if (member "Fantasque Sans Mono" fonts)
+          (set-frame-font "Fantasque Sans Mono-12" t t)
+        (if (member "DejaVu Sans Mono" fonts)
+            (set-frame-font "DejaVu Sans Mono-11" t t))))))
+
+(defun me:extra-setup ()
+  (tool-bar-mode 0)                                           ; no tool bar (tool-bar)
+  (scroll-bar-mode 0)                                         ; no scroll bar (scroll-bar)
+  (mouse-avoidance-mode 'animate)                             ; move mouse pointer out of way (avoid)
+  (global-eldoc-mode -1)                                      ; turn off annoying eldoc mode (eldoc)
+  (fset 'yes-or-no-p 'y-or-n-p)                               ; change stupid default y/n? y
+  (make-directory me:emacs-backup-directory t)                ; make sure backup dir exists
+  (electric-indent-mode +1)                                   ; turn on electric mode globally (electric)
+  (me:set-preferred-font)                                     ; set the font
+  (run-at-time "1 hour" 3600 #'clean-buffer-list))            ; clear out old buffers every hour (midnight)
 
 ;; configuration I haven't figured out how to wedge into
 ;; use-package
@@ -93,35 +116,14 @@
           (lambda ()
             (modify-syntax-entry ?+ "." )))                  ; + is punctuation
 
-
-;; set font in order of preference
-(if (member "Hack" (font-family-list))
-    (set-frame-font "Hack-11:autohint=true" t t)
-  (if (member "Fantasque Sans Mono" (font-family-list))
-      (set-frame-font "Fantasque Sans Mono-12" t t)
-    (if (member "DejaVu Sans Mono" (font-family-list))
-        (set-frame-font "DejaVu Sans Mono-11" t t))))
-
-(tool-bar-mode 0)                                           ; no tool bar (tool-bar)
-(scroll-bar-mode 0)                                         ; no scroll bar (scroll-bar)
-(mouse-avoidance-mode 'animate)                             ; move mouse pointer out of way (avoid)
-(global-eldoc-mode -1)                                      ; turn off annoying eldoc mode (eldoc)
-(fset 'yes-or-no-p 'y-or-n-p)                               ; change stupid default y/n? y
-(make-directory me:emacs-backup-directory t)                ; make sure backup dir exists
-(electric-indent-mode +1)                                   ; turn on electric mode globally (electric)
-(savehist-mode t)                                           ; save minibuffer history (savehist)
-(minibuffer-depth-indicate-mode t)                          ; show recursive edit depth (mb-depth)
-(run-at-time "1 hour" 3600 #'clean-buffer-list)             ; clear out old buffers every hour (midnight)
-
-(global-unset-key (kbd "<f3>"))
-(global-unset-key (kbd "<f4>"))
-(global-unset-key (kbd "<f10>"))                            ; was menu-bar-open
-(global-unset-key (kbd "<f11>"))                            ; was fullscreen mode
+(run-with-idle-timer 0.1 nil #'me:extra-setup)
 
 
 ;; keymappings
 ;; N.B. Other keybindings defined in apropriate use-package
 (use-package general
+  :init
+	(global-unset-key (kbd "<f4>"))
   :config
   (general-evil-setup t)
   (general-define-key
@@ -211,6 +213,7 @@
 ;; built-in windmove
 (use-package windmove
   :ensure nil
+  :defer 3
   :general
   ("s-j" #'windmove-down)
   ("s-k" #'windmove-up)
@@ -258,7 +261,7 @@
   (column-number-mode t)                       ; display column/row of cursor in mode-line
   (global-visual-line-mode t)                  ; wrap long lines
   :diminish visual-line-mode
-  :defer 1)
+  :demand)
 
 ;; built-in "abbrev" package
 (use-package abbrev
@@ -269,7 +272,7 @@
   :init
   :config
   :diminish abbrev-mode
-  :defer 1)
+  :demand)
 
 ;; built-in "hl-line" package
 (use-package hl-line
@@ -290,7 +293,7 @@
   :init
   :config
   (menu-bar-mode 0)                             ; no menu bar
-  :defer 1)
+  :demand)
 
 ;; built-in "face-remap" package
 (use-package face-remap
@@ -301,7 +304,7 @@
   :init
   (setq text-scale-mode-step 1.05)              ; text size increases by 5% (normally 20%)
   :config
-  :demand)
+  :defer 3)
 
 (use-package smooth-scrolling
   :config
@@ -1279,5 +1282,4 @@
 (me:load-init-file "system" (symbol-name system-type))
 (me:load-init-file "host" system-name)
 
-;; restore a normal gc threshold
-(run-at-time 10 nil (lambda () (setq gc-cons-threshold 1000000)))
+(setq gc-cons-threshold 800000)
