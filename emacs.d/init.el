@@ -848,6 +848,7 @@
 (use-package counsel
   :defines counsel-yank-pop-preselect-last
   :commands (  counsel-file-jump counsel-find-file)
+  :load-path "lisp/swiper"
   :general
   (:keymaps 'global :prefix "<f4>"
            "a" #'counsel-apropos
