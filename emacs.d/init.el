@@ -1,6 +1,8 @@
 ;;; -*- lexical-binding: t -*-
 
+(defconst me:gc-cons-threshold-original gc-cons-threshold)
 (setq gc-cons-threshold most-positive-fixnum)
+(add-hook 'after-init-hook #'(lambda () (setq gc-cons-threshold me:gc-cons-threshold-original)))
 
 ;; package management
 
@@ -105,7 +107,7 @@
       x-gtk-use-system-tooltips nil)                        ; allow tooltip theming
 
 (add-hook 'after-init-hook                                  ; report init time
-          (lambda ()
+          #'(lambda ()
             (message "Time to initialize: %s"
                      (emacs-init-time))))
 (add-hook 'prog-mode-hook                                   ; stuff for all programming modes
@@ -166,7 +168,7 @@
   :ensure nil
   :init
   (add-hook 'emacs-lisp-mode-hook
-            (lambda ()
+            #'(lambda ()
               (modify-syntax-entry ?- "w")                    ; hyphens are parts of words
               (setq tab-width 2                               ; tab inserts 2 spaces
                     standard-indent 2                         ; indent by 2
@@ -321,7 +323,7 @@
   :init
   (setq sublimity-scroll-weight 6
         sublimity-scroll-drift-length 2)
-  (run-with-idle-timer 1 nil (lambda ()
+  (run-with-idle-timer 1 nil #'(lambda ()
     (require 'sublimity-scroll)))
   :config
   (sublimity-mode 1))
@@ -349,7 +351,7 @@
 (use-package fill-column-indicator
   :disabled
   :config
-    (add-hook 'after-change-major-mode-hook (lambda () (if buffer-file-name (fci-mode 1))))
+    (add-hook 'after-change-major-mode-hook #'(lambda () (if buffer-file-name (fci-mode 1))))
     (setq fci-rule-color "white smoke"))
 
 ;; Highlight cursor position in buffer
@@ -562,7 +564,7 @@
   :config
   (ivy-mode 1)
   :init
-  (add-hook 'ivy-mode-hook (lambda ()
+  (add-hook 'ivy-mode-hook #'(lambda ()
                              (setq ivy-height (/ (+ 2 (frame-height)) 3))))
   (setq ivy-use-virtual-buffers t                           ; add ‘recentf-mode’ and bookmarks to ‘ivy-switch-buffer’.
         ivy-virtual-abbreviate 'full                        ; use full path for abbreviation
@@ -722,7 +724,7 @@
   :defines (company-dabbrev-downcase company-dabbrev-ignore-case)
   :init
   (add-hook 'adoc-mode-hook
-            (lambda ()
+            #'(lambda ()
               (setq company-dabbrev-downcase nil     ; don't downcase completions
                     company-dabbrev-ignore-case nil  ; don't keep prefix
                     evil-shift-width 4               ; set tabs 4 spaces
@@ -756,7 +758,7 @@
   :config
   :init
   (add-hook 'python-mode-hook
-            (lambda ()
+            #'(lambda ()
               (semantic-mode t)
               (setq evil-shift-width 4)
               (setq python-indent-offset 4)
@@ -783,7 +785,7 @@
   :ensure nil
   :init
   (add-hook 'java-mode-hook
-            (lambda ()
+            #'(lambda ()
               (setq c-basic-offset 4                             ; use common convention
                     tab-width 8                                  ; 4 spaces indentation
                     evil-shift-width 4                           ; no tabs
@@ -795,10 +797,10 @@
 (use-package cc-mode
   :init
   (add-hook 'c-mode-common-hook
-            (lambda ()
+            #'(lambda ()
               (setq c-basic-offset 3)))
   (add-hook 'c++-mode-hook
-            (lambda ()
+            #'(lambda ()
               (define-key c++-mode-map ":" #'self-insert-command)
               (define-key c++-mode-map ")" #'self-insert-command)
               (define-key c++-mode-map ";" #'self-insert-command)
@@ -843,8 +845,7 @@
   (setq compilation-scroll-output t
         compilation-ask-about-save nil    ; save all modified
         compilation-auto-jump-to-first-error t
-        compilation-finish-functions
-        (lambda (buf str)
+        compilation-finish-functions #'(lambda (_buf str)
           (compilation-set-skip-threshold 1)
           (if (null (string-match ".*exited abnormally.*" str))
               ;;if no errors, make the compilation window go away in a few seconds
@@ -853,9 +854,9 @@
                 (message "No Compilation Errors!"))
         compilation-skip-threshold 2)))
   (add-hook 'compilation-start-hook
-            (lambda (proc) (compilation-set-skip-threshold 2)))
+            #'(lambda (_proc) (compilation-set-skip-threshold 2)))
   (add-hook 'compilation-mode-hook
-    (lambda ()
+    #'(lambda ()
       (define-key compilation-mode-map (kbd "g") nil)
       (define-key compilation-mode-map (kbd "j") nil)
       (define-key compilation-mode-map (kbd "k") nil)
@@ -920,7 +921,7 @@
                                       ; deft auto-save interferes with whitespace-butler, so disable
         deft-auto-save-interval 0)
   (add-hook 'deft-mode-hook
-            (lambda ()
+            #'(lambda ()
               (define-key deft-mode-map (kbd "<f4> n") #'quit-window)
               (define-key deft-mode-map (kbd "<C-return>") #'deft-new-file)
               (define-key deft-mode-map (kbd "<C-backspace>") #'deft-filter-clear))))
@@ -1181,7 +1182,7 @@
   ;; keys and not much more, this is good for read-only scenario
   ;; Since view-mode is combined with other modes, this needs
   ;; to be a hook.
-  (add-hook 'view-mode-hook (lambda () (if view-mode (evil-motion-state) (evil-normal-state))))
+  (add-hook 'view-mode-hook #'(lambda () (if view-mode (evil-motion-state) (evil-normal-state))))
 
   (evil-mode 1))
 
@@ -1215,7 +1216,7 @@
 
 (use-package with-editor
   :init
-  (add-hook 'with-editor-mode-hook (lambda ()
+  (add-hook 'with-editor-mode-hook #'(lambda ()
                                      (evil-insert-state)
                                      (setq fill-column 70)))
   :diminish)
@@ -1260,7 +1261,6 @@
 
 (use-package popwin
   :init
-  (setq display-buffer-function #'popwin:display-buffer)
   :config
   (push '("*Async Shell Command*" :noselect t) popwin:special-display-config)
   (push '("*Completions*" :stick t :noselect t) popwin:special-display-config)
@@ -1283,4 +1283,3 @@
 (me:load-init-file "system" (symbol-name system-type))
 (me:load-init-file "host" system-name)
 
-(setq gc-cons-threshold 800000)
