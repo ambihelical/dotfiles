@@ -68,3 +68,5 @@
 	mnemonicprefix = true
 [status]
 	submoduleSummary = true
+[credential]
+	helper = cache
