@@ -11,6 +11,7 @@
 [ -d ~/.local/bin ] && PATH=~/.local/bin:"${PATH}"                            # locally installed execs
 [ -d ~/bin ] && PATH=~/bin:"${PATH}"                                        # my utilities
 [ -d ~/bin/${OSTYPE} ] && PATH=~/bin/${OSTYPE}:"${PATH}"                    # my utilities, os specific
+[ -d ~/Android/Sdk/platform-tools ] && PATH=~/Android/Sdk/platform-tools:"${PATH}"         # adb, fastboot, etc
 
 export ACKRC=${XDG_CONFIG_HOME}/ack
 [ -d ~/extern/ChibiOS-RT ] && export CHIBIOS=~/extern/ChibiOS-RT            # chibios development
