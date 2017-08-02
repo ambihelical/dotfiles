@@ -43,3 +43,6 @@ fi
 if [ ${offminutes} -gt 0 ]; then
 	 xset dpms 0 0 $((offminutes * 60))
 fi
+
+# root gets garbled sometimes, so set solid color
+xsetroot -solid "#333333"
