@@ -82,6 +82,7 @@
               fill-column 120)                              ; auto-wrap only very long lines
 (setq auto-save-file-name-transforms
          `((".*" ,me:emacs-backup-directory t))             ; autosave files in backup directory
+      ad-redefinition-action 'accept                        ; turn off 'xyz' got redefined warnings
       backup-directory-alist
          `((".*" . ,me:emacs-backup-directory))             ; backup files in backup directory
       custom-file "/dev/null"                               ; disable customizations
