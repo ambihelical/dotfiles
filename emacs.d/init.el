@@ -73,6 +73,7 @@
   (make-directory me:emacs-backup-directory t)                ; make sure backup dir exists
   (electric-indent-mode +1)                                   ; turn on electric mode globally (electric)
   (me:set-preferred-font)                                     ; set the font
+  (delete-selection-mode t)                                   ; pastes delete selection
   (run-at-time "1 hour" 3600 #'clean-buffer-list))            ; clear out old buffers every hour (midnight)
 
 ;; configuration I haven't figured out how to wedge into
@@ -146,6 +147,11 @@
   (general-define-key "s-." #'repeat)
   :demand)
 
+(use-package hydra
+  :commands (defhydra)
+  :config
+  :init)
+
 ;; frequently used functions
 (use-package utilities
   :ensure nil
@@ -159,14 +165,13 @@
     ("s-3"        #'me:select-3rd-other-buffer)
     ("s-4"        #'me:select-4th-other-buffer)
     ("s-5"        #'me:select-5th-other-buffer)
-    ("s-v"        #'me:paste-then-earlier)
-    ("s-V"        #'me:paste-then-later)
     ("<f3>"       #'me:find-some-files)
   :config
   :load-path "lisp/")
 
 ;; infrequently used functions
 (use-package extras
+  :commands (hydra-paste/body)
   :ensure nil
   :general
     ("s-1"     #'me:find-other-file)
@@ -175,6 +180,16 @@
     ("<f4> 2"  #'me:ps-two-per-page)
     ("s-\\"    #'me:next-powerline-separator)
   :config
+  ;; Define paste hydra.
+  ;; eval to avoid pulling in hydra via macro expansion
+  ;; Note would like to also redefine C-n, C-p, but these require
+  ;; last-command to be a paste, and using a hydra messes with that,
+  ;; last-command will be hydra-paste/body
+  (eval '(defhydra hydra-paste (:hint nil)
+    "Pasting (see also C-n, C-p)"
+    ("b" me:paste-then-earlier "Paste above, earlier kill" :column "")
+    ("a" me:paste-then-later "Paste below, later kill" )
+    ("y" me:counsel-yank-pop-preselect-last "Select from kill ring")))
   :load-path "lisp/")
 
 ;; built-in emacs-lisp-mode package
@@ -726,14 +741,18 @@
            "s" #'swiper-all)
   ("C-h b"  #'counsel-descbinds)
   ("M-x"    #'counsel-M-x)
+  ("M-y"    #'counsel-yank-pop)
   ("<f5> t" #'counsel-load-theme)
   ("<f5> c" #'counsel-colors-emacs)
   ("<f5> w" #'counsel-colors-web)
   ("<f6> m" #'counsel-imenu)
   :init
-  (setq counsel-yank-pop-separator "\n---\n"
-        counsel-yank-pop-preselect-last t)
+  (setq counsel-yank-pop-separator "\n---\n")
   :config
+  (defun me:counsel-yank-pop-preselect-last ()
+    (interactive)
+    (let ((counsel-yank-pop-preselect-last t))
+      (call-interactively (counsel-yank-pop))))
   (counsel-mode 1)
   :diminish (counsel-mode . ""))
 
@@ -1293,6 +1312,7 @@
       "g"          #'evil-avy-goto-char-2
       "h"          #'hydra-git-gutter/body
       "l"          #'evil-avy-goto-char-in-line
+      "p"          #'hydra-paste/body
       "w"          #'save-buffer
       "x"          #'exchange-point-and-mark
       "<DEL>"      #'kill-this-buffer)

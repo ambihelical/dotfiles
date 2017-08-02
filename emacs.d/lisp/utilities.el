@@ -5,6 +5,9 @@
 
 ;;; Code:
 
+(require 'counsel)
+(require 'subr-x)
+
 ;; save any dirty buffers
 ;;;###autoload
 (defun me:save-dirty-buffers ()
@@ -90,19 +93,5 @@
 (defun me:minibuffer-exit ()
   (setq inhibit-message (> (minibuffer-depth) 1)
         gc-cons-threshold me:normal-gc-cons-threshold))
-
-;;;###autoload
-(defun me:paste-then-earlier ()
-  "Paste and move to next kill ring entry (earlier in time)"
-  (interactive)
-  (evil-paste-after 1)
-  (current-kill 1))
-
-;;;###autoload
-(defun me:paste-then-later ()
-  "Paste and move to previous kill ring entry (later in time)"
-  (interactive)
-  (evil-paste-after 1)
-  (current-kill -1))
 
 (provide 'utilities)

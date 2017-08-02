@@ -78,5 +78,20 @@
     (if prefix (ps-print-buffer (read-file-name "file name:"))
       (ps-print-buffer))))
 
+;;;###autoload
+(defun me:paste-then-earlier ()
+  "Paste before and move to next kill ring entry (earlier in time)"
+  (interactive)
+  (evil-paste-before 1)
+  (current-kill 1)
+  (setq this-command #'evil-paste-before))   ; enable evil-repeat and evil-paste-pop
+
+;;;###autoload
+(defun me:paste-then-later ()
+  "Paste after and move to previous kill ring entry (later in time)"
+  (interactive)
+  (evil-paste-after 1)
+  (current-kill -1)
+  (setq this-command #'evil-paste-after))   ; enable evil-repeat and evil-paste-pop
 
 (provide 'extras)
