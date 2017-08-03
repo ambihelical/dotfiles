@@ -16,7 +16,7 @@
 (defun me:find-some-files ()
   "Find files in project or fallback to current directory"
   (interactive)
-  (if (projectile-project-p)
+  (if (and (fboundp 'projectile-project-p) (projectile-project-p))
       (counsel-projectile-find-file)
     (counsel-find-file)))
 
