@@ -17,12 +17,12 @@
 (unless (package-installed-p 'use-package )
   (package-install 'use-package))
 (eval-when-compile
+  (setq use-package-enable-imenu-support t)                       ; support for packages in imenu
   (require 'use-package))
 
 (eval-after-load "use-package"
   '(setq use-package-always-ensure t                              ; ensure by default
          use-package-always-defer t                               ; defer by default
-         use-package-enable-imenu-support t                       ; support for packages in imenu
          use-package-minimum-reported-time 0.03                   ; minimum time when verbose
          use-package-verbose nil))                                 ; don't be verbose
 
