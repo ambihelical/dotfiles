@@ -322,11 +322,13 @@
   :if window-system
   :defer 1
   :init
-  (setq sublimity-scroll-weight 6
-        sublimity-scroll-drift-length 2)
-  (run-with-idle-timer 1 nil #'(lambda ()
-    (require 'sublimity-scroll)))
   :config
+  (use-package sublimity-scroll
+    :ensure nil
+    :demand
+    :init
+    (setq sublimity-scroll-weight 6
+          sublimity-scroll-drift-length 2))
   (sublimity-mode 1))
 
 ;; highlight keywords
