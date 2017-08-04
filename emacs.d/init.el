@@ -523,6 +523,12 @@
             diredp-hide-details-initially-flag t
             diredp-image-preview-in-tooltip 400
             diredp-auto-focus-frame-for-thumbnail-tooltip-flag t))
+
+    (use-package dired-collapse
+      :commands ( dired-collapse-mode )
+      :init
+      (add-hook 'dired-mode-hook #'dired-collapse-mode))
+
   :ensure nil)
 
 (use-package flyspell
