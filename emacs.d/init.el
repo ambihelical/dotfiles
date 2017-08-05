@@ -245,8 +245,9 @@
   :init
   (setq auto-revert-check-vc-info nil                         ; don't update branch on auto-revert
         auto-revert-verbose nil)                              ; don't tell me about auto reverts
+  (add-hook 'prog-mode-hook #'auto-revert-mode)
+  (add-hook 'text-mode-hook #'auto-revert-mode)
   :config
-  (global-auto-revert-mode t)                                 ; revert unchanged files automatically
   :diminish auto-revert-mode)
 
 ;; built-in "simple" package
@@ -256,6 +257,10 @@
     ("s-n"        #'next-error)
     ("s-p"        #'previous-error)
   :init
+  (add-hook 'prog-mode-hook #'visual-line-mode)
+  (add-hook 'text-mode-hook #'visual-line-mode)
+  (add-hook 'visual-line-mode-hook #'(lambda () (diminish 'visual-line-mode "ⓥ")))
+  (add-hook 'auto-fill-mode-hook #'(lambda () (message "here") (diminish 'auto-fill-function "⮨")))
   (setq kill-ring-max 200                      ; More killed items
         kill-do-not-save-duplicates t          ; No duplicates in kill ring
         save-interprogram-paste-before-kill t  ; save clipboard before killing
@@ -263,8 +268,6 @@
            '(left-curly-arrow nil))            ; use left curly error for wrapped lines
   :config
   (column-number-mode t)                       ; display column/row of cursor in mode-line
-  (global-visual-line-mode t)                  ; wrap long lines
-  :diminish visual-line-mode
   :demand)
 
 ;; built-in "abbrev" package
@@ -480,8 +483,10 @@
   :config)
 
 (use-package undo-tree
+  :init
+  (add-hook 'prog-mode-hook 'undo-tree-mode)
+  (add-hook 'text-mode-hook 'undo-tree-mode)
   :config
-  (global-undo-tree-mode)
   :general
     ("<f4> v"     #'undo-tree-visualize)
   :diminish undo-tree-mode)
@@ -936,19 +941,18 @@
               (define-key deft-mode-map (kbd "<C-backspace>") #'deft-filter-clear))))
 
 (use-package company
-  :commands ( global-company-mode)
   :general
     ("s-d"        #'company-complete)
   :init
   (setq company-minimum-prefix-length 1            ; just one char needed
         company-dabbrev-downcase nil)              ; never downcase
+  (add-hook 'prog-mode-hook #'company-mode)
   :config
   (use-package company-quickhelp
     :demand
     :config
     (company-quickhelp-mode 1))
-  (global-company-mode)
-  :diminish company-mode)
+  :diminish company-mode "ⓒ")
 
 (use-package counsel-gtags
   :commands ( counsel-gtags-find-definition
@@ -1037,15 +1041,17 @@
                     (evil-insert-state)
                     (goto-char p)
                     (set-mark m))))
+  (add-hook 'prog-mode-hook 'yas-minor-mode)
+  (add-hook 'text-mode-hook 'yas-minor-mode)
   :config
   (define-key yas-minor-mode-map (kbd "<tab>") nil) ; don't use <tab>
   (define-key yas-minor-mode-map (kbd "TAB") nil)   ; don't use TAB
-  (yas-global-mode)
-  :diminish (yas-minor-mode . "Ⓨ"))
+  :diminish (yas-minor-mode . "ⓨ"))
+
 
 (use-package flycheck
   :commands flycheck-mode
-  :diminish ( flycheck-mode . "ⓒ")
+  :diminish ( flycheck-mode . "🗹")
   :init
   (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
   (me:add-hook-with-delay 'prog-mode-hook 10 #'flycheck-mode)
@@ -1198,10 +1204,10 @@
 (use-package ws-butler
   :init
   (setq ws-butler-convert-leading-tabs-or-spaces t)       ; convert according to indent-tabs-mode (but not when smart-tabs-mode on)
+  (add-hook 'prog-mode-hook #'ws-butler-mode)
+  (add-hook 'text-mode-hook #'ws-butler-mode)
   :config
-  (ws-butler-global-mode t)
-  :diminish ws-butler-mode
-  :defer 3)
+  :diminish ws-butler-mode "⌫")
 
 (use-package shell-pop
   :config
