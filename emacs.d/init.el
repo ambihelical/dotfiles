@@ -420,15 +420,15 @@
 (use-package git-gutter-fringe+
   :if window-system
   :init
+  (me:add-hook-with-delay 'prog-mode-hook 2 #'git-gutter+-mode)
+  (me:add-hook-with-delay 'text-mode-hook 2 #'git-gutter+-mode)
+  (add-hook 'git-gutter+-mode-hook #'(lambda () (diminish 'git-gutter+-mode "ⓖ")))
   :general
     ("s-g"        #'git-gutter+-next-hunk)
     ("s-S-g"      #'git-gutter+-previous-hunk)
     ("s-s"        #'git-gutter+-stage-hunks)
     ("s-o"        #'git-gutter+-show-hunk-inline-at-point)
-  :config
-  (global-git-gutter+-mode t)
-  :defer 1
-  :diminish git-gutter+-mode)
+  :config)
 
 (use-package ruler-mode
   :general
