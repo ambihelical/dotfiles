@@ -336,14 +336,12 @@
 
 ;; highlight keywords
 (use-package fic-mode
-  :commands fic-mode
   :config
   :init
     (setq fic-highlighted-words `( "TODO" "HACK" "KLUDGE" "FIXME" "TRICKY" "BUG" ))
     (me:add-hook-with-delay 'prog-mode-hook 10 #'fic-mode))
 
 (use-package whitespace
-  :commands whitespace-mode
   :config
   :init
     (setq whitespace-line-column nil                      ; highlight past fill-column
@@ -371,7 +369,6 @@
   :diminish beacon-mode)
 
 (use-package adaptive-wrap
-  :commands adaptive-wrap-prefix-mode
   :config
   :init
   (setq-default adaptive-wrap-extra-indent 3)
@@ -530,14 +527,13 @@
             diredp-auto-focus-frame-for-thumbnail-tooltip-flag t))
 
     (use-package dired-collapse
-      :commands ( dired-collapse-mode )
+      :config
       :init
       (add-hook 'dired-mode-hook #'dired-collapse-mode))
 
   :ensure nil)
 
 (use-package flyspell
-  :commands ( flyspell-prog-mode flyspell-mode )
   :general
     ("s-f"        #'flyspell-auto-correct-previous-word)
     ("s-S-f"      #'flyspell-correct-previous-word-generic)
@@ -1050,7 +1046,6 @@
 
 
 (use-package flycheck
-  :commands flycheck-mode
   :diminish ( flycheck-mode . "🗹")
   :init
   (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
@@ -1072,7 +1067,6 @@
 
 ;; enable code folding (evil has bindings)
 (use-package hideshow
-  :commands hs-minor-mode
   :config
   :init
   (me:add-hook-with-delay 'prog-mode-hook   5 #'hs-minor-mode)
@@ -1085,7 +1079,6 @@
   (setq avy-all-windows 'all-frames))
 
 (use-package evil
-  :commands evil-mode
   :init
   (add-hook 'prog-mode-hook #'evil-mode)
   (add-hook 'text-mode-hook #'evil-mode)
