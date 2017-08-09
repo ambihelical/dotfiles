@@ -20,14 +20,16 @@
       (counsel-projectile-find-file)
     (counsel-find-file)))
 
-;; Return t if buffer can be selected.  This allows
+;; Return non-nil if buffer can be selected.  This allows
 ;; certain non-file buffers to be selected with
 ;; me:select-nth-other-buffer.
 (defun me:useful-buffer (buffer)
   (let ((bufname (buffer-name buffer))
-        (specials `("*scratch*" "*Messages*")))
-    (cond ((car (member bufname specials)) t)
-          ((buffer-file-name buffer) t))))
+        (special-names #'("*scratch*" "*Messages*" "*ielm*"))
+        (special-modes #'( dired-mode )))
+    (cond ((member bufname special-names))
+          ((buffer-file-name buffer))
+          ((member (with-current-buffer buffer major-mode) special-modes)))))
 
 ;;;###autoload
 (defun me:select-nth-other-buffer (arg &optional prefix)
