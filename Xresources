@@ -44,3 +44,8 @@ URxvt*color15 : #EEEEEC
 URxvt*scrollTtyOutput: false
 URxvt*scrollWithBuffer: true
 URxvt*scrollTtyKeypress: true
+
+! turn these off early
+Emacs*toolBar: off
+Emacs*verticalScrollBars: off
+Emacs*menuBar: off
