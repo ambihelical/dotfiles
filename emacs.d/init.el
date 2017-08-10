@@ -671,21 +671,8 @@
 
 (use-package counsel-projectile
   :general
-    ("<f7> f" #'counsel-projectile-find-file)
+    ("<f7> f" #'counsel-projectile-ag)
   :config
-  ;; version of counsel-projectile-find-file which uses
-  ;; projectile-current-project-files instead of the fontified
-  ;; counsel-projectile--file-list
-  (defun counsel-projectile-find-file (&optional arg)
-    (interactive "P")
-    (projectile-maybe-invalidate-cache arg)
-    (ivy-read (projectile-prepend-project-name "Find file: ")
-              (projectile-current-project-files)
-              :matcher #'counsel--find-file-matcher
-              :require-match t
-              :keymap counsel-projectile-map
-              :action #'counsel-projectile--find-file-action
-              :caller 'counsel-projectile-find-file))
   (counsel-projectile-on))
 
 (use-package perspective
