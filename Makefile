@@ -18,7 +18,8 @@ SHELL_FILES = ~/.bashrc ~/.bash_profile ${CFG}/readline ~/.profile
 DIR_FILES = ~/bin
 BIN_FILES=$(foreach bin,$(notdir $(wildcard ${PWD}/bin/*)),~/bin/${bin})
 XORG_FILES = ${CFG}/xsettingsd ~/.Xresources ${CFG}/xkb/symbols/local
-APP_FILES = ${CFG}/screen ${CFG}/ack $(CFG)/globalrc $(CFG)/pythonrc ${CFG}/rtags/rdmrc
+APP_FILES = ${CFG}/screen ${CFG}/ack $(CFG)/globalrc $(CFG)/pythonrc ${CFG}/rtags/rdmrc \
+				$(CFG)/gconf
 GIT_FILES = ${CFG}/git/config  ${CFG}/git/ignore
 I3_FILES = ${CFG}/i3/config ${CFG}/i3/i3status.config ${CFG}/dunst/dunstrc \
            ${CFG}/gsimplecal/config ${CFG}/i3/three-pane.json
@@ -124,6 +125,9 @@ ${CFG}/%: ${PWD}/%
 	${LN} $< $@
 
 ${CACHE}/%:
+	mkdir -p $@
+
+$(CFG)/%:
 	mkdir -p $@
 
 ${ETC}/%: ./etc/%
