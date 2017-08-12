@@ -1248,6 +1248,18 @@
     :init
     (setq evil-magit-state 'normal)))
 
+(use-package git-timemachine
+  :init
+  ;; override evil with timemachine's keymap
+  (add-hook 'git-timemachine-mode-hook #'(lambda ()
+                                           (when (fboundp 'evil-mode)
+                                              (evil-make-overriding-map git-timemachine-mode-map 'normal)
+                                              (evil-normalize-keymaps))))
+  :config
+  :general
+  ("<f9> t"   #'git-timemachine)
+  :diminish "🕓")
+
 (use-package treemacs
   :general
     ("<f4> /"   #'treemacs-toggle)
