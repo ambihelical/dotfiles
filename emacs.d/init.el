@@ -1099,6 +1099,13 @@
   :init
   (add-hook 'prog-mode-hook #'evil-mode)
   (add-hook 'text-mode-hook #'evil-mode)
+  ;; make cut/paste more vim-like
+  ;; mainly keep emacs cut/paste separate from system clipboard
+  ;; in the default case (must use "+ or "* to override)
+  ;; This assumes select-enable-clipboard is set to nil as well
+  (add-hook 'evil-local-mode-hook #'(lambda ()
+                                (setq-default interprogram-paste-function nil
+                                              interprogram-cut-function nil)))
   (setq-default evil-symbol-word-search t   ; misnamed: t is search for symbols, not words
                 evil-shift-width 3)         ; shift by ideal width :)
   (setq evil-want-C-w-delete nil            ; want C-w it for windows commands
