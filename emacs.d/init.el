@@ -499,39 +499,56 @@
 
 (use-package dired
   :general
-    ("<f4> d"     #'dired-jump)
+  ("<f4> d"     #'dired-jump)
+  (:keymaps 'dired-mode-map
+            "/" #'dired-narrow
+            "C-c C-f" #'peep-dired)
   :init
   (setq dired-recursive-deletes 'always
         dired-recursive-copies 'always
+        dired-auto-revert-buffer t       ; revert buffer on revisit
         dired-dwim-target t)             ; use existing dired buffer, if exists
   :config
-    (use-package peep-dired
-      :config
-      :general
-      (:keymaps 'dired-mode-map
-                "C-f" #'peep-dired))
+  (use-package dired+
+    :defer 2
+    :config
+    :init
+    (setq font-lock-maximum-decoration (quote ((dired-mode . nil) (t . t)))   ; turn off barf colors
+          diredp-hide-details-initially-flag t
+          diredp-image-preview-in-tooltip 400
+          diredp-auto-focus-frame-for-thumbnail-tooltip-flag t))
 
-    (use-package dired-narrow
-      :config
-      :general
-      (:keymaps 'dired-mode-map
-                  "/" #'dired-narrow))
-
-    (use-package dired+
-      :defer 2
-      :config
-      :init
-      (setq font-lock-maximum-decoration (quote ((dired-mode . nil) (t . t)))   ; turn off barf colors
-            diredp-hide-details-initially-flag t
-            diredp-image-preview-in-tooltip 400
-            diredp-auto-focus-frame-for-thumbnail-tooltip-flag t))
-
-    (use-package dired-collapse
-      :config
-      :init
-      (add-hook 'dired-mode-hook #'dired-collapse-mode))
-
+  (use-package dired-collapse
+    :config
+    :init
+    (add-hook 'dired-mode-hook #'dired-collapse-mode))
   :ensure nil)
+
+;; Cowboy override of peep-dired-mode-map which has a
+;; key define which causes an error.  Every other method
+;; of doing this failed, but this works.
+(defvar peep-dired-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "j")         #'peep-dired-next-file)
+    (define-key map (kbd "k")         #'peep-dired-prev-file)
+    (define-key map (kbd "C-f")       #'peep-dired-scroll-page-down)
+    (define-key map (kbd "C-b")       #'peep-dired-scroll-page-up)
+    (define-key map (kbd "q")         #'peep-dired)
+    map)
+  "Keymap for `peep-dired-mode'.")
+
+(use-package peep-dired
+  :init
+  ;; This makes peep-dired-mode-map override all evil mappings
+  ;; evil-make-overriding-map doesn't handle j and k for some reason.
+  (add-hook 'peep-dired-hook #'(lambda ()
+                                 (evil-make-intercept-map peep-dired-mode-map 'normal)
+                                 (evil-normalize-keymaps 'normal)))
+  :config)
+
+(use-package dired-narrow
+  :init
+  :config)
 
 (use-package flyspell
   :general
