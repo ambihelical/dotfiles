@@ -412,7 +412,7 @@
 (use-package linum-relative
   :config
   :general
-    ("<f4> l"      #'linum-relative-mode)
+    ("<f5> l"      #'linum-relative-mode)
   :diminish linum-relative-mode
   :init
   (setq linum-relative-current-symbol ""))   ; show current line #
