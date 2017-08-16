@@ -612,23 +612,25 @@
 (use-package counsel
   :commands (  counsel-file-jump counsel-find-file)
   :general
-    ("<f4> a" #'counsel-apropos)
-    ("<f4> b" #'counsel-mark-ring)
-    ("<f4> f" #'counsel-git-grep)
-    ("<f4> i" #'counsel-info-lookup-symbol)
-    ("<f4> j" #'counsel-bookmark)
-    ("<f4> k" #'counsel-descbinds)
-    ("<f4> l" #'counsel-locate)
-    ("<f4> r" #'counsel-recentf)
-    ("<f4> s" #'counsel-ag)
-    ("<f4> u" #'counsel-unicode-char)
-    ("C-h b"  #'counsel-descbinds)
-    ("M-x"    #'counsel-M-x)
-    ("M-y"    #'counsel-yank-pop)
-    ("<f5> t" #'counsel-load-theme)
-    ("<f6> m" #'counsel-imenu)
-    (:keymaps 'ivy-minibuffer-map
-              "M-y" #'ivy-next-line)
+  (:keymaps 'global :prefix "<f4>"
+           "a" #'counsel-apropos
+           "b" #'counsel-mark-ring
+           "i" #'counsel-info-lookup-symbol
+           "j" #'counsel-bookmark
+           "k" #'counsel-descbinds
+           "l" #'counsel-locate
+           "r" #'counsel-recentf
+           "u" #'counsel-unicode-char)
+  (:keymaps 'global :prefix "<f4> s"
+           "a" #'counsel-ag
+           "g" #'counsel-git-grep
+           "s" #'swiper-all)
+  ("C-h b"  #'counsel-descbinds)
+  ("M-x"    #'counsel-M-x)
+  ("<f5> t" #'counsel-load-theme)
+  ("<f6> m" #'counsel-imenu)
+  (:keymaps 'ivy-minibuffer-map
+            "M-y" #'ivy-next-line)
   :init
   (setq counsel-yank-pop-separator "\n---\n")
   :config
