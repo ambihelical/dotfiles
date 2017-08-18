@@ -132,6 +132,7 @@
   (general-define-key
    :prefix "<f4>"
     "g"     #'general-describe-keybindings)
+  (general-define-key "s-." #'repeat)
   :demand)
 
 ;; frequently used functions
@@ -146,8 +147,8 @@
     ("s-3"        #'me:select-3rd-other-buffer)
     ("s-4"        #'me:select-4th-other-buffer)
     ("s-5"        #'me:select-5th-other-buffer)
-    ("s-,"        #'me:paste-then-earlier)
-    ("s-."        #'me:paste-then-later)
+    ("s-v"        #'me:paste-then-earlier)
+    ("s-V"        #'me:paste-then-later)
     ("<f3>"       #'me:find-some-files)
   :config
   :load-path "lisp/")
@@ -583,11 +584,11 @@
     ("C-x b"      #'ivy-switch-buffer)
     (:keymaps 'ivy-mode-map
               "<escape>" #'minibuffer-keyboard-quit
-              "C-j" #'ivy-next-line-and-call
-              "C-k" #'ivy-previous-line-and-call
-              "C-=" #'ivy-minibuffer-grow
-              "C--" #'ivy-minibuffer-shrink
-              "C-'" #'ivy-avy)
+              "S-n" #'ivy-next-line-and-call
+              "S-p" #'ivy-previous-line-and-call
+              "C-c =" #'ivy-minibuffer-grow
+              "C-c -" #'ivy-minibuffer-shrink
+              "C-c f" #'ivy-avy)
   :config
   (ivy-mode 1)
   :init
