@@ -848,6 +848,18 @@
     :prefix "<SPC>"
       "o"          #'me:switch-to-compile-buffer
       "r"          #'recompile)
+    (:keymaps 'compilation-mode-map
+              "<up>" #'compilation-previous-error
+              "<down>" #'compilation-next-error
+              "<prior>" #'compilation-previous-file
+              "<next>" #'compilation-next-file
+              "C-c C-e" #'me:rotate-skip-threshold
+              "<SPC>" nil
+              "g" nil
+              "j" nil
+              "k" nil
+              "h" nil
+              "l" nil)
   :config
   (defun me:switch-to-compile-buffer ()
     (interactive)
@@ -872,20 +884,11 @@
         compilation-skip-threshold 2)))
   (add-hook 'compilation-start-hook
             #'(lambda (_proc) (compilation-set-skip-threshold 2)))
-  (add-hook 'compilation-mode-hook
-    #'(lambda ()
-      (define-key compilation-mode-map (kbd "g") nil)
-      (define-key compilation-mode-map (kbd "j") nil)
-      (define-key compilation-mode-map (kbd "k") nil)
-      (define-key compilation-mode-map (kbd "h") nil)
-      (define-key compilation-mode-map (kbd "l") nil)
-      (define-key compilation-mode-map (kbd "<spc>") nil)
-      (define-key compilation-mode-map (kbd "<tab>") #'me:rotate-skip-threshold)
-      (define-key compilation-mode-map (kbd ";") #'next-error-follow-minor-mode)
-      (define-key compilation-mode-map (kbd "<up>") #'compilation-previous-error)
-      (define-key compilation-mode-map (kbd "<down>") #'compilation-next-error)
-      (define-key compilation-mode-map (kbd "<prior>") #'compilation-previous-file)
-      (define-key compilation-mode-map (kbd "<next>") #'compilation-next-file))))
+
+  (add-hook 'compilation-mode-hook #'(lambda ()
+                                        (when (fboundp 'evil-mode)
+                                          (evil-make-intercept-map compilation-mode-map 'normal)
+                                          (evil-normalize-keymaps)))))
 
 ;; view symbols of libraries
 (use-package elf-mode
