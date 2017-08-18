@@ -582,10 +582,11 @@
     ("<f4> <f4>"  #'ivy-resume)
     ("<f2>"       #'ivy-switch-buffer)
     ("C-x b"      #'ivy-switch-buffer)
-    (:keymaps 'ivy-mode-map
+    (:keymaps 'ivy-minibuffer-map
               "<escape>" #'minibuffer-keyboard-quit
-              "S-n" #'ivy-next-line-and-call
-              "S-p" #'ivy-previous-line-and-call
+              "M-y" #'ivy-next-line                       ; for yank-pop flow
+              "s-n" #'ivy-next-line-and-call
+              "s-p" #'ivy-previous-line-and-call
               "C-c =" #'ivy-minibuffer-grow
               "C-c -" #'ivy-minibuffer-shrink
               "C-c f" #'ivy-avy)
@@ -630,8 +631,6 @@
   ("M-x"    #'counsel-M-x)
   ("<f5> t" #'counsel-load-theme)
   ("<f6> m" #'counsel-imenu)
-  (:keymaps 'ivy-minibuffer-map
-            "M-y" #'ivy-next-line)
   :init
   (setq counsel-yank-pop-separator "\n---\n")
   :config
