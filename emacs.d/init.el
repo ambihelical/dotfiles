@@ -440,8 +440,14 @@
 (use-package paradox
   :general
     ("<f4> p"     #'paradox-list-packages)
+    (:keymaps 'paradox-menu-mode-map
+              "j" #'paradox-next-entry
+              "k" #'paradox-previous-entry)
   :config
   :init
+  (add-hook 'paradox-menu-mode-hook #'(lambda ()
+                                        (when (fboundp 'evil-mode)
+                                          (evil-emacs-state))))
   (setq paradox-spinner-type 'moon
         paradox-execute-asynchronously nil
         paradox-display-download-count t
@@ -1197,7 +1203,6 @@
                   doc-view-mode-hook
                   image-mode-hook
                   image-dired-thumbnail-mode-hook
-                  paradox-menu-mode-hook
                   magit-branch-manager-mode-hook
                   magit-log-mode-hook
                   magit-revision-mode-hook))
