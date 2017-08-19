@@ -1070,16 +1070,14 @@
   (:prefix "C-c"
            "!"  '(:ignore t :which-key "Flycheck→" ))
   :config
-  (use-package flycheck-pos-tip
-    :demand
-    :init
-    (progn
-      (setq flycheck-pos-tip-timeout 3))
-    :config
-    (progn
-      (flycheck-pos-tip-mode t)))
   (set-face-attribute 'flycheck-warning nil :foreground 'unspecified :background "khaki1")
   (set-face-attribute 'flycheck-error nil :foreground 'unspecified :background "light pink"))
+
+(use-package flycheck-pos-tip
+  :init
+  (setq flycheck-pos-tip-timeout 3)
+  (add-hook 'flycheck-mode-hook #'flycheck-pos-tip-mode)
+  :config)
 
 ;; enable code folding (evil has bindings)
 (use-package hideshow
