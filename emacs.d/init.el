@@ -991,12 +991,13 @@
     (add-to-list 'company-backends 'company-rtags))
   (defun me:use-rtags (&optional useFileManager)
     (and (rtags-executable-find "rc")
-          (cond
+         (cond
           ((not (counsel-gtags--root)) t)
           ((and (not (eq major-mode 'c++-mode))
-                    (not (eq major-mode 'c-mode))) (rtags-has-filemanager))
-              (useFileManager (rtags-has-filemanager))
-              (t (rtags-is-indexed)))))
+                (not (eq major-mode 'c-mode)))
+           (rtags-has-filemanager))
+          (useFileManager (rtags-has-filemanager))
+          (t (rtags-is-indexed)))))
   (defun me:tags-find-symbol-at-point (&optional prefix)
     (interactive "P")
     (if (not (rtags-find-symbol-at-point prefix))
