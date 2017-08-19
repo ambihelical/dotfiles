@@ -2,7 +2,7 @@
 
 (defconst me:gc-cons-threshold-original gc-cons-threshold)
 (setq gc-cons-threshold most-positive-fixnum)
-(add-hook 'after-init-hook #'(lambda () (setq gc-cons-threshold me:gc-cons-threshold-original)))
+(add-hook 'after-init-hook (lambda () (setq gc-cons-threshold me:gc-cons-threshold-original)))
 
 ;; package management
 
@@ -108,7 +108,7 @@
       x-gtk-use-system-tooltips nil)                        ; allow tooltip theming
 
 (add-hook 'after-init-hook                                  ; report init time
-          #'(lambda ()
+          (lambda ()
             (message "Time to initialize: %s"
                      (emacs-init-time))))
 (add-hook 'prog-mode-hook                                   ; stuff for all programming modes
@@ -170,7 +170,7 @@
   :ensure nil
   :init
   (add-hook 'emacs-lisp-mode-hook
-            #'(lambda ()
+            (lambda ()
               (modify-syntax-entry ?- "w")                    ; hyphens are parts of words
               (setq tab-width 2                               ; tab inserts 2 spaces
                     standard-indent 2                         ; indent by 2
@@ -260,8 +260,8 @@
   :init
   (add-hook 'prog-mode-hook #'visual-line-mode)
   (add-hook 'text-mode-hook #'visual-line-mode)
-  (add-hook 'visual-line-mode-hook #'(lambda () (diminish 'visual-line-mode "ⓥ")))
-  (add-hook 'auto-fill-mode-hook #'(lambda () (message "here") (diminish 'auto-fill-function "⮨")))
+  (add-hook 'visual-line-mode-hook (lambda () (diminish 'visual-line-mode "ⓥ")))
+  (add-hook 'auto-fill-mode-hook (lambda () (message "here") (diminish 'auto-fill-function "⮨")))
   (setq kill-ring-max 200                      ; More killed items
         kill-do-not-save-duplicates t          ; No duplicates in kill ring
         save-interprogram-paste-before-kill t  ; save clipboard before killing
@@ -356,7 +356,7 @@
 (use-package fill-column-indicator
   :disabled
   :config
-    (add-hook 'after-change-major-mode-hook #'(lambda () (if buffer-file-name (fci-mode 1))))
+    (add-hook 'after-change-major-mode-hook (lambda () (if buffer-file-name (fci-mode 1))))
     (setq fci-rule-color "white smoke"))
 
 ;; Highlight cursor position in buffer
@@ -423,7 +423,7 @@
   :init
   (me:add-hook-with-delay 'prog-mode-hook 2 #'git-gutter+-mode)
   (me:add-hook-with-delay 'text-mode-hook 2 #'git-gutter+-mode)
-  (add-hook 'git-gutter+-mode-hook #'(lambda () (diminish 'git-gutter+-mode "ⓖ")))
+  (add-hook 'git-gutter+-mode-hook (lambda () (diminish 'git-gutter+-mode "ⓖ")))
   :general
     ("s-g"        #'git-gutter+-next-hunk)
     ("s-S-g"      #'git-gutter+-previous-hunk)
@@ -445,7 +445,7 @@
               "k" #'paradox-previous-entry)
   :config
   :init
-  (add-hook 'paradox-menu-mode-hook #'(lambda ()
+  (add-hook 'paradox-menu-mode-hook (lambda ()
                                         (when (fboundp 'evil-mode)
                                           (evil-emacs-state))))
   (setq paradox-spinner-type 'moon
@@ -548,7 +548,7 @@
   :init
   ;; This makes peep-dired-mode-map override all evil mappings
   ;; evil-make-overriding-map doesn't handle j and k for some reason.
-  (add-hook 'peep-dired-hook #'(lambda ()
+  (add-hook 'peep-dired-hook (lambda ()
                                  (evil-make-intercept-map peep-dired-mode-map 'normal)
                                  (evil-normalize-keymaps 'normal)))
   :config)
@@ -599,7 +599,7 @@
   :config
   (ivy-mode 1)
   :init
-  (add-hook 'ivy-mode-hook #'(lambda ()
+  (add-hook 'ivy-mode-hook (lambda ()
                              (setq ivy-height (/ (+ 2 (frame-height)) 3))))
   (setq ivy-use-virtual-buffers t                           ; add ‘recentf-mode’ and bookmarks to ‘ivy-switch-buffer’.
         ivy-virtual-abbreviate 'full                        ; use full path for abbreviation
@@ -747,7 +747,7 @@
   :defines (company-dabbrev-downcase company-dabbrev-ignore-case)
   :init
   (add-hook 'adoc-mode-hook
-            #'(lambda ()
+            (lambda ()
               (setq company-dabbrev-downcase nil     ; don't downcase completions
                     company-dabbrev-ignore-case nil  ; don't keep prefix
                     evil-shift-width 4               ; set tabs 4 spaces
@@ -781,7 +781,7 @@
   :config
   :init
   (add-hook 'python-mode-hook
-            #'(lambda ()
+            (lambda ()
               (semantic-mode t)
               (setq evil-shift-width 4)
               (setq python-indent-offset 4)
@@ -808,7 +808,7 @@
   :ensure nil
   :init
   (add-hook 'java-mode-hook
-            #'(lambda ()
+            (lambda ()
               (setq c-basic-offset 4                             ; use common convention
                     tab-width 8                                  ; 4 spaces indentation
                     evil-shift-width 4                           ; no tabs
@@ -820,10 +820,10 @@
 (use-package cc-mode
   :init
   (add-hook 'c-mode-common-hook
-            #'(lambda ()
+            (lambda ()
               (setq c-basic-offset 3)))
   (add-hook 'c++-mode-hook
-            #'(lambda ()
+            (lambda ()
               (define-key c++-mode-map ":" #'self-insert-command)
               (define-key c++-mode-map ")" #'self-insert-command)
               (define-key c++-mode-map ";" #'self-insert-command)
@@ -880,7 +880,7 @@
   (setq compilation-scroll-output t
         compilation-ask-about-save nil    ; save all modified
         compilation-auto-jump-to-first-error t
-        compilation-finish-functions #'(lambda (_buf str)
+        compilation-finish-functions (lambda (_buf str)
           (compilation-set-skip-threshold 1)
           (if (null (string-match ".*exited abnormally.*" str))
               ;;if no errors, make the compilation window go away in a few seconds
@@ -889,9 +889,9 @@
                 (message "No Compilation Errors!"))
         compilation-skip-threshold 2)))
   (add-hook 'compilation-start-hook
-            #'(lambda (_proc) (compilation-set-skip-threshold 2)))
+            (lambda (_proc) (compilation-set-skip-threshold 2)))
 
-  (add-hook 'compilation-mode-hook #'(lambda ()
+  (add-hook 'compilation-mode-hook (lambda ()
                                         (when (fboundp 'evil-mode)
                                           (evil-make-intercept-map compilation-mode-map 'normal)
                                           (evil-normalize-keymaps)))))
@@ -947,7 +947,7 @@
                                       ; deft auto-save interferes with whitespace-butler, so disable
         deft-auto-save-interval 0)
   (add-hook 'deft-mode-hook
-            #'(lambda ()
+            (lambda ()
               (define-key deft-mode-map (kbd "<f4> n") #'quit-window)
               (define-key deft-mode-map (kbd "<C-return>") #'deft-new-file)
               (define-key deft-mode-map (kbd "<C-backspace>") #'deft-filter-clear))))
@@ -1049,7 +1049,7 @@
   :init
   (setq yas-fallback-behavior 'return-nil)          ; don't try old binding
   (add-hook 'yas-before-expand-snippet-hook         ; evil-insert at each slot
-            #'(lambda()
+            (lambda()
                   (let ((p (point)) (m (mark)))
                     (evil-insert-state)
                     (goto-char p)
@@ -1101,7 +1101,7 @@
   ;; mainly keep emacs cut/paste separate from system clipboard
   ;; in the default case (must use "+ or "* to override)
   ;; This assumes select-enable-clipboard is set to nil as well
-  (add-hook 'evil-local-mode-hook #'(lambda ()
+  (add-hook 'evil-local-mode-hook (lambda ()
                                 (setq-default interprogram-paste-function nil
                                               interprogram-cut-function nil)))
   (setq-default evil-symbol-word-search t   ; misnamed: t is search for symbols, not words
@@ -1211,7 +1211,7 @@
   ;; keys and not much more, this is good for read-only scenario
   ;; Since view-mode is combined with other modes, this needs
   ;; to be a hook.
-  (add-hook 'view-mode-hook #'(lambda () (if view-mode (evil-motion-state) (evil-normal-state))))
+  (add-hook 'view-mode-hook (lambda () (if view-mode (evil-motion-state) (evil-normal-state))))
 
   (evil-mode 1))
 
@@ -1245,7 +1245,7 @@
 
 (use-package with-editor
   :init
-  (add-hook 'with-editor-mode-hook #'(lambda ()
+  (add-hook 'with-editor-mode-hook (lambda ()
                                      (evil-insert-state)
                                      (setq fill-column 70)))
   :diminish)
@@ -1272,7 +1272,7 @@
 (use-package git-timemachine
   :init
   ;; override evil with timemachine's keymap
-  (add-hook 'git-timemachine-mode-hook #'(lambda ()
+  (add-hook 'git-timemachine-mode-hook (lambda ()
                                            (when (fboundp 'evil-mode)
                                               (evil-make-overriding-map git-timemachine-mode-map 'normal)
                                               (evil-normalize-keymaps))))
