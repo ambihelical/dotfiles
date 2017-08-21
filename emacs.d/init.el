@@ -1269,16 +1269,32 @@
     :init
     (setq evil-magit-state 'normal)))
 
+;; Cowboy override of git-timemachine-mode-map
+;; Timemachine's map has a number of bindings which
+;; are evil commands.  So we clear it out here and
+;; define our own bindings using general.
+(defvar git-timemachine-mode-map
+  (let ((map (make-sparse-keymap))) map)
+  "Keymap for `git-timemachine-mode-map'.")
+
 (use-package git-timemachine
   :init
-  ;; override evil with timemachine's keymap
+  ;; Use timemachine map on top of evil bindings
   (add-hook 'git-timemachine-mode-hook (lambda ()
                                            (when (fboundp 'evil-mode)
                                               (evil-make-overriding-map git-timemachine-mode-map 'normal)
-                                              (evil-normalize-keymaps))))
+                                              (evil-normalize-keymaps 'normal))))
   :config
   :general
-  ("<f9> t"   #'git-timemachine)
+  (:keymaps 'global :prefix "<f9>"  "t" #'git-timemachine)
+  (:keymaps 'git-timemachine-mode-map
+            "s-p" #'git-timemachine-show-previous-revision
+            "s-n" #'git-timemachine-show-next-revision
+            "q" #'git-timemachine-quit   ; we lose q command in evil, but won't matter really
+            "C-c g" #'git-timemachine-show-nth-revision
+            "C-c a"  #'git-timemachine-kill-abbreviated-revision
+            "C-c r"  #'git-timemachine-kill-revision
+            "C-c b" #'git-timemachine-blame)
   :diminish "🕓")
 
 (use-package treemacs
