@@ -244,11 +244,11 @@
   :ensure nil
   :defer 2
   :init
-  (setq auto-revert-check-vc-info nil                         ; don't update branch on auto-revert
-        auto-revert-verbose nil)                              ; don't tell me about auto reverts
   (add-hook 'prog-mode-hook #'auto-revert-mode)
   (add-hook 'text-mode-hook #'auto-revert-mode)
   :config
+  (setq auto-revert-check-vc-info nil                         ; don't update branch on auto-revert
+        auto-revert-verbose nil)                              ; don't tell me about auto reverts
   :diminish auto-revert-mode)
 
 ;; built-in "simple" package
@@ -338,16 +338,16 @@
 ;; highlight keywords
 (use-package fic-mode
   :config
-  :init
     (setq fic-highlighted-words `( "TODO" "HACK" "KLUDGE" "FIXME" "TRICKY" "BUG" ))
+  :init
     (me:add-hook-with-delay 'prog-mode-hook 10 #'fic-mode))
 
 (use-package whitespace
   :config
+  (setq whitespace-line-column nil                      ; highlight past fill-column
+        whitespace-style '(face trailing tabs tab-mark lines-tail space-before-tab)
+        whitespace-display-mappings '((tab-mark 9 [9657 9] [92 9])))
   :init
-    (setq whitespace-line-column nil                      ; highlight past fill-column
-          whitespace-style '(face trailing tabs tab-mark lines-tail space-before-tab)
-          whitespace-display-mappings '((tab-mark 9 [9657 9] [92 9])))
     (add-hook 'whitespace-mode-hook 'me:set-extra-font-attributes)
     (me:add-hook-with-delay 'prog-mode-hook 7 #'whitespace-mode)
   :diminish whitespace-mode)
@@ -457,19 +457,19 @@
         paradox-hide-wiki-packages t))
 
 (use-package recentf
-  :config (recentf-mode)
-  :init
+  :config
   (setq recentf-max-saved-items 200
         recentf-max-menu-items 15
-        recentf-auto-cleanup 300))           ; wait 5m before 1st cleanup
+        recentf-auto-cleanup 300) ; wait 5m before 1st cleanup
+  (recentf-mode))
 
 ;; save buffer positions
 (use-package saveplace
   :init
   (setq-default save-place t)
+  :config
   (setq save-place-file (expand-file-name "places" user-emacs-directory)
         save-place-forget-unreadable-files nil)
-  :config
   (save-place-mode t)
   :defer 3)
 
@@ -1047,7 +1047,6 @@
   :general
     ("<s-return>" #'yas-expand)
   :init
-  (setq yas-fallback-behavior 'return-nil)          ; don't try old binding
   (add-hook 'yas-before-expand-snippet-hook         ; evil-insert at each slot
             (lambda()
                   (let ((p (point)) (m (mark)))
@@ -1076,9 +1075,9 @@
 
 (use-package flycheck-pos-tip
   :init
-  (setq flycheck-pos-tip-timeout 3)
   (add-hook 'flycheck-mode-hook #'flycheck-pos-tip-mode)
-  :config)
+  :config
+  (setq flycheck-pos-tip-timeout 3))
 
 ;; enable code folding (evil has bindings)
 (use-package hideshow
@@ -1217,10 +1216,10 @@
 
 (use-package ws-butler
   :init
-  (setq ws-butler-convert-leading-tabs-or-spaces t)       ; convert according to indent-tabs-mode (but not when smart-tabs-mode on)
   (add-hook 'prog-mode-hook #'ws-butler-mode)
   (add-hook 'text-mode-hook #'ws-butler-mode)
   :config
+  (setq ws-butler-convert-leading-tabs-or-spaces t)       ; convert according to indent-tabs-mode (but not when smart-tabs-mode on)
   :diminish ws-butler-mode "⌫")
 
 (use-package shell-pop
@@ -1236,8 +1235,8 @@
 
 (use-package which-key
   :init
-  (setq which-key-max-description-length nil)
   :config
+  (setq which-key-max-description-length nil)
   (which-key-mode)
   (which-key-setup-side-window-right-bottom)
   :defer 2
@@ -1338,5 +1337,4 @@
     (load-file file-name))))
 
 (me:load-init-file "system" (symbol-name system-type))
-(me:load-init-file "host" system-name)
-
+(me:load-init-file "host" (system-name))
