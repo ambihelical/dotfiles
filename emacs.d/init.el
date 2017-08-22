@@ -977,7 +977,19 @@
   (setq company-minimum-prefix-length 1            ; just one char needed
         company-dabbrev-downcase nil)              ; never downcase
   (add-hook 'prog-mode-hook #'company-mode)
+  (add-hook 'company-completion-started-hook #'me:company-started)
+  (add-hook 'company-completion-finished-hook #'me:company-ended)
+  (add-hook 'company-completion-cancelled-hook #'me:company-ended)
   :config
+  (defvar me:flycheck-error-function nil)
+  (defun me:company-started (&optional args)
+    (when (fboundp 'flycheck-pos-tip-error-messages)
+      (setq me:flycheck-error-function (symbol-function 'flycheck-pos-tip-error-messages))
+      (fset 'flycheck-pos-tip-error-messages 'ignore)))
+
+  (defun me:company-ended (&optional args)
+    (when (fboundp 'flycheck-pos-tip-error-messages)
+      (fset 'flycheck-pos-tip-error-messages me:flycheck-error-function)))
   (use-package company-quickhelp
     :demand
     :config
