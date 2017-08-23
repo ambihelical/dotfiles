@@ -150,6 +150,7 @@
   :commands (me:set-extra-font-attributes
              me:minibuffer-setup
              me:minibuffer-exit
+             me:find-some-files
              me:save-dirty-buffers )
   :general
     ("s-2"        #'me:select-2nd-other-buffer)
@@ -204,14 +205,14 @@
   (add-hook 'focus-out-hook #'me:save-dirty-buffers)          ; save on defocus
   (setq frame-title-format
         '((:eval (if (buffer-file-name)
-                    (me:replace-prefix (abbreviate-file-name default-directory)
+                     (me:replace-prefix (abbreviate-file-name default-directory)
                                         (abbreviate-file-name buffer-file-name))
-                  "%b"))
+                   "%b"))
           " %* ["
           (:eval (abbreviate-file-name default-directory))
           "]")                                               ; fancy title
-      split-width-threshold 240                              ; 2x ideal line width :)
-      icon-title-format frame-title-format)                  ; use same title for unselected frame
+        split-width-threshold 240                              ; 2x ideal line width :)
+        icon-title-format frame-title-format)                  ; use same title for unselected frame
   :config
   :demand)
 
@@ -750,6 +751,7 @@
             "p"  '(:ignore t :which-key "Projectile→" ))
   :diminish projectile-mode
   :after evil
+  :demand t     ; required because use-package-always-defer is t
   :init
   (setq projectile-completion-system 'ivy
         projectile-globally-ignored-files #'( "TAGS" "GTAGS" "GRTAGS" "GPATH" )
@@ -768,10 +770,11 @@
   (projectile-mode 1))
 
 (use-package counsel-projectile
+  :after ( counsel projectile )
+  :demand t     ; required because use-package-always-defer is t
   :general
     ("<f7> f" #'counsel-projectile-ag)
-  :config
-  (counsel-projectile-on))
+  :config)
 
 (defun me:close-treemacs-if-open ()
   (when (and (fboundp 'treemacs--is-visible?) (treemacs--is-visible?))
@@ -856,8 +859,8 @@
   (use-package evil-org :config :demand))
 
 (use-package org-projectile
-  :after projectile
-  :general
+  :after ( projectile org )
+  :demand t     ; required because use-package-always-defer is t
   :init
   :config
   (org-projectile-per-project)
