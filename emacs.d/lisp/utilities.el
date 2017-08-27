@@ -25,8 +25,8 @@
 ;; me:select-nth-other-buffer.
 (defun me:useful-buffer (buffer)
   (let ((bufname (buffer-name buffer))
-        (special-names #'("*scratch*" "*Messages*" "*ielm*"))
-        (special-modes #'( dired-mode )))
+        (special-names #'("*scratch*" "*Messages*" "*ielm*" "*Help*" "*info*"))
+        (special-modes #'( dired-mode woman-mode )))
     (cond ((member bufname special-names))
           ((buffer-file-name buffer))
           ((member (with-current-buffer buffer major-mode) special-modes)))))
