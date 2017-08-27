@@ -631,6 +631,7 @@
            "u" #'counsel-unicode-char)
   (:keymaps 'global :prefix "<f4> s"
            "a" #'counsel-ag
+           "b" #'swiper
            "g" #'counsel-git-grep
            "s" #'swiper-all)
   ("C-h b"  #'counsel-descbinds)
