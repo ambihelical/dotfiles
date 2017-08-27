@@ -509,10 +509,13 @@
   ("<f4> d"     #'dired-jump)
   (:keymaps 'dired-mode-map
             "/" #'dired-narrow
-            "C-c C-f" #'peep-dired)
+            "C-c d" #'dired-hide-details-mode
+            "C-c w" #'wdired-change-to-wdired-mode
+            "C-c f" #'peep-dired)
   :init
   (setq dired-recursive-deletes 'always
         dired-recursive-copies 'always
+        dired-listing-switches "-alh"    ; human readable sizes
         dired-auto-revert-buffer t       ; revert buffer on revisit
         dired-dwim-target t)             ; use existing dired buffer, if exists
   :config
@@ -525,11 +528,19 @@
           diredp-image-preview-in-tooltip 400
           diredp-auto-focus-frame-for-thumbnail-tooltip-flag t))
 
-  (use-package dired-collapse
-    :config
-    :init
-    (add-hook 'dired-mode-hook #'dired-collapse-mode))
   :ensure nil)
+
+(use-package dired-collapse
+  :config
+  :init
+  (add-hook 'dired-mode-hook #'dired-collapse-mode))
+
+(use-package wdired
+  :commands ( wdired-change-to-wdired-mode )
+  :ensure nil
+  :config
+  :init
+  (setq wdired-allow-to-change-permissions t))
 
 ;; Cowboy override of peep-dired-mode-map which has a
 ;; key define which causes an error.  Every other method
