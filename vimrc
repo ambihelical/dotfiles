@@ -31,7 +31,6 @@ set hlsearch                  " highlight search terms (nohls temp. turns off)
 set autoread                  " read changed files w/o prompt
 set autowrite                 " write changed files under certain circumstances
 set tildeop                   " allow ~ to work as operator
-set background=light          " use colors that look good on a light background
 set shell=/bin/bash           " use bash for shelling out
 set shellslash                " use forward slash for expanding file names
 set cmdheight=2               " 2 line command area
@@ -47,10 +46,6 @@ set noshowmatch               " don't show matching brackets
 set nostartofline             " keep current column if possible
 set undofile                  " use persistant undo
 set fillchars+=vert:\         " use black for vertical split
-set guioptions-=T             " remove the mostly useless toolbar
-set guioptions-=r             " no right hand scrollbar
-set guioptions-=b             " no bottom scrollbar
-set guioptions-=L             " no left scrollbar
 set spelllang=en_us           " set spelling language
 set nospell                   " turn spell off by default
 set wildmenu                  " enhanced command line completion (use TAB)
@@ -70,25 +65,34 @@ set directory=~/.cache/vim//         " where to put .swp files (// makes unique 
 set viminfo+=n~/.cache/vim/viminfo   " where to put viminfo
 set runtimepath=~/.config/vim,~/.config/vim/after,$VIM,$VIMRUNTIME
 
+if has("gui_running")
+	set guioptions-=T             " remove the mostly useless toolbar
+	set guioptions-=r             " no right hand scrollbar
+	set guioptions-=b             " no bottom scrollbar
+	set guioptions-=L             " no left scrollbar
+	set background=light          " use colors that look good on a light background
+	" set font for gvim
+	if has("macunix")
+	  set guifont=DejaVu_Sans_Mono:h12
+	elseif has("unix")
+	  set guifont=Hack\ 10
+	  "set guifont=DejaVu\ Sans\ Mono\ 10
+	else
+	  set guifont=Monospace\ 8
+	endif
+else
+	set background=dark          " use colors that look good on a dark background
+	" 256 color support if possible
+	if $TERM == "xterm-256color" || $TERM == "screen-256color" || $COLORTERM == "gnome-terminal"
+	  set t_Co=256
+	endif
+endif
+
 
 " fix backspace under cygwin
 if &term == "rxvt"
    set t_kb=
    fixdel
-endif
-
-" 256 color support if possible
-if $TERM == "xterm-256color" || $TERM == "screen-256color" || $COLORTERM == "gnome-terminal"
-  set t_Co=256
-endif
-
-" set font for gvim
-if has("macunix")
-  set guifont=DejaVu_Sans_Mono:h12
-elseif has("unix")
-  set guifont=DejaVu\ Sans\ Mono\ 10
-else
-  set guifont=Monospace\ 8
 endif
 
 
