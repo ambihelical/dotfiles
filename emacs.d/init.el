@@ -1249,7 +1249,8 @@
 (use-package which-key
   :init
   :config
-  (setq which-key-max-description-length nil)
+  (setq which-key-max-description-length nil
+        which-key-allow-evil-operators t)
   (which-key-mode)
   (which-key-setup-side-window-right-bottom)
   :defer 2
