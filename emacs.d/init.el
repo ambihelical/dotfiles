@@ -839,6 +839,7 @@
               (define-key c++-mode-map ":" #'self-insert-command)
               (define-key c++-mode-map ")" #'self-insert-command)
               (define-key c++-mode-map ";" #'self-insert-command)
+              (c-set-offset 'arglist-intro '++)               ; indent args extra
               (c-set-offset 'innamespace [0])))              ; no indentation in namespace
   (setq c-default-style "ellemtel"                           ; similar to allman style
         c-electric-pound-behavior (quote (alignleft))        ; cpp directives aligned to left
