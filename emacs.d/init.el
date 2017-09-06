@@ -745,6 +745,11 @@
   :config
     (use-package evil-org :config :demand))
 
+(use-package org-bullets
+  :init
+  (add-hook 'org-mode-hook #'org-bullets-mode)
+  :config)
+
 (use-package cmake-mode
   :config
   :init
