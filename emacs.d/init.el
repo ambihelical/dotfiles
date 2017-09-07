@@ -1338,7 +1338,7 @@
     ("<f4> /"   #'treemacs-toggle)
     ("<f7> /"   #'treemacs-projectile)
   :init
-  (setq treemacs-header-function            #'treemacs--create-header-projectile
+  (setq treemacs-header-function            #'treemacs-projectile-create-header
         treemacs-follow-after-init          t
         treemacs-width                      35
         treemacs-indentation                2
@@ -1346,9 +1346,11 @@
         treemacs-change-root-without-asking nil
         treemacs-sorting                    'alphabetic-desc
         treemacs-show-hidden-files          t
+        treemacs-collapse-dirs              3
         treemacs-never-persist              nil)
   :config
   (use-package treemacs-evil :demand t)
+  (use-package treemacs-projectile :demand t)
   (treemacs-follow-mode t)
   (treemacs-filewatch-mode t))
 
