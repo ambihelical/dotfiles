@@ -49,3 +49,11 @@ URxvt*scrollTtyKeypress: true
 Emacs*toolBar: off
 Emacs*verticalScrollBars: off
 Emacs*menuBar: off
+
+! Turn on subpixel rendering
+Xft.antialias:  rgba
+Xft.hinting:    1
+Xft.hintstyle:  hintfull
+Xft.lcdfilter:  lcddefault
+Xft.rgba:       rgb
+
