@@ -429,17 +429,24 @@
   (setq linum-relative-current-symbol ""))   ; show current line #
 
 (use-package git-gutter-fringe+
+  :commands (hydra-git-gutter/body git-gutter+-mode)
   :if window-system
   :init
   (add-hook 'git-gutter+-mode-hook (lambda () (diminish 'git-gutter+-mode "±")))
   (add-hook 'prog-mode-hook #'git-gutter+-mode)
   (add-hook 'text-mode-hook #'git-gutter+-mode)
-  :general
-    ("s-g"        #'git-gutter+-next-hunk)
-    ("s-S-g"      #'git-gutter+-previous-hunk)
-    ("s-s"        #'git-gutter+-stage-hunks)
-    ("s-o"        #'git-gutter+-show-hunk-inline-at-point)
-  :config)
+  :config
+  ;; Define git-gutter hydra
+  (eval '(defhydra hydra-git-gutter (:hint nil)
+    "Git gutter"
+    ("n" git-gutter+-next-hunk "Goto next hunk" :column "Navigation")
+    ("p" git-gutter+-previous-hunk "Goto previous hunk" )
+    ("o" git-gutter+-show-hunk-inline-at-point "Show hunk in-line" )
+    ("v" git-gutter+-show-hunk "Show hunk")
+    ("s" git-gutter+-stage-hunks "Stage hunk at point or all in region" :column "Operations")
+    ("r" git-gutter+-revert-hunks "Revert hunk at point or all in region")
+    ("u" git-gutter+-unstage-whole-buffer "Unstage entire buffer" :exit t)
+    ("m" git-gutter+-mode "Toggle mode" :exit t))))
 
 (use-package ruler-mode
   :general
@@ -1187,6 +1194,7 @@
       "a"          #'align
       "f"          #'evil-avy-goto-word-1
       "g"          #'evil-avy-goto-char-2
+      "h"          #'hydra-git-gutter/body
       "l"          #'evil-avy-goto-char-in-line
       "w"          #'save-buffer
       "x"          #'exchange-point-and-mark
