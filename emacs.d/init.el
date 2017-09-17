@@ -168,6 +168,9 @@
 ;; built-in emacs-lisp-mode package
 (use-package emacs-lisp-mode
   :ensure nil
+  :general
+  (:prefix "C-c"
+           "v"          #'pp-eval-last-sexp)
   :init
   (add-hook 'emacs-lisp-mode-hook
             (lambda ()
@@ -1080,6 +1083,8 @@
   :commands ( yas-expand-snippet )
   :general
     ("<s-return>" #'yas-expand)
+    (:prefix "C-c"
+            "&" '(:ignore t :which-key "Yasnippet→" ))
   :init
   (add-hook 'yas-before-expand-snippet-hook         ; evil-insert at each slot
             (lambda()
@@ -1115,6 +1120,9 @@
 
 ;; enable code folding (evil has bindings)
 (use-package hideshow
+  :general
+  (:prefix "C-c"
+           "@" '(:ignore t :which-key "HideShow→" ))
   :config
   :init
   (me:add-hook-with-delay 'prog-mode-hook   5 #'hs-minor-mode)
@@ -1152,7 +1160,6 @@
       ","          #'evil-jump-backward
       "a"          #'align
       "c"          #'me:use-evil-clipboard-register
-      "e"          #'pp-eval-last-sexp
       "f"          #'evil-avy-goto-word-1
       "g"          #'evil-avy-goto-char-2
       "l"          #'evil-avy-goto-char-in-line
