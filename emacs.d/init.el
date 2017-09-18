@@ -988,12 +988,12 @@
   (add-hook 'company-completion-cancelled-hook #'me:company-ended)
   :config
   (defvar me:flycheck-error-function nil)
-  (defun me:company-started (&optional args)
+  (defun me:company-started (&optional _args)
     (when (fboundp 'flycheck-pos-tip-error-messages)
       (setq me:flycheck-error-function (symbol-function 'flycheck-pos-tip-error-messages))
       (fset 'flycheck-pos-tip-error-messages 'ignore)))
 
-  (defun me:company-ended (&optional args)
+  (defun me:company-ended (&optional _args)
     (when (fboundp 'flycheck-pos-tip-error-messages)
       (fset 'flycheck-pos-tip-error-messages me:flycheck-error-function)))
   (use-package company-quickhelp
