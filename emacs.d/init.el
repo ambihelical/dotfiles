@@ -612,12 +612,7 @@
     ("C-x b"      #'ivy-switch-buffer)
     (:keymaps 'ivy-minibuffer-map
               "<escape>" #'minibuffer-keyboard-quit
-              "M-y" #'ivy-next-line                       ; for yank-pop flow
-              "s-n" #'ivy-next-line-and-call
-              "s-p" #'ivy-previous-line-and-call
-              "C-c =" #'ivy-minibuffer-grow
-              "C-c -" #'ivy-minibuffer-shrink
-              "C-c f" #'ivy-avy)
+              "M-y" #'ivy-next-line)                       ; for yank-pop flow
   :config
   (ivy-mode 1)
   :init
@@ -630,6 +625,10 @@
         ivy-re-builders-alist
            '((t . ivy--regex-ignore-order)))                ; allow input not in order
   :diminish (ivy-mode . ""))
+
+(use-package ivy-hydra
+  :commands (ivy-hydra/body)
+  :config)
 
 ;; add some ivy buffer information
 ;; N.B. Disabled until #8 reopened and fixed
