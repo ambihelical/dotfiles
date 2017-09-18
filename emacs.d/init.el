@@ -421,8 +421,8 @@
 (use-package git-gutter-fringe+
   :if window-system
   :init
-  (me:add-hook-with-delay 'prog-mode-hook 2 #'git-gutter+-mode)
-  (me:add-hook-with-delay 'text-mode-hook 2 #'git-gutter+-mode)
+  (add-hook 'prog-mode-hook #'git-gutter+-mode)
+  (add-hook 'text-mode-hook #'git-gutter+-mode)
   (add-hook 'git-gutter+-mode-hook (lambda () (diminish 'git-gutter+-mode "ⓖ")))
   :general
     ("s-g"        #'git-gutter+-next-hunk)
