@@ -1236,10 +1236,7 @@
                   finder-mode-hook
                   doc-view-mode-hook
                   image-mode-hook
-                  image-dired-thumbnail-mode-hook
-                  magit-branch-manager-mode-hook
-                  magit-log-mode-hook
-                  magit-revision-mode-hook))
+                  image-dired-thumbnail-mode-hook))
            (add-hook hook #'evil-emacs-state))
 
   ;; Put view-mode in motion-state, this gives us motion
@@ -1287,6 +1284,7 @@
   :diminish)
 
 (use-package magit
+  :after evil
   :init
   (setq magit-completing-read-function 'ivy-completing-read    ; use ivy
         vc-handled-backends nil)                               ; magit does everything needed
@@ -1299,11 +1297,12 @@
     ("<f9> l"     #'magit-log-current)
     ("<f9> f"     #'magit-log-buffer-file)
     ("<f9> <f9>"  #'magit-status)
-  :config
-  (use-package evil-magit
-    :demand
+  :config)
+
+(use-package evil-magit
+    :after magit
     :init
-    (setq evil-magit-state 'normal)))
+    (setq evil-magit-state 'normal))
 
 ;; Cowboy override of git-timemachine-mode-map
 ;; Timemachine's map has a number of bindings which
