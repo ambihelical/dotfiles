@@ -1332,30 +1332,35 @@
 
 ;; Cowboy override of git-timemachine-mode-map
 ;; Timemachine's map has a number of bindings which
-;; are evil commands.  So we clear it out here and
-;; define our own bindings using general.
+;; are evil commands.  So we clear it out here.
 (defvar git-timemachine-mode-map
   (let ((map (make-sparse-keymap))) map)
   "Keymap for `git-timemachine-mode-map'.")
 
 (use-package git-timemachine
   :init
-  ;; Use timemachine map on top of evil bindings
+  ;; evil-motion-state when in timemachine mode
   (add-hook 'git-timemachine-mode-hook (lambda ()
                                            (when (fboundp 'evil-mode)
-                                              (evil-make-overriding-map git-timemachine-mode-map 'normal)
-                                              (evil-normalize-keymaps 'normal))))
+                                             (evil-motion-state))))
   :config
+  ;; Define time machine hydra. Since we allow any command while the
+  ;; timemachine is on, some will "break" timemachine. Stick to
+  ;; navigation and all should be good.
+  (eval '(defhydra hydra-timemachine
+           (:hint nil
+            :body-pre (git-timemachine)
+            :foreign-keys run )
+    "Time machine"
+    ("<up>" #'git-timemachine-show-previous-revision "Previous revision" :column "Navigation")
+    ("<down>" #'git-timemachine-show-next-revision "Next revision")
+    ("C-c h" #'git-timemachine-show-current-revision "Current revision")
+    ("C-c C-c" #'git-timemachine-quit "Quit" :color blue )
+    ("C-c b" #'git-timemachine-blame "Show culprits" :column "Operations")
+    ("C-c r" #'git-timemachine-kill-revision "Yank revision")
+    ("C-c s" #'git-timemachine-kill-abbreviated-revision "Yank abbreviated revision")))
   :general
-  (:keymaps 'global :prefix "<f9>"  "t" #'git-timemachine)
-  (:keymaps 'git-timemachine-mode-map
-            "s-p" #'git-timemachine-show-previous-revision
-            "s-n" #'git-timemachine-show-next-revision
-            "q" #'git-timemachine-quit   ; we lose q command in evil, but won't matter really
-            "C-c g" #'git-timemachine-show-nth-revision
-            "C-c a"  #'git-timemachine-kill-abbreviated-revision
-            "C-c r"  #'git-timemachine-kill-revision
-            "C-c b" #'git-timemachine-blame)
+  (:keymaps 'global :prefix "<f9>"  "t" #'hydra-timemachine/body)
   :diminish "🕓")
 
 (use-package treemacs
