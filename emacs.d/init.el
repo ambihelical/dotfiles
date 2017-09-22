@@ -1263,7 +1263,7 @@
   (setq shell-pop-internal-mode "ansi-term"
         shell-pop-term-shell "/bin/bash"
         shell-pop-window-size 40
-        shell-pop-window-position "top"
+        shell-pop-window-position "bottom"
         shell-pop-universal-key "<f4> t"))
 
 (use-package which-key
