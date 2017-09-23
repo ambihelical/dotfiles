@@ -1258,7 +1258,7 @@
   (add-hook 'text-mode-hook #'ws-butler-mode)
   :config
   (setq ws-butler-convert-leading-tabs-or-spaces t)       ; convert according to indent-tabs-mode (but not when smart-tabs-mode on)
-  :diminish ws-butler-mode "⌫")
+  :diminish ws-butler-mode "✅")
 
 (use-package shell-pop
   :config
