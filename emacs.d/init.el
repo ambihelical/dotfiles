@@ -704,8 +704,14 @@
   :config
   (counsel-projectile-on))
 
+(defun me:close-treemacs-if-open ()
+  (when (and (fboundp 'treemacs--is-visible?) (treemacs--is-visible?))
+    (treemacs-toggle)))
+
 (use-package perspective
   :after projectile
+  :init
+  (add-hook 'persp-switch-hook #'me:close-treemacs-if-open)
   :general
     ("<f7> r"     #'persp-rename)
     ("s-<right>"  #'persp-next)
