@@ -1156,14 +1156,15 @@
       ";"          #'evil-jump-forward
       ","          #'evil-jump-backward
       "a"          #'align
-      "c"          #'me:use-evil-clipboard-register
       "f"          #'evil-avy-goto-word-1
       "g"          #'evil-avy-goto-char-2
       "l"          #'evil-avy-goto-char-in-line
-      "s"          #'me:use-evil-selection-register
       "w"          #'save-buffer
       "x"          #'exchange-point-and-mark
       "<DEL>"      #'kill-this-buffer)
+    (:states '(normal visual) :prefix "<SPC>"
+             "s"  (general-simulate-keys "\"*")
+             "c"  (general-simulate-keys "\"+"))
     (:keymaps '(normal visual ) "<escape>" #'keyboard-quit)
 
     ;; Move via visual lines
@@ -1183,14 +1184,6 @@
               "<backtab>"   #'me:evil-shift-left-visual)
 
   :config
-
-  (defun me:use-evil-selection-register ()
-    (interactive)
-    (evil-execute-macro 1 "\"*"))
-
-  (defun me:use-evil-clipboard-register ()
-    (interactive)
-    (evil-execute-macro 1 "\"+"))
 
   (defun me:evil-shift-left-visual ()
     (interactive)
