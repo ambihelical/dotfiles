@@ -1337,6 +1337,7 @@
         treemacs-width                      35
         treemacs-indentation                2
         treemacs-git-integration            t
+        treemacs-silent-refresh             t
         treemacs-change-root-without-asking nil
         treemacs-sorting                    'alphabetic-desc
         treemacs-show-hidden-files          t
