@@ -101,6 +101,8 @@
       undo-strong-limit 1500000                             ; 1.5M (default is 120K)
       undo-outer-limit 150000000                            ; 150M (default is 12M)
       scroll-margin 5                                       ; show some lines around cursor when possible
+      safe-local-variable-values                            ; allow these values in .dir-locals.el
+        '((evil-indent-convert-tabs . t))
       select-enable-clipboard nil                           ; make cut/paste function correctly (select)
       sentence-end-double-space nil                         ; sentences end with one space
       standard-indent 3                                     ; ideal indent :)
