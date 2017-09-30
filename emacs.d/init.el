@@ -382,7 +382,14 @@
   (miniedit-mode t)
   :init)
 
-(use-package leuven-theme :defer 0 :config)
+(use-package hc-zenburn-theme
+  :load-path "lisp/hc-zenburn-emacs"
+  :config
+  ;; make visual and highlight more noticable
+  (set-face-attribute 'lazy-highlight nil :background "#5e5e5e")
+  (set-face-attribute 'region nil :background "#5e5e5e")
+  (set-face-attribute 'highlight nil :background "#5e5e5e")
+  :defer 0)
 
 (use-package spaceline-config
   :if window-system
@@ -1127,9 +1134,7 @@
   :general
   (:prefix "C-c"
            "!"  '(:ignore t :which-key "Flycheck→" ))
-  :config
-  (set-face-attribute 'flycheck-warning nil :foreground 'unspecified :background "khaki1")
-  (set-face-attribute 'flycheck-error nil :foreground 'unspecified :background "light pink"))
+  :config)
 
 (use-package flycheck-pos-tip
   :init

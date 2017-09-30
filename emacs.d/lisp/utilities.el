@@ -68,12 +68,10 @@
 ;; set font attributes after theme loads
 ;;;###autoload
 (defun me:set-extra-font-attributes ()
-  (set-face-attribute 'default nil :background "gray99")
   (let ((bg (face-attribute 'default :background))
         (fg (face-attribute 'default :foreground)))
-         (set-face-attribute 'hl-line nil :foreground 'unspecified :background "gainsboro")
-         (set-face-attribute 'whitespace-line nil :foreground 'unspecified :background "lemon chiffon")
-         (set-face-attribute 'whitespace-tab nil :foreground "gainsboro" :background bg )
+         (set-face-attribute 'whitespace-line nil :foreground 'unspecified :background "grey32")
+         (set-face-attribute 'whitespace-tab nil :foreground "grey32" :background bg )
          (set-face-attribute 'whitespace-trailing nil :foreground fg :background "red" )))
 
 ;; value of gc-cons-threshold to restore after minibuffer
