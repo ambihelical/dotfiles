@@ -651,6 +651,8 @@
   ("C-h b"  #'counsel-descbinds)
   ("M-x"    #'counsel-M-x)
   ("<f5> t" #'counsel-load-theme)
+  ("<f5> c" #'counsel-colors-emacs)
+  ("<f5> w" #'counsel-colors-web)
   ("<f6> m" #'counsel-imenu)
   :init
   (setq counsel-yank-pop-separator "\n---\n")
