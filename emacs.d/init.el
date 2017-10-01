@@ -431,13 +431,13 @@
 
 (use-package ruler-mode
   :general
-    ("<f4> r" #'ruler-mode)
+    ("<f5> u" #'ruler-mode)
   :config)
 
 ;; better package manager
 (use-package paradox
   :general
-    ("<f4> p"     #'paradox-list-packages)
+    ("<f4> P"     #'paradox-list-packages)
     (:keymaps 'paradox-menu-mode-map
               "j" #'paradox-next-entry
               "k" #'paradox-previous-entry)
@@ -636,6 +636,7 @@
            "j" #'counsel-bookmark
            "k" #'counsel-descbinds
            "l" #'counsel-locate
+           "p" #'counsel-package
            "r" #'counsel-recentf
            "u" #'counsel-unicode-char)
   (:keymaps 'global :prefix "<f4> s"
