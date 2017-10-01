@@ -355,13 +355,6 @@
     (me:add-hook-with-delay 'prog-mode-hook 7 #'whitespace-mode)
   :diminish whitespace-mode)
 
-;; N.B. Disabled because it seems to interfere with popups
-(use-package fill-column-indicator
-  :disabled
-  :config
-    (add-hook 'after-change-major-mode-hook (lambda () (if buffer-file-name (fci-mode 1))))
-    (setq fci-rule-color "white smoke"))
-
 ;; Highlight cursor position in buffer
 (use-package beacon
   :if window-system
