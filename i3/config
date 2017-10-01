@@ -26,10 +26,10 @@ font pango:Ubuntu Mono Bold 12
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec urxvt || i3-sensible-terminal
+bindsym $mod+Return exec urxvt&
 
 # open scratch window if closed accidently
-bindsym $mod+Control+Return exec --no-startup-id urxvt -name scratch
+bindsym $mod+Control+Return exec --no-startup-id urxvt -name scratch&
 
 
 # kill focused window
@@ -198,6 +198,7 @@ set $white   #ffffff
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
+	i3bar_command i3bar --bar_id bar-0 &
 	status_command py3status -c ~/.config/i3/i3status.config
 	workspace_buttons yes
 	tray_output primary
@@ -243,11 +244,11 @@ bindsym $mod+minus scratchpad show
 # startup programs
 # first run host-specific setup, then invariants
 exec --no-startup-id ~/bin/i3wm-extra-startup
-exec --no-startup-id nm-applet
-exec --no-startup-id clipit
-exec --no-startup-id thunderbird
-exec --no-startup-id urxvt -name scratch
-exec --no-startup-id devmon
+exec --no-startup-id nm-applet &
+exec --no-startup-id clipit &
+exec --no-startup-id thunderbird &
+exec --no-startup-id urxvt -name scratch &
+exec --no-startup-id devmon &
 exec --no-startup-id ~/bin/i3wm-private-startup || true
 
 # special window handling
@@ -282,13 +283,13 @@ for_window [class="HipChat"] title_format "<span font='Symbola Bold 12'>🔊</sp
 
 
 # convenient key bindings
-bindsym $mod+slash exec nemo --no-desktop || nautilus --no-desktop
-bindsym $mod+b exec firefox || chromium-browser || chromium
+bindsym $mod+slash exec nemo --no-desktop &
+bindsym $mod+b exec firefox &
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 1 -- +5% && killall -SIGUSR1 i3status
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 1 -- -5% && killall -SIGUSR1 i3status
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 1 toggle
-bindsym $mod+equal exec wmctrl -c "Qalculate" || qalculate
-bindsym XF86Calculator exec wmctrl -c "Qalculate" || qalculate
+bindsym $mod+equal exec wmctrl -c "Qalculate" || qalculate&
+bindsym XF86Calculator exec wmctrl -c "Qalculate" || qalculate&
 bindsym XF86Mail [class="Thunderbird"] focus
 bindsym Shift+XF86Mail [class="Pidgin"] focus
 bindsym XF86Tools [class="Pithos"] focus
@@ -299,8 +300,8 @@ bindsym $mod+g exec i3-input -F '[con_mark="%s"] focus' -l 1 -P 'Go to: '
 bindsym $mod+w exec i3-input -F 'rename workspace to "%s"' -P 'Workspace name: '
 
 # edit current selection or clipboard in gvim
-bindsym $mod+apostrophe exec --no-startup-id xclip -o | gvim -
-bindsym $mod+Shift+apostrophe exec --no-startup-id xclip -selection c -o | gvim -
+bindsym $mod+apostrophe exec --no-startup-id xclip -o | gvim - &
+bindsym $mod+Shift+apostrophe exec --no-startup-id xclip -selection c -o | gvim - &
 
 # copy primary selection to clipboard
 bindsym $mod+c exec --no-startup-id xclip -o | xclip -i -selection c
