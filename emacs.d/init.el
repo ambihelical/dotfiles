@@ -862,6 +862,18 @@
    ("\\.h\\'"   . c++-mode)
    ("\\.hpp\\'" . c++-mode)))
 
+;; very large file support
+(use-package vlf
+  :general
+  (:prefix "C-c"
+           "C-v"  '(:ignore t :which-key "VLF→" ))
+  :defer 0
+  :init
+  (require 'vlf-setup)
+  :config)
+
+(use-package logview)
+
 ;; font lock for newer c++ versions
 (use-package modern-cpp-font-lock
   :diminish modern-c++-font-lock-mode
