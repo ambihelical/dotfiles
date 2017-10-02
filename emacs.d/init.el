@@ -172,7 +172,8 @@
   :ensure nil
   :general
   (:prefix "C-c"
-           "v"          #'pp-eval-last-sexp)
+           "v"          #'pp-eval-last-sexp
+           "x"          #'pp-macroexpand-last-sexp)
   :init
   (add-hook 'emacs-lisp-mode-hook
             (lambda ()
