@@ -22,7 +22,7 @@ elif [ "$host" == "jh-rvueb" ]; then
 	# - and make compose key be the old windows key
 	setxkbmap -option 'caps:hyper' -option 'altwin:swap_alt_win' -option 'compose:rwin'
 	xrandr --output DVI-D-0 --right-of HDMI-0 --rotate left
-	xrandr --output HDMI-0 --primary
+	xrandr --output HDMI-0 --primary --dpi 103
 	lockminutes=15
 else
 	echo "Unknown host |$host|"

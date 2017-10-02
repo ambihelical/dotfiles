@@ -56,7 +56,7 @@
 (defun me:set-preferred-font ()
   (let ((fonts (font-family-list)))
     (if (member "Hack" fonts)
-        (set-frame-font "Hack-11:autohint=true" t t)
+        (set-frame-font "Hack-10:autohint=true" t t)
       (if (member "Fantasque Sans Mono" fonts)
           (set-frame-font "Fantasque Sans Mono-12" t t)
         (if (member "DejaVu Sans Mono" fonts)
