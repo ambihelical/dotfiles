@@ -266,8 +266,8 @@
   :init
   (add-hook 'prog-mode-hook #'visual-line-mode)
   (add-hook 'text-mode-hook #'visual-line-mode)
-  (add-hook 'visual-line-mode-hook (lambda () (diminish 'visual-line-mode "ⓥ")))
-  (add-hook 'auto-fill-mode-hook (lambda () (message "here") (diminish 'auto-fill-function "⮨")))
+  (add-hook 'visual-line-mode-hook (lambda () (diminish 'visual-line-mode "¶")))
+  (add-hook 'auto-fill-mode-hook (lambda () (diminish 'auto-fill-function "⤶")))
   (setq kill-ring-max 200                      ; More killed items
         kill-do-not-save-duplicates t          ; No duplicates in kill ring
         save-interprogram-paste-before-kill t  ; save clipboard before killing
@@ -428,9 +428,9 @@
 (use-package git-gutter-fringe+
   :if window-system
   :init
+  (add-hook 'git-gutter+-mode-hook (lambda () (diminish 'git-gutter+-mode "±")))
   (add-hook 'prog-mode-hook #'git-gutter+-mode)
   (add-hook 'text-mode-hook #'git-gutter+-mode)
-  (add-hook 'git-gutter+-mode-hook (lambda () (diminish 'git-gutter+-mode "ⓖ")))
   :general
     ("s-g"        #'git-gutter+-next-hunk)
     ("s-S-g"      #'git-gutter+-previous-hunk)
@@ -599,7 +599,7 @@
       (setq ispell-program-name "aspell")
       ;; Please note ispell-extra-args contains ACTUAL parameters passed to aspell
       (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))))
-  :diminish (flyspell-mode . "ⓢ"))
+  :diminish (flyspell-mode . "Abc"))
 
 (use-package ivy
   :general
@@ -733,8 +733,8 @@
   (add-hook 'c-mode-hook #'me:smart-tabs-mode-unless-override)
   (add-hook 'c++-mode-hook #'me:smart-tabs-mode-unless-override)
   (add-hook 'python-mode-hook #'me:smart-tabs-mode-unless-override)
+  (add-hook 'smart-tabs-mode-hook (lambda () (diminish 'smart-tabs-mode "⏭")))
   :config
-
   (smart-tabs-insinuate 'python)
   (smart-tabs-insinuate 'c 'c++))
 
@@ -1034,7 +1034,7 @@
     :demand
     :config
     (company-quickhelp-mode 1))
-  :diminish company-mode "ⓒ")
+  :diminish company-mode "[☰]")
 
 (use-package counsel-gtags
   :commands ( counsel-gtags-find-definition
@@ -1130,11 +1130,11 @@
   :config
   (define-key yas-minor-mode-map (kbd "<tab>") nil) ; don't use <tab>
   (define-key yas-minor-mode-map (kbd "TAB") nil)   ; don't use TAB
-  :diminish (yas-minor-mode . "ⓨ"))
+  :diminish (yas-minor-mode . "{}"))
 
 
 (use-package flycheck
-  :diminish ( flycheck-mode . "🗹")
+  :diminish ( flycheck-mode . "﹏")
   :init
   (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
   (me:add-hook-with-delay 'prog-mode-hook 10 #'flycheck-mode)
@@ -1157,7 +1157,7 @@
   :config
   :init
   (me:add-hook-with-delay 'prog-mode-hook   5 #'hs-minor-mode)
-  :diminish (hs-minor-mode . "ⓕ"))
+  :diminish (hs-minor-mode . "🌗"))
 
 (use-package avy
   :commands ( avy-goto-word-1 avy-goto-char-2 avy-goto-char-in-line )
@@ -1282,7 +1282,7 @@
   (add-hook 'text-mode-hook #'ws-butler-mode)
   :config
   (setq ws-butler-convert-leading-tabs-or-spaces t)       ; convert according to indent-tabs-mode (but not when smart-tabs-mode on)
-  :diminish ws-butler-mode "✅")
+  :diminish ws-butler-mode "△")
 
 (use-package shell-pop
   :config
