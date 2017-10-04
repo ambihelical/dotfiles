@@ -403,7 +403,8 @@
     :config
     :demand
     :init
-    (setq powerline-default-separator 'curve))
+    (setq powerline-default-separator 'curve
+          powerline-height (+ (frame-char-height) 8)))
   (spaceline-spacemacs-theme)
   ;; Remove existing buffer local mode line format so that it uses the
   ;; global one, and then force it to update.
