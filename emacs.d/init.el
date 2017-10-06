@@ -729,6 +729,14 @@
     (me:add-hook-with-delay 'prog-mode-hook 8 #'rainbow-delimiters-mode)
   :config)
 
+;; color color strings
+(use-package rainbow-mode
+  :init
+  (add-hook 'emacs-lisp-mode-hook #'rainbow-mode)
+  (add-hook 'js-mode-hook #'rainbow-mode)
+  (add-hook 'rainbow-mode-hook (lambda () (diminish 'rainbow-mode "🌈")))
+  :config)
+
 ;; Highlight cursor's surrounding parentheses
 (use-package highlight-parentheses
   :diminish highlight-parentheses-mode
