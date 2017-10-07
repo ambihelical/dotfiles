@@ -728,22 +728,6 @@
     (setq persp-initial-frame-name (projectile-project-name))
     (persp-mode))
 
-;; Only use smart-tabs-mode if tabs are enabled
-(defun me:smart-tabs-mode-unless-override ()
-  (if indent-tabs-mode
-      (smart-tabs-mode)))
-
-(use-package smart-tabs-mode
-  :commands (smart-tabs-mode)
-  :init
-  (add-hook 'c-mode-hook #'me:smart-tabs-mode-unless-override)
-  (add-hook 'c++-mode-hook #'me:smart-tabs-mode-unless-override)
-  (add-hook 'python-mode-hook #'me:smart-tabs-mode-unless-override)
-  (add-hook 'smart-tabs-mode-hook (lambda () (diminish 'smart-tabs-mode "⏭")))
-  :config
-  (smart-tabs-insinuate 'python)
-  (smart-tabs-insinuate 'c 'c++))
-
 ;; Highlight delimiters by depth
 (use-package rainbow-delimiters
   :init
