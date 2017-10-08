@@ -120,6 +120,10 @@
 (add-hook 'makefile-mode-hook
           (lambda ()
             (modify-syntax-entry ?+ "." )))                  ; + is punctuation
+;; don't ask about term processes
+;; N.B. There may be var in emacs 26 for this
+(add-hook 'comint-exec-hook
+      (lambda () (set-process-query-on-exit-flag (get-buffer-process (current-buffer)) nil)))
 
 (run-with-idle-timer 0.1 nil #'me:extra-setup)
 
