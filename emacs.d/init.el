@@ -694,7 +694,7 @@
         projectile-enable-caching t)
   :config
   (push "compile_commands.json" projectile-project-root-files)
-  (push "build" projectile-globally-ignored-directories)
+  (push "out" projectile-globally-ignored-directories)     ;; aosp build
   (use-package persp-projectile
     :demand
     :general
