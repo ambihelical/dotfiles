@@ -34,3 +34,6 @@
 [submodule "stdman"]
 	path = stdman
 	url = https://github.com/jeaye/stdman.git
+[submodule "git/git-scripts"]
+	path = git/git-scripts
+	url = https://github.com/jwiegley/git-scripts.git

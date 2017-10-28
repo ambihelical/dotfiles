@@ -17,6 +17,8 @@ GPP := gpp -DOS=${OS} -DHOST=${HOST} -DKERNEL=${KERNEL} -n -U '@[' ']@' '(' ',' 
 SHELL_FILES = ~/.bashrc ~/.bash_profile ${CFG}/readline ~/.profile
 DIR_FILES = ~/bin
 BIN_FILES=$(foreach bin,$(notdir $(wildcard ${PWD}/bin/*)),~/bin/${bin})
+GIT_SCRIPTS_CMDS = forest wtf whoami fire undo tarball
+GIT_SCRIPTS = $(foreach cmd,${GIT_SCRIPTS_CMDS},~/bin/git-${cmd})
 XORG_FILES = ${CFG}/xsettingsd ~/.Xresources ${CFG}/xkb/symbols/local
 APP_FILES = ${CFG}/screen ${CFG}/ack $(CFG)/globalrc $(CFG)/pythonrc ${CFG}/rtags/rdmrc \
 				$(CFG)/gconf
@@ -46,7 +48,7 @@ help:
 base: ${SHELL_FILES} ${DIR_FILES} ${BIN_FILES} ${XORG_FILES}
 	@echo "base configured"
 
-dev: ${VIM_FILES} ${APP_FILES} ${GIT_FILES} ${EMACS_FILES}
+dev: ${VIM_FILES} ${APP_FILES} ${GIT_FILES} ${EMACS_FILES} ${GIT_SCRIPTS}
 	@echo "dev configured"
 
 i3: ${I3_FILES}
@@ -109,6 +111,10 @@ ${CFG}/xsettingsd: ${PWD}/xsettingsd
 ${CFG}/git/config: ${PWD}/git/config
 	cp -f $< $@
 	i3wm-private-startup || true
+
+~/bin/git-% : ${PWD}/git/git-scripts/git-%
+	chmod a+x $<
+	${LN} $< $@
 
 # files in bin directory
 ~/bin/% : ${PWD}/bin/%
