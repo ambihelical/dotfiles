@@ -645,16 +645,18 @@
   (:keymaps 'global :prefix "<f4>"
            "a" #'counsel-apropos
            "b" #'counsel-mark-ring
+           "D" #'counsel-linux-app
            "i" #'counsel-info-lookup-symbol
            "j" #'counsel-bookmark
            "k" #'counsel-descbinds
-           "l" #'counsel-locate
            "p" #'counsel-package
            "r" #'counsel-recentf
+           "s"  '(:ignore t :which-key "Search→" )
            "u" #'counsel-unicode-char)
   (:keymaps 'global :prefix "<f4> s"
            "a" #'counsel-ag
            "b" #'swiper
+           "l" #'counsel-locate
            "g" #'counsel-git-grep
            "s" #'swiper-all)
   ("C-h b"  #'counsel-descbinds)
