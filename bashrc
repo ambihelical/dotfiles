@@ -188,9 +188,10 @@ _gcd() {
 complete -ofilenames -onospace -F _gcd gcd
 
 # window title, TITLE defined allows override
+# also add BELL to show urgency hint where supported
 window_title() {
 	local def_title="$(tilde $PWD) [${USER}@${HOSTNAME}]"
-	echo -ne "\033]0;${TITLE:-${def_title}}\007"
+	echo -ne "\033]0;${TITLE:-${def_title}}\007\a"
 }
 
 # colors for less (mainly for man)
