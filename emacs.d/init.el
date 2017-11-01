@@ -613,9 +613,14 @@
     (:keymaps 'ivy-minibuffer-map
               "<escape>" #'minibuffer-keyboard-quit
               "M-y" #'ivy-next-line)                       ; for yank-pop flow
+    (:keymaps 'ivy-occur-grep-mode-map
+              "DEL"  #'ivy-occur-delete-candidate)       ; orig C-d
   :config
   (ivy-mode 1)
   :init
+  (add-hook 'ivy-occur-mode-hook (lambda ()
+                                 (evil-make-intercept-map ivy-occur-mode-map 'normal)
+                                 (evil-normalize-keymaps 'normal)))
   (add-hook 'ivy-mode-hook (lambda ()
                              (setq ivy-height (/ (+ 2 (frame-height)) 3))))
   (setq ivy-use-virtual-buffers t                           ; add ‘recentf-mode’ and bookmarks to ‘ivy-switch-buffer’.
@@ -671,7 +676,9 @@
   :diminish (counsel-mode . ""))
 
 ;; allow grep buffers to be editted
-(use-package wgrep)
+(use-package wgrep
+  :init
+  (setq wgrep-enable-key "\C-c\C-w"))
 
 (use-package projectile
   :general
