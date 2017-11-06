@@ -819,12 +819,42 @@
    ("\\.md\\'" . markdown-mode)))
 
 (use-package org
+  :commands org-capture
+  :general
+  ("<f8> t" #'org-todo-list)
+  ("<f8> a" #'org-agenda)
+  ("<f8> s" #'me:search-notes)
+  ("<f8> c" #'counsel-org-capture)
   :init
+  (defconst me:command (expand-file-name "Notes/command.org" me:data-directory))
+  (defconst me:language (expand-file-name "Notes/language.org" me:data-directory))
+  (defconst me:system (expand-file-name "Notes/system.org" me:data-directory))
+  (defconst me:android (expand-file-name "Notes/android.org" me:data-directory))
   (setq org-hide-emphasis-markers t)
+  (add-hook 'org-capture-mode-hook #'evil-insert-state)
+  (setq org-capture-templates `(("c" "Command notes")
+                                ("ug" "Using Git" entry (file+headline ,me:command "Git"))
+                                ("ul" "Using Linux" entry (file+headline ,me:command  "Linux" ))
+                                ("ub" "Using Bash" entry (file+headline ,me:command  "Bash" ))
+                                ("s" "System notes")
+                                ("sl" "Administrating Linux " entry (file+headline ,me:system "Linux"))
+                                ("sm" "Administrating Mac" entry (file+headline ,me:system "Mac"))
+                                ("p" "Language notes")
+                                ("pe" "Elisp" entry (file+headline ,me:language  "Elisp" ))
+                                ("pp" "Python" entry (file+headline ,me:language  "Python" ))
+                                ("pc" "C++" entry (file+headline ,me:language "C++" ))
+                                ("a" "Android Notes")
+                                ("ag" "Android General" entry (file+headline ,me:android  "General" ))
+                                ("ab" "Android Build System" entry (file+headline ,me:android  "Build System" ))
+                                ("aa" "Android Architecture" entry (file+headline ,me:android  "Architecture" ))))
+
   :mode
   (("\\.org\\'" . org-mode))
   :config
-    (use-package evil-org :config :demand))
+  (defun me:search-notes ()
+    (interactive)
+    (counsel-ag nil (expand-file-name "Notes" me:data-directory) "-i" nil))
+  (use-package evil-org :config :demand))
 
 (use-package org-bullets
   :init

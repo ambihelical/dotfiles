@@ -2,6 +2,7 @@
 LN = scripts/safe-link
 CFG = ~/.config
 CACHE=~/.cache
+DATA=~/.local/share
 ETC=/etc
 
 # gpp processing
@@ -15,7 +16,7 @@ KERNEL := $(shell uname -s)
 GPP := gpp -DOS=${OS} -DHOST=${HOST} -DKERNEL=${KERNEL} -n -U '@[' ']@' '(' ',' ')' '(' ')' '\#' '' -M '@@' '\n' ' ' ' ' '\n' '(' ')'
 
 SHELL_FILES = ~/.bashrc ~/.bash_profile ${CFG}/readline ~/.profile
-DIR_FILES = ~/bin
+DIR_FILES = ~/bin ~/.local/share/Notes
 BIN_FILES=$(foreach bin,$(notdir $(wildcard ${PWD}/bin/*)),~/bin/${bin})
 GIT_SCRIPTS_CMDS = forest wtf whoami fire undo tarball
 GIT_SCRIPTS = $(foreach cmd,${GIT_SCRIPTS_CMDS},~/bin/git-${cmd})
@@ -121,7 +122,7 @@ ${CFG}/git/config: ${PWD}/git/config
 ~/bin/% : ${PWD}/bin/%
 	${LN} $< $@
 
-# ~/.xxx with simple name map 
+# ~/.xxx with simple name map
 ~/.% : ${PWD}/%
 	${LN} $< $@
 
@@ -129,6 +130,11 @@ ${CFG}/git/config: ${PWD}/git/config
 # link from ${PWD}/app/file
 ${CFG}/%: ${PWD}/%
 	mkdir -p $(dir $@)
+	${LN} $< $@
+
+# ~/.local/share/dir
+# link from ${PWD}/dir
+${DATA}/%: ${PWD}/%
 	${LN} $< $@
 
 ${CACHE}/%:
