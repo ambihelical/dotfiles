@@ -856,6 +856,16 @@
     (counsel-ag nil (expand-file-name "Notes" me:data-directory) "-i" nil))
   (use-package evil-org :config :demand))
 
+(use-package org-projectile
+  :after projectile
+  :general
+  :init
+  :config
+  (org-projectile-per-project)
+  (setq org-projectile-per-project-filepath "todo.org")
+  (setq org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
+  (push (org-projectile-project-todo-entry) org-capture-templates))
+
 (use-package org-bullets
   :init
   (add-hook 'org-mode-hook #'org-bullets-mode)
