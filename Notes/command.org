@@ -1,0 +1,135 @@
+* Git
+** Undo last commit (returns changes to modified):
+	=git reset --soft HEAD^=
+
+** Undo reset
+	=git reset HEAD@{1}=
+
+** Reset branch to remote (discard all changes locally)
+	=git reset --hard remote/remote-name=
+	- remote can be "origin" which is tracked remote branch
+
+** Redo last commit.  Any additions to the index are added to the new commit:
+	=git commit --amend=
+
+** Discard modifications:
+	=git checkout -- file=
+	=git checkout -- .=       -> all in directory
+
+** Remove files not under version control, including ignored files:
+	=git clean -nx=           # dry-run
+	=git clean -fx=           # do for real
+
+** Set HEAD to another branch in bare repository
+	=git symbolic-ref HEAD refs/heads/<name>=
+
+** Pull using ssh:  (see also notes on ssh)
+	=git pull user@host:~/git-repo-in-home=
+
+** Push to branch
+	=git push remote-name branch-name=
+
+** Search commit contents
+	=git log --grep=string=        # commits where string exists
+	=git log -Sstring=             # commits where count of string changed
+	=git log -Gstring=             # commits where string was added or removed
+
+** Rebase branch to master
+	=git checkout mybranch=
+	=git rebase master=
+
+** Revision syntax
+	^ first parent
+	^n nth parent
+	~n nth ancestor
+
+** Update submodules
+	=git submodule update --init=
+
+** Rebase general form
+	=git rebase --onto <graft-point> <excluding> <including>=
+	- <graft-point> defaults to <including>
+	- <including> defaults to current branch HEAD
+	- <excluding> is the commit to start the graft
+
+** Modify Commit author
+   git commit --amend --author="Adolf Hitler <derfuhrer@blitzkrieg.com>"
+   git commit --amend --reset-author    # reset to config value
+* Linux
+** Xargs with input not at end of command
+	=e.g. =cmd|xargs -I LINE cp LINE dest=
+** High fidelity rsync copy
+  =rsync -HAXEglorth --progress old new=
+** Extended attributes
+	- Install package attr
+	- tools: getfattr, setfattr
+	- Note: cp needs --preserve=all to preserve attributes
+** Switch to root from account which can't sudo
+	=su -m -=
+** Run command as root (when not in sudoers)
+	=su -c '<command>' root=
+** Search man pages
+	=apropos <keyword>=
+
+* Bash
+** Redirections
+*** redirect stderr to err.log
+    =cmd 2> err.log=
+*** redirect stderr to stdout
+    =cmd 2>&1=
+*** redirect stderr & stdout to file
+    =cmd &> log=
+*** redirect stderr & stdout, append to file
+    =cmd >> log 2>&1=
+
+*** Save all output to file
+    =cmd 2>&1 | tee file=
+    cmd 2>&1 | tee -a file
+** Find type of command
+	=type CMD=
+** Unset environment var
+	=unset VAR=
+** recursive command
+	=find PATH -print0 | xargs -0 COMMAND=
+** notice new binaries
+	=hash -r=
+** useful variables:
+  - $# - number parameters
+  - $@ - list of parameters
+  - ${var%.*} - strip extension
+
+** Rename files
+	=for fn in *pattern*; do echo mv $fn ${fn/old-pat/new-pat}; done | /bin/bash=
+
+** Terminal screen size
+	LINES=#
+	COLUMNS=#
+
+** Strict mode
+	=set -euo pipefail=
+	IFS=$'\n\t'
+
+** Run function when script exits
+	function myexit {
+		rm -rf "#tempfile#"
+	}
+	try myexit EXIT
+
+** Create temporary directory, Linux or OSX
+	=tmpdir=$(mktemp -d 2>/dev/null || mktemp -d -t 'template-pattern')=
+
+** Decrypt several PGP/GPG files
+	=gpg --decrypt-files <files>=   # prompts once
+
+** Expand arguments but do nothing (aka :)
+	- =false || { : $foo ; }=
+	- can use for then block if nothing to do when true
+* Imagemagick
+** Composite three images into one (not very generic)
+	=convert -size 278x160 xc:black \( $1 -resize 93 \) -geometry +0+10  -composite \( $2 -resize 93 \) -geometry +93+10  -composite \( $3 -resize 93 \) -geometry +186+10  -composite $4=
+* Gtags
+** Create GTAGS files for a set of directories
+   Find ./dir1 ./dir2 ./dir3 |gtags --file=-
+* Cmake
+** Generate compile_commands.json
+	add -DCMAKE_EXPORT_COMPILE_COMMANDS=ON to cmake invocations

@@ -1,0 +1,54 @@
+* Linux
+** tftp setup
+	- install package tftpd-hpa
+	- service is tftpd-hpa
+	- in /etc/xinetd/tftp:
+		service tftp
+		{
+			protocol        = udp
+			port            = 69
+			socket_type     = dgram
+			wait            = yes
+			user            = root
+			server          = /usr/sbin/in.tftpd
+			server_args     = -s /tftpboot
+			disable         = no
+		}
+
+** dhcp setup
+	- install isc-dhcp-server
+	- service is isc-dhcp-server
+	- in /etc/dhcp/dhcpd.conf
+
+	ddns-update-style none;
+	option domain-name "mydomain.com";
+	option domain-name-servers 192.168.13.6, 192.168.13.7;
+	default-lease-time 600;
+	max-lease-time 7200;
+
+	# subnet setup
+	subnet 192.168.8.0 netmask 255.255.255.0 {
+		range 192.168.8.100 192.168.8.199;
+		option routers 192.168.8.1;
+		server-name "192.168.8.1";
+		# Uncomment this to enable cia flash update from /tftpboot/ciaimg
+		# filename "ciaimg";
+	}
+
+	# example fixed address
+	host host-name {
+	  hardware ethernet E8:5B:5B:23:D7:05;
+	  fixed-address 192.168.8.115;
+	}
+
+** nfs setup
+	- in /etc/exports:
+	  <path-to-export-as-nfs> <ipaddr>/24(ro,no_root_squash,async,no_subtree_check)
+	- service is nfs-kernel-server
+
+** mount vfat usb drive with open permissions
+	=mount -tvfat -orw,umask=000 <device> <mount-point>=
+	=mount -tvfat -oro,umask=000 <device> <mount-point>=
+* Mac
+** Mount cifs mount
+	=cifs://url.com/mount-point=

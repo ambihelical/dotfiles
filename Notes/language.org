@@ -1,0 +1,93 @@
+* C++
+** General
+	 - Don''t use reserved names [SO 228783]:
+		- Names in global scope beginning with an underscore (classes, functions, macros)
+		- Names in any scope _containing_ two adjacent underscores
+		- Names in any scope beginning with _[A-Z]
+	 - use auto_ptr or unique_ptr for pointer member destruction
+	 - use unique_ptr for C types that have typical creating and destroying functions
+			  unique_ptr<void,decltype(&::freefn)> c_handle;  // class member
+			  class_ctor() : c_handle{ ::newfn(args...),&::freefn}{}   // initialization
+			  unique_ptr<FILE,decltype((&::fclose))> scopeGuard(fopen(args),fclose)    // within scope example
+	 - Remember the "rule of three" and its amendments:
+		  - if any of destructor, copy contructor or assignment methods are defined, you should define the others.
+		  - if RAII is used, the destructor may be left undefined.
+		  - [c++11] Define a move constructor as well [SO 3279543]
+		  - [c++11] Defining any of the three suppresses autogeneration of a move constructor
+	 - Use an initialization form for POD non-static members and local variables,
+		otherwise they will NOT have a defined value:
+		  1. zero initialize using default constructor form  `e.g. int foo();`
+		  2. assignment of value
+		  3. assignment of {0} to zero initialize structure
+		  4. [c++11] prefer to use {} to zero or value initialize
+	 - Don''t overload &&, || or ,(comma). [moreeffc++#7]
+
+** Includes
+	 - use include guard (but don''t use initial underscore)
+	 - order includes from system-wide to project-specific
+	 - where possible, use forward declarations
+
+** Constructors
+	 - If single argument, use `explicit`
+	 - prefer initialization lists to assignment [effc++#12]
+	 - list members in initialization list in order of declaration [effc++#13]
+	 - make sure POD members are initialized using one of the initialization forms
+	 - Declare copy constructor arguments as const references
+	 - Any uncaught exception in constructor will cause destructor to not be called [moreeffc++#11]
+	 - Define copy constructor and assignment for classes with dynamically allocated memory [effc++#11]
+	 - [c++11] if argument type is move-enabled, pass-by-value with std::move is best
+	 - [c++11] To define a move constructor, easiest is to use copy-and-swap idiom: [SO 3279543]
+			ex: myobj(myobj&& other) : myobj() { swap(*this,other); }
+
+** Destructors
+	 - should not throw exceptions
+	 - [pre-c++11] should be marked throw()
+	 - if class can be derived from, destructors should be either [GOTW/mill#18]
+		  - protected non-virtual - if only derived classes can destroy
+		  - public virtual
+	 - Use `bool std::uncaught_exception()` to detect if an exception is in progress
+	 - [c++11] If dtor is empty define or declare using `= default`
+	 - [c++11] Should not throw exceptions and should be marked noexcept
+
+** Assignment operators:
+	- make sure to call base class to copy its members: `BASE::operator=(rhs)`  [effc++#16]
+	- make sure to check for self assignment   [effc++#17]
+	- return reference to object (aka `*this`)  [effc++#15]
+	- [c++11] use copy-and-swap idiom to define assignment operators  [SO 3279543]
+		- instead of move assignment operator, as well [SO 9746748]
+		- best implemented with a nothrowing swap method [GOTW 059]
+			ex: myobj& operator=(myobj other) { swap(*this, other); return *this; }
+
+** Virtual Methods and Inheritance
+	 - Prefer to make public class interface non-virtual and virtual methods private [GOTW/Mill#18]
+		  [see also Non-Virtual Interface Idiom]
+	 - Make virtual method protected only if derived classes need to invoke the base implementation.[GOTW/Mill#18]
+	 - Don't redefine an inherited nonvirtual method in derived classes [effc++#37]
+	 - Don't redefine an inherited default parameter value in derived classes [effc++#38]
+	 - [c++11] use `override` on each method intended to override a base class virtual method.
+
+** Method and Function implementations
+	 - Return a constructed object to enable Return Value Optimization [moreeffc++#20]
+	 - In general, pass large objects by const reference instead of by-value
+	 - [c++11] prefer pass-by-value when parameters can be moved and are going to be copied anyway.
+	 - [c++11] prefer return-by-value when return type can be moved.
+
+** Exceptions
+	- Always catch exceptions by reference [moreeffc++#13]
+	- Use `throw;` to rethrow an exception after catching it
+	- catch all exceptions in main(). Otherwise if an exception is
+		thrown, and no handler is found, the stack is not guaranteed to
+		be unwound
+
+** Namespaces
+	 - Remember the interface principle: [exceptC++]
+		  - All functions, including free functions that both "mention" and are "supplied" with the class are
+			  logically part of the class.
+		  - Define all such functions in the same namespace as the class.
+* Linking
+** Allow undefined shared libraries
+	=-Wl,--allow-shlib-undefined=
+** Don't allow undefined
+	=-Wl,--noundefined=
+** See what what libraries an ELF executable or shared lib needs
+	=readelf -d <file>=
