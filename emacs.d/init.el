@@ -77,7 +77,7 @@
 ;; use-package
 
 (setq-default tab-width 3                                   ; ideal tab width
-              indent-tabs-mode t                            ; enable tabs for most files
+              indent-tabs-mode nil                          ; disable tabs, re-enable selectively
               indicate-empty-lines t                        ; show empty lines at end of buffer
               fill-column 120)                              ; auto-wrap only very long lines
 (setq auto-save-file-name-transforms
@@ -116,7 +116,13 @@
 
 (add-hook 'makefile-mode-hook
           (lambda ()
+            (setq indent-tabs-mode t)                        ; tabs are needed
             (modify-syntax-entry ?+ "." )))                  ; + is punctuation
+
+(add-hook 'sh-mode-hook
+          (lambda ()
+            (setq indent-tabs-mode t)))
+
 ;; don't ask about term processes
 ;; N.B. There may be var in emacs 26 for this
 (add-hook 'comint-exec-hook
@@ -181,7 +187,6 @@
               (modify-syntax-entry ?- "w")                    ; hyphens are parts of words
               (setq tab-width 2                               ; tab inserts 2 spaces
                     standard-indent 2                         ; indent by 2
-                    indent-tabs-mode nil                      ; no tabs
                     evil-shift-width 2                        ; need this since no tabs
                     lisp-body-indent 2)))                     ; indent elisp by 2
   :interpreter (("emacs" . emacs-lisp-mode)))
@@ -817,8 +822,7 @@
               (setq company-dabbrev-downcase nil     ; don't downcase completions
                     company-dabbrev-ignore-case nil  ; don't keep prefix
                     evil-shift-width 4               ; set tabs 4 spaces
-                    tab-width 4
-                    indent-tabs-mode nil)))
+                    tab-width 4)))
   :config
   (defun me:adoc-mode-flyspell-verify ()
     "flyspell function to ignore certain asciidoc markup"
@@ -877,8 +881,7 @@
             (lambda ()
               (setq c-basic-offset 4                             ; use common convention
                     tab-width 8                                  ; 4 spaces indentation
-                    evil-shift-width 4                           ; no tabs
-                    indent-tabs-mode nil)))
+                    evil-shift-width 4)))
   :config
   :mode
   (("\\.java\\'" . java-mode)))
@@ -887,7 +890,8 @@
   :init
   (add-hook 'c-mode-common-hook
             (lambda ()
-              (setq c-basic-offset 3)))
+              (setq c-basic-offset 3
+                    indent-tabs-mode t)))
   (add-hook 'c++-mode-hook
             (lambda ()
               (define-key c++-mode-map ":" #'self-insert-command)
