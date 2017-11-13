@@ -1321,8 +1321,7 @@
 (use-package magit
   :after evil
   :init
-  (setq magit-completing-read-function 'ivy-completing-read    ; use ivy
-        vc-handled-backends nil)                               ; magit does everything needed
+  (setq magit-completing-read-function 'ivy-completing-read)   ; use ivy
   :general
     ("<f9> b"     #'magit-blame)
     ("<f9> B"     #'magit-run-git-gui-blame)
