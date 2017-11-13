@@ -50,6 +50,12 @@ Emacs*toolBar: off
 Emacs*verticalScrollBars: off
 Emacs*menuBar: off
 
+! blend in with theme for less flash at startup
+Emacs*background: #313131
+Emacs*foreground: #DCDCCC
+Emacs.mode-line.attributeForeground: #9cbf9c
+Emacs.mode-line.attributeBackground: #202020
+
 ! Turn on subpixel rendering
 Xft.antialias:  rgba
 Xft.hinting:    1
