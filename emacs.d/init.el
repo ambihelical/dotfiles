@@ -33,6 +33,10 @@
 ;; emacs directories
 (defconst me:emacs-cache-directory (expand-file-name "emacs" me:cache-directory))
 (defconst me:emacs-backup-directory (expand-file-name "backups" me:emacs-cache-directory))
+;; fonts in order of preference
+(defconst me:preferred-fonts #'(("Hack" . "Hack-10:autohint=true")
+                                ("Fantasque Sans Mono" . "Fantasque Sans Mono-12")
+                                ("DejaVu Sans Mono" . "DejaVu Sans Mono-11")))
 
 ;; replace prefix part of a string
 (defun me:replace-prefix (prefix input)
@@ -56,13 +60,10 @@
                                           (funcall ,func))))))))))
 
 (defun me:set-preferred-font ()
-  (let ((fonts (font-family-list)))
-    (if (member "Hack" fonts)
-        (set-frame-font "Hack-10:autohint=true" t t)
-      (if (member "Fantasque Sans Mono" fonts)
-          (set-frame-font "Fantasque Sans Mono-12" t t)
-        (if (member "DejaVu Sans Mono" fonts)
-            (set-frame-font "DejaVu Sans Mono-11" t t))))))
+  (let* ((fonts (font-family-list))
+         (match (seq-find (lambda (elem) (member (car elem) fonts)) me:preferred-fonts)))
+       (if match
+           (set-frame-font (cdr match) t t))))
 
 (defun me:extra-setup ()
   (tool-bar-mode 0)                                           ; no tool bar (tool-bar)
@@ -72,9 +73,18 @@
   (fset 'yes-or-no-p 'y-or-n-p)                               ; change stupid default y/n? y
   (make-directory me:emacs-backup-directory t)                ; make sure backup dir exists
   (electric-indent-mode +1)                                   ; turn on electric mode globally (electric)
-  (me:set-preferred-font)                                     ; set the font
   (delete-selection-mode t)                                   ; pastes delete selection
   (run-at-time "1 hour" 3600 #'clean-buffer-list))            ; clear out old buffers every hour (midnight)
+
+;; Reset all buffer's mode line to the default one
+(defun me:reset-mode-lines ()
+  (mapc (lambda (buffer)
+          (if (or (buffer-file-name buffer)
+                  (not (equal (substring (buffer-name buffer) 0 1) " ")))
+              (with-current-buffer buffer
+                (kill-local-variable 'mode-line-format)
+                (force-mode-line-update t))))
+      (buffer-list)))
 
 ;; Run programming mode hooks
 ;; This is used for modes which should trigger programming mode hooks
@@ -299,8 +309,6 @@
     ("s-n"        #'next-error)
     ("s-p"        #'previous-error)
   :init
-  (add-hook 'visual-line-mode-hook (lambda () (diminish 'visual-line-mode "¶")))
-  (add-hook 'auto-fill-mode-hook (lambda () (diminish 'auto-fill-function "⤶")))
   (setq kill-ring-max 200                      ; More killed items
         kill-do-not-save-duplicates t          ; No duplicates in kill ring
         save-interprogram-paste-before-kill t  ; save clipboard before killing
@@ -318,7 +326,6 @@
            "a"  '(:ignore t :which-key "Abbrev→" ))
   :init
   :config
-  :diminish abbrev-mode
   :demand)
 
 ;; built-in "hl-line" package
@@ -335,7 +342,7 @@
 (use-package menu-bar
   :ensure nil
   :general
-    ("<f5> m"      #'menu-bar-mode)
+    ("<f5> b"      #'menu-bar-mode)
     ("<f5> <f5>"   #'menu-bar-open)
   :init
   :config
@@ -431,8 +438,7 @@
   :init
   (setq beacon-blink-when-window-scrolls nil)
   :config
-  (beacon-mode 1)
-  :diminish beacon-mode)
+  (beacon-mode 1))
 
 (use-package adaptive-wrap
   :config
@@ -455,37 +461,56 @@
               (set-face-attribute 'magit-diff-hunk-heading nil :box "#5e5e5e" :background "dark slate grey")
               (set-face-attribute 'magit-diff-hunk-heading-highlight nil :box "#5e5e5e" :background "steel blue")))
   :config
+  (me:set-preferred-font)                                     ; set the font
   ;; make visual and highlight more noticable
   (set-face-attribute 'lazy-highlight nil :background "#5e5e5e")
   (set-face-attribute 'region nil :background "#5e5e5e")
   (set-face-attribute 'highlight nil :background "#5e5e5e")
   :defer 0)
 
-(use-package spaceline-config
-  :if window-system
-  :ensure spaceline
-  :defer 2
+
+(use-package smart-mode-line
+  :demand
+  :after hc-zenburn-theme
   :init
-  (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state
-        spaceline-minor-modes-separator " ")
+  (setq sml/theme 'respectful
+        size-indication-mode t
+        sml/col-number-format "%2C"
+        sml/numbers-separator " "
+        sml/no-confirm-load-theme t)
   :config
-  (use-package powerline
-    :config
-    :demand
-    :init
-    (setq powerline-default-separator 'curve
-          powerline-height (+ (frame-char-height) 8)))
-  (spaceline-spacemacs-theme)
-  ;; Remove existing buffer local mode line format so that it uses the
-  ;; global one, and then force it to update.
-  (mapc (lambda (buffer)
-          (if (or (buffer-file-name buffer)
-                  (not (equal (substring (buffer-name buffer) 0 1) " ")))
-              (with-current-buffer buffer
-                ;(message "Updating %s" buffer);
-                (kill-local-variable 'mode-line-format)
-                (force-mode-line-update t))))
-      (buffer-list)))
+  (sml/setup))  ;; runs hooks on sml/after-setup-hook
+
+;; add modeline popup
+(use-package minions                    ; A minor-mode menu for the mode line
+  :init
+  (setq minions-direct '(flycheck-mode overwrite-mode)
+        minions-mode-line-lighter "ʘʘ")
+  (add-hook 'sml/after-setup-hook #'minions-mode)
+  :config
+  (me:reset-mode-lines)
+  :general
+  ("<f5> m" #'minions-minor-modes-menu))
+
+; modeline tabs
+(use-package moody
+  :after hc-zenburn-theme
+  :demand
+  :init
+  (setq x-underline-at-descent-line t)
+  :config
+  (let ((line (face-attribute 'mode-line :underline)))
+      (set-face-attribute 'mode-line          nil :overline   line)
+      (set-face-attribute 'mode-line-inactive nil :overline   line)
+      (set-face-attribute 'mode-line-inactive nil :underline  line)
+      (set-face-attribute 'mode-line          nil :underline  line)
+      (set-face-attribute 'mode-line          nil :box        nil)
+      (set-face-attribute 'mode-line-inactive nil :box        nil))
+  ;; make mode lines more noticable
+  (set-face-attribute 'mode-line nil :background "#4e4e4e" :height 1.1)
+  (set-face-attribute 'mode-line-inactive nil :background "#3e3e3e" :height 0.9)
+  (moody-replace-mode-line-buffer-identification)
+  (moody-replace-vc-mode))
 
 ;; 26.1 built-in line numbers mode
 (use-package display-line-numbers
@@ -500,7 +525,6 @@
   :if window-system
   :hook ((prog-mode text-mode) . git-gutter+-mode)
   :init
-  (add-hook 'git-gutter+-mode-hook (lambda () (diminish 'git-gutter+-mode "±")))
   :config
   ;; Define git-gutter hydra
   (eval '(defhydra hydra-git-gutter (:hint nil)
@@ -575,8 +599,7 @@
   :hook ((prog-mode text-mode) . undo-tree-mode)
   :config
   :general
-    ("<f4> v"     #'undo-tree-visualize)
-  :diminish undo-tree-mode)
+    ("<f4> v"     #'undo-tree-visualize))
 
 ;; remote file editting
 (use-package tramp
@@ -655,7 +678,6 @@
 ;; Use perl-like Regexp for all minibuffer input
 (use-package pcre2el
   :defer 1
-  :diminish (pcre-mode . ".*")
   :config
   (pcre-mode))
 
@@ -683,7 +705,7 @@
       (setq ispell-program-name "aspell")
       ;; Please note ispell-extra-args contains ACTUAL parameters passed to aspell
       (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))))
-  :diminish (flyspell-mode . "Abc"))
+  )
 
 ;; look up words
 (use-package define-word
@@ -707,8 +729,6 @@
               "M-y" #'ivy-next-line)                       ; for yank-pop flow
     (:keymaps 'ivy-occur-grep-mode-map
               "DEL"  #'ivy-occur-delete-candidate)       ; orig C-d
-  :config
-  (ivy-mode 1)
   :init
   (add-hook 'ivy-occur-mode-hook (lambda ()
                                  (evil-make-intercept-map ivy-occur-mode-map 'normal)
@@ -723,7 +743,8 @@
         ivy-dynamic-exhibit-delay-ms 200                    ; dynamic collection delay
         ivy-re-builders-alist
            '((t . ivy--regex-ignore-order)))                ; allow input not in order
-  :diminish (ivy-mode . ""))
+  :config
+  (ivy-mode 1))
 
 (use-package ivy-hydra
   :commands (ivy-hydra/body)
@@ -780,8 +801,7 @@
     (if (and (fboundp 'projectile-project-p) (projectile-project-p))
         (counsel-projectile-find-file)
       (counsel-find-file)))
-  (counsel-mode 1)
-  :diminish (counsel-mode . ""))
+  (counsel-mode 1))
 
 ;; allow grep buffers to be editted
 (use-package wgrep
@@ -799,7 +819,6 @@
          "m"    #'projectile-compile-project)
     (:prefix "C-c"
             "p"  '(:ignore t :which-key "Projectile→" ))
-  :diminish projectile-mode
   :after evil
   :demand t     ; required because use-package-always-defer is t
   :init
@@ -860,12 +879,10 @@
 (use-package rainbow-mode
   :hook (( emacs-lisp-mode js-mode ) . rainbow-mode )
   :init
-  (add-hook 'rainbow-mode-hook (lambda () (diminish 'rainbow-mode "🌈")))
   :config)
 
 ;; Highlight cursor's surrounding parentheses
 (use-package highlight-parentheses
-  :diminish highlight-parentheses-mode
   :init
   (me:add-hook-with-delay 'prog-mode-hook 8 #'highlight-parentheses-mode)
   :config)
@@ -1050,7 +1067,6 @@
 
 ;; font lock for newer c++ versions
 (use-package modern-cpp-font-lock
-  :diminish modern-c++-font-lock-mode
   :config
   :init
   (me:add-hook-with-delay 'c++-mode-hook 10 #'modern-c++-font-lock-mode))
@@ -1193,7 +1209,7 @@
     :demand
     :config
     (company-quickhelp-mode 1))
-  :diminish company-mode "[☰]")
+  )
 
 (use-package counsel-gtags
   :commands ( counsel-gtags-find-definition
@@ -1205,10 +1221,10 @@
   :init
   (add-hook 'c-mode-hook #'counsel-gtags-mode)
   (add-hook 'c++-mode-hook #'counsel-gtags-mode)
-  :config
-  :diminish counsel-gtags-mode)
+  :config)
 
 (use-package rtags
+  :disabled
   :init
   (defun me:flycheck-rtags-setup ()
     (require 'flycheck-rtags)
@@ -1293,9 +1309,9 @@
 
 
 (use-package flycheck
-  :diminish ( flycheck-mode . "﹏")
   :init
   (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
+  (setq flycheck-mode-line-prefix "☑")
   (me:add-hook-with-delay 'prog-mode-hook 3 #'flycheck-mode)
   :general
   (:prefix "C-c"
@@ -1315,8 +1331,7 @@
            "@" '(:ignore t :which-key "HideShow→" ))
   :config
   :init
-  (me:add-hook-with-delay 'prog-mode-hook   5 #'hs-minor-mode)
-  :diminish (hs-minor-mode . "🌗"))
+  (me:add-hook-with-delay 'prog-mode-hook   5 #'hs-minor-mode))
 
 (use-package avy
   :commands ( avy-goto-word-1 avy-goto-char-2 avy-goto-char-in-line )
@@ -1340,6 +1355,7 @@
         evil-want-C-w-in-emacs-state t      ; ditto
         evil-want-C-i-jump nil              ; need TAB for other things
         evil-indent-convert-tabs nil        ; make = work with smart tabs mode
+        evil-mode-line-format '( before . mode-line-front-space)
         evil-search-module #'evil-search)
   :general
     (:states '(normal visual emacs)
@@ -1449,7 +1465,7 @@
   :hook (( prog-mode text-mode ) . ws-butler-mode )
   :config
   (setq ws-butler-convert-leading-tabs-or-spaces t)       ; convert according to indent-tabs-mode (but not when smart-tabs-mode on)
-  :diminish ws-butler-mode "△")
+  )
 
 (use-package shell-pop
   :config
@@ -1531,7 +1547,7 @@
     ("C-c s" #'git-timemachine-kill-abbreviated-revision "Yank abbreviated revision")))
   :general
   (:keymaps 'global :prefix "<f9>"  "t" #'hydra-timemachine/body)
-  :diminish "🕓")
+  )
 
 (use-package treemacs
   :general
