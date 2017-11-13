@@ -1300,7 +1300,8 @@
   (add-hook 'with-editor-mode-hook (lambda ()
                                      (evil-insert-state)
                                      (setq fill-column 70)))
-  :diminish)
+  :config
+  :diminish with-editor-mode)
 
 (use-package magit
   :after evil
