@@ -113,9 +113,6 @@
           (lambda ()
             (message "Time to initialize: %s"
                      (emacs-init-time))))
-(add-hook 'prog-mode-hook                                   ; stuff for all programming modes
-          (lambda ()
-             (modify-syntax-entry ?_ "w")))                 ; underscores are parts of words
 
 (add-hook 'makefile-mode-hook
           (lambda ()
@@ -323,6 +320,31 @@
   (setq text-scale-mode-step 1.05)              ; text size increases by 5% (normally 20%)
   :config
   :defer 3)
+
+;; built-in prog-mode
+(use-package prog-mode
+  :ensure nil
+  :init
+  (add-hook 'prog-mode-hook
+            (lambda ()
+              (modify-syntax-entry ?_ "w")))                 ; underscores are parts of words
+  :config)
+
+;; built-in generic mode
+(use-package generic
+  :ensure nil
+  :init
+  :config
+  (defun me:run-prog-mode-hooks () (run-hooks 'prog-mode-hook))
+  (define-generic-mode 'selinux-contexts-mode
+    '("#") nil nil
+    '("file_contexts\\'")
+    '( me:run-prog-mode-hooks ))
+  (define-generic-mode 'selinux-policy-mode
+    '("#") '("type" "allow" "neverallow" ) nil
+    '("\\.te\\'")
+    '( me:run-prog-mode-hooks ))
+  :demand)
 
 (use-package smooth-scrolling
   :config
