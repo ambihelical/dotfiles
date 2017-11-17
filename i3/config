@@ -270,6 +270,7 @@ for_window [class="Pithos"] title_format "<span font='Symbola Bold 12'>♫</span
 for_window [class="Thunderbird"] title_format "<span font='Symbola Bold 12'>ᛋ</span> %title"
 for_window [class="Git-gui"] title_format "<span foreground='plum'><span font='Symbola Bold 12'>Ⓖ</span> %title</span>"
 for_window [class="Gitk"] title_format "<span foreground='plum'><span font='Symbola Bold 12'>⌥</span> %title</span>"
+for_window [class="Qgit"] title_format "<span font='Symbola Bold 12'>⌥</span> %title"
 for_window [class="GVim"] title_format "<span font='Symbola Bold 12'>☢</span> %title"
 for_window [class="Pidgin"] title_format "<span font='Symbola Bold 12'>🐦</span> %title"
 for_window [class="Evince"] title_format "<span font='Symbola Bold 12'>Ⓟ</span> %title"
