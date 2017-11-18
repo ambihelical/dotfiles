@@ -484,9 +484,6 @@
               "k" #'paradox-previous-entry)
   :config
   :init
-  (add-hook 'paradox-menu-mode-hook (lambda ()
-                                        (when (fboundp 'evil-mode)
-                                          (evil-emacs-state))))
   (setq paradox-spinner-type 'moon
         paradox-execute-asynchronously nil
         paradox-display-download-count t
@@ -1284,14 +1281,23 @@
   (evil-set-initial-state 'deft-mode 'insert)
 
   ;; these modes are better in emacs state
-  (dolist (hook '(git-rebase-mode-hook
-                  flycheck-error-list-mode-hook
-                  rtags-mode-hook
-                  finder-mode-hook
-                  doc-view-mode-hook
-                  image-mode-hook
-                  image-dired-thumbnail-mode-hook))
-           (add-hook hook #'evil-emacs-state))
+  (dolist (mode '(git-rebase-mode
+                  flycheck-error-list-mode
+                  rtags-mode
+                  finder-mode
+                  doc-view-mode
+                  image-mode
+                  magit-repolist-mode
+                  paradox-menu-mode
+                  dired-mode
+                  special-mode
+                  image-dired-thumbnail-mode))
+           (add-to-list 'evil-emacs-state-modes mode))
+
+  ;; these modes benefit from hjkl bindings
+  (evil-add-hjkl-bindings tabulated-list-mode-map 'emacs)
+  (evil-add-hjkl-bindings dired-mode-map 'emacs)
+  (evil-add-hjkl-bindings special-mode-map 'emacs)
 
   ;; Put view-mode in motion-state, this gives us motion
   ;; keys and not much more, this is good for read-only scenario
