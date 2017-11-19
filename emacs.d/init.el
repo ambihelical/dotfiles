@@ -590,6 +590,7 @@
   :general
   ("<f4> d"   #'dired-jump)
   (:keymaps 'dired-mode-map
+            "?" #'hydra-dired/body
             "/" #'dired-narrow
             "C-c d" #'dired-hide-details-mode
             "C-c w" #'wdired-change-to-wdired-mode
@@ -602,15 +603,119 @@
         dired-dwim-target t)             ; use existing dired buffer, if exists
   :config
   (use-package dired+
-    :defer 2
+    :demand
     :config
+    (diredp-toggle-find-file-reuse-dir 1)               ; reuse buffers by default
     :init
     (setq font-lock-maximum-decoration (quote ((dired-mode . nil) (t . t)))   ; turn off barf colors
           diredp-hide-details-initially-flag t
           diredp-image-preview-in-tooltip 400
           diredp-auto-focus-frame-for-thumbnail-tooltip-flag t))
+  (eval '(defhydra hydra-dired (:hint nil)
+      "Dired"
+      ("(" dired-hide-details-mode "Details" :column "Interface")
+      ("s" dired-sort-toggle-or-edit "Date sort")
+      (")" dired-omit-mode "Toggle omit")
+      ("_" dired-show-file-type "File type")
+      ("g" revert-buffer "Refresh")
+      ("C-M-R" diredp-toggle-find-file-reuse-dir "Reuse dir")
+      ("r" dired-do-redisplay "Redisplay")
+      ("/" dired-narrow "Narrow" )
+      ("K" dired-do-kill-lines "Remove lines")
+      ("$" diredp-hide-subdir-nomove "Hide subdir")
+      ("^" diredp-up-directory "Parent dir")
+      (">" dired-next-dirline "Next dir")
+      ("<" dired-prev-dirline "Prev dir")
+      ("n" diredp-next-line "Next line")
+      ("p" diredp-previous-line "Prev line")
+      ("M-{" diredp-prev-marked-file "Previous Mark")
+      ("M-}" diredp-next-marked-file "Next Mark")
+      ("?" nil :color blue)
+
+      ("t" dired-toggle-marks "Toggle marks" :column "Mark & flag")
+      ("m" dired-mark "Mark")
+      ("u" dired-unmark "Unmark")
+      ("U" dired-unmark-all-marks "Unmark all")
+      ("* ?" dired-unmark-all-files "Unmark files")
+      ("* s" dired-mark-subdir-files "Mark files")
+      ("* *" dired-mark-executables "Mark execs")
+      ("* /" dired-mark-directories "Mark dirs")
+      ("* O" dired-mark-omitted "Mark omitted")
+      ("* @" dired-mark-symlinks "Mark symlinks")
+      ("M-+ * @" diredp-mark-symlinks-recursive "Mark symlinks tree")
+      ("% m" dired-mark-files-regexp "Mark Re")
+      ("% g" dired-mark-files-containing-regexp "Mark Re content")
+      ("E" dired-mark-extension "Mark extension")
+      ("d" dired-flag-file-deletion "Flag file")
+      ("% d" dired-flag-files-regexp "Flag Re")
+      ("% &" dired-flag-garbage-files "Flag garbage")
+      ("DEL" dired-unmark-backward "Unmark backward")
+
+      ("RET" dired-find-file "Open" :column "Viewing")
+      ("o" dired-find-file-other-window "Open in window")
+      ("C-o" diredp-find-file-other-frame "Open in frame")
+      ("F" dired-do-find-marked-files "Open files")
+      ("v" dired-view-file "View file")
+      ("e" dired-ediff-files "Diff files")
+      ("=" diredp-ediff "Diff file")
+      ("J" dired-goto-file "Goto file")
+      ("P" dired-do-print "Print files")
+
+      ("A" dired-do-find-regexp "Find Re" :column "Operations")
+      ("C" dired-do-copy "Copy files")
+      ("% C" dired-do-copy-regexp "Copy Re")
+      ("+" dired-create-directory "Create Dir")
+      ("i" dired-maybe-insert-subdir "Create Subdir")
+      ("z" diredp-compress-this-file "G[un]zip this")
+      ("Z" dired-do-compress "G[un]zip files ")
+      ("c" dired-compress-to "Compress to archive")
+      ("y" diredp-relsymlink-this-file "Rel. symlink this")
+      ("Y" dired-do-relsymlink "Rel. symlink files")
+      ("% Y" dired-do-relsymlink-regexp "Rel. symlink Re")
+      ("M-+ Y" diredp-do-relsymlink-recursive "Rel. Symlink tree")
+      ("S" dired-do-symlink "Symlink files")
+      ("% S" dired-do-symlink-regexp "Symlink files")
+      ("M-+ S" diredp-do-symlink-recursive "Symlink tree")
+      ("H" dired-do-hardlink "Hard link files")
+      ("% H" dired-do-hardlink-regexp "Hard link Re")
+      ("C-B" diredp-bookmark-this-file "Bookmark file")
+
+      ("M-T" diredp-touch-this-file "Touch this" :column "Attrib & Naming")
+      ("C-M-T" dired-do-touch "Touch files")
+      ("M-+ C-M-T" diredp-do-touch-recursive "Touch tree")
+      ("M" dired-do-chmod "Chmod files")
+      ("M-M" diredp-chmod-this-file "Chmod this")
+      ("M-+ M" diredp-do-chmod-recursive "Chmod tree")
+      ("O" dired-do-chown "Chown files")
+      ("M-O" diredp-chown-this-file "Chown this")
+      ("M-+ O" diredp-do-chown-recursive "Chown tree")
+      ("G" dired-do-chgrp "Chgrp files")
+      ("C-M-G" dired-chgrp-this-file "Chgrp this")
+      ("M-+ G" dired-do-chgrp-recursive "Chgrp tree")
+      ("w" dired-copy-filename-as-kill "Yank filename")
+      ("R" dired-do-rename "Rename files")
+      ("% R" dired-do-rename-regexp "Rename Re")
+      ("M-l" diredp-downcase-this-file "Downcase this")
+      ("% l" diredp-downcase "Downcase files")
+      ("M-u" diredp-upcase-this-file "Downcase this")
+      ("% u" diredp-upcase "Downcase files")
+
+      ("D" dired-do-delete "Delete" :column "Destructive & Special")
+      ("C-k" diredp-delete-this-file "Delete this")
+      ("x" dired-do-flagged-delete "Delete flagged")
+      ("Q" dired-do-find-regexp-and-replace "Replace Re")
+      ("M-q" dired-do-query-replace-regexp "Replace Re ?")
+      ("C-c w" wdired-change-to-wdired-mode "Wdired mode")
+      ("L" dired-do-load "Load lisp")
+      ("B" dired-do-byte-compile "Compile lisp")
+      ("I" dired-info "Info on file")
+      ("M" dired-man "Man on file")
+      ("V" dired-mail "Mail on file")
+      ("!" dired-do-shell-command "Sync shell")
+      ("&" dired-do-shell-command "Async shell")))
 
   :ensure nil)
+
 
 (use-package dired-collapse
   :config
