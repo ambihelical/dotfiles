@@ -387,7 +387,6 @@
   :init)
 
 (use-package hc-zenburn-theme
-  :load-path "lisp/hc-zenburn-emacs"
   :config
   ;; make visual and highlight more noticable
   (set-face-attribute 'lazy-highlight nil :background "#5e5e5e")
