@@ -611,7 +611,7 @@
           diredp-hide-details-initially-flag t
           diredp-image-preview-in-tooltip 400
           diredp-auto-focus-frame-for-thumbnail-tooltip-flag t))
-  (eval '(defhydra hydra-dired (:hint nil)
+  (eval '(defhydra hydra-dired (:hint nil :color pink)
       "Dired"
       ("(" dired-hide-details-mode "Details" :column "Interface")
       ("s" dired-sort-toggle-or-edit "Date sort")
@@ -630,7 +630,8 @@
       ("p" diredp-previous-line "Prev line")
       ("M-{" diredp-prev-marked-file "Previous Mark")
       ("M-}" diredp-next-marked-file "Next Mark")
-      ("?" nil :color blue)
+      ("?" nil :exit t)
+      ("q" quit-window "Quit" :exit t)
 
       ("t" dired-toggle-marks "Toggle marks" :column "Mark & flag")
       ("m" dired-mark "Mark")
@@ -674,7 +675,7 @@
       ("% Y" dired-do-relsymlink-regexp "Rel. symlink Re")
       ("M-+ Y" diredp-do-relsymlink-recursive "Rel. Symlink tree")
       ("S" dired-do-symlink "Symlink files")
-      ("% S" dired-do-symlink-regexp "Symlink files")
+      ("% S" dired-do-symlink-regexp "Symlink Re")
       ("M-+ S" diredp-do-symlink-recursive "Symlink tree")
       ("H" dired-do-hardlink "Hard link files")
       ("% H" dired-do-hardlink-regexp "Hard link Re")
@@ -697,8 +698,8 @@
       ("% R" dired-do-rename-regexp "Rename Re")
       ("M-l" diredp-downcase-this-file "Downcase this")
       ("% l" diredp-downcase "Downcase files")
-      ("M-u" diredp-upcase-this-file "Downcase this")
-      ("% u" diredp-upcase "Downcase files")
+      ("M-u" diredp-upcase-this-file "Upcase this")
+      ("% u" diredp-upcase "Upcase files")
 
       ("D" dired-do-delete "Delete" :column "Destructive & Special")
       ("C-k" diredp-delete-this-file "Delete this")
