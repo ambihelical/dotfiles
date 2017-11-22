@@ -542,7 +542,6 @@
 
 (use-package dired
   :general
-  ("<f4> d"     #'dired-jump)
   (:keymaps 'dired-mode-map
             "/" #'dired-narrow
             "C-c d" #'dired-hide-details-mode
@@ -674,6 +673,7 @@
   (:keymaps 'global :prefix "<f4>"
            "a" #'counsel-apropos
            "b" #'counsel-mark-ring
+           "d" #'counsel-dired-jump
            "D" #'counsel-linux-app
            "i" #'counsel-info-lookup-symbol
            "j" #'counsel-bookmark
