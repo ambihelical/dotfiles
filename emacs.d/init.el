@@ -634,6 +634,18 @@
       (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))))
   :diminish (flyspell-mode . "Abc"))
 
+;; look up (english) words on wordnik
+(use-package define-word
+  :general
+  ("C-c d" #'define-word-at-point)
+  ("C-c D" #'define-word)
+  :config
+  ;; advise define-word to set word limit based on frame height
+  (defun me:advise-define-word (word)
+    (setq define-word-limit (/ (+ 2 (frame-height)) 3)))
+  (advice-add #'define-word :before #'me:advise-define-word)
+  :init)
+
 (use-package ivy
   :general
     ("<f4> <f4>"  #'ivy-resume)
