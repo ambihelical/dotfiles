@@ -592,13 +592,18 @@
   (:keymaps 'dired-mode-map
             "?" #'hydra-dired/body
             "/" #'dired-narrow
+            "j" #'dired-next-line
+            "k" #'dired-previous-line
+            "\ l" #'dired-kill-line
+            "\ s" #'dired-kill-subdir
+            "\ t" #'dired-kill-tree
             "C-c d" #'dired-hide-details-mode
             "C-c w" #'wdired-change-to-wdired-mode
             "C-c f" #'peep-dired)
   :init
   (setq dired-recursive-deletes 'always
         dired-recursive-copies 'always
-        dired-listing-switches "-alh"    ; human readable sizes
+        dired-listing-switches "-alh1vG --group-directories-first"    ; human readable sizes
         dired-auto-revert-buffer t       ; revert buffer on revisit
         dired-dwim-target t)             ; use existing dired buffer, if exists
   :config
@@ -612,17 +617,21 @@
           diredp-image-preview-in-tooltip 400
           diredp-auto-focus-frame-for-thumbnail-tooltip-flag t))
   (eval '(defhydra hydra-dired (:hint nil :color pink)
-      "Current: .  Current or marked: +  Dir: *  Tree: /  Regular Expression: Re  Incremental: ?"
+      "Current: .  Current or marked: +  Subdir: *  Tree: /  Regular Expression: Re  Incremental: ?"
       ("(" dired-hide-details-mode "Details" :column "Interface")
       ("s" dired-sort-toggle-or-edit "Date sort")
       (")" dired-omit-mode "Toggle omit")
       ("_" dired-show-file-type "File type .")
       ("g" revert-buffer "Refresh")
+      ("C-_" dired-undo "Undo")
       ("C-M-R" diredp-toggle-find-file-reuse-dir "Reuse dir")
       ("r" dired-do-redisplay "Redisplay")
       ("/" dired-narrow "Narrow" )
-      ("K" dired-do-kill-lines "Remove lines +")
-      ("$" diredp-hide-subdir-nomove "Hide subdir .")
+      ("$" diredp-hide-subdir-nomove "Hide/Show subdir .")
+      ("i" dired-maybe-insert-subdir "Add subdir .")
+      ("\ l" dired-kill-line "Remove .")
+      ("\ s" dired-kill-subdir "Remove *")
+      ("\ t" dired-kill-tree "Remove /")
       ("^" diredp-up-directory "Parent dir")
       (">" dired-next-dirline "Next dir")
       ("<" dired-prev-dirline "Prev dir")
@@ -633,40 +642,46 @@
       ("?" nil :exit t)
       ("q" quit-window "Quit" :exit t)
 
-      ("t" dired-toggle-marks "Toggle marks" :column "Mark & flag")
-      ("m" dired-mark "Mark .")
+      ("m" dired-mark "Mark ." :column "Marking")
       ("u" dired-unmark "Unmark .")
+      ("t" dired-toggle-marks "Toggle marks")
+      ("* DEL" dired-unmark-backward "Unmark backward")
       ("U" dired-unmark-all-marks "Unmark all")
-      ("* ?" dired-unmark-all-files "Unmark +")
       ("* s" dired-mark-subdir-files "Mark *")
-      ("* *" dired-mark-executables "Mark execs")
-      ("* /" dired-mark-directories "Mark dirs")
-      ("* O" dired-mark-omitted "Mark omitted")
-      ("* @" dired-mark-symlinks "Mark symlinks")
-      ("M-+ * @" diredp-mark-symlinks-recursive "Mark symlinks /")
       ("% m" dired-mark-files-regexp "Mark Re")
       ("% g" dired-mark-files-containing-regexp "Mark Re content")
-      ("E" dired-mark-extension "Mark extension")
-      ("d" dired-flag-file-deletion "Flag .")
-      ("% d" dired-flag-files-regexp "Flag Re")
-      ("% &" dired-flag-garbage-files "Flag garbage")
-      ("DEL" dired-unmark-backward "Unmark backward")
+      ("M-+ % m" dired-mark-files-regexp-recursive "Mark Re /")
+      ("* ?" dired-unmark-all-files "Unmark all")
+      ("* c" dired-change-marks "Change marks")
+      ("* *" dired-mark-executables "Mark execs")
+      ("* ." diredp-mark-extension "Mark/unmark extension")
+      ("* /" dired-mark-directories "Mark dirs")
+      ("* O" dired-mark-omitted "Mark omitted")
+      ("* B" diredp-mark-autofiles "Mark autofiles")
+      ("M-+ * B" diredp-mark-autofiles-recursive "Mark autofiles /")
+      ("* @" dired-mark-symlinks "Mark symlinks")
+      ("M-+ * @" diredp-mark-symlinks-recursive "Mark symlinks /")
 
       ("RET" dired-find-file "Open ." :column "Viewing")
       ("o" dired-find-file-other-window "Window .")
       ("C-o" diredp-find-file-other-frame "Frame .")
       ("F" dired-do-find-marked-files "Open +")
+      ("M-+ F" dired-do-find-marked-files-recursive "Open + /")
       ("v" dired-view-file "View .")
       ("e" dired-ediff-files "Diff +")
       ("=" diredp-ediff "Diff .")
       ("J" dired-goto-file "Goto .")     ;; doesnt work
       ("P" dired-do-print "Print +")
+      ("I" dired-info "Info .")
+      ("M" dired-man "Man .")
+      ("V" dired-mail "Mail .")
 
-      ("A" dired-do-find-regexp "Find Re" :column "Operations")
+      ("A" dired-do-find-regexp "Find Re +" :column "Operations")
+      ("M-+ A" diredp-do-search-recursive "Find Re + /")
       ("C" dired-do-copy "Copy +")
-      ("% C" dired-do-copy-regexp "Copy Re")
+      ("% C" dired-do-copy-regexp "Copy + Re")
+      ("M-+ C" dired-do-copy-recursive "Copy + Re")
       ("+" dired-create-directory "Create Dir")
-      ("i" dired-maybe-insert-subdir "Create Subdir")
       ("z" diredp-compress-this-file "G[un]zip .")
       ("Z" dired-do-compress "G[un]zip + ")
       ("c" dired-compress-to "Archive +")
@@ -681,7 +696,7 @@
       ("% H" dired-do-hardlink-regexp "Hard link Re")
       ("C-B" diredp-bookmark-this-file "Bookmark .")
 
-      ("M-T" diredp-touch-this-file "Touch ." :column "Attrib & Naming")
+      ("M-T" diredp-touch-this-file "Touch ." :column "Attributes")
       ("C-M-T" dired-do-touch "Touch +")
       ("M-+ C-M-T" diredp-do-touch-recursive "Touch /")
       ("M" dired-do-chmod "Chmod +")
@@ -698,22 +713,53 @@
       ("% R" dired-do-rename-regexp "Rename Re")
       ("M-l" diredp-downcase-this-file "Downcase .")
       ("% l" diredp-downcase "Downcase +")
+      ("M-+ % l" diredp-downcase-recursive "Downcase /")
       ("M-u" diredp-upcase-this-file "Upcase .")
       ("% u" diredp-upcase "Upcase +")
+      ("M-+ % u" diredp-upcase-recursive "Upcase /")
+      ("M-c" diredp-capitalize-this-file "Capitalize .")
+      ("% c" diredp-capitalize "Capitalize +")
+      ("M-+ % c" diredp-capitalize-recursive "Capitalize /")
 
-      ("D" dired-do-delete "Delete" :column "Delete & Special")
+      ("D" dired-do-delete "Delete +" :column "Delete & Special")
+      ("M-+ D" diredp-do-delete-recursive "Delete + /" :column "Delete & Special")
       ("C-k" diredp-delete-this-file "Delete .?")
+      ("d" dired-flag-file-deletion "Flag .")
+      ("% d" dired-flag-files-regexp "Flag Re")
+      ("% &" dired-flag-garbage-files "Flag garbage")
       ("x" dired-do-flagged-delete "Delete flagged")
       ("Q" dired-do-find-regexp-and-replace "Replace Re")
       ("M-q" dired-do-query-replace-regexp "Replace Re ?")
-      ("L" dired-do-load "Lisp load +")
-      ("B" dired-do-byte-compile "Byte Compile +")
-      ("I" dired-info "Info .")
-      ("M" dired-man "Man .")
-      ("V" dired-mail "Mail .")
       ("!" dired-do-shell-command "Sync shell +")
       ("&" dired-do-shell-command "Async shell +")
-      ("C-c w" wdired-change-to-wdired-mode "Wdired")))
+      ("C-c w" wdired-change-to-wdired-mode "Wdired")
+      ("L" dired-do-load "Lisp load +")
+      ("B" dired-do-byte-compile "Byte Compile +")
+
+      ("T +" diredp-tag-this-file "Tag ." :column "Tagging")
+      ("T -" diredp-untag-this-file "Untag .")
+      ("T 0" diredp-remove-all-tags-this-file "Remove tags .")
+      ("T c" diredp-copy-tags-this-file "Copy tags .")
+      ("T p" diredp-paste-add-tags-this-file "Paste add tags .")
+      ("T q" diredp-paste-replace-tags-this-file "Paste replace tags .")
+      ("T v" diredp-set-tag-value-this-file "Set tag .")
+      ("T u %" diredp-unmark-files-tagged-regexp "Unmark tag Re")
+      ("T u *" diredp-unmark-files-tagged-all "Unmark tagged all")
+      ("T u +" diredp-unmark-files-tagged-some "Unmark tagged some")
+      ("T m %" diredp-mark-files-tagged-regexp "Unmark tag Re")
+      ("T m *" diredp-mark-files-tagged-all "Unmark tagged all")
+      ("T m +" diredp-mark-files-tagged-some "Unmark tagged some")
+      ("T > C-y" diredp-do-paste-add-tags "Paste add tags")
+      ("T > +" diredp-do-tag "Tag +")
+      ("T > -" diredp-do-untag "Untag +")
+      ("T > 0" diredp-do-untag "Remove tags +")
+      ("T > p" diredp-do-paste-add-tags "Paste add tags +")
+      ("T > q" diredp-do-paste-replace-tags "Paste replace tags +")
+      ("T > v" diredp-do-set-tag-value "Set tag +")
+      ("T u ~ *" diredp-unmark-files-tagged-not-all "Unmark not all tags")
+      ("T u ~ +" diredp-unmark-files-tagged-none "Unmark no tags")
+      ("T m ~ *" diredp-mark-files-tagged-not-all "Mark not all tags")
+      ("T m ~ +" diredp-mark-files-tagged-none "Mark no tags")))
 
   :ensure nil)
 
@@ -1548,7 +1594,6 @@
 
   ;; these modes benefit from hjkl bindings
   (evil-add-hjkl-bindings tabulated-list-mode-map 'emacs)
-  (evil-add-hjkl-bindings dired-mode-map 'emacs)
   (evil-add-hjkl-bindings special-mode-map 'emacs)
 
   ;; Put view-mode in motion-state, this gives us motion
