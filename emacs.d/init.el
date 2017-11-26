@@ -604,9 +604,17 @@
                                  (evil-normalize-keymaps 'normal)))
   :config)
 
+;; implement dired-narrow function
 (use-package dired-narrow
   :init
   :config)
+
+;; Use perl-like Regexp for all minibuffer input
+(use-package pcre2el
+  :defer 1
+  :diminish (pcre-mode . ".*")
+  :config
+  (pcre-mode))
 
 (use-package flyspell
   :general
