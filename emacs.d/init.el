@@ -1219,8 +1219,8 @@
       "x"          #'exchange-point-and-mark
       "<DEL>"      #'kill-this-buffer)
     (:states '(normal visual) :prefix "<SPC>"
-             "s"  (general-simulate-keys "\"*")
-             "c"  (general-simulate-keys "\"+"))
+             "s"  (general-simulate-keys "\"*" nil nil t)
+             "c"  (general-simulate-keys "\"+" nil nil t))
     (:keymaps '(normal visual ) "<escape>" #'keyboard-quit)
 
     ;; Move via visual lines
