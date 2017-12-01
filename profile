@@ -43,8 +43,9 @@ export CUDA_CACHE_PATH=${XDG_CACHE_HOME}/nv
 # avoid ~/.ICEauthority
 export ICEAUTHORITY=${XDG_CACHE_HOME}/ICEauthority
 
-# avoid ~/.ccache, set max size
-export CCACHE_MAXSIZE=10G
+# avoid ~/.ccache, and also set max size
+# can override this with ccache -M ##G
+export CCACHE_MAXSIZE=25G
 export CCACHE_DIR=${XDG_CACHE_HOME}/ccache
 [ -d ${CCACHE_DIR} ] || mkdir -p ${CCACHE_DIR}
 
