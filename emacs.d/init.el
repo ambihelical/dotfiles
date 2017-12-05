@@ -830,7 +830,6 @@
   (defconst me:language (expand-file-name "Notes/language.org" me:data-directory))
   (defconst me:system (expand-file-name "Notes/system.org" me:data-directory))
   (defconst me:android (expand-file-name "Notes/android.org" me:data-directory))
-  (setq org-hide-emphasis-markers t)
   (add-hook 'org-capture-mode-hook #'evil-insert-state)
   (setq org-capture-templates `(("c" "Command notes")
                                 ("ug" "Using Git" entry (file+headline ,me:command "Git"))
