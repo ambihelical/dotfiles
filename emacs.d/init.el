@@ -408,12 +408,17 @@
 (use-package miniedit
   :general
   (:keymap minibuffer-local-map
-   "C-c e" #'miniedit)
+           "C-c e" #'miniedit)
   :config
   (miniedit-mode t)
   :init)
 
 (use-package hc-zenburn-theme
+  :init
+  (add-hook 'magit-mode-hook
+            (lambda ()
+              (set-face-attribute 'magit-diff-hunk-heading nil :box "#5e5e5e" :background "dark slate grey")
+              (set-face-attribute 'magit-diff-hunk-heading-highlight nil :box "#5e5e5e" :background "steel blue")))
   :config
   ;; make visual and highlight more noticable
   (set-face-attribute 'lazy-highlight nil :background "#5e5e5e")
@@ -1382,12 +1387,12 @@
     ("<f9> l"     #'magit-log-current)
     ("<f9> r"     #'magit-list-repositories)
     ("<f9> <f9>"  #'magit-status)
-  :config)
-
-(use-package evil-magit
-    :after magit
+  :config
+  (use-package evil-magit
+    :demand
     :init
-    (setq evil-magit-state 'normal))
+    (setq evil-magit-state 'normal)
+    :config))
 
 ;; Cowboy override of git-timemachine-mode-map
 ;; Timemachine's map has a number of bindings which
