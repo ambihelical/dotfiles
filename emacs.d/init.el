@@ -681,6 +681,8 @@
         ivy-virtual-abbreviate 'full                        ; use full path for abbreviation
         ivy-count-format ""                                 ; does not count candidates
         ivy-initial-inputs-alist nil                        ; no regexp by default
+        ivy-on-del-error-function nil                       ; too many backspaces doesn't exit
+        ivy-dynamic-exhibit-delay-ms 200                    ; dynamic collection delay
         ivy-re-builders-alist
            '((t . ivy--regex-ignore-order)))                ; allow input not in order
   :diminish (ivy-mode . ""))
