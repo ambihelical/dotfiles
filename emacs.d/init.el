@@ -1404,6 +1404,7 @@
   "Keymap for `git-timemachine-mode-map'.")
 
 (use-package git-timemachine
+  :commands ( hydra-timemachine/body )
   :init
   ;; evil-motion-state when in timemachine mode
   (add-hook 'git-timemachine-mode-hook (lambda ()
