@@ -553,6 +553,7 @@
 
 (use-package dired
   :general
+  ("<f4> d"   #'dired-jump)
   (:keymaps 'dired-mode-map
             "/" #'dired-narrow
             "C-c d" #'dired-hide-details-mode
@@ -706,8 +707,8 @@
   (:keymaps 'global :prefix "<f4>"
            "a" #'counsel-apropos
            "b" #'counsel-mark-ring
-           "d" #'counsel-dired-jump
-           "D" #'counsel-linux-app
+           "D" #'counsel-dired-jump
+           "l" #'counsel-linux-app
            "i" #'counsel-info-lookup-symbol
            "j" #'counsel-bookmark
            "k" #'counsel-descbinds
@@ -728,7 +729,8 @@
   ("<f5> w" #'counsel-colors-web)
   ("<f6> m" #'counsel-imenu)
   :init
-  (setq counsel-yank-pop-separator "\n---\n")
+  (setq counsel-yank-pop-separator "\n---\n"
+        counsel-yank-pop-preselect-last t)
   :config
   (counsel-mode 1)
   :diminish (counsel-mode . ""))
