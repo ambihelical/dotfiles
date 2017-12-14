@@ -202,9 +202,33 @@ bar {
 	status_command py3status -c ~/.config/i3/i3status.config
 	workspace_buttons yes
 	tray_output primary
+   output primary
 	# turn off scrolling to select workspace
 	wheel_up_cmd nop
 	wheel_down_cmd nop
+	colors {
+		background $dark1
+		statusline $lite2
+		# class            border   backgr   text
+		focused_workspace  $cyan    $cyan    $lite3
+		active_workspace   $blue    $blue    $lite3
+		inactive_workspace $dark3   $dark1   $lite2
+		urgent_workspace   $cyan    $red	    $lite3
+	}
+}
+
+# Special bar without status for non-primary It isn't (ca v4.14)
+# possible to specify non-primary output, so each such stripped-down
+# output will need to be specified with separate "output" statements.
+# This is bound to fail at some point, but it works for my limited use
+# case.
+bar {
+	workspace_buttons yes
+	# turn off scrolling to select workspace
+	wheel_up_cmd nop
+	wheel_down_cmd nop
+   output DVI-D-0     # work
+   output HDMI-1      # home
 	colors {
 		background $dark1
 		statusline $lite2
