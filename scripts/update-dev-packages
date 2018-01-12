@@ -22,16 +22,17 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	p="$p manpages-dev manpages-posix-dev ncurses-doc"
 	p="$p librsvg2-bin"
   # languages, compilers and building
-	p="$p cmake-gui build-essential ccache"
-	p="$p clang gcc-doc glibc-doc"
+	p="$p cmake-qt-gui build-essential ccache"
+	p="$p clang-3.8 libclang-3.8-dev gcc-doc glibc-doc"
 	p="$p autoconf automake libtool gettext intltool"
 	p="$p ruby"
-  # for emacs irony-mode package
-	p="$p libclang-dev"
   # version control
 	p="$p meld git-gui mercurial subversion "
   # libraries sometimes needed to build from source
 	p="$p libncurses5-dev"
+  # image file dev libs
+	p="$p libgtk-3-dev libtiff5-dev libjpeg-dev libgif-dev libxpm-dev libmagick++-dev librsvg2-dev"
+
 	apt-get --quiet --ignore-missing --yes install $p
 	apt-get --quiet --ignore-missing --no-install-recommends --yes install $q
 	echo "NOTE: Install global via source, debian is out of date"
