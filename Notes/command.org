@@ -18,7 +18,11 @@
 
 ** Remove files not under version control, including ignored files:
 	=git clean -nx=           # dry-run
-	=git clean -fx=           # do for real
+   =git clean -fx=           # do for real
+
+** Really clean up repo
+   =git clean -fdx=
+   =git reset -hard=
 
 ** Set HEAD to another branch in bare repository
 	=git symbolic-ref HEAD refs/heads/<name>=

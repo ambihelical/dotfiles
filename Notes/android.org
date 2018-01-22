@@ -44,7 +44,6 @@
    # select avc error and then:
    xclip -o | audit2allow -e -p out/target/product/<device>/root/sepolicy
 
-
 ** sepolicy intermediates (remove&rebuild when sepolicy changes--not sure this is correct)
 
    out/.../<device>/obj/ETC/sepolicy_intermediates           # general
@@ -56,3 +55,12 @@
    make product-graph
 
    Note: doesn't seem to traverse include traversals
+
+* Client interaction
+** Get current slot from host (when fastboot running on client)
+   =fastboot -s tcp:<clientip> getvar current-slot 2>&1 | head -1| cut -d\  -f2=
+** Turn off selinux enforcement on client
+   =setenforce 0=
+** Mount USB
+   =mount -tvfat -oro,umask=000 /dev/block/sda1 <mnt>=   # readonly
+   =mount -tvfat -oumask=000 /dev/block/sda1 <mnt>=   # writable
