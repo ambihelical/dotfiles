@@ -2,9 +2,13 @@
 # Set environment vars for programs running under dash/sh.
 # This is also sourced from ~/.bash_profile
 
+
+# if /data/cache exists, use it for XDG_CACHE_HOME
+# Generally this will some kind of fast drive at /data
+[ -d /data/cache ] && export XDG_CACHE_HOME=/data/cache
+
 # set XDG dirs to their defaults.  Not strictly necessary for cache, config and data, but
 # set in case apps are poorly written.
-
 [ "$XDG_CACHE_HOME" ] || export XDG_CACHE_HOME=${HOME}/.cache
 [ "$XDG_CONFIG_HOME" ] || export XDG_CONFIG_HOME=${HOME}/.config
 [ "$XDG_DATA_HOME" ] || export XDG_DATA_HOME=${HOME}/.local/share
@@ -45,7 +49,11 @@ export ICEAUTHORITY=${XDG_CACHE_HOME}/ICEauthority
 
 # avoid ~/.ccache, and also set max size
 # can override this with ccache -M ##G
-export CCACHE_MAXSIZE=25G
+if [ "${XDG_CACHE_HOME}" = "/data/cache" ]; then
+   export CCACHE_MAXSIZE=75G
+else
+   export CCACHE_MAXSIZE=25G
+fi
 export CCACHE_DIR=${XDG_CACHE_HOME}/ccache
 [ -d ${CCACHE_DIR} ] || mkdir -p ${CCACHE_DIR}
 

@@ -367,11 +367,6 @@ linux*)
 	say() { echo "(audio_mode 'async)(SayText \"$*\")" | festival --pipe; }
 	alias vi='gvim -geometry 120x60-0 2>/dev/null'
 	alias lyx='lyx -geometry 800x1075-15+0'
-
-	# allow core dumps
-	if [	"$(uname -n)" == "jh-rvueb" ]; then
-		 ulimit -c unlimited
-	fi
 	;;
 
 darwin*)  # OSX
