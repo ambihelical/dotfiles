@@ -7,6 +7,12 @@ if [[ "$linux" != "Ubuntu" ]]; then
 	echo "Only Ubuntu for now"
 	exit 1
 fi
+host=$(uname -n)
+
+# disable suspend for hosts where it is broken
+nosuspend=0
+[ "$host" == "jh-rvueb" ] && nosuspend=1
+
 
 # Fixing hibernate problems: http://blog.roland-kluge.de/?p=793
 #                            http://askubuntu.com/q/1792
@@ -16,7 +22,9 @@ systemd=1510
 
 case $1 in
 suspend)
-	if [ "$version" -ge "$systemd" ]; then
+	if [ "$nosuspend" == "1" ]; then
+		echo "Suspend doesn't work on this machine! Last time I checked, anyway"
+	elif [ "$version" -ge "$systemd" ]; then
 		dbus-send --system --print-reply --dest="org.freedesktop.login1" /org/freedesktop/login1 org.freedesktop.login1.Manager.Suspend boolean:true
 	else
 		dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Suspend
