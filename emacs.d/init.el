@@ -26,11 +26,13 @@
          use-package-minimum-reported-time 0.03                   ; minimum time when verbose
          use-package-verbose nil))                                 ; don't be verbose
 
-;; set some personal variables
+;; xdg directories
 (defconst me:data-directory (or (getenv "XDG_DATA_HOME") "~/.local/share"))
 (defconst me:cache-directory (or (getenv "XDG_CACHE_HOME")  "~/.cache"))
 (defconst me:config-directory (or (getenv "XDG_CONFIG_HOME")  "~/.config"))
-(defconst me:emacs-backup-directory (expand-file-name "emacs" me:cache-directory))
+;; emacs directories
+(defconst me:emacs-cache-directory (expand-file-name "emacs" me:cache-directory))
+(defconst me:emacs-backup-directory (expand-file-name "backups" me:emacs-cache-directory))
 
 ;; replace prefix part of a string
 (defun me:replace-prefix (prefix input)
@@ -759,6 +761,7 @@
         projectile-globally-ignored-files #'( "TAGS" "GTAGS" "GRTAGS" "GPATH" )
         projectile-globally-ignored-file-suffixes #'( ".o" ".so" ".a" ".ko" ".jar" ".bc" ".class")
         projectile-use-git-grep t
+        projectile-cache-file (expand-file-name "projectile-cache" me:emacs-cache-directory)
         projectile-mode-line '(:eval (format " [%s]" (projectile-project-name)))
         projectile-enable-caching t)
   :config
