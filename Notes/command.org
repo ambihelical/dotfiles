@@ -88,7 +88,7 @@
 
 *** Save all output to file
     =cmd 2>&1 | tee file=
-    cmd 2>&1 | tee -a file
+    =cmd 2>&1 | tee -a file=
 ** Find type of command
 	=type CMD=
 ** Unset environment var

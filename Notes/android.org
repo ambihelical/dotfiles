@@ -56,11 +56,41 @@
 
    Note: doesn't seem to traverse include traversals
 
+** Help on commands
+   hmm
+** show compilation commands
+   m|mm|mmm|mma|mmma showcommands
+
 * Client interaction
 ** Get current slot from host (when fastboot running on client)
    =fastboot -s tcp:<clientip> getvar current-slot 2>&1 | head -1| cut -d\  -f2=
-** Turn off selinux enforcement on client
+
+* Android Shell
+** Turn off selinux enforcement
    =setenforce 0=
 ** Mount USB
    =mount -tvfat -oro,umask=000 /dev/block/sda1 <mnt>=   # readonly
    =mount -tvfat -oumask=000 /dev/block/sda1 <mnt>=   # writable
+** Commands to analyze memory & processes
+    cat /proc/meminfo
+    free
+    top
+    ps
+    lsof or lsof -p <pid>
+    pmap -x <pid>
+    showmap <pid>
+    procrank
+    procmem <pid>
+    cat /proc/<pid>/smaps
+    dumpsys meminfo (when Android is running)
+    memtest
+** System properties
+*** getprop show system properties
+*** setprop set system property
+*** bootloaders (may) convert kernel boot param of androidboot.<x> into ro.boot.<x>
+** DHCP
+   To get a DHCP IP, run =dhcptool eth0=
+** Rebooting
+   =reboot [<target>[,quiescent]]=
+** Sleep (S3) mode
+   =input keyevent KEYCODE_POWER=
