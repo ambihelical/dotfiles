@@ -158,14 +158,16 @@
   :commands (me:set-extra-font-attributes
              me:minibuffer-setup
              me:minibuffer-exit
-             me:find-some-files
-             me:save-dirty-buffers )
+             me:select-2nd-other-buffer
+             me:select-3rd-other-buffer
+             me:select-4th-other-buffer
+             me:select-5th-other-buffer
+             me:save-dirty-buffers)
   :general
     ("s-2"        #'me:select-2nd-other-buffer)
     ("s-3"        #'me:select-3rd-other-buffer)
     ("s-4"        #'me:select-4th-other-buffer)
     ("s-5"        #'me:select-5th-other-buffer)
-    ("<f3>"       #'me:find-some-files)
   :config
   :load-path "lisp/")
 
@@ -742,6 +744,7 @@
   ("C-h b"  #'counsel-descbinds)
   ("M-x"    #'counsel-M-x)
   ("M-y"    #'counsel-yank-pop)
+  ("<f3>"   #'me:find-some-files)
   ("<f5> t" #'counsel-load-theme)
   ("<f5> c" #'counsel-colors-emacs)
   ("<f5> w" #'counsel-colors-web)
@@ -753,6 +756,12 @@
     (interactive)
     (let ((counsel-yank-pop-preselect-last t))
       (call-interactively (counsel-yank-pop))))
+  (defun me:find-some-files ()
+    "Find files in project or fallback to current directory"
+    (interactive)
+    (if (and (fboundp 'projectile-project-p) (projectile-project-p))
+        (counsel-projectile-find-file)
+      (counsel-find-file)))
   (counsel-mode 1)
   :diminish (counsel-mode . ""))
 

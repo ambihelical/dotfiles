@@ -5,23 +5,12 @@
 
 ;;; Code:
 
-(require 'counsel)
-(require 'subr-x)
-
 ;; save any dirty buffers
 ;;;###autoload
 (defun me:save-dirty-buffers ()
   "Save any dirty buffers"
   (interactive)
   (save-some-buffers t))
-
-;;;###autoload
-(defun me:find-some-files ()
-  "Find files in project or fallback to current directory"
-  (interactive)
-  (if (and (fboundp 'projectile-project-p) (projectile-project-p))
-      (counsel-projectile-find-file)
-    (counsel-find-file)))
 
 ;; Return non-nil if buffer can be selected.  This allows
 ;; certain non-file buffers to be selected with
