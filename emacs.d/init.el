@@ -1499,6 +1499,7 @@
   (setq evil-want-C-w-delete nil            ; want C-w it for windows commands
         evil-want-C-w-in-emacs-state t      ; ditto
         evil-want-C-i-jump nil              ; need TAB for other things
+        evil-want-integration nil           ; use evil-collection instead
         evil-indent-convert-tabs nil        ; make = work with smart tabs mode
         evil-search-module #'evil-search)
   :general
@@ -1508,10 +1509,10 @@
       ";"          #'evil-jump-forward
       ","          #'evil-jump-backward
       "a"          #'align
-      "f"          #'evil-avy-goto-word-1
-      "g"          #'evil-avy-goto-char-2
+      "f"          #'avy-goto-word-1
+      "g"          #'avy-goto-char-2
       "h"          #'hydra-git-gutter/body
-      "l"          #'evil-avy-goto-char-in-line
+      "l"          #'avy-goto-char-in-line
       "p"          #'hydra-paste/body
       "w"          #'save-buffer
       "x"          #'exchange-point-and-mark
@@ -1579,30 +1580,21 @@
   (evil-set-initial-state 'deft-mode 'insert)
 
   ;; these modes are better in emacs state
-  (dolist (mode '(git-rebase-mode
-                  flycheck-error-list-mode
-                  rtags-mode
-                  finder-mode
-                  doc-view-mode
-                  image-mode
-                  magit-repolist-mode
-                  paradox-menu-mode
-                  dired-mode
-                  special-mode
-                  image-dired-thumbnail-mode))
-           (add-to-list 'evil-emacs-state-modes mode))
-
-  ;; these modes benefit from hjkl bindings
-  (evil-add-hjkl-bindings tabulated-list-mode-map 'emacs)
-  (evil-add-hjkl-bindings special-mode-map 'emacs)
-
-  ;; Put view-mode in motion-state, this gives us motion
-  ;; keys and not much more, this is good for read-only scenario
-  ;; Since view-mode is combined with other modes, this needs
-  ;; to be a hook.
-  (add-hook 'view-mode-hook (lambda () (if view-mode (evil-motion-state) (evil-normal-state))))
+  (dolist (mode
+           '(dired-mode
+             finder-mode
+             image-dired-thumbnail-mode
+             paradox-menu-mode))
+    (add-to-list 'evil-emacs-state-modes mode))
 
   (evil-mode 1))
+
+(use-package evil-collection
+  :after evil
+  :init
+  :defer 1
+  :config
+  (evil-collection-init))
 
 (use-package ws-butler
   :init
@@ -1659,7 +1651,6 @@
   (use-package evil-magit
     :demand
     :init
-    (setq evil-magit-state 'normal)
     :config))
 
 ;; Cowboy override of git-timemachine-mode-map
