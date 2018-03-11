@@ -1162,7 +1162,8 @@
       (fset 'flycheck-pos-tip-error-messages 'ignore)))
 
   (defun me:company-ended (&optional _args)
-    (when (fboundp 'flycheck-pos-tip-error-messages)
+    (when (and (fboundp 'flycheck-pos-tip-error-messages)
+               me:flycheck-error-function)
       (fset 'flycheck-pos-tip-error-messages me:flycheck-error-function)))
   (use-package company-quickhelp
     :demand
@@ -1271,7 +1272,7 @@
   :diminish ( flycheck-mode . "﹏")
   :init
   (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
-  (me:add-hook-with-delay 'prog-mode-hook 10 #'flycheck-mode)
+  (me:add-hook-with-delay 'prog-mode-hook 3 #'flycheck-mode)
   :general
   (:prefix "C-c"
            "!"  '(:ignore t :which-key "Flycheck→" ))
