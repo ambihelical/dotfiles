@@ -1119,6 +1119,13 @@
             "h" #'image-backward-hscroll
             "l" #'image-forward-hscroll))
 
+(use-package pdf-tools
+  :init
+  (add-hook 'pdf-view-mode-hook (lambda () (blink-cursor-mode -1)))
+  :mode (("\\.pdf\\'" . pdf-view-mode))
+  :config
+  (pdf-tools-install))
+
 (use-package deft
   :config
   (if (file-readable-p "~/Dropbox/Notes")
