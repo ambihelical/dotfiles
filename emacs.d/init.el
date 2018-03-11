@@ -680,7 +680,7 @@
   ("C-c D" #'define-word)
   :config
   ;; advise define-word to set word limit based on frame height
-  (defun me:advise-define-word (word)
+  (defun me:advise-define-word (_word)
     (setq define-word-limit (/ (+ 2 (frame-height)) 3)))
   (advice-add #'define-word :before #'me:advise-define-word)
   :init)
@@ -726,6 +726,7 @@
   :defer 3)
 
 (use-package counsel
+  :defines counsel-yank-pop-preselect-last
   :commands (  counsel-file-jump counsel-find-file)
   :general
   (:keymaps 'global :prefix "<f4>"
@@ -861,6 +862,7 @@
 
 (use-package org
   :commands org-capture
+  :defines org-capture-templates
   :general
   ("<f8> t" #'org-todo-list)
   ("<f8> a" #'org-agenda)
@@ -1331,8 +1333,8 @@
       "x"          #'exchange-point-and-mark
       "<DEL>"      #'kill-this-buffer)
     (:states '(normal visual) :prefix "<SPC>"
-             "s"  (general-simulate-keys "\"*" nil nil t)
-             "c"  (general-simulate-keys "\"+" nil nil t))
+             "s"  (general-simulate-key "\"*" :state 'normal :keymap nil :lookup nil :name me:simulate-selection-reg )
+             "c"  (general-simulate-key "\"+" :state 'normal :keymap nil :lookup nil :name me:simulate-clipboard-reg ))
     (:keymaps '(normal visual ) "<escape>" #'keyboard-quit)
 
     ;; Move via visual lines
@@ -1518,7 +1520,7 @@
         treemacs-follow-after-init          t
         treemacs-width                      35
         treemacs-indentation                2
-        treemacs-git-integration            t
+        treemacs-git-mode                   t
         treemacs-silent-refresh             t
         treemacs-change-root-without-asking nil
         treemacs-sorting                    'alphabetic-desc
