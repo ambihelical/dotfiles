@@ -1289,6 +1289,41 @@
               (define-key deft-mode-map (kbd "<C-return>") #'deft-new-file)
               (define-key deft-mode-map (kbd "<C-backspace>") #'deft-filter-clear))))
 
+;; polyglot language server interface
+(use-package eglot
+  :general
+  (:keymaps 'eglot-mode-map "M-RET"  #'eglot-code-actions)
+  :hook ((c-mode . eglot-ensure)
+         (c++-mode . eglot-ensure))
+  :init
+  (setq eglot-ignored-server-capabilites '( :hoverProvider :documentHighlightProvider)
+        eglot-events-buffer-size 0)     ;; events are verbose, so disable
+  :config
+  ;; project-find-function which uses projectile methods to find
+  ;; the projectile project associated with a directory.
+  ;; If projectile not loaded, or directory is not in a project,
+  ;; hopefully returns nil.
+  (defun me:project-finder (dir)
+    (if (boundp 'projectile-project-root-cache)
+        (let ((root (projectile-project-root dir)))
+          (and root (cons 'transient root)))))
+  (add-to-list 'project-find-functions #'me:project-finder)
+
+  ;; augment the eglot-initialization-options defined by eglot-cquery
+  ;; Store cache in ~/.cache/emacs/cquery-cache.d/<hash-of-project-path>
+  ;; Other options are straightforward
+  (cl-defmethod eglot-initialization-options :around ((server eglot-cquery))
+    (let* ((root (expand-file-name (car (project-roots (eglot--project server)))))
+           (root-hashed (replace-regexp-in-string "\/" "!" (directory-file-name root) t t nil 1))
+           (cache-path (expand-file-name "cquery-cache.d" me:emacs-cache-directory))
+           (cache (expand-file-name root-hashed cache-path)))
+      (append (list :cacheDirectory (file-name-as-directory cache)
+                    :index '(:comments 2)
+                    :threads 2
+                    :cacheFormat "msgpack")
+              (cl-call-next-method))))
+  (add-to-list 'eglot-server-programs '((c++-mode c-mode) eglot-cquery "~/extern/cquery-dev/build/release/bin/cquery")))
+
 (use-package company
   :general
     ("s-d"        #'company-complete)
@@ -1327,6 +1362,44 @@
   (add-hook 'c-mode-hook #'counsel-gtags-mode)
   (add-hook 'c++-mode-hook #'counsel-gtags-mode)
   :config)
+
+;; built-in package for cross-references
+(use-package xref
+  :demand
+  :ensure nil
+  :config
+  (add-to-list 'xref-prompt-for-identifier #'xref-find-references t)
+  :general
+  ("<f6> <f6>" #'xref-find-definitions)
+  ("<f6> r"   #'xref-find-references)
+  ("<f6> a"   #'xref-find-apropos))
+
+;; ivy interface to xref
+(use-package ivy-xref
+  :commands (ivy-xref-show-xrefs)
+  :after xref
+  :init
+  (setq xref-show-xrefs-function #'ivy-xref-show-xrefs
+        ivy-xref-use-file-path t))
+
+(use-package yasnippet
+  :commands ( yas-expand-snippet )
+  :general
+    ("<s-return>" #'yas-expand)
+    (:prefix "C-c"
+            "&" '(:ignore t :which-key "Yasnippet→" ))
+  :init
+  (add-hook 'yas-before-expand-snippet-hook         ; evil-insert at each slot
+            (lambda()
+                  (let ((p (point)) (m (mark)))
+                    (evil-insert-state)
+                    (goto-char p)
+                    (set-mark m))))
+  (add-hook 'prog-mode-hook 'yas-minor-mode)
+  (add-hook 'text-mode-hook 'yas-minor-mode)
+  :config
+  (define-key yas-minor-mode-map (kbd "<tab>") nil) ; don't use <tab>
+  (define-key yas-minor-mode-map (kbd "TAB") nil))   ; don't use TAB
 
 (use-package flycheck
   :init
@@ -1460,6 +1533,7 @@
            '(dired-mode
              finder-mode
              image-dired-thumbnail-mode
+             cquery-tree-mode
              paradox-menu-mode))
     (add-to-list 'evil-emacs-state-modes mode))
 
