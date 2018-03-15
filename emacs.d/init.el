@@ -1318,6 +1318,104 @@
   (add-hook 'c++-mode-hook #'counsel-gtags-mode)
   :config)
 
+;; built-in package for cross-references
+(use-package xref
+  :demand
+  :ensure nil
+  :config
+  (add-to-list 'xref-prompt-for-identifier #'xref-find-references t)
+  :general
+  ("<f6> <f6>" #'xref-find-definitions)
+  ("<f6> r"   #'xref-find-references)
+  ("<f6> a"   #'xref-find-apropos))
+
+;; ivy interface to xref
+(use-package ivy-xref
+  :commands (ivy-xref-show-xrefs)
+  :after xref
+  :init
+  (setq xref-show-xrefs-function #'ivy-xref-show-xrefs
+        ivy-xref-use-file-path t))
+
+;; C/C++ cross-references and more
+(use-package cquery
+  :commands lsp-query-enable
+  :general
+  ("<f6> b" #'me:cquery-xref-find-base)
+  ("<f6> c" #'me:cquery-xref-find-callers)
+  ("<f6> v" #'me:cquery-xref-find-vars)
+  ("<f6> R" #'cquery-freshen-index)
+  ("<f6> d" #'me:cquery-xref-find-derived)
+  ("<f6> [" #'me:cquery-show-tree-callers)
+  ("<f6> ]" #'me:cquery-show-tree-callees)
+  :config
+  (defun me:cquery-xref-find-base () (interactive) (cquery-xref-find-custom "$cquery/base"))
+  (defun me:cquery-xref-find-callers () (interactive) (cquery-xref-find-custom "$cquery/callers"))
+  (defun me:cquery-xref-find-derived () (interactive) (cquery-xref-find-custom "$cquery/derived"))
+  (defun me:cquery-xref-find-vars () (interactive) (cquery-xref-find-custom "$cquery/vars"))
+  (defun me:cquery-show-tree-callees () (interactive) (cquery-call-hierarchy t))
+  (defun me:cquery-show-tree-callers () (interactive) (cquery-call-hierarchy nil))
+  :init
+  (setq cquery-executable "~/extern/cquery-dev/build/release/bin/cquery"
+        cquery-cache-dir-function #'cquery-cache-dir-consolidated
+        cquery-cache-dir-consolidated-path (expand-file-name "cquery-cache.d" me:emacs-cache-directory)
+        cquery-extra-init-params '( :index (:comments 2)               ;; use all of comments
+                                    :threads 2                         ;; default is %80, which is too high
+                                    :cacheFormat "msgpack"))           ;; use more compact format
+  (defun me:cquery-enable ()
+    (condition-case nil
+        (lsp-cquery-enable)
+      (user-error nil)))
+  (add-hook 'c-mode-hook #'me:cquery-enable)
+  (add-hook 'c++-mode-hook #'me:cquery-enable))
+
+;; LSP package
+(use-package lsp-mode
+  :init
+  (setq lsp-enable-eldoc nil)
+  :config)
+
+;; useful UI integrations for lsp-mode
+(use-package lsp-ui
+  :after lsp-mode
+  :general
+  ("<f6> u" #'lsp-ui-mode)
+  :init
+  (setq lsp-inhibit-message t)
+  :config)
+
+;; company backend for LSP
+(use-package company-lsp
+  :after (company lsp-mode)
+  :init
+  (setq company-transformers nil
+        company-lsp-async t
+        company-lsp-enable-snippet t
+        company-lsp-enable-recompletion t
+        company-lsp-cache-candidates nil)
+  :demand t
+  :config
+  (add-to-list 'company-backends 'company-lsp))
+
+(use-package yasnippet
+  :commands ( yas-expand-snippet )
+  :general
+    ("<s-return>" #'yas-expand)
+    (:prefix "C-c"
+            "&" '(:ignore t :which-key "Yasnippet→" ))
+  :init
+  (add-hook 'yas-before-expand-snippet-hook         ; evil-insert at each slot
+            (lambda()
+                  (let ((p (point)) (m (mark)))
+                    (evil-insert-state)
+                    (goto-char p)
+                    (set-mark m))))
+  (add-hook 'prog-mode-hook 'yas-minor-mode)
+  (add-hook 'text-mode-hook 'yas-minor-mode)
+  :config
+  (define-key yas-minor-mode-map (kbd "<tab>") nil) ; don't use <tab>
+  (define-key yas-minor-mode-map (kbd "TAB") nil))   ; don't use TAB
+
 (use-package flycheck
   :init
   (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
@@ -1443,6 +1541,7 @@
            '(dired-mode
              finder-mode
              image-dired-thumbnail-mode
+             cquery-tree-mode
              paradox-menu-mode))
     (add-to-list 'evil-emacs-state-modes mode))
 
