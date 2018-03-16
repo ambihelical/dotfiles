@@ -72,3 +72,5 @@
 	submoduleSummary = true
 [credential]
 	helper = cache
+[ssh]
+   variant = ssh
