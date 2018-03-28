@@ -147,6 +147,11 @@
   (general-define-key "s-." #'repeat)
   :demand)
 
+;; cowboy override of hydra's base map
+;; it's bindings interfere with evil when
+;; a hydra passes foreign keys through.
+(defvar hydra-base-map (make-sparse-keymap))
+
 (use-package hydra
   :commands (defhydra)
   :config
@@ -1475,9 +1480,7 @@
 ;; Cowboy override of git-timemachine-mode-map
 ;; Timemachine's map has a number of bindings which
 ;; are evil commands.  So we clear it out here.
-(defvar git-timemachine-mode-map
-  (let ((map (make-sparse-keymap))) map)
-  "Keymap for `git-timemachine-mode-map'.")
+(defvar git-timemachine-mode-map (make-sparse-keymap))
 
 (use-package git-timemachine
   :commands ( hydra-timemachine/body )
