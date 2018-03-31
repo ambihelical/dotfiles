@@ -1647,11 +1647,13 @@
     ("<f9> l"     #'magit-log-current)
     ("<f9> r"     #'magit-list-repositories)
     ("<f9> <f9>"  #'magit-status)
-  :config
-  (use-package evil-magit
-    :demand
-    :init
-    :config))
+  :config)
+
+(use-package evil-magit
+  :after magit
+  :demand t
+  :init
+  :config)
 
 ;; Cowboy override of git-timemachine-mode-map
 ;; Timemachine's map has a number of bindings which
