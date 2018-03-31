@@ -1176,6 +1176,7 @@
     :demand
     :config
     (company-quickhelp-mode 1))
+  (company-tng-configure-default)
   :diminish company-mode "[☰]")
 
 (use-package counsel-gtags
