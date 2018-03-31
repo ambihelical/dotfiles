@@ -1265,11 +1265,24 @@
   (rtags-set-periodic-reparse-timeout 2)
   (rtags-enable-standard-keybindings))
 
-;; yas snippets
+;; snippets
+;; cowboy override of yassnippet keyboard map to remove
+;; TAB because this interferes with company tab completion
+;; (define-key in :config is too late)
+(defvar yas-minor-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "\C-c&\C-s" 'yas-insert-snippet)
+    (define-key map "\C-c&\C-n" 'yas-new-snippet)
+    (define-key map "\C-c&\C-v" 'yas-visit-snippet-file)
+    map)
+  "The keymap used when `yas-minor-mode' is active.")
+
+;; disabled because I'm not using it
 (use-package yasnippet
+  :disabled
   :commands ( yas-expand-snippet )
   :general
-    ("<s-return>" #'yas-expand)
+    ("<s-tab>" #'yas-maybe-expand)
     (:prefix "C-c"
             "&" '(:ignore t :which-key "Yasnippet→" ))
   :init
@@ -1282,9 +1295,7 @@
   (add-hook 'prog-mode-hook 'yas-minor-mode)
   (add-hook 'text-mode-hook 'yas-minor-mode)
   :config
-  (define-key yas-minor-mode-map (kbd "<tab>") nil) ; don't use <tab>
-  (define-key yas-minor-mode-map (kbd "TAB") nil)   ; don't use TAB
-  :diminish (yas-minor-mode . "{}"))
+  :diminish (yas-minor-mode . "≛"))
 
 
 (use-package flycheck
