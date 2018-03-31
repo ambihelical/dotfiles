@@ -1084,7 +1084,7 @@
             (lambda (_proc) (compilation-set-skip-threshold 2)))
 
   (add-hook 'compilation-mode-hook (lambda ()
-                                        (when (fboundp 'evil-mode)
+                                        (when (fboundp 'evil-make-intercept-map)
                                           (evil-make-intercept-map compilation-mode-map 'normal)
                                           (evil-normalize-keymaps)))))
 
@@ -1497,7 +1497,7 @@
   :init
   ;; evil-motion-state when in timemachine mode
   (add-hook 'git-timemachine-mode-hook (lambda ()
-                                           (when (fboundp 'evil-mode)
+                                           (when (fboundp 'evil-motion-state)
                                              (evil-motion-state))))
   :config
   ;; Define time machine hydra. Since we allow any command while the
