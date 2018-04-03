@@ -76,6 +76,10 @@
   (delete-selection-mode t)                                   ; pastes delete selection
   (run-at-time "1 hour" 3600 #'clean-buffer-list))            ; clear out old buffers every hour (midnight)
 
+;; Run programming mode hooks
+;; This is used for modes which should trigger programming mode hooks
+(defun me:run-prog-mode-hooks () (run-hooks 'prog-mode-hook))
+
 ;; configuration I haven't figured out how to wedge into
 ;; use-package
 
@@ -365,7 +369,6 @@
   :ensure nil
   :init
   :config
-  (defun me:run-prog-mode-hooks () (run-hooks 'prog-mode-hook))
   (define-generic-mode 'selinux-contexts-mode
     '("#") nil nil
     '("file_contexts\\'")
@@ -374,6 +377,14 @@
     '("#") '("type" "allow" "neverallow" ) nil
     '("\\.te\\'")
     '( me:run-prog-mode-hooks ))
+  :demand)
+
+;; build-in configure file mode
+(use-package conf-mode
+  :ensure nil
+  :init
+  (add-hook 'conf-mode-hook #'me:run-prog-mode-hooks)
+  :config
   :demand)
 
 (use-package smooth-scrolling
