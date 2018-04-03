@@ -1537,6 +1537,16 @@
     (:keymaps 'visual
               "<"           #'me:evil-shift-left-visual
               "<backtab>"   #'me:evil-shift-left-visual)
+    ;; Improve window resize bindings
+    ;; Remove need for shift and make repeatable
+    (:keymaps '( normal insert visual ) :prefix "C-w"
+              "-"  #'evil-window-decrease-height :repeat t
+              "="  #'evil-window-increase-height :repeat t
+              ","  #'evil-window-decrease-width :repeat t
+              "."  #'evil-window-increase-width :repeat t )
+    ;; We stole the balance binding for C-w =, add it back
+    (:keymaps '( normal visual ) :prefix "C-w"
+              "b"  #'balance-windows)
 
   :config
 
