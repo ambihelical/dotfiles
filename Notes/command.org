@@ -123,7 +123,10 @@
 	=tmpdir=$(mktemp -d 2>/dev/null || mktemp -d -t 'template-pattern')=
 
 ** Decrypt several PGP/GPG files
-	=gpg --decrypt-files <files>=   # prompts once
+   =gpg --decrypt-files <files>=   # prompts once
+
+** Export pgp key
+   =gpg --export -a "user name" > gpg.key.asc=
 
 ** Expand arguments but do nothing (aka :)
 	- =false || { : $foo ; }=
