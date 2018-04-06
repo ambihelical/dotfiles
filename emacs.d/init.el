@@ -145,6 +145,7 @@
 	(global-unset-key (kbd "<f4>"))
   :config
   (general-evil-setup t)
+  (general-override-mode)
   (general-define-key
    :prefix "<f4>"
     "g"     #'general-describe-keybindings)
@@ -1503,7 +1504,7 @@
         evil-indent-convert-tabs nil        ; make = work with smart tabs mode
         evil-search-module #'evil-search)
   :general
-    (:states '(normal visual emacs)
+    (:states '(normal visual emacs) :keymaps 'override
     :prefix "<SPC>"
       "<SPC>"      #'me:switch-to-previous-buffer
       ";"          #'evil-jump-forward
@@ -1517,7 +1518,7 @@
       "w"          #'save-buffer
       "x"          #'exchange-point-and-mark
       "<DEL>"      #'kill-this-buffer)
-    (:states '(normal visual) :prefix "<SPC>"
+    (:states '(normal visual) :prefix "<SPC>" :keymaps 'override
              "s"  (general-simulate-key "\"*" :state 'normal :keymap nil :lookup nil :name me:simulate-selection-reg )
              "c"  (general-simulate-key "\"+" :state 'normal :keymap nil :lookup nil :name me:simulate-clipboard-reg ))
     (:keymaps '(normal visual ) "<escape>" #'keyboard-quit)
