@@ -280,6 +280,7 @@ for_window [class="chromium-browser"] title_format "<span font='Symbola Bold 12'
 for_window [class="VirtualBox"] title_format "<span font='Symbola Bold 12'>ⓥ</span> %title"
 for_window [class="Thg"] title_format "<span font='Symbola Bold 12'>Ⓣ</span> %title"
 for_window [class="HipChat"] title_format "<span font='Symbola Bold 12'>🔊</span> %title"
+for_window [class="Slack"] title_format "<span font='Symbola Bold 12'>♯</span> %title"
 
 
 # convenient key bindings
