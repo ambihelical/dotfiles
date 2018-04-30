@@ -525,11 +525,16 @@
 ;; better package manager
 (use-package paradox
   :general
-    ("<f4> P"     #'paradox-list-packages)
+    ("<f4> P"     #'me:paradox-list-packages)
     (:keymaps 'paradox-menu-mode-map
               "j" #'paradox-next-entry
               "k" #'paradox-previous-entry)
   :config
+  ;; make sure packages are up-to-date before updating
+  (defun me:paradox-list-packages ()
+    (interactive)
+    (package-refresh-contents)
+    (paradox-list-packages nil))
   :init
   (setq paradox-spinner-type 'moon
         paradox-execute-asynchronously nil
