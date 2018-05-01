@@ -283,11 +283,9 @@
 
 ;; built-in autorevert package
 (use-package autorevert
+  :hook (( prog-mode text-mode ) . auto-revert-mode )
   :ensure nil
   :defer 2
-  :init
-  (add-hook 'prog-mode-hook #'auto-revert-mode)
-  (add-hook 'text-mode-hook #'auto-revert-mode)
   :config
   (setq auto-revert-check-vc-info nil                         ; don't update branch on auto-revert
         auto-revert-verbose nil)                              ; don't tell me about auto reverts
@@ -295,13 +293,12 @@
 
 ;; built-in "simple" package
 (use-package simple
+  :hook (( prog-mode text-mode ) . visual-line-mode )
   :ensure nil
   :general
     ("s-n"        #'next-error)
     ("s-p"        #'previous-error)
   :init
-  (add-hook 'prog-mode-hook #'visual-line-mode)
-  (add-hook 'text-mode-hook #'visual-line-mode)
   (add-hook 'visual-line-mode-hook (lambda () (diminish 'visual-line-mode "¶")))
   (add-hook 'auto-fill-mode-hook (lambda () (diminish 'auto-fill-function "⤶")))
   (setq kill-ring-max 200                      ; More killed items
@@ -501,10 +498,9 @@
 (use-package git-gutter-fringe+
   :commands (hydra-git-gutter/body git-gutter+-mode)
   :if window-system
+  :hook ((prog-mode text-mode) . git-gutter+-mode)
   :init
   (add-hook 'git-gutter+-mode-hook (lambda () (diminish 'git-gutter+-mode "±")))
-  (add-hook 'prog-mode-hook #'git-gutter+-mode)
-  (add-hook 'text-mode-hook #'git-gutter+-mode)
   :config
   ;; Define git-gutter hydra
   (eval '(defhydra hydra-git-gutter (:hint nil)
@@ -576,9 +572,7 @@
   :config)
 
 (use-package undo-tree
-  :init
-  (add-hook 'prog-mode-hook 'undo-tree-mode)
-  (add-hook 'text-mode-hook 'undo-tree-mode)
+  :hook ((prog-mode text-mode) . undo-tree-mode)
   :config
   :general
     ("<f4> v"     #'undo-tree-visualize)
@@ -864,9 +858,8 @@
 
 ;; color color strings
 (use-package rainbow-mode
+  :hook (( emacs-lisp-mode js-mode ) . rainbow-mode )
   :init
-  (add-hook 'emacs-lisp-mode-hook #'rainbow-mode)
-  (add-hook 'js-mode-hook #'rainbow-mode)
   (add-hook 'rainbow-mode-hook (lambda () (diminish 'rainbow-mode "🌈")))
   :config)
 
@@ -1331,9 +1324,8 @@
   (setq avy-all-windows 'all-frames))
 
 (use-package evil
+  :hook (( prog-mode text-mode ) . evil-mode )
   :init
-  (add-hook 'prog-mode-hook #'evil-mode)
-  (add-hook 'text-mode-hook #'evil-mode)
   ;; make cut/paste more vim-like
   ;; mainly keep emacs cut/paste separate from system clipboard
   ;; in the default case (must use "+ or "* to override)
@@ -1453,9 +1445,7 @@
   (evil-mode 1))
 
 (use-package ws-butler
-  :init
-  (add-hook 'prog-mode-hook #'ws-butler-mode)
-  (add-hook 'text-mode-hook #'ws-butler-mode)
+  :hook (( prog-mode text-mode ) . ws-butler-mode )
   :config
   (setq ws-butler-convert-leading-tabs-or-spaces t)       ; convert according to indent-tabs-mode (but not when smart-tabs-mode on)
   :diminish ws-butler-mode "△")
