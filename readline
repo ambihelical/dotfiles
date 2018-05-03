@@ -3,6 +3,9 @@ set editing-mode vi
 set show-all-if-ambiguous On
 # ignore case  
 set completion-ignore-case On
+# allow more completions than default 100
+set completion-query-items 200
+set page-completions off
 
 ### experiments below ###
 
