@@ -420,7 +420,8 @@
         whitespace-display-mappings '((tab-mark 9 [9657 9] [92 9])))
   :init
     (add-hook 'whitespace-mode-hook 'me:set-extra-font-attributes)
-    (me:add-hook-with-delay 'prog-mode-hook 7 #'whitespace-mode)
+    (me:add-hook-with-delay 'prog-mode-hook 3 #'whitespace-mode)
+    (me:add-hook-with-delay 'text-mode-hook 3 #'whitespace-mode)
   :diminish whitespace-mode)
 
 ;; Highlight cursor position in buffer
