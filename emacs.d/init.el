@@ -942,6 +942,7 @@
   (setq wgrep-enable-key "\C-c\C-w"))
 
 (use-package projectile
+  :load-path "lisp/projectile"
   :general
     ("<f7> k"     #'projectile-kill-buffers)
     ("<f7> o"     #'projectile-multi-occur)
@@ -967,27 +968,29 @@
   (push "compile_commands.json" projectile-project-root-files)
   (push "out" projectile-globally-ignored-directories)     ;; aosp build
   (use-package persp-projectile
-    :demand
-    :general
-      ("<f7> <f7>"  #'projectile-persp-switch-project)
-    :config)
+    :disabled
+     :demand
+     :general
+       ("<f7> <f7>"  #'projectile-persp-switch-project)
+     :config)
   (projectile-mode 1))
 
 (use-package counsel-projectile
+  :load-path "lisp/counsel-projectile"
   :after ( counsel projectile )
   :demand t     ; required because use-package-always-defer is t
   :general
     ("<f7> f" #'counsel-projectile-ag)
   :config)
 
-(defun me:close-treemacs-if-open ()
-  (when (and (fboundp 'treemacs--is-visible?) (treemacs--is-visible?))
-    (treemacs-toggle)))
+;(defun me:close-treemacs-if-open ()
+;  (when (and (fboundp 'treemacs--is-visible?) (treemacs--is-visible?))
+;    (treemacs-toggle)))
 
 (use-package perspective
   :after projectile
   :init
-  (add-hook 'persp-switch-hook #'me:close-treemacs-if-open)
+;  (add-hook 'persp-switch-hook #'me:close-treemacs-if-open)
   :general
     ("<f7> r"     #'persp-rename)
     ("s-<right>"  #'persp-next)
@@ -1063,6 +1066,7 @@
   (use-package evil-org :config :demand))
 
 (use-package org-projectile
+  :disabled
   :after ( projectile org )
   :demand t     ; required because use-package-always-defer is t
   :init
@@ -1695,6 +1699,7 @@
   :diminish "🕓")
 
 (use-package treemacs
+  :disabled
   :general
     ("<f4> /"   #'treemacs-toggle)
     ("<f7> /"   #'treemacs-projectile)
