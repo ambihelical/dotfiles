@@ -11,8 +11,8 @@ if [ "$host" == "hum" ]; then
 	 # - caps is hyper
 	 # - compose is right alt
 	 setxkbmap -option 'caps:hyper' -option 'compose:ralt'
-	 xrandr --output DVI-I-1 --left-of HDMI-1
 	 xrandr --output DVI-I-1 --primary
+	 xrandr --output DVI-I-1 --left-of HDMI-1
 	 dropbox start -i
 	 lockminutes=0
 elif [ "$host" == "jh-rvueb" ]; then
@@ -21,8 +21,8 @@ elif [ "$host" == "jh-rvueb" ]; then
 	# - swap alt/win so window keys next to spacebar
 	# - and make compose key be the old windows key
 	setxkbmap -option 'caps:hyper' -option 'altwin:swap_alt_win' -option 'compose:rwin'
-	xrandr --output DVI-D-0 --right-of HDMI-0 --rotate left
 	xrandr --output HDMI-0 --primary --dpi 103
+	xrandr --output DVI-D-0 --right-of HDMI-0 --rotate left
 	lockminutes=15
 else
 	echo "Unknown host |$host|"
