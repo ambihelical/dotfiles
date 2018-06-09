@@ -812,13 +812,18 @@
   (setq projectile-completion-system 'ivy
         projectile-globally-ignored-files #'( "TAGS" "GTAGS" "GRTAGS" "GPATH" )
         projectile-globally-ignored-file-suffixes #'( ".o" ".so" ".a" ".ko" ".jar" ".bc" ".class")
+        ;; we mainly want projects defined by certain markers and we always want to take the top-most marker.
+        ;; Reorder so other cases are secondary
+        projectile-project-root-files-functions #'(projectile-root-top-down
+                                                   projectile-root-top-down-recurring
+                                                   projectile-root-bottom-up
+                                                   projectile-root-local)
         projectile-use-git-grep t
         projectile-cache-file (expand-file-name "projectile-cache" me:emacs-cache-directory)
         projectile-mode-line '(:eval (format " [%s]" (projectile-project-name)))
         projectile-enable-caching t)
   :config
-  (push "compile_commands.json" projectile-project-root-files)
-  (push "out" projectile-globally-ignored-directories)     ;; aosp build
+  (push ".projectile" projectile-project-root-files)             ; topmost .projectile defines a project
   (use-package persp-projectile
     :demand
     :general
