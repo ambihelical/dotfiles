@@ -489,13 +489,13 @@
                 (force-mode-line-update t))))
       (buffer-list)))
 
-(use-package linum-relative
+;; 26.1 built-in line numbers mode
+(use-package display-line-numbers
   :config
   :general
-    ("<f5> l"      #'linum-relative-mode)
-  :diminish linum-relative-mode
+  ("<f5> l"      #'display-line-numbers-mode)
   :init
-  (setq linum-relative-current-symbol ""))   ; show current line #
+  (setq display-line-numbers-type 'relative))
 
 (use-package git-gutter-fringe+
   :commands (hydra-git-gutter/body git-gutter+-mode)
