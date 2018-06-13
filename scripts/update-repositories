@@ -28,6 +28,8 @@ if hash lsb_release 2> /dev/null; then
 		add-apt-repository --yes ppa:webupd8team/nemo
 		# i3
 		echo "deb http://debian.sur5r.net/i3/ $(lsb_release -c -s) universe" >> /etc/apt/sources.list
+		# emacs
+		add-apt-repository ppa:kelleyk/emacs
 	fi
 	apt-get update
 	apt-get --allow-unauthenticated install sur5r-keyring
