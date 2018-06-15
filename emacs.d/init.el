@@ -1533,20 +1533,17 @@
 
 (use-package treemacs
   :general
-    ("<f4> /"   #'treemacs-toggle)
+    ("<f4> /"   #'treemacs)
     ("<f7> /"   #'treemacs-projectile)
   :init
-  (setq treemacs-header-function            #'treemacs-projectile-create-header
-        treemacs-follow-after-init          t
+  (setq treemacs-follow-after-init          t
         treemacs-width                      35
         treemacs-indentation                2
         treemacs-git-mode                   t
         treemacs-silent-refresh             t
-        treemacs-change-root-without-asking nil
         treemacs-sorting                    'alphabetic-desc
         treemacs-show-hidden-files          t
-        treemacs-collapse-dirs              3
-        treemacs-never-persist              nil)
+        treemacs-collapse-dirs              3)
   :config
   (use-package treemacs-evil :demand t)
   (use-package treemacs-projectile :demand t)
