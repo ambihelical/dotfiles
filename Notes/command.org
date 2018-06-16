@@ -130,7 +130,14 @@
 
 ** Expand arguments but do nothing (aka :)
 	- =false || { : $foo ; }=
-	- can use for then block if nothing to do when true
+   - can use for then block if nothing to do when true
+
+** Batch renames
+   =rename 's/sch/rep' file-glob=
+
+** Batch search/replace
+   =perl -pi -w -e 's/sch/rep/g;' file-glob=
+
 * Imagemagick
 ** Composite three images into one (not very generic)
 	=convert -size 278x160 xc:black \( $1 -resize 93 \) -geometry +0+10  -composite \( $2 -resize 93 \) -geometry +93+10  -composite \( $3 -resize 93 \) -geometry +186+10  -composite $4=
