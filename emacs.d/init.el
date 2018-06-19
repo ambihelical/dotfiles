@@ -79,6 +79,8 @@
 ;; Run programming mode hooks
 ;; This is used for modes which should trigger programming mode hooks
 (defun me:run-prog-mode-hooks () (run-hooks 'prog-mode-hook))
+;; This is used for modes which need tabs
+(defun me:set-indent-tabs-mode () ( setq indent-tabs-mode t))
 
 ;; configuration I haven't figured out how to wedge into
 ;; use-package
@@ -127,9 +129,7 @@
             (setq indent-tabs-mode t)                        ; tabs are needed
             (modify-syntax-entry ?+ "." )))                  ; + is punctuation
 
-(add-hook 'sh-mode-hook
-          (lambda ()
-            (setq indent-tabs-mode t)))
+(add-hook 'sh-mode-hook #'me:set-indent-tabs-mode)
 
 ;; don't ask about term processes
 ;; N.B. There may be var in emacs 26 for this
@@ -931,6 +931,7 @@
 
 (use-package cmake-mode
   :config
+  :hook ( cmake-mode . me:set-indent-tabs-mode)
   :init
   (setq cmake-tab-width 3)
   :mode
