@@ -1006,7 +1006,7 @@
   (add-hook 'java-mode-hook
             (lambda ()
               (setq c-basic-offset 4                             ; use common convention
-                    tab-width 8                                  ; 4 spaces indentation
+                    tab-width 4                                  ; 4 spaces indentation
                     evil-shift-width 4)))
   :config
   :mode
