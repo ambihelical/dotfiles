@@ -110,6 +110,7 @@
       scroll-margin 5                                       ; show some lines around cursor when possible
       safe-local-variable-values                            ; allow these values in .dir-locals.el
         '((evil-indent-convert-tabs . t))
+      scalable-fonts-allowed t                              ; allow any scalable font
       select-enable-clipboard nil                           ; make cut/paste function correctly (select)
       sentence-end-double-space nil                         ; sentences end with one space
       standard-indent 3                                     ; ideal indent :)
