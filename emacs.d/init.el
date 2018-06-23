@@ -603,12 +603,11 @@
 
 ;; remote file editting
 (use-package tramp
-  :ensure nil
   :init
   (setq tramp-terminal-type "dumb"                              ; avoid fancy prompts
         tramp-backup-directory-alist backup-directory-alist     ; keep backups local
         tramp-default-method "ssh")                             ; use ssh by default
-)
+  :ensure nil)
 
 (use-package dired
   :general
@@ -685,8 +684,6 @@
   :general
     ("s-f"        #'flyspell-auto-correct-previous-word)
     ("s-S-f"      #'flyspell-correct-previous-word-generic)
-  :config
-  (use-package flyspell-correct-ivy :demand)
   :init
   (setq ispell-personal-dictionary (expand-file-name "hunspell/words" me:config-directory))
   (me:add-hook-with-delay 'prog-mode-hook 10 #'flyspell-prog-mode)
@@ -705,7 +702,8 @@
       (setq ispell-program-name "aspell")
       ;; Please note ispell-extra-args contains ACTUAL parameters passed to aspell
       (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))))
-  )
+  :config
+  (use-package flyspell-correct-ivy :demand))
 
 ;; look up words
 (use-package define-word
@@ -1464,8 +1462,7 @@
 (use-package ws-butler
   :hook (( prog-mode text-mode ) . ws-butler-mode )
   :config
-  (setq ws-butler-convert-leading-tabs-or-spaces t)       ; convert according to indent-tabs-mode (but not when smart-tabs-mode on)
-  )
+  (setq ws-butler-convert-leading-tabs-or-spaces t))       ; convert according to indent-tabs-mode (but not when smart-tabs-mode on)
 
 (use-package shell-pop
   :config
@@ -1546,8 +1543,7 @@
     ("C-c r" #'git-timemachine-kill-revision "Yank revision")
     ("C-c s" #'git-timemachine-kill-abbreviated-revision "Yank abbreviated revision")))
   :general
-  (:keymaps 'global :prefix "<f9>"  "t" #'hydra-timemachine/body)
-  )
+  (:keymaps 'global :prefix "<f9>"  "t" #'hydra-timemachine/body))
 
 (use-package treemacs
   :general
