@@ -685,14 +685,14 @@
       (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))))
   :diminish (flyspell-mode . "Abc"))
 
-;; look up (english) words on wordnik
+;; look up words
 (use-package define-word
   :general
   ("C-c d" #'define-word-at-point)
   ("C-c D" #'define-word)
   :config
   ;; advise define-word to set word limit based on frame height
-  (defun me:advise-define-word (_word)
+  (defun me:advise-define-word (_word _service &optional _choose)
     (setq define-word-limit (/ (+ 2 (frame-height)) 3)))
   (advice-add #'define-word :before #'me:advise-define-word)
   :init)
