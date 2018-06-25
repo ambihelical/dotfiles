@@ -343,6 +343,10 @@ linux-gnuea*)  # raspbian
 	;;
 linux*)
 	export DISPLAY=:0.0   # set display for X
+
+	# Use openjdk 8 by default
+	export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+
 	# simulate the osx commands:
 	alias open=gnome-open
 	alias pbcopy='xclip -selection clipboard'
