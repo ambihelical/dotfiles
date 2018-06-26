@@ -774,7 +774,7 @@
            "s"  '(:ignore t :which-key "Search→" )
            "u" #'counsel-unicode-char)
   (:keymaps 'global :prefix "<f4> s"
-           "a" #'counsel-ag
+           "a" #'me:counsel-projectile-ag
            "b" #'swiper
            "l" #'counsel-locate
            "g" #'counsel-git-grep
@@ -800,6 +800,12 @@
     (if (and (fboundp 'projectile-project-p) (projectile-project-p))
         (counsel-projectile-find-file)
       (counsel-find-file)))
+  (defun me:counsel-projectile-ag (arg)
+    "Search using ag in project or if prefix or not in project, ask for dir and args"
+    (interactive "P")
+    (if (and (not arg) (fboundp 'projectile-project-p) (projectile-project-p))
+        (counsel-ag "" (projectile-project-root) "")
+      (counsel-ag)))
   (counsel-mode 1))
 
 ;; allow grep buffers to be editted
