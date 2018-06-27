@@ -94,4 +94,16 @@
   (current-kill -1)
   (setq this-command #'evil-paste-after))   ; enable evil-repeat and evil-paste-pop
 
+;;;###autoload
+(defun x-urgency-hint (frame &optional reset )
+  "Set urgency hint on given frame. RESET will reset it"
+  (let* ((wm-hints (append (x-window-property "WM_HINTS" frame "WM_HINTS" nil nil t) nil))
+         (flags (car wm-hints)))
+    (setcar wm-hints
+            (if reset
+                (logand flags (lognot #x100))
+              (logior flags #x100)))
+    (x-change-window-property "WM_HINTS" wm-hints frame "WM_HINTS" 32 t)))
+
+
 (provide 'extras)

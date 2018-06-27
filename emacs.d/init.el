@@ -194,7 +194,7 @@
 
 ;; infrequently used functions
 (use-package extras
-  :commands (hydra-paste/body)
+  :commands (hydra-paste/body x-urgency-hint)
   :ensure nil
   :general
     ("s-1"     #'me:find-other-file)
@@ -1113,6 +1113,7 @@
         compilation-auto-jump-to-first-error t
         compilation-finish-functions (lambda (_buf str)
           (compilation-set-skip-threshold 1)
+          (x-urgency-hint (selected-frame))
           (if (null (string-match ".*exited abnormally.*" str))
               ;;if no errors, make the compilation window go away in a few seconds
               (progn
