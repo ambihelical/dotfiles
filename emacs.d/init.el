@@ -476,7 +476,8 @@
   :init
   (setq sml/theme 'respectful
         size-indication-mode t
-        sml/col-number-format "%2C"
+        sml/line-number-format "%4l"
+        sml/col-number-format "%3C"
         sml/numbers-separator " "
         sml/no-confirm-load-theme t)
   :config
