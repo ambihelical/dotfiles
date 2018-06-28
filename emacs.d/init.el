@@ -155,15 +155,11 @@
   (general-define-key "s-." #'repeat)
   :demand)
 
-;; cowboy override of hydra's base map
-;; it's bindings interfere with evil when
-;; a hydra passes foreign keys through.
-(defvar hydra-base-map (make-sparse-keymap))
-
 (use-package hydra
   :commands (defhydra)
   :config
-  :init)
+  :init
+  (setq hydra-base-map (make-sparse-keymap)))
 
 ;; frequently used functions
 (use-package utilities
@@ -734,19 +730,6 @@
             "C-c w" #'wdired-change-to-wdired-mode)
   :config)
 
-;; Cowboy override of peep-dired-mode-map which has a
-;; key define which causes an error.  Every other method
-;; of doing this failed, but this works.
-(defvar peep-dired-mode-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "j")         #'peep-dired-next-file)
-    (define-key map (kbd "k")         #'peep-dired-prev-file)
-    (define-key map (kbd "C-f")       #'peep-dired-scroll-page-down)
-    (define-key map (kbd "C-b")       #'peep-dired-scroll-page-up)
-    (define-key map (kbd "q")         #'peep-dired)
-    map)
-  "Keymap for `peep-dired-mode'.")
-
 (use-package peep-dired
   :init
   ;; This makes peep-dired-mode-map override all evil mappings
@@ -754,6 +737,14 @@
   (add-hook 'peep-dired-hook (lambda ()
                                  (evil-make-intercept-map peep-dired-mode-map 'normal)
                                  (evil-normalize-keymaps 'normal)))
+  (setq peep-dired-mode-map
+        (let ((map (make-sparse-keymap)))
+          (define-key map (kbd "j")         #'peep-dired-next-file)
+          (define-key map (kbd "k")         #'peep-dired-prev-file)
+          (define-key map (kbd "C-f")       #'peep-dired-scroll-page-down)
+          (define-key map (kbd "C-b")       #'peep-dired-scroll-page-up)
+          (define-key map (kbd "q")         #'peep-dired)
+          map))
   :general
   (:keymaps 'dired-mode-map
             "C-c f" #'peep-dired)
@@ -1506,14 +1497,10 @@
   :init
   :config)
 
-;; Cowboy override of git-timemachine-mode-map
-;; Timemachine's map has a number of bindings which
-;; are evil commands.  So we clear it out here.
-(defvar git-timemachine-mode-map (make-sparse-keymap))
-
 (use-package git-timemachine
   :commands ( hydra-timemachine/body )
   :init
+  (setq git-timemachine-mode-map (make-sparse-keymap))  ;; override all bindings
   ;; evil-motion-state when in timemachine mode
   (add-hook 'git-timemachine-mode-hook (lambda ()
                                            (when (fboundp 'evil-motion-state)
