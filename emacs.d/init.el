@@ -1033,7 +1033,9 @@
                     evil-shift-width 4)))
   :config
   :mode
-  (("\\.java\\'" . java-mode)))
+  (("\\.java\\'" . java-mode))
+  (("\\.aidl\\'" . java-mode))                               ; Hack AIDL syntax highlighting
+  (("\\.hal\\'" . java-mode)))                               ; Hack HIDL syntax highlighting
 
 (use-package cc-mode
   :init
