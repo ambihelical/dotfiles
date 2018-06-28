@@ -104,6 +104,7 @@
       ad-redefinition-action 'accept                        ; turn off 'xyz' got redefined warnings
       backup-directory-alist
          `((".*" . ,me:emacs-backup-directory))             ; backup files in backup directory
+      confirm-kill-processes nil                            ; don't ask about killing processes at exit
       custom-file "/dev/null"                               ; disable customizations
       fast-but-imprecise-scrolling t                        ; quick and dirty scrolling
       history-length 1000                                   ; length of history
@@ -141,10 +142,6 @@
 
 (add-hook 'sh-mode-hook #'me:set-indent-tabs-mode)
 
-;; don't ask about term processes
-;; N.B. There may be var in emacs 26 for this
-(add-hook 'comint-exec-hook
-      (lambda () (set-process-query-on-exit-flag (get-buffer-process (current-buffer)) nil)))
 
 (run-with-idle-timer 0.1 nil #'me:extra-setup)
 
