@@ -499,6 +499,7 @@
   ;; make mode lines more noticable
   (set-face-attribute 'mode-line nil :background "#4e4e4e" :height 1.1)
   (set-face-attribute 'mode-line-inactive nil :background "#3e3e3e" :height 0.9)
+  (set-face-attribute 'persp-selected-face nil :inherit nil)  ; theme fix for inactive modeline
   (moody-replace-mode-line-buffer-identification)
   (moody-replace-vc-mode))
 
