@@ -125,8 +125,8 @@
       scalable-fonts-allowed t                              ; allow any scalable font
       select-enable-clipboard nil                           ; make cut/paste function correctly (select)
       sentence-end-double-space nil                         ; sentences end with one space
-      view-read-only t                                      ; show r/o files in view mode
       standard-indent 3                                     ; preferred indent
+;      view-read-only t                                      ; show r/o files in view mode
       x-gtk-use-system-tooltips nil)                        ; allow tooltip theming
 
 (add-hook 'after-init-hook                                  ; report init time
