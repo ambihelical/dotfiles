@@ -845,14 +845,9 @@
     ("<f7> f" #'counsel-projectile-ag)
   :config)
 
-(defun me:close-treemacs-if-open ()
-  (when (and (fboundp 'treemacs--is-visible?) (treemacs--is-visible?))
-    (treemacs-toggle)))
-
 (use-package perspective
   :after projectile
   :init
-  (add-hook 'persp-switch-hook #'me:close-treemacs-if-open)
   :general
     ("<f7> r"     #'persp-rename)
     ("s-<right>"  #'persp-next)
@@ -1445,25 +1440,6 @@
     ("C-c s" #'git-timemachine-kill-abbreviated-revision "Yank abbreviated revision")))
   :general
   (:keymaps 'global :prefix "<f9>"  "t" #'hydra-timemachine/body))
-
-(use-package treemacs
-  :general
-    ("<f4> /"   #'treemacs)
-    ("<f7> /"   #'treemacs-projectile)
-  :init
-  (setq treemacs-follow-after-init          t
-        treemacs-width                      35
-        treemacs-indentation                2
-        treemacs-git-mode                   t
-        treemacs-silent-refresh             t
-        treemacs-sorting                    'alphabetic-desc
-        treemacs-show-hidden-files          t
-        treemacs-collapse-dirs              3)
-  :config
-  (use-package treemacs-evil :demand t)
-  (use-package treemacs-projectile :demand t)
-  (treemacs-follow-mode t)
-  (treemacs-filewatch-mode t))
 
 (use-package popwin
   :init
