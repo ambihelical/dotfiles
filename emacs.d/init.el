@@ -89,13 +89,11 @@
 ;; Run programming mode hooks
 ;; This is used for modes which should trigger programming mode hooks
 (defun me:run-prog-mode-hooks () (run-hooks 'prog-mode-hook))
-;; This is used for modes which need tabs
-(defun me:set-indent-tabs-mode () ( setq indent-tabs-mode t))
 
 ;; configuration I haven't figured out how to wedge into
 ;; use-package
 
-(setq-default tab-width 3                                   ; ideal tab width
+(setq-default tab-width 3                                   ; preferred tab width
               indent-tabs-mode nil                          ; disable tabs, re-enable selectively
               indicate-empty-lines t                        ; show empty lines at end of buffer
               fill-column 120)                              ; auto-wrap only very long lines
@@ -126,8 +124,8 @@
       scalable-fonts-allowed t                              ; allow any scalable font
       select-enable-clipboard nil                           ; make cut/paste function correctly (select)
       sentence-end-double-space nil                         ; sentences end with one space
-      standard-indent 3                                     ; ideal indent :)
       view-read-only t                                      ; show r/o files in view mode
+      standard-indent 3                                     ; preferred indent
       x-gtk-use-system-tooltips nil)                        ; allow tooltip theming
 
 (add-hook 'after-init-hook                                  ; report init time
@@ -139,9 +137,6 @@
           (lambda ()
             (setq indent-tabs-mode t)                        ; tabs are needed
             (modify-syntax-entry ?+ "." )))                  ; + is punctuation
-
-(add-hook 'sh-mode-hook #'me:set-indent-tabs-mode)
-
 
 (run-with-idle-timer 0.1 nil #'me:extra-setup)
 
@@ -222,11 +217,7 @@
   :init
   (add-hook 'emacs-lisp-mode-hook
             (lambda ()
-              (modify-syntax-entry ?- "w")                    ; hyphens are parts of words
-              (setq tab-width 2                               ; tab inserts 2 spaces
-                    standard-indent 2                         ; indent by 2
-                    evil-shift-width 2                        ; need this since no tabs
-                    lisp-body-indent 2)))                     ; indent elisp by 2
+              (modify-syntax-entry ?- "w")))                  ; hyphens are parts of words
   :interpreter (("emacs" . emacs-lisp-mode)))
 
 ;; built-in frame package
@@ -890,6 +881,11 @@
   (me:add-hook-with-delay 'prog-mode-hook 8 #'highlight-parentheses-mode)
   :config)
 
+(use-package dtrt-indent
+  :hook (( prog-mode text-mode ) . dtrt-indent-mode)
+  :init
+  :config)
+
 (use-package markdown-mode
   :config
   :mode
@@ -951,7 +947,6 @@
 
 (use-package cmake-mode
   :config
-  :hook ( cmake-mode . me:set-indent-tabs-mode)
   :init
   (setq cmake-tab-width 3)
   :mode
@@ -1023,11 +1018,6 @@
 (use-package java-mode
   :ensure nil
   :init
-  (add-hook 'java-mode-hook
-            (lambda ()
-              (setq c-basic-offset 4                             ; use common convention
-                    tab-width 4                                  ; 4 spaces indentation
-                    evil-shift-width 4)))
   :config
   :mode
   (("\\.java\\'" . java-mode))
@@ -1036,10 +1026,6 @@
 
 (use-package cc-mode
   :init
-  (add-hook 'c-mode-common-hook
-            (lambda ()
-              (setq c-basic-offset 3
-                    indent-tabs-mode t)))
   (add-hook 'c++-mode-hook
             (lambda ()
               (define-key c++-mode-map ":" #'self-insert-command)
@@ -1276,7 +1262,6 @@
         evil-want-C-w-in-emacs-state t      ; ditto
         evil-want-C-i-jump nil              ; need TAB for other things
         evil-want-integration nil           ; use evil-collection instead
-        evil-indent-convert-tabs nil        ; make = work with smart tabs mode
         evil-mode-line-format '( before . mode-line-front-space)
         evil-search-module #'evil-search)
   :general
@@ -1377,8 +1362,7 @@
 
 (use-package ws-butler
   :hook (( prog-mode text-mode ) . ws-butler-mode )
-  :config
-  (setq ws-butler-convert-leading-tabs-or-spaces t))       ; convert according to indent-tabs-mode (but not when smart-tabs-mode on)
+  :config)
 
 (use-package shell-pop
   :config
