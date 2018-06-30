@@ -155,6 +155,17 @@
   (general-define-key "s-." #'repeat)
   :demand)
 
+;; make describe-xxx more useful
+(use-package helpful
+  :init
+  :general
+  ("C-h x" #'helpful-describe-callable)
+  ([remap describe-key] #'helpful-key)
+  ([remap describe-function] #'helpful-function)
+  ([remap describe-variable] #'helpful-variable)
+  ([remap describe-symbol] #'helpful-symbol)
+  :config)
+
 (use-package hydra
   :commands (defhydra)
   :config
