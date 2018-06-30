@@ -511,23 +511,23 @@
   :init
   (setq display-line-numbers-type 'relative))
 
-(use-package git-gutter-fringe+
-  :commands (hydra-git-gutter/body git-gutter+-mode)
-  :if window-system
-  :hook ((prog-mode text-mode) . git-gutter+-mode)
+;; Display difference indicators in margin
+(use-package diff-hl
+  :hook ((prog-mode text-mode) . diff-hl-mode)
+  :commands (hydra-diff-hl/body)
   :init
+  (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh)
+  ;; NB: this doesn't work with dired-subtree, so disabling for now
+  ;; (add-hook 'dired-mode-hook #'diff-hl-dired-mode)
   :config
-  ;; Define git-gutter hydra
-  (eval '(defhydra hydra-git-gutter (:hint nil)
-    "Git gutter"
-    ("n" git-gutter+-next-hunk "Goto next hunk" :column "Navigation")
-    ("p" git-gutter+-previous-hunk "Goto previous hunk" )
-    ("o" git-gutter+-show-hunk-inline-at-point "Show hunk in-line" )
-    ("v" git-gutter+-show-hunk "Show hunk")
-    ("s" git-gutter+-stage-hunks "Stage hunk at point or all in region" :column "Operations")
-    ("r" git-gutter+-revert-hunks "Revert hunk at point or all in region")
-    ("u" git-gutter+-unstage-whole-buffer "Unstage entire buffer" :exit t)
-    ("m" git-gutter+-mode "Toggle mode" :exit t))))
+  (diff-hl-margin-mode t)
+  ;; Define diff-hl hydra
+  (eval '(defhydra hydra-diff-hl (:hint nil)
+    "Diff hl"
+    ("j" diff-hl-next-hunk "Goto next hunk" :column "Navigation")
+    ("k" diff-hl-previous-hunk "Goto previous hunk" )
+    ("v" diff-hl-diff-goto-hunk "Show hunk" :column "Operations")
+    ("r" diff-hl-revert-hunk "Revert hunk at point or all in region"))))
 
 (use-package ruler-mode
   :general
@@ -1269,7 +1269,7 @@
       "a"          #'align
       "f"          #'avy-goto-word-1
       "g"          #'avy-goto-char-2
-      "h"          #'hydra-git-gutter/body
+      "h"          #'hydra-diff-hl/body
       "l"          #'avy-goto-char-in-line
       "p"          #'hydra-paste/body
       "w"          #'save-buffer
