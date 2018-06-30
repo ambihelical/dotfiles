@@ -227,7 +227,7 @@
   :general
   ("<f5> f"     #'toggle-frame-fullscreen)   ; frame
   ("s-`"        #'previous-buffer)           ; window
-  ("<s-~>"      #'next-buffer)               ; window
+  ("s-~"        #'next-buffer)               ; window
   ("s-w"        #'other-window)              ; window
   :init
   (add-hook 'focus-out-hook #'me:save-dirty-buffers)          ; save on defocus
