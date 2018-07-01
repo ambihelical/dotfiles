@@ -1051,7 +1051,9 @@
   (require 'vlf-setup)
   :config)
 
-(use-package logview)
+(use-package logview
+  :mode
+  (("\\.log\\'"   . logview-mode)))
 
 ;; font lock for newer c++ versions
 (use-package modern-cpp-font-lock
