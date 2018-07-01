@@ -247,7 +247,7 @@ exec --no-startup-id nm-applet &
 exec --no-startup-id clipit &
 exec --no-startup-id thunderbird &
 exec --no-startup-id urxvt -name scratch &
-exec --no-startup-id devmon &
+exec --no-startup-id udiskie --tray --no-notify --use-udisks2 &
 exec --no-startup-id ~/bin/i3wm-private-startup || true
 
 # special window handling
