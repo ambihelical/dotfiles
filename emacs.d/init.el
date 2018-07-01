@@ -1055,10 +1055,8 @@
 
 ;; font lock for newer c++ versions
 (use-package modern-cpp-font-lock
-  :config
-  :init
-  (me:add-hook-with-delay 'c++-mode-hook 10 #'modern-c++-font-lock-mode))
-
+  :hook ( c++-mode . modern-c++-font-lock-mode )
+  :config)
 
 (use-package compile
   :commands compile
