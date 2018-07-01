@@ -735,17 +735,18 @@
   :config
   (ivy-mode 1))
 
+;; add hydra accessable with C-o in minibuffer
 (use-package ivy-hydra
+  :after ivy
   :commands (ivy-hydra/body)
   :config)
 
 ;; add some ivy buffer information
-;; N.B. Disabled until #8 reopened and fixed
 (use-package ivy-rich
-  :disabled
+  :after ivy
   :config
   (ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer)
-  :defer 3)
+  :demand)
 
 (use-package counsel
   :defines counsel-yank-pop-preselect-last
