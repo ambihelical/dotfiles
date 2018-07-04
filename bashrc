@@ -69,7 +69,7 @@ gprompt() {
 	# get 1st two lines. First will be status line
 	# second may have modification status for first file
 	declare -a lines
-	mapfile -t lines < <($git_eng status --porcelain --branch 2>/dev/null|head -2)
+	mapfile -t lines < <($git_eng status --porcelain --branch --untracked-files=no 2>/dev/null|head -2)
 	[ -n "${lines[0]}" ] || return  # git branch not found
 
 	# how many commits local branch is ahead/behind of remote?
@@ -78,22 +78,32 @@ gprompt() {
 	#         or: ## local-branch...remote-branch
 	#         or: ## local-branch
 	#         or: ## HEAD (no branch)
-	#                1             2      3             4   5
+	#                1                2      3                4   5
 	local regex='^## ([-a-zA-Z0-9/_]+)(\.\.\.([-a-zA-Z0-9/_]+)( \[([^\[]*)\]){0,1}){0,1}$'
 	local detachedRe='^## HEAD[\t\ ]+\(no branch\)$'
 	local marks aheadN behindN
 	if [[ ${lines[0]} =~ $regex ]]; then
-		 lbranch=${BASH_REMATCH[1]}
-		 rbranch=${BASH_REMATCH[3]}
-		 local slippage=${BASH_REMATCH[5]}
-		 local aheadRe='ahead ([0-9]+)'
-		 local behindRe='behind ([0-9]+)'
-		 [[ "$slippage" =~ $aheadRe ]] && aheadN=${BASH_REMATCH[1]}
-		 [[ "$slippage" =~ $behindRe ]] && behindN=${BASH_REMATCH[1]}
+		lbranch=${BASH_REMATCH[1]}
+		rbranch=${BASH_REMATCH[3]}
+		local slippage=${BASH_REMATCH[5]}
+		local aheadRe='ahead ([0-9]+)'
+		local behindRe='behind ([0-9]+)'
+		local remoteRe='([-a-zA-Z0-9_]+)/([-a-zA-Z0-9/_]+){0,1}'
+		[[ "$slippage" =~ $aheadRe ]] && aheadN=${BASH_REMATCH[1]}
+		[[ "$slippage" =~ $behindRe ]] && behindN=${BASH_REMATCH[1]}
+		# check for common form where local branch name is same as remote branch
+		# if so, shorten things
+		if [[ $rbranch =~ $remoteRe ]]; then
+			local remote=${BASH_REMATCH[1]}
+			local branch=${BASH_REMATCH[2]}
+			if [[ $branch == $lbranch ]]; then
+				rbranch="$remote"
+			fi
+		fi
 	elif [[ ${lines[0]} =~ $detachedRe ]]; then
-		 lbranch="<detached HEAD>"
+		lbranch="<detached HEAD>"
 	else
-		 lbranch="<Parse Error>"
+		lbranch="<Parse Error>"
 	fi
 	regex='^ *M'
 	[[ "${lines[1]}" =~ $regex ]] && marks+=" $branch_changed_symbol"
