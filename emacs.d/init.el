@@ -977,6 +977,7 @@
 (use-package dtrt-indent
   :hook (( prog-mode text-mode ) . dtrt-indent-mode)
   :init
+  (setq dtrt-indent-run-after-smie t)
   :config)
 
 (use-package markdown-mode
