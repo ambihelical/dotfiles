@@ -599,12 +599,6 @@
               "k" #'windresize-up)
   :config)
 
-(use-package undo-tree
-  :hook ((prog-mode text-mode) . undo-tree-mode)
-  :config
-  :general
-    ("<f4> v"     #'undo-tree-visualize))
-
 ;; remote file editting
 (use-package tramp
   :init
