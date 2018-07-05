@@ -153,6 +153,7 @@
    :prefix "<f4>"
     "g"     #'general-describe-keybindings)
   (general-define-key "s-." #'repeat)
+  (general-define-key "s-s" #'save-buffer)
   :demand)
 
 ;; make describe-xxx more useful
@@ -236,6 +237,7 @@
   ("s-`"        #'previous-buffer)           ; window
   ("s-~"        #'next-buffer)               ; window
   ("s-w"        #'other-window)              ; window
+  ("s-o"        #'me:switch-to-previous-buffer)
   :init
   (add-hook 'focus-out-hook #'me:save-dirty-buffers)          ; save on defocus
   (setq frame-title-format
@@ -249,6 +251,9 @@
         split-width-threshold 240                              ; 2x ideal line width :)
         icon-title-format frame-title-format)                  ; use same title for unselected frame
   :config
+  (defun me:switch-to-previous-buffer ()
+    (interactive)
+    (switch-to-buffer (other-buffer (current-buffer) 1)))
   :demand)
 
 ;; built-in winner package
@@ -304,6 +309,7 @@
   :general
     ("s-n"        #'next-error)
     ("s-p"        #'previous-error)
+    ("s-<backspace>"    #'kill-current-buffer)
   :init
   (setq kill-ring-max 200                      ; More killed items
         kill-do-not-save-duplicates t          ; No duplicates in kill ring
@@ -1359,9 +1365,8 @@
         evil-mode-line-format '( before . mode-line-front-space)
         evil-search-module #'evil-search)
   :general
-    (:states '(normal visual emacs) :keymaps 'override
+    (:states '(normal visual) :keymaps 'override
     :prefix "<SPC>"
-      "<SPC>"      #'me:switch-to-previous-buffer
       ";"          #'evil-jump-forward
       ","          #'evil-jump-backward
       "a"          #'align
@@ -1370,9 +1375,7 @@
       "h"          #'hydra-diff-hl/body
       "l"          #'avy-goto-char-in-line
       "p"          #'hydra-paste/body
-      "w"          #'save-buffer
-      "x"          #'exchange-point-and-mark
-      "<DEL>"      #'kill-this-buffer)
+      "x"          #'exchange-point-and-mark)
     (:states '(normal visual) :prefix "<SPC>" :keymaps 'override
              "s"  (general-simulate-key "\"*" :state 'normal :keymap nil :lookup nil :name me:simulate-selection-reg )
              "c"  (general-simulate-key "\"+" :state 'normal :keymap nil :lookup nil :name me:simulate-clipboard-reg ))
@@ -1407,10 +1410,6 @@
     (evil-shift-right (region-beginning) (region-end))
     (evil-normal-state)
     (evil-visual-restore))
-
-  (defun me:switch-to-previous-buffer ()
-    (interactive)
-    (switch-to-buffer (other-buffer (current-buffer) 1)))
 
   (use-package evil-args
     :general
