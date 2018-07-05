@@ -160,7 +160,7 @@
 (use-package helpful
   :init
   :general
-  ("C-h x" #'helpful-describe-callable)
+  ("C-h x" #'helpful-callable)
   ([remap describe-key] #'helpful-key)
   ([remap describe-function] #'helpful-function)
   ([remap describe-variable] #'helpful-variable)
