@@ -1438,6 +1438,14 @@
 
   (evil-mode 1))
 
+(use-package evil-string-inflection
+  :after evil
+  :general
+  (:states '(normal visual) :keymaps 'override
+   :prefix "g"
+      "-"          #'evil-operator-string-inflection)
+  :init)
+
 (use-package evil-collection
   :after evil
   :defines evil-collection-company-use-tng
