@@ -86,18 +86,32 @@ gprompt() {
 		lbranch=${BASH_REMATCH[1]}
 		rbranch=${BASH_REMATCH[3]}
 		local slippage=${BASH_REMATCH[5]}
-		local aheadRe='ahead ([0-9]+)'
-		local behindRe='behind ([0-9]+)'
-		local remoteRe='([-a-zA-Z0-9_]+)/([-a-zA-Z0-9/_]+){0,1}'
+		local aheadRe='[ahead ([0-9]+)]'
+		local behindRe='[behind ([0-9]+)]'
 		[[ "$slippage" =~ $aheadRe ]] && aheadN=${BASH_REMATCH[1]}
 		[[ "$slippage" =~ $behindRe ]] && behindN=${BASH_REMATCH[1]}
 		# check for common form where local branch name is same as remote branch
 		# if so, shorten things
+		local personalRe="^personal/([-a-zA-Z0-9_]+)/([-a-zA-Z0-9/_]+)$"
+		if [[ $lbranch =~ $personalRe ]]; then
+			if [[ "${BASH_REMATCH[1]}" == "${USER}" ]]; then
+				lbranch="~/${BASH_REMATCH[2]}"
+			else
+				lbranch="~${BASH_REMATCH[1]}/${BASH_REMATCH[2]}"
+			fi
+		fi
+		local remoteRe='^([-a-zA-Z0-9_]+)/([-a-zA-Z0-9/_]+){0,1}$'
 		if [[ $rbranch =~ $remoteRe ]]; then
 			local remote=${BASH_REMATCH[1]}
 			local branch=${BASH_REMATCH[2]}
 			if [[ $branch == $lbranch ]]; then
 				rbranch="$remote"
+			elif [[ $branch =~ $personalRe ]]; then
+				if [[ "${BASH_REMATCH[1]}" == "${USER}" ]]; then
+					rbranch="~/${BASH_REMATCH[2]}"
+				else
+					rbranch="~${BASH_REMATCH[1]}/${BASH_REMATCH[2]}"
+				fi
 			fi
 		fi
 	elif [[ ${lines[0]} =~ $detachedRe ]]; then
