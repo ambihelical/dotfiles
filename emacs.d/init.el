@@ -1512,6 +1512,14 @@
                                            (when (fboundp 'evil-motion-state)
                                              (evil-motion-state))))
   :config
+  (defun me:git-timemachine-show-commit ()
+    "Show commit for current revision."
+    (interactive)
+    (let ((rev (car git-timemachine-revision)))
+      (require 'magit)
+      (with-temp-buffer
+        (save-excursion (magit-mode-setup #'magit-revision-mode rev nil nil nil)))))
+
   ;; Define time machine hydra. Since we allow any command while the
   ;; timemachine is on, some will "break" timemachine. Stick to
   ;; navigation and all should be good.
@@ -1520,9 +1528,10 @@
             :body-pre (git-timemachine)
             :foreign-keys run )
     "Time machine"
-    ("<up>" #'git-timemachine-show-previous-revision "Previous revision" :column "Navigation")
-    ("<down>" #'git-timemachine-show-next-revision "Next revision")
+    ("C-p" #'git-timemachine-show-previous-revision "Previous revision" :column "Navigation")
+    ("C-n" #'git-timemachine-show-next-revision "Next revision")
     ("C-c h" #'git-timemachine-show-current-revision "Current revision")
+    ("C-c v" #'me:git-timemachine-show-commit "Show commit")
     ("C-c C-c" #'git-timemachine-quit "Quit" :color blue )
     ("C-c b" #'git-timemachine-blame "Show culprits" :column "Operations")
     ("C-c r" #'git-timemachine-kill-revision "Yank revision")
