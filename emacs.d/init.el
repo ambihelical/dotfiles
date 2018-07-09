@@ -905,6 +905,7 @@
     ("<f7> k"     #'projectile-kill-buffers)
     ("<f7> o"     #'projectile-multi-occur)
     ("<f7> u"     #'projectile-invalidate-cache)
+    ("<f7> N"     #'projectile-clear-known-projects)
     ("<f7> n"     #'projectile-add-known-project)
     (:states '(normal visual emacs)
     :prefix "<SPC>"
