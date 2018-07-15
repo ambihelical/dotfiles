@@ -1553,6 +1553,13 @@
   :general
   (:keymaps 'global :prefix "<f9>"  "t" #'hydra-timemachine/body))
 
+(use-package magit-todos
+  :after magit
+  :demand t
+  :init
+  :config
+  (magit-todos-mode t))
+
 (use-package popwin
   :init
   :config
