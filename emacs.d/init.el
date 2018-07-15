@@ -106,6 +106,7 @@
       custom-file "/dev/null"                               ; disable customizations
       fast-but-imprecise-scrolling t                        ; quick and dirty scrolling
       history-length 1000                                   ; length of history
+      history-delete-duplicates t                           ; don't allow repeated history
       inhibit-splash-screen t                               ; no splash
       inhibit-startup-echo-area-message t                   ; no startup message
       inhibit-startup-message t                             ; no startup message
