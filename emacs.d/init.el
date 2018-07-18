@@ -1553,10 +1553,17 @@
   :general
   (:keymaps 'global :prefix "<f9>"  "t" #'hydra-timemachine/body))
 
+;; temporary until use-package #702 is fixed
+(with-eval-after-load 'magit-todos
+  (customize-set-variable 'magit-todos-keywords #'("TODO" "FIXME")))
+
+;; N.B. disabled until directories can be ignored
 (use-package magit-todos
+  :disabled
   :after magit
   :demand t
   :init
+  (setq magit-todos-group-by #'(magit-todos-item-filename magit-todos-item-keyword))
   :config
   (magit-todos-mode t))
 
