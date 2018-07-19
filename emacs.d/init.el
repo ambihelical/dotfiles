@@ -1545,7 +1545,6 @@
   :config
   (push '("*Async Shell Command*" :noselect t) popwin:special-display-config)
   (push '("*Completions*" :stick t :noselect t) popwin:special-display-config)
-  (push '("*Help*" :stick t ) popwin:special-display-config)
   (push '(Man-mode :stick t :height 20) popwin:special-display-config)
   (push '("*undo-tree*" :stick t :width 60 :position right) popwin:special-display-config)
   (push '("*General Keybindings*" :width 72 :position right) popwin:special-display-config)
