@@ -1260,9 +1260,7 @@
         deft-file-naming-rules '((nospace . "_")
                                   (noslash . "_")
                                   (case-fn . downcase))
-        ; first extension in list seems to be used for new files.  Not sure
-        ; what deft-default-extesion does
-        deft-default-extension "md"
+        ; first extension in list is used for new files.
         deft-extensions '("md" "txt" "text" "markdown" "mmd" "org")
                                       ; deft auto-save interferes with whitespace-butler, so disable
         deft-auto-save-interval 0)
@@ -1454,10 +1452,9 @@
   :config)
 
 (use-package shell-pop
-  :config
   :general
     ("<f4> t"     #'shell-pop)
-  :init
+  :config
   (setq shell-pop-internal-mode "ansi-term"
         shell-pop-term-shell "/bin/bash"
         shell-pop-window-size 40
