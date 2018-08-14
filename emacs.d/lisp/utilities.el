@@ -15,13 +15,16 @@
 ;; Return non-nil if buffer can be selected.  This allows
 ;; certain non-file buffers to be selected with
 ;; me:select-nth-other-buffer.
+
+(defconst me:special-names #'("*scratch*" "*Messages*" "*ielm*" "*Help*" "*info*"))
+(defconst me:special-modes #'( dired-mode woman-mode ))
+
 (defun me:useful-buffer (buffer)
-  (let ((bufname (buffer-name buffer))
-        (special-names #'("*scratch*" "*Messages*" "*ielm*" "*Help*" "*info*"))
-        (special-modes #'( dired-mode woman-mode )))
-    (cond ((member bufname special-names))
-          ((buffer-file-name buffer))
-          ((member (with-current-buffer buffer major-mode) special-modes)))))
+  (let ((bufname (buffer-name buffer)))
+    (cond ((member bufname me:special-names))             ;; one of these names
+          ((buffer-file-name buffer))                     ;; has a file
+          ((string-match ".~[-_.A-Za-z]+~$" bufname))     ;; magit branch buffer
+          ((member (with-current-buffer buffer major-mode) me:special-modes)))))  ;; one of these modes
 
 ;;;###autoload
 (defun me:select-nth-other-buffer (arg &optional prefix)

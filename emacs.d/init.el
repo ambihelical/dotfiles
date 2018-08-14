@@ -1491,9 +1491,16 @@
     ("<f9> c"     #'magit-commit)
     ("<f9> f"     #'magit-log-buffer-file)
     ("<f9> l"     #'magit-log-current)
+    ("<f9> o"     #'me:magit-open-revision)
     ("<f9> r"     #'magit-list-repositories)
     ("<f9> <f9>"  #'magit-status)
-  :config)
+  :config
+  (defun me:magit-open-revision (rev arg)
+    "Select and open revision of current file, with prefix opens in other window"
+    (interactive (list (magit-read-branch-or-commit "Open revision") current-prefix-arg))
+    (if arg
+        (switch-to-buffer-other-window (magit-find-file-noselect rev (buffer-file-name)))
+      (switch-to-buffer (magit-find-file-noselect rev (buffer-file-name))))))
 
 (use-package evil-magit
   :after magit
