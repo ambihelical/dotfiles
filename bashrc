@@ -86,8 +86,8 @@ gprompt() {
 		lbranch=${BASH_REMATCH[1]}
 		rbranch=${BASH_REMATCH[3]}
 		local slippage=${BASH_REMATCH[5]}
-		local aheadRe='[ahead ([0-9]+)]'
-		local behindRe='[behind ([0-9]+)]'
+		local aheadRe='ahead ([0-9]+)'
+		local behindRe='behind ([0-9]+)'
 		[[ "$slippage" =~ $aheadRe ]] && aheadN=${BASH_REMATCH[1]}
 		[[ "$slippage" =~ $behindRe ]] && behindN=${BASH_REMATCH[1]}
 		# check for common form where local branch name is same as remote branch
