@@ -68,6 +68,7 @@
 [diff]
 	submodule = log
 	mnemonicprefix = true
+	renameLimit = 20000
 [status]
 	submoduleSummary = true
 [credential]
