@@ -1310,8 +1310,9 @@
   (add-hook 'c++-mode-hook #'counsel-gtags-mode)
   :config)
 
-;; build in package for cross-references
+;; built-in package for cross-references
 (use-package xref
+  :demand
   :ensure nil
   :config
   (add-to-list 'xref-prompt-for-identifier #'xref-find-references t)
