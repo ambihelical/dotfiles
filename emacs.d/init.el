@@ -1271,6 +1271,15 @@
               (define-key deft-mode-map (kbd "<C-return>") #'deft-new-file)
               (define-key deft-mode-map (kbd "<C-backspace>") #'deft-filter-clear))))
 
+;; polyglot language server interface
+(use-package eglot
+  :general
+  (:keymaps 'eglot-mode-map "M-RET"  #'eglot-code-actions)
+  :hook ((c-mode . eglot-ensure)
+         (c++-mode . eglot-ensure))
+  :config
+  (add-to-list 'eglot-server-programs '((c++-mode c-mode) eglot-cquery "~/extern/cquery-dev/build/release/bin/cquery")))
+
 (use-package company
   :general
     ("s-d"        #'company-complete)
@@ -1328,66 +1337,6 @@
   :init
   (setq xref-show-xrefs-function #'ivy-xref-show-xrefs
         ivy-xref-use-file-path t))
-
-;; C/C++ cross-references and more
-(use-package cquery
-  :commands lsp-query-enable
-  :general
-  ("<f6> b" #'me:cquery-xref-find-base)
-  ("<f6> c" #'me:cquery-xref-find-callers)
-  ("<f6> v" #'me:cquery-xref-find-vars)
-  ("<f6> R" #'cquery-freshen-index)
-  ("<f6> d" #'me:cquery-xref-find-derived)
-  ("<f6> [" #'me:cquery-show-tree-callers)
-  ("<f6> ]" #'me:cquery-show-tree-callees)
-  :config
-  (defun me:cquery-xref-find-base () (interactive) (cquery-xref-find-custom "$cquery/base"))
-  (defun me:cquery-xref-find-callers () (interactive) (cquery-xref-find-custom "$cquery/callers"))
-  (defun me:cquery-xref-find-derived () (interactive) (cquery-xref-find-custom "$cquery/derived"))
-  (defun me:cquery-xref-find-vars () (interactive) (cquery-xref-find-custom "$cquery/vars"))
-  (defun me:cquery-show-tree-callees () (interactive) (cquery-call-hierarchy t))
-  (defun me:cquery-show-tree-callers () (interactive) (cquery-call-hierarchy nil))
-  :init
-  (setq cquery-executable "~/extern/cquery-dev/build/release/bin/cquery"
-        cquery-cache-dir-function #'cquery-cache-dir-consolidated
-        cquery-cache-dir-consolidated-path (expand-file-name "cquery-cache.d" me:emacs-cache-directory)
-        cquery-extra-init-params '( :index (:comments 2)               ;; use all of comments
-                                    :threads 2                         ;; default is %80, which is too high
-                                    :cacheFormat "msgpack"))           ;; use more compact format
-  (defun me:cquery-enable ()
-    (condition-case nil
-        (lsp-cquery-enable)
-      (user-error nil)))
-  (add-hook 'c-mode-hook #'me:cquery-enable)
-  (add-hook 'c++-mode-hook #'me:cquery-enable))
-
-;; LSP package
-(use-package lsp-mode
-  :init
-  (setq lsp-enable-eldoc nil)
-  :config)
-
-;; useful UI integrations for lsp-mode
-(use-package lsp-ui
-  :after lsp-mode
-  :general
-  ("<f6> u" #'lsp-ui-mode)
-  :init
-  (setq lsp-inhibit-message t)
-  :config)
-
-;; company backend for LSP
-(use-package company-lsp
-  :after (company lsp-mode)
-  :init
-  (setq company-transformers nil
-        company-lsp-async t
-        company-lsp-enable-snippet t
-        company-lsp-enable-recompletion t
-        company-lsp-cache-candidates nil)
-  :demand t
-  :config
-  (add-to-list 'company-backends 'company-lsp))
 
 (use-package yasnippet
   :commands ( yas-expand-snippet )
