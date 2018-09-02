@@ -159,7 +159,7 @@
 
 ;; make describe-xxx more useful
 (use-package helpful
-  :init
+  :commands ( helpful-callable helpful-key helpful-function helpful-variable helpful-symbol )
   :general
   ("C-h x" #'helpful-callable)
   ([remap describe-key] #'helpful-key)
@@ -840,6 +840,7 @@
 
 ;; add some ivy buffer information
 (use-package ivy-rich
+  :disabled
   :after ivy
   :config
   (ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer)
