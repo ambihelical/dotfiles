@@ -902,19 +902,18 @@
   (setq wgrep-enable-key "\C-c\C-w"))
 
 (use-package projectile
-  :general
-    ("<f7> k"     #'projectile-kill-buffers)
-    ("<f7> o"     #'projectile-multi-occur)
-    ("<f7> u"     #'projectile-invalidate-cache)
-    ("<f7> N"     #'projectile-clear-known-projects)
-    ("<f7> n"     #'projectile-add-known-project)
-    (:states '(normal visual emacs)
-    :prefix "<SPC>"
-         "m"    #'projectile-compile-project)
-    (:prefix "C-c"
-            "p"  '(:ignore t :which-key "Projectile→" ))
   :after evil
   :demand t     ; required because use-package-always-defer is t
+  :general
+  (:keymaps 'projectile-mode-map "<f7>" 'projectile-command-map )
+  ("<f7> N"     #'projectile-clear-known-projects)
+  ("<f7> n"     #'projectile-add-known-project)
+  (:prefix "<f7>" "4"  '(:ignore t :which-key "Find→" ))
+  (:prefix "<f7>" "5"  '(:ignore t :which-key "Find→" ))
+  (:prefix "<f7>" "x"  '(:ignore t :which-key "Run→" ))
+  (:prefix "<f7>" "s"  '(:ignore t :which-key "Search→" ))
+  (:prefix "<SPC>" :states '(normal visual emacs)
+        "m"    #'projectile-compile-project)
   :init
   (setq projectile-completion-system 'ivy
         projectile-globally-ignored-files #'( "TAGS" "GTAGS" "GRTAGS" "GPATH" )
