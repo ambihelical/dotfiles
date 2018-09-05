@@ -1278,6 +1278,19 @@
   :hook ((c-mode . eglot-ensure)
          (c++-mode . eglot-ensure))
   :config
+  ;; augment the eglot-initialization-options defined by eglot-cquery
+  ;; Store cache in ~/.cache/emacs/cquery-cache.d/<hash-of-project-path>
+  ;; Other options are straightforward
+  (cl-defmethod eglot-initialization-options :around ((server eglot-cquery))
+    (let* ((root (expand-file-name (car (project-roots (eglot--project server)))))
+           (root-hashed (replace-regexp-in-string "\/" "!" (directory-file-name root) t t nil 1))
+           (cache-path (expand-file-name "cquery-cache.d" me:emacs-cache-directory))
+           (cache (expand-file-name root-hashed cache-path)))
+      (append (list :cacheDirectory (file-name-as-directory cache)
+                    :index '(:comments 2)
+                    :threads 2
+                    :cacheFormat "msgpack")
+              (cl-call-next-method))))
   (add-to-list 'eglot-server-programs '((c++-mode c-mode) eglot-cquery "~/extern/cquery-dev/build/release/bin/cquery")))
 
 (use-package company
