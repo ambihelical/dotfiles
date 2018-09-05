@@ -271,8 +271,17 @@ fi
 # be able to find our locally built libraries
 [ -d ~/.local/lib ] && export LD_LIBRARY_PATH=~/.local/lib
 
+# use emacs in client mode as default editor
 # use vim as default editor and for command line editting style
+
+if type emacsclient > /dev/null 2>&1;  then
+export ALTERNATE_EDITOR=""
+export EDITOR="emacsclient -t"
+export VISUAL="emacsclient -c -a emacs"
+else
 export EDITOR=vim
+export VISUAL=gvim
+fi
 set -o vi
 
 # use less for paging

@@ -62,8 +62,11 @@
 (defun me:set-preferred-font ()
   (let* ((fonts (font-family-list))
          (match (seq-find (lambda (elem) (member (car elem) fonts)) me:preferred-fonts)))
-       (if match
-           (set-frame-font (cdr match) t t))))
+    (if match
+        (let ((font-name (cdr match)))
+          (message "font name is %s" font-name)
+          (add-to-list 'default-frame-alist `(font . ,font-name))
+          (set-frame-font font-name t t)))))
 
 (defun me:extra-setup ()
   (tool-bar-mode 0)                                           ; no tool bar (tool-bar)
@@ -74,6 +77,7 @@
   (make-directory me:emacs-backup-directory t)                ; make sure backup dir exists
   (electric-indent-mode +1)                                   ; turn on electric mode globally (electric)
   (delete-selection-mode t)                                   ; pastes delete selection
+  (me:set-preferred-font)                                     ; set the font
   (run-at-time "1 hour" 3600 #'clean-buffer-list))            ; clear out old buffers every hour (midnight)
 
 ;; Reset all buffer's mode line to the default one
@@ -956,7 +960,8 @@
     (:prefix "C-x"
             "x"  '(:ignore t :which-key "Perspective→" ))
   :config
-    (setq persp-initial-frame-name (projectile-project-name))
+    (unless (daemonp)
+      (setq persp-initial-frame-name (projectile-project-name)))
     (persp-mode))
 
 ;; Highlight delimiters by depth
