@@ -49,3 +49,6 @@ ulimit -n 4096
 
 # root gets garbled sometimes, so set solid color
 xsetroot -solid "#333333"
+
+# start emacs daemon
+emacs --daemon

@@ -59,11 +59,18 @@
                                           (set-buffer cur-buf)
                                           (funcall ,func))))))))))
 
-(defun me:set-preferred-font ()
-  (let* ((fonts (font-family-list))
-         (match (seq-find (lambda (elem) (member (car elem) fonts)) me:preferred-fonts)))
-       (if match
-           (set-frame-font (cdr match) t t))))
+(defun me:set-frame-face (frame)
+  "Set font face for frame"
+  (select-frame frame)
+  (if (display-graphic-p)
+    (let* ((fonts (font-family-list))
+          (match (seq-find (lambda (elem) (member (car elem) fonts)) me:preferred-fonts)))
+      (if match
+          (let ((font-name (cdr match)))
+            ;(message "font name is %s" font-name)
+            (add-to-list 'default-frame-alist `(font . ,font-name))
+            (set-frame-font font-name t t))))))
+
 
 (defun me:extra-setup ()
   (tool-bar-mode 0)                                           ; no tool bar (tool-bar)
@@ -241,6 +248,9 @@
   ("s-o"        #'me:switch-to-previous-buffer)
   :init
   (add-hook 'focus-out-hook #'me:save-dirty-buffers)          ; save on defocus
+  (add-hook 'after-make-frame-functions #'me:set-frame-face)
+  (mapc #'me:set-frame-face (frame-list))
+
   (setq frame-title-format
         '((:eval (if (buffer-file-name)
                      (me:replace-prefix (abbreviate-file-name default-directory)
@@ -464,7 +474,6 @@
               (set-face-attribute 'magit-diff-hunk-heading nil :box "#5e5e5e" :background "dark slate grey")
               (set-face-attribute 'magit-diff-hunk-heading-highlight nil :box "#5e5e5e" :background "steel blue")))
   :config
-  (me:set-preferred-font)                                     ; set the font
   ;; make visual and highlight more noticable
   (set-face-attribute 'lazy-highlight nil :background "#5e5e5e")
   (set-face-attribute 'region nil :background "#5e5e5e")
@@ -953,7 +962,8 @@
     (:prefix "C-x"
             "x"  '(:ignore t :which-key "Perspective→" ))
   :config
-    (setq persp-initial-frame-name (projectile-project-name))
+    (unless (daemonp)
+      (setq persp-initial-frame-name (projectile-project-name)))
     (persp-mode))
 
 ;; Highlight delimiters by depth
