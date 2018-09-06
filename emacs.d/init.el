@@ -922,7 +922,6 @@
         ;; Reorder so other cases are secondary
         projectile-project-root-files #'( ".projectile" )
         projectile-project-root-files-functions #'(projectile-root-top-down
-                                                   projectile-root-top-down-recurring
                                                    projectile-root-bottom-up
                                                    projectile-root-local)
         projectile-use-git-grep t
