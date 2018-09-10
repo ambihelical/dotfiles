@@ -941,6 +941,7 @@
         projectile-use-git-grep t
         projectile-cache-file (expand-file-name "projectile-cache" me:emacs-cache-directory)
         projectile-mode-line '(:eval (format " [%s]" (projectile-project-name)))
+        projectile-project-compilation-cmd ""     ;; workaround for stupid projectile bug
         projectile-enable-caching t)
   :config
   (use-package persp-projectile
