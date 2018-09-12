@@ -46,6 +46,18 @@ tilde() {
 	echo ${*/${HOME}/\~}
 }
 
+# find files
+
+ff() {
+	op="name"
+	[ "$1" = "-i" ] && op="iname" && shift
+	name=$1
+	shift
+	pat="*${name}*"
+	find . -${op} $pat $@
+}
+
+# output current column
 ccolumn()
 {
 	 local COL
