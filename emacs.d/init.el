@@ -154,12 +154,11 @@
 (use-package general
   :init
 	(global-unset-key (kbd "<f4>"))
+	(global-unset-key (kbd "<f10>"))
   :config
   (general-evil-setup t)
   (general-override-mode)
-  (general-define-key
-   :prefix "<f4>"
-    "g"     #'general-describe-keybindings)
+  (general-define-key :prefix "<f4>" "g"     #'general-describe-keybindings)
   (general-define-key "s-." #'repeat)
   (general-define-key "s-s" #'save-buffer)
   :demand)
@@ -241,7 +240,7 @@
 (use-package frame
   :ensure nil
   :general
-  ("<f5> f"     #'toggle-frame-fullscreen)   ; frame
+  ("<f10> f"     #'toggle-frame-fullscreen)   ; frame
   ("s-`"        #'previous-buffer)           ; window
   ("s-~"        #'next-buffer)               ; window
   ("s-w"        #'other-window)              ; window
@@ -278,17 +277,6 @@
   :init
   :config
   (winner-mode t))
-
-;; built-in windmove
-(use-package windmove
-  :ensure nil
-  :defer 3
-  :general
-  ("s-j" #'windmove-down)
-  ("s-k" #'windmove-up)
-  ("s-h" #'windmove-left)
-  ("s-l" #'windmove-right))
-
 
 ;; built-in minibuffer package
 (use-package minibuffer
@@ -345,7 +333,7 @@
 (use-package hl-line
   :ensure nil
   :general
-  ("<f5> h" #'global-hl-line-mode)              ; toggle hl-line
+  ("<f10> h" #'global-hl-line-mode)              ; toggle hl-line
   :init
   :config
   (global-hl-line-mode t)                       ; highlight current line (hl-line)
@@ -355,8 +343,8 @@
 (use-package menu-bar
   :ensure nil
   :general
-    ("<f5> b"      #'menu-bar-mode)
-    ("<f5> <f5>"   #'menu-bar-open)
+    ("<f10> b"      #'menu-bar-mode)
+    ("<f10> <f10>"   #'menu-bar-open)
   :init
   :config
   (menu-bar-mode 0)                             ; no menu bar
@@ -366,8 +354,8 @@
 (use-package face-remap
   :ensure nil
   :general
-  ("<f5> -" #'text-scale-adjust)
-  ("<f5> =" #'text-scale-adjust)
+  ("<f10> -" #'text-scale-adjust)
+  ("<f10> =" #'text-scale-adjust)
   :init
   (setq text-scale-mode-step 1.05)              ; text size increases by 5% (normally 20%)
   :config
@@ -503,7 +491,7 @@
   :config
   (me:reset-mode-lines)
   :general
-  ("<f5> m" #'minions-minor-modes-menu))
+  ("<f10> m" #'minions-minor-modes-menu))
 
 ; modeline tabs
 (use-package moody
@@ -530,7 +518,7 @@
 (use-package display-line-numbers
   :config
   :general
-  ("<f5> l"      #'display-line-numbers-mode)
+  ("<f10> l"      #'display-line-numbers-mode)
   :init
   (setq display-line-numbers-type 'relative))
 
@@ -554,7 +542,7 @@
 
 (use-package ruler-mode
   :general
-    ("<f5> u" #'ruler-mode)
+    ("<f10> u" #'ruler-mode)
   :config)
 
 ;; better package manager
@@ -600,7 +588,7 @@
 ; modal window resizing
 (use-package windresize
   :general
-    ("<f5> r"      #'windresize)
+    ("<f10> r"      #'windresize)
     (:keymaps 'windresize-map
               "q" #'windresize-exit
               "h" #'windresize-left
@@ -621,13 +609,17 @@
   :general
   ("<f4> d"   #'dired-jump)
   (:keymaps 'dired-mode-map
-            "?" #'hydra-dired/body
+            "<f5> h" #'hydra-dired/body
             "j" #'dired-next-line
             "k" #'dired-previous-line
-            "\ l" #'dired-kill-line
-            "\ s" #'dired-kill-subdir
-            "\ t" #'dired-kill-tree
-            "C-c d" #'dired-hide-details-mode)
+            "<f5> d" #'dired-hide-details-mode)
+  ("*" '(:ignore t :which-key "Marking→" ))
+  ("%" '(:ignore t :which-key "Regular Expressions→" ))
+  (";" '(:ignore t :which-key "Cryptography→" ))
+  (":" '(:ignore t :which-key "Cryptography→" ))
+  ("C-t" '(:ignore t :which-key "Images→" ))
+  ("M-s" '(:ignore t :which-key "Incremental search→" ))
+  ("C-x" '(:ignore t :which-key "Miscellaneous" ))
   :init
   (setq dired-recursive-deletes 'always
         dired-recursive-copies 'always
@@ -748,7 +740,7 @@
   :ensure nil
   :general
   (:keymaps 'dired-mode-map
-            "C-c w" #'wdired-change-to-wdired-mode)
+            "<f5> w" #'wdired-change-to-wdired-mode)
   :config)
 
 (use-package peep-dired
@@ -768,7 +760,7 @@
           map))
   :general
   (:keymaps 'dired-mode-map
-            "C-c f" #'peep-dired)
+            "<f5> p" #'peep-dired)
   :config)
 
 ;; Use perl-like Regexp for all minibuffer input
@@ -821,6 +813,17 @@
     ("C-x b"      #'ivy-switch-buffer)
     (:keymaps 'ivy-minibuffer-map
               "<escape>" #'minibuffer-keyboard-quit
+              "<f5> a"   '(ivy-read-action         :which-key "Select action (C-M-a)")
+              "<f5> c"   '(ivy-call                :which-key "Call & stay open (C-M-m)")
+              "<f5> d"   '(ivy-dispatching-call    :which-key "Action & stay open (C-M-o)")
+              "<f5> e"   '(ivy-dispatch-done       :which-key "Call selected action & close (M-o)")
+              "<f5> f"   '(ivy-avy                 :which-key "Avy search (C-')")
+              "<f5> h"   '(hydra-ivy/body          :which-key "Show hydra")
+              "<f5> k"   '(ivy-kill-ring-save      :which-key "Save in kill ring")
+              "<f5> o"   '(ivy-occur               :which-key "Open occur buffer")
+              "<f5> r"   '(ivy-restrict-to-matches :which-key "Rematch")
+              "<f5> q"   '(ivy-toggle-regexp-quote :which-key "Toggle regexp quoting")
+              "<f5> y"   '(ivy-yank-word           :which-key "Yank from buffer")
               "M-y" #'ivy-next-line)                       ; for yank-pop flow
     (:keymaps 'ivy-occur-grep-mode-map
               "DEL"  #'ivy-occur-delete-candidate)       ; orig C-d
@@ -881,9 +884,9 @@
   ("M-x"    #'counsel-M-x)
   ("M-y"    #'counsel-yank-pop)
   ("<f3>"   #'me:find-some-files)
-  ("<f5> t" #'counsel-load-theme)
-  ("<f5> c" #'counsel-colors-emacs)
-  ("<f5> w" #'counsel-colors-web)
+  ("<f10> t" #'counsel-load-theme)
+  ("<f10> c" #'counsel-colors-emacs)
+  ("<f10> w" #'counsel-colors-web)
   ("<f6> m" #'counsel-imenu)
   :init
   (setq counsel-yank-pop-separator "\n---\n")
@@ -908,14 +911,14 @@
 
 ;; allow grep buffers to be editted
 (use-package wgrep
-  :init
-  (setq wgrep-enable-key "\C-c\C-w"))
+  :general
+  (:keymaps 'grep-mode-map "<f5> w" #'wgrep-change-to-wgrep-mode))
 
 (use-package projectile
   :after evil
   :demand t     ; required because use-package-always-defer is t
   :general
-  (:keymaps 'projectile-mode-map "<f7>" 'projectile-command-map )
+  (:keymaps 'projectile-mode-map "<f7>" 'projectile-command-map )  ; all projectile built in bindings off f7
   ("<f7> N"     #'projectile-clear-known-projects)
   ("<f7> n"     #'projectile-add-known-project)
   (:prefix "<f7>" "4"  '(:ignore t :which-key "Find→" ))
@@ -1180,7 +1183,7 @@
               "<down>" #'compilation-next-error
               "<prior>" #'compilation-previous-file
               "<next>" #'compilation-next-file
-              "C-c C-e" #'me:rotate-skip-threshold
+              "<f5> r" #'me:rotate-skip-threshold
               "<SPC>" nil
               "g" nil
               "j" nil
@@ -1282,7 +1285,7 @@
 ;; polyglot language server interface
 (use-package eglot
   :general
-  (:keymaps 'eglot-mode-map "M-RET"  #'eglot-code-actions)
+  (:keymaps 'eglot-mode-map "<f5> a"  #'eglot-code-actions)
   :hook ((c-mode . eglot-ensure)
          (c++-mode . eglot-ensure))
   :init
@@ -1313,6 +1316,8 @@
               (cl-call-next-method))))
   (add-to-list 'eglot-server-programs '((c++-mode c-mode) eglot-cquery "~/extern/cquery-dev/build/release/bin/cquery")))
 
+;; N.B. Completion when candidate is already typed out is broken in company.
+;; See issues #451, #205, #150
 (use-package company
   :general
     ("s-d"        #'company-complete)
@@ -1360,6 +1365,7 @@
   (add-to-list 'xref-prompt-for-identifier #'xref-find-references t)
   :general
   ("<f6> <f6>" #'xref-find-definitions)
+  ("<f6> d"    #'xref-find-definitions-other-window)
   ("<f6> r"   #'xref-find-references)
   ("<f6> a"   #'xref-find-apropos))
 
@@ -1441,6 +1447,10 @@
         evil-mode-line-format '( before . mode-line-front-space)
         evil-search-module #'evil-search)
   :general
+    ("s-j" #'evil-window-down)
+    ("s-k" #'evil-window-up)
+    ("s-h" #'evil-window-left)
+    ("s-l" #'evil-window-right)
     (:states '(normal visual) :keymaps 'override
     :prefix "<SPC>"
       ";"          #'evil-jump-forward
@@ -1448,6 +1458,7 @@
       "a"          #'align
       "f"          #'avy-goto-word-1
       "g"          #'avy-goto-char-2
+      "<SPC>"      #'avy-goto-char-timer
       "h"          #'hydra-diff-hl/body
       "l"          #'avy-goto-char-in-line
       "p"          #'hydra-paste/body
@@ -1554,8 +1565,13 @@
 
 (use-package which-key
   :init
+  :general
+  ("<f5>" '(:ignore t :which-key "Major Mode Specific→" ))
+  ("<f5> <f5>"  #'which-key-show-major-mode)
   :config
-  (setq which-key-max-description-length nil
+  (setq which-key-max-description-length 40
+        which-key-side-window-max-width 0.67
+        which-key-side-window-max-height 0.5
         which-key-allow-evil-operators t)
   (which-key-mode)
   (which-key-setup-side-window-right-bottom)
@@ -1642,7 +1658,7 @@
   (push '("*Completions*" :stick t :noselect t) popwin:special-display-config)
   (push '(Man-mode :stick t :height 20) popwin:special-display-config)
   (push '("*undo-tree*" :stick t :width 60 :position right) popwin:special-display-config)
-  (push '("*General Keybindings*" :width 72 :position right) popwin:special-display-config)
+  (push '("*General Keybindings*" :width 120 :position right) popwin:special-display-config)
   (popwin-mode 1)
   :defer 2)
 
