@@ -1360,8 +1360,9 @@
                                               interprogram-cut-function nil)))
   (setq-default evil-symbol-word-search t   ; misnamed: t is search for symbols, not words
                 evil-shift-width 3)         ; shift by ideal width :)
-  (setq evil-want-C-w-delete nil            ; want C-w it for windows commands
+  (setq evil-want-C-w-delete nil            ; want C-w for windows commands
         evil-want-C-w-in-emacs-state t      ; ditto
+        undo-tree-enable-undo-in-region nil ; enable undo in region (somehow nil does it)
         evil-want-C-i-jump nil              ; need TAB for other things
         evil-want-keybinding nil            ; use evil-collection instead
         evil-mode-line-format '( before . mode-line-front-space)
