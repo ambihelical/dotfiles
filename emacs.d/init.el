@@ -488,6 +488,7 @@
   (setq sml/theme 'respectful
         size-indication-mode t
         sml/line-number-format "%4l"
+        sml/size-indication-format " %I"
         sml/col-number-format "%3C"
         sml/numbers-separator " "
         sml/no-confirm-load-theme t)
@@ -1366,6 +1367,14 @@
         evil-want-integration nil           ; use evil-collection instead
         evil-mode-line-format '( before . mode-line-front-space)
         evil-search-module #'evil-search)
+
+  (setq evil-normal-state-tag   (propertize " N " 'face '((:background "DarkGoldenrod2" :foreground "black")))
+          evil-emacs-state-tag    (propertize " E " 'face '((:background "SkyBlue2"       :foreground "black")))
+          evil-insert-state-tag   (propertize " I " 'face '((:background "chartreuse3"    :foreground "black")))
+          evil-replace-state-tag  (propertize " R " 'face '((:background "chocolate"      :foreground "black")))
+          evil-motion-state-tag   (propertize " M " 'face '((:background "plum3"          :foreground "black")))
+          evil-visual-state-tag   (propertize " V " 'face '((:background "gray"           :foreground "black")))
+          evil-operator-state-tag (propertize " O " 'face '((:background "sandy brown"    :foreground "black"))))
   :general
     (:states '(normal visual) :keymaps 'override
     :prefix "<SPC>"
