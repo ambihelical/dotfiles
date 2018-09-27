@@ -1160,6 +1160,12 @@
   :config)
 
 (use-package logview
+  :general
+  ("<f5> c" #'me:colorize-ansi-escapes)
+  :config
+  (defun me:colorize-ansi-escapes ()
+    (interactive)
+    (ansi-color-apply-on-region (point-min) (point-max)))
   :mode
   (("\\.log\\'"   . logview-mode)))
 
