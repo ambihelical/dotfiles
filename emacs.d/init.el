@@ -991,6 +991,10 @@
   (setq dtrt-indent-run-after-smie t)
   :config)
 
+(use-package aggressive-indent
+  :hook (( emacs-lisp-mode ) . aggressive-indent-mode)
+  :config)
+
 (use-package markdown-mode
   :config
   :mode
