@@ -1610,18 +1610,19 @@
 (use-package magit
   :after evil
   :init
-  (setq magit-completing-read-function 'ivy-completing-read)   ; use ivy
-  (setq magit-repository-directories '(( "~/dev" . 1)))
+  (setq magit-completing-read-function 'ivy-completing-read   ; use ivy
+        magit-section-initial-visibility-alist '(( stashes . hide ))
+        magit-repository-directories '(( "~/dev" . 1)))
   :general
-    ("<f9> a"     #'magit-commit-amend)
-    ("<f9> b"     #'magit-blame)
-    ("<f9> B"     #'magit-run-git-gui-blame)
-    ("<f9> c"     #'magit-commit)
-    ("<f9> f"     #'magit-log-buffer-file)
-    ("<f9> l"     #'magit-log-current)
-    ("<f9> o"     #'me:magit-open-revision)
-    ("<f9> r"     #'magit-list-repositories)
-    ("<f9> <f9>"  #'magit-status)
+  ("<f9> a"     #'magit-commit-amend)
+  ("<f9> b"     #'magit-blame)
+  ("<f9> B"     #'magit-run-git-gui-blame)
+  ("<f9> c"     #'magit-commit)
+  ("<f9> f"     #'magit-log-buffer-file)
+  ("<f9> l"     #'magit-log-current)
+  ("<f9> o"     #'me:magit-open-revision)
+  ("<f9> r"     #'magit-list-repositories)
+  ("<f9> <f9>"  #'magit-status)
   :config
   (defun me:magit-open-revision (rev arg)
     "Select and open revision of current file, with prefix opens in other window"
