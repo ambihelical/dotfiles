@@ -126,6 +126,7 @@
       undo-limit 1000000                                    ; 1M (default is 80K)
       undo-strong-limit 1500000                             ; 1.5M (default is 120K)
       undo-outer-limit 150000000                            ; 150M (default is 12M)
+      use-file-dialog nil                                   ; never want gui file dialog
       scroll-margin 5                                       ; show some lines around cursor when possible
       safe-local-variable-values                            ; allow these values in .dir-locals.el
         '((evil-indent-convert-tabs . t))
