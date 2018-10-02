@@ -1678,6 +1678,7 @@
   (push '("*Completions*" :stick t :noselect t) popwin:special-display-config)
   (push '(Man-mode :stick t :height 20) popwin:special-display-config)
   (push '("*undo-tree*" :stick t :width 60 :position right) popwin:special-display-config)
+  (push '("*Help*" :stick t :width 80 :position right) popwin:special-display-config)
   (push '("*General Keybindings*" :width 120 :position right) popwin:special-display-config)
   (popwin-mode 1)
   :defer 2)
