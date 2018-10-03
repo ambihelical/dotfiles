@@ -497,6 +497,7 @@
 (use-package minions                    ; A minor-mode menu for the mode line
   :init
   (setq minions-direct '(flycheck-mode overwrite-mode)
+        minions-mode-line-delimiters nil
         minions-mode-line-lighter "[☰]")
   (add-hook 'sml/after-setup-hook #'minions-mode)
   :config
