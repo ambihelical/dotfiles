@@ -405,6 +405,12 @@
   :config
   :demand)
 
+;; built-in eldoc mode
+(use-package eldoc-mode
+  :ensure nil
+  :general
+  ("<f10> e" #'eldoc-mode))
+
 (use-package smooth-scrolling
   :config
   (smooth-scrolling-mode t)
