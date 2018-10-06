@@ -48,28 +48,28 @@
 
 ;; run hook function on buffer after a delay
 (defmacro me:add-hook-with-delay (hook delay func)
-    `(add-hook ,hook
-               (lambda ()
-                 (let ((cur-buf (current-buffer)))
-                   (run-at-time ,delay nil
-                                (lambda ()
-                                  (save-current-buffer
-                                    (if (buffer-live-p cur-buf)
-                                        (progn
-                                          (set-buffer cur-buf)
-                                          (funcall ,func))))))))))
+  `(add-hook ,hook
+             (lambda ()
+               (let ((cur-buf (current-buffer)))
+                 (run-at-time ,delay nil
+                              (lambda ()
+                                (save-current-buffer
+                                  (if (buffer-live-p cur-buf)
+                                      (progn
+                                        (set-buffer cur-buf)
+                                        (funcall ,func))))))))))
 
 (defun me:set-frame-face (frame)
   "Set font face for frame"
   (select-frame frame)
   (if (display-graphic-p)
-    (let* ((fonts (font-family-list))
-          (match (seq-find (lambda (elem) (member (car elem) fonts)) me:preferred-fonts)))
-      (if match
-          (let ((font-name (cdr match)))
-            ;(message "font name is %s" font-name)
-            (add-to-list 'default-frame-alist `(font . ,font-name))
-            (set-frame-font font-name t t))))))
+      (let* ((fonts (font-family-list))
+             (match (seq-find (lambda (elem) (member (car elem) fonts)) me:preferred-fonts)))
+        (if match
+            (let ((font-name (cdr match)))
+                                        ;(message "font name is %s" font-name)
+              (add-to-list 'default-frame-alist `(font . ,font-name))
+              (set-frame-font font-name t t))))))
 
 
 (defun me:extra-setup ()
@@ -91,7 +91,7 @@
               (with-current-buffer buffer
                 (kill-local-variable 'mode-line-format)
                 (force-mode-line-update t))))
-      (buffer-list)))
+        (buffer-list)))
 
 ;; Run programming mode hooks
 ;; This is used for modes which should trigger programming mode hooks
@@ -105,10 +105,10 @@
               indicate-empty-lines t                        ; show empty lines at end of buffer
               fill-column 120)                              ; auto-wrap only very long lines
 (setq auto-save-file-name-transforms
-         `((".*" ,me:emacs-backup-directory t))             ; autosave files in backup directory
+      `((".*" ,me:emacs-backup-directory t))             ; autosave files in backup directory
       ad-redefinition-action 'accept                        ; turn off 'xyz' got redefined warnings
       backup-directory-alist
-         `((".*" . ,me:emacs-backup-directory))             ; backup files in backup directory
+      `((".*" . ,me:emacs-backup-directory))             ; backup files in backup directory
       confirm-kill-processes nil                            ; don't ask about killing processes at exit
       custom-file "/dev/null"                               ; disable customizations
       fast-but-imprecise-scrolling t                        ; quick and dirty scrolling
@@ -129,12 +129,12 @@
       use-file-dialog nil                                   ; never want gui file dialog
       scroll-margin 5                                       ; show some lines around cursor when possible
       safe-local-variable-values                            ; allow these values in .dir-locals.el
-        '((evil-indent-convert-tabs . t))
+      '((evil-indent-convert-tabs . t))
       scalable-fonts-allowed t                              ; allow any scalable font
       select-enable-clipboard nil                           ; make cut/paste function correctly (select)
       sentence-end-double-space nil                         ; sentences end with one space
       standard-indent 3                                     ; preferred indent
-;      view-read-only t                                      ; show r/o files in view mode
+      ;;      view-read-only t                                      ; show r/o files in view mode
       x-gtk-use-system-tooltips nil)                        ; allow tooltip theming
 
 (add-hook 'after-init-hook                                  ; report init time
@@ -154,8 +154,8 @@
 ;; N.B. Other keybindings defined in apropriate use-package
 (use-package general
   :init
-	(global-unset-key (kbd "<f4>"))
-	(global-unset-key (kbd "<f10>"))
+  (global-unset-key (kbd "<f4>"))
+  (global-unset-key (kbd "<f10>"))
   :config
   (general-evil-setup t)
   (general-override-mode)
@@ -193,10 +193,10 @@
              me:select-5th-other-buffer
              me:save-dirty-buffers)
   :general
-    ("s-2"        #'me:select-2nd-other-buffer)
-    ("s-3"        #'me:select-3rd-other-buffer)
-    ("s-4"        #'me:select-4th-other-buffer)
-    ("s-5"        #'me:select-5th-other-buffer)
+  ("s-2"        #'me:select-2nd-other-buffer)
+  ("s-3"        #'me:select-3rd-other-buffer)
+  ("s-4"        #'me:select-4th-other-buffer)
+  ("s-5"        #'me:select-5th-other-buffer)
   :config
   :load-path "lisp/")
 
@@ -205,11 +205,11 @@
   :commands (hydra-paste/body x-urgency-hint)
   :ensure nil
   :general
-    ("s-1"     #'me:find-other-file)
-    ("s-c"     #'me:rotate-fill-column)
-    ("<f4> 1"  #'me:ps-one-per-page)
-    ("<f4> 2"  #'me:ps-two-per-page)
-    ("s-\\"    #'me:next-powerline-separator)
+  ("s-1"     #'me:find-other-file)
+  ("s-c"     #'me:rotate-fill-column)
+  ("<f4> 1"  #'me:ps-one-per-page)
+  ("<f4> 2"  #'me:ps-two-per-page)
+  ("s-\\"    #'me:next-powerline-separator)
   :config
   ;; Define paste hydra.
   ;; eval to avoid pulling in hydra via macro expansion
@@ -217,10 +217,10 @@
   ;; last-command to be a paste, and using a hydra messes with that,
   ;; last-command will be hydra-paste/body
   (eval '(defhydra hydra-paste (:hint nil)
-    "Pasting (see also C-n, C-p)"
-    ("b" me:paste-then-earlier "Paste above, earlier kill" :column "")
-    ("a" me:paste-then-later "Paste below, later kill" )
-    ("y" me:counsel-yank-pop-preselect-last "Select from kill ring")))
+           "Pasting (see also C-n, C-p)"
+           ("b" me:paste-then-earlier "Paste above, earlier kill" :column "")
+           ("a" me:paste-then-later "Paste below, later kill" )
+           ("y" me:counsel-yank-pop-preselect-last "Select from kill ring")))
   :load-path "lisp/")
 
 ;; built-in emacs-lisp-mode package
@@ -272,8 +272,8 @@
 (use-package winner
   :ensure nil
   :general
-    ("s-]"   #'winner-redo)
-    ("s-["   #'winner-undo)
+  ("s-]"   #'winner-redo)
+  ("s-["   #'winner-undo)
   :defer 1
   :init
   :config
@@ -286,7 +286,6 @@
   (setq enable-recursive-minibuffers t)                        ; allow recursive edit
   (add-hook 'minibuffer-setup-hook #'me:minibuffer-setup)
   (add-hook 'minibuffer-exit-hook #'me:minibuffer-exit)
-
   :config
   (savehist-mode t)                        ; save minibuffer history (savehist)
   (minibuffer-depth-indicate-mode t)       ; show recursive edit depth (mb-depth)
@@ -307,15 +306,15 @@
   :hook (( prog-mode text-mode ) . visual-line-mode )
   :ensure nil
   :general
-    ("s-n"        #'next-error)
-    ("s-p"        #'previous-error)
-    ("s-<backspace>"    #'kill-current-buffer)
+  ("s-n"        #'next-error)
+  ("s-p"        #'previous-error)
+  ("s-<backspace>"    #'kill-current-buffer)
   :init
   (setq kill-ring-max 200                      ; More killed items
         kill-do-not-save-duplicates t          ; No duplicates in kill ring
         save-interprogram-paste-before-kill t  ; save clipboard before killing
         visual-line-fringe-indicators
-           '(left-curly-arrow nil))            ; use left curly error for wrapped lines
+        '(left-curly-arrow nil))            ; use left curly error for wrapped lines
   :config
   (column-number-mode t)                       ; display column/row of cursor in mode-line
   :demand)
@@ -344,8 +343,8 @@
 (use-package menu-bar
   :ensure nil
   :general
-    ("<f10> b"      #'menu-bar-mode)
-    ("<f10> <f10>"   #'menu-bar-open)
+  ("<f10> b"      #'menu-bar-mode)
+  ("<f10> <f10>"   #'menu-bar-open)
   :init
   :config
   (menu-bar-mode 0)                             ; no menu bar
@@ -424,9 +423,9 @@
 ;; highlight keywords
 (use-package fic-mode
   :config
-    (setq fic-highlighted-words `( "TODO" "HACK" "KLUDGE" "FIXME" "TRICKY" "BUG" ))
+  (setq fic-highlighted-words `( "TODO" "HACK" "KLUDGE" "FIXME" "TRICKY" "BUG" ))
   :init
-    (me:add-hook-with-delay 'prog-mode-hook 10 #'fic-mode))
+  (me:add-hook-with-delay 'prog-mode-hook 10 #'fic-mode))
 
 (use-package whitespace
   :config
@@ -434,9 +433,9 @@
         whitespace-style '(face trailing tabs tab-mark lines-tail space-before-tab)
         whitespace-display-mappings '((tab-mark 9 [9657 9] [92 9])))
   :init
-    (add-hook 'whitespace-mode-hook 'me:set-extra-font-attributes)
-    (me:add-hook-with-delay 'prog-mode-hook 3 #'whitespace-mode)
-    (me:add-hook-with-delay 'text-mode-hook 3 #'whitespace-mode)
+  (add-hook 'whitespace-mode-hook 'me:set-extra-font-attributes)
+  (me:add-hook-with-delay 'prog-mode-hook 3 #'whitespace-mode)
+  (me:add-hook-with-delay 'text-mode-hook 3 #'whitespace-mode)
   :diminish whitespace-mode)
 
 ;; Highlight cursor position in buffer
@@ -502,7 +501,7 @@
   :general
   ("<f10> m" #'minions-minor-modes-menu))
 
-; modeline tabs
+;; modeline tabs
 (use-package moody
   :after hc-zenburn-theme
   :demand
@@ -510,12 +509,12 @@
   (setq x-underline-at-descent-line t)
   :config
   (let ((line (face-attribute 'mode-line :underline)))
-      (set-face-attribute 'mode-line          nil :overline   line)
-      (set-face-attribute 'mode-line-inactive nil :overline   line)
-      (set-face-attribute 'mode-line-inactive nil :underline  line)
-      (set-face-attribute 'mode-line          nil :underline  line)
-      (set-face-attribute 'mode-line          nil :box        nil)
-      (set-face-attribute 'mode-line-inactive nil :box        nil))
+    (set-face-attribute 'mode-line          nil :overline   line)
+    (set-face-attribute 'mode-line-inactive nil :overline   line)
+    (set-face-attribute 'mode-line-inactive nil :underline  line)
+    (set-face-attribute 'mode-line          nil :underline  line)
+    (set-face-attribute 'mode-line          nil :box        nil)
+    (set-face-attribute 'mode-line-inactive nil :box        nil))
   ;; make mode lines more noticable
   (set-face-attribute 'mode-line nil :background "#4e4e4e" :height 1.1)
   (set-face-attribute 'mode-line-inactive nil :background "#3e3e3e" :height 0.9)
@@ -543,24 +542,24 @@
   (diff-hl-margin-mode t)
   ;; Define diff-hl hydra
   (eval '(defhydra hydra-diff-hl (:hint nil)
-    "Diff hl"
-    ("j" diff-hl-next-hunk "Goto next hunk" :column "Navigation")
-    ("k" diff-hl-previous-hunk "Goto previous hunk" )
-    ("v" diff-hl-diff-goto-hunk "Show hunk" :column "Operations")
-    ("r" diff-hl-revert-hunk "Revert hunk at point or all in region"))))
+           "Diff hl"
+           ("j" diff-hl-next-hunk "Goto next hunk" :column "Navigation")
+           ("k" diff-hl-previous-hunk "Goto previous hunk" )
+           ("v" diff-hl-diff-goto-hunk "Show hunk" :column "Operations")
+           ("r" diff-hl-revert-hunk "Revert hunk at point or all in region"))))
 
 (use-package ruler-mode
   :general
-    ("<f10> u" #'ruler-mode)
+  ("<f10> u" #'ruler-mode)
   :config)
 
 ;; better package manager
 (use-package paradox
   :general
-    ("<f4> P"     #'me:paradox-list-packages)
-    (:keymaps 'paradox-menu-mode-map
-              "j" #'paradox-next-entry
-              "k" #'paradox-previous-entry)
+  ("<f4> P"     #'me:paradox-list-packages)
+  (:keymaps 'paradox-menu-mode-map
+            "j" #'paradox-next-entry
+            "k" #'paradox-previous-entry)
   :config
   ;; make sure packages are up-to-date before updating
   (defun me:paradox-list-packages ()
@@ -594,16 +593,16 @@
   :defer 3)
 
 
-; modal window resizing
+;; modal window resizing
 (use-package windresize
   :general
-    ("<f10> r"      #'windresize)
-    (:keymaps 'windresize-map
-              "q" #'windresize-exit
-              "h" #'windresize-left
-              "l" #'windresize-right
-              "j" #'windresize-down
-              "k" #'windresize-up)
+  ("<f10> r"      #'windresize)
+  (:keymaps 'windresize-map
+            "q" #'windresize-exit
+            "h" #'windresize-left
+            "l" #'windresize-right
+            "j" #'windresize-down
+            "k" #'windresize-up)
   :config)
 
 ;; remote file editting
@@ -637,87 +636,87 @@
         dired-dwim-target t)             ; use existing dired buffer, if exists
   :config
   (eval '(defhydra hydra-dired (:hint nil :color pink)
-      "Current: .  Current or marked: +  Subdir: *  Tree: /  Regular Expression: Re  Incremental: ?"
+           "Current: .  Current or marked: +  Subdir: *  Tree: /  Regular Expression: Re  Incremental: ?"
 
-      ;; interface
-      ("(" dired-hide-details-mode "Details" :column "Interface")
-      ("s" dired-sort-toggle-or-edit "Date sort")
-      (")" dired-omit-mode "Toggle omit")
-      ("_" dired-show-file-type "File type .")
-      ("g" revert-buffer "Refresh")
-      ("C-_" dired-undo "Undo")
-      ("r" dired-do-redisplay "Redisplay")
-      ("/" dired-narrow "Narrow" )
-      ("i" dired-maybe-insert-subdir "Add subdir .")
-      (">" dired-next-dirline "Next dir")
-      ("<" dired-prev-dirline "Prev dir")
-      ("?" nil :exit t)
-      ("q" quit-window "Quit" :exit t)
+           ;; interface
+           ("(" dired-hide-details-mode "Details" :column "Interface")
+           ("s" dired-sort-toggle-or-edit "Date sort")
+           (")" dired-omit-mode "Toggle omit")
+           ("_" dired-show-file-type "File type .")
+           ("g" revert-buffer "Refresh")
+           ("C-_" dired-undo "Undo")
+           ("r" dired-do-redisplay "Redisplay")
+           ("/" dired-narrow "Narrow" )
+           ("i" dired-maybe-insert-subdir "Add subdir .")
+           (">" dired-next-dirline "Next dir")
+           ("<" dired-prev-dirline "Prev dir")
+           ("?" nil :exit t)
+           ("q" quit-window "Quit" :exit t)
 
-      ;; marking
-      ("m" dired-mark "Mark ." :column "Marking")
-      ("u" dired-unmark "Unmark .")
-      ("U" dired-unmark-all-marks "Unmark all")
-      ("M-{" dired-prev-marked-file "Previous mark")
-      ("M-}" dired-next-marked-file "Next mark")
-      ("% m" dired-mark-files-regexp "Mark Re")
-      ("% g" dired-mark-files-containing-regexp "Mark Re content")
-      ("* s" dired-mark-subdir-files "Mark *")
-      ("* t" dired-toggle-marks "Toggle marks")
-      ("* DEL" dired-unmark-backward "Unmark backward")
-      ("* ?" dired-unmark-all-files "Unmark all")
-      ("* c" dired-change-marks "Change marks")
-      ("* *" dired-mark-executables "Mark execs")
-      ("* /" dired-mark-directories "Mark dirs")
-      ("* O" dired-mark-omitted "Mark omitted")
-      ("* @" dired-mark-symlinks "Mark symlinks")
+           ;; marking
+           ("m" dired-mark "Mark ." :column "Marking")
+           ("u" dired-unmark "Unmark .")
+           ("U" dired-unmark-all-marks "Unmark all")
+           ("M-{" dired-prev-marked-file "Previous mark")
+           ("M-}" dired-next-marked-file "Next mark")
+           ("% m" dired-mark-files-regexp "Mark Re")
+           ("% g" dired-mark-files-containing-regexp "Mark Re content")
+           ("* s" dired-mark-subdir-files "Mark *")
+           ("* t" dired-toggle-marks "Toggle marks")
+           ("* DEL" dired-unmark-backward "Unmark backward")
+           ("* ?" dired-unmark-all-files "Unmark all")
+           ("* c" dired-change-marks "Change marks")
+           ("* *" dired-mark-executables "Mark execs")
+           ("* /" dired-mark-directories "Mark dirs")
+           ("* O" dired-mark-omitted "Mark omitted")
+           ("* @" dired-mark-symlinks "Mark symlinks")
 
-      ;; viewing
-      ("RET" dired-find-file "Open ." :column "Viewing")
-      ("o" dired-find-file-other-window "Window .")
-      ("F" dired-do-find-marked-files "Open +")
-      ("v" dired-view-file "View .")
-      ("=" dired-diff "Diff +")
-      ("J" dired-goto-file "Goto .")     ;; doesnt work
-      ("P" dired-do-print "Print +")
-      ("I" dired-info "Info .")
-      ("M" dired-man "Man .")
+           ;; viewing
+           ("RET" dired-find-file "Open ." :column "Viewing")
+           ("o" dired-find-file-other-window "Window .")
+           ("F" dired-do-find-marked-files "Open +")
+           ("v" dired-view-file "View .")
+           ("=" dired-diff "Diff +")
+           ("J" dired-goto-file "Goto .")     ;; doesnt work
+           ("P" dired-do-print "Print +")
+           ("I" dired-info "Info .")
+           ("M" dired-man "Man .")
 
-      ;; Operations
-      ("A" dired-do-find-regexp "Find Re +" :column "Operations")
-      ("C" dired-do-copy "Copy +")
-      ("% C" dired-do-copy-regexp "Copy + Re")
-      ("+" dired-create-directory "Create Dir")
-      ("Z" dired-do-compress "G[un]zip + ")
-      ("c" dired-compress-to "Archive +")
-      ("Y" dired-do-relsymlink "Rsymlink +")
-      ("% Y" dired-do-relsymlink-regexp "Rsymlink Re")
-      ("S" dired-do-symlink "Symlink +")
-      ("% S" dired-do-symlink-regexp "Symlink Re")
-      ("H" dired-do-hardlink "Hard link +")
-      ("% H" dired-do-hardlink-regexp "Hard link Re")
+           ;; Operations
+           ("A" dired-do-find-regexp "Find Re +" :column "Operations")
+           ("C" dired-do-copy "Copy +")
+           ("% C" dired-do-copy-regexp "Copy + Re")
+           ("+" dired-create-directory "Create Dir")
+           ("Z" dired-do-compress "G[un]zip + ")
+           ("c" dired-compress-to "Archive +")
+           ("Y" dired-do-relsymlink "Rsymlink +")
+           ("% Y" dired-do-relsymlink-regexp "Rsymlink Re")
+           ("S" dired-do-symlink "Symlink +")
+           ("% S" dired-do-symlink-regexp "Symlink Re")
+           ("H" dired-do-hardlink "Hard link +")
+           ("% H" dired-do-hardlink-regexp "Hard link Re")
 
-      ("T" dired-do-touch "Touch +")
-      ("M" dired-do-chmod "Chmod +")
-      ("O" dired-do-chown "Chown +")
-      ("G" dired-do-chgrp "Chgrp +")
-      ("w" dired-copy-filename-as-kill "Yank .")
-      ("R" dired-do-rename "Rename +")
-      ("% R" dired-do-rename-regexp "Rename Re")
-      ("% u" dired-upcase "Rename as Uppercase")
-      ("% l" dired-upcase "Rename as Lowercase")
+           ("T" dired-do-touch "Touch +")
+           ("M" dired-do-chmod "Chmod +")
+           ("O" dired-do-chown "Chown +")
+           ("G" dired-do-chgrp "Chgrp +")
+           ("w" dired-copy-filename-as-kill "Yank .")
+           ("R" dired-do-rename "Rename +")
+           ("% R" dired-do-rename-regexp "Rename Re")
+           ("% u" dired-upcase "Rename as Uppercase")
+           ("% l" dired-upcase "Rename as Lowercase")
 
-      ("D" dired-do-delete "Delete +" :column "Delete & Special")
-      ("d" dired-flag-file-deletion "Flag .")
-      ("% d" dired-flag-files-regexp "Flag Re")
-      ("% &" dired-flag-garbage-files "Flag garbage")
-      ("x" dired-do-flagged-delete "Delete flagged")
-      ("Q" dired-do-find-regexp-and-replace "Replace Re")
-      ("M-q" dired-do-query-replace-regexp "Replace Re ?")
-      ("!" dired-do-shell-command "Sync shell +")
-      ("C-c w" wdired-change-to-wdired-mode "Wdired")
-      ("L" dired-do-load "Lisp load +")
-      ("B" dired-do-byte-compile "Byte Compile +")))
+           ("D" dired-do-delete "Delete +" :column "Delete & Special")
+           ("d" dired-flag-file-deletion "Flag .")
+           ("% d" dired-flag-files-regexp "Flag Re")
+           ("% &" dired-flag-garbage-files "Flag garbage")
+           ("x" dired-do-flagged-delete "Delete flagged")
+           ("Q" dired-do-find-regexp-and-replace "Replace Re")
+           ("M-q" dired-do-query-replace-regexp "Replace Re ?")
+           ("!" dired-do-shell-command "Sync shell +")
+           ("C-c w" wdired-change-to-wdired-mode "Wdired")
+           ("L" dired-do-load "Lisp load +")
+           ("B" dired-do-byte-compile "Byte Compile +")))
 
   :ensure nil)
 
@@ -757,8 +756,8 @@
   ;; This makes peep-dired-mode-map override all evil mappings
   ;; evil-make-overriding-map doesn't handle j and k for some reason.
   (add-hook 'peep-dired-hook (lambda ()
-                                 (evil-make-intercept-map peep-dired-mode-map 'normal)
-                                 (evil-normalize-keymaps 'normal)))
+                               (evil-make-intercept-map peep-dired-mode-map 'normal)
+                               (evil-normalize-keymaps 'normal)))
   (setq peep-dired-mode-map
         (let ((map (make-sparse-keymap)))
           (define-key map (kbd "j")         #'peep-dired-next-file)
@@ -780,26 +779,26 @@
 
 (use-package flyspell
   :general
-    ("s-f"        #'flyspell-auto-correct-previous-word)
-    ("s-S-f"      #'flyspell-correct-previous-word-generic)
+  ("s-f"        #'flyspell-auto-correct-previous-word)
+  ("s-S-f"      #'flyspell-correct-previous-word-generic)
   :init
   (setq ispell-personal-dictionary (expand-file-name "hunspell/words" me:config-directory))
   (me:add-hook-with-delay 'prog-mode-hook 10 #'flyspell-prog-mode)
   (me:add-hook-with-delay 'text-mode-hook 10 #'flyspell-mode)
   ;; setup spell check, prefer hunspell
   (cond
-    ((executable-find "hunspell")
-      (setq ispell-program-name "hunspell")
-      (setq ispell-local-dictionary "en_US")
-      (setq ispell-local-dictionary-alist
-            ;; Please note the list `("-d" "en_US")` contains ACTUAL parameters passed to hunspell
-            ;; You could use `("-d" "en_US,en_US-med")` to check with multiple dictionaries
-            '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8)
-              )))
-    ((executable-find "aspell")
-      (setq ispell-program-name "aspell")
-      ;; Please note ispell-extra-args contains ACTUAL parameters passed to aspell
-      (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))))
+   ((executable-find "hunspell")
+    (setq ispell-program-name "hunspell")
+    (setq ispell-local-dictionary "en_US")
+    (setq ispell-local-dictionary-alist
+          ;; Please note the list `("-d" "en_US")` contains ACTUAL parameters passed to hunspell
+          ;; You could use `("-d" "en_US,en_US-med")` to check with multiple dictionaries
+          '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8)
+            )))
+   ((executable-find "aspell")
+    (setq ispell-program-name "aspell")
+    ;; Please note ispell-extra-args contains ACTUAL parameters passed to aspell
+    (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))))
   :config
   (use-package flyspell-correct-ivy :demand))
 
@@ -817,29 +816,29 @@
 
 (use-package ivy
   :general
-    ("<f4> <f4>"  #'ivy-resume)
-    ("<f2>"       #'ivy-switch-buffer)
-    ("C-x b"      #'ivy-switch-buffer)
-    (:keymaps 'ivy-minibuffer-map
-              "<escape>" #'minibuffer-keyboard-quit
-              "<f5> a"   '(ivy-read-action         :which-key "Select action (C-M-a)")
-              "<f5> c"   '(ivy-call                :which-key "Call & stay open (C-M-m)")
-              "<f5> d"   '(ivy-dispatching-call    :which-key "Action & stay open (C-M-o)")
-              "<f5> e"   '(ivy-dispatch-done       :which-key "Call selected action & close (M-o)")
-              "<f5> f"   '(ivy-avy                 :which-key "Avy search (C-')")
-              "<f5> h"   '(hydra-ivy/body          :which-key "Show hydra")
-              "<f5> k"   '(ivy-kill-ring-save      :which-key "Save in kill ring")
-              "<f5> o"   '(ivy-occur               :which-key "Open occur buffer")
-              "<f5> r"   '(ivy-restrict-to-matches :which-key "Rematch")
-              "<f5> q"   '(ivy-toggle-regexp-quote :which-key "Toggle regexp quoting")
-              "<f5> y"   '(ivy-yank-word           :which-key "Yank from buffer")
-              "M-y" #'ivy-next-line)                       ; for yank-pop flow
-    (:keymaps 'ivy-occur-grep-mode-map
-              "DEL"  #'ivy-occur-delete-candidate)       ; orig C-d
+  ("<f4> <f4>"  #'ivy-resume)
+  ("<f2>"       #'ivy-switch-buffer)
+  ("C-x b"      #'ivy-switch-buffer)
+  (:keymaps 'ivy-minibuffer-map
+            "<escape>" #'minibuffer-keyboard-quit
+            "<f5> a"   '(ivy-read-action         :which-key "Select action (C-M-a)")
+            "<f5> c"   '(ivy-call                :which-key "Call & stay open (C-M-m)")
+            "<f5> d"   '(ivy-dispatching-call    :which-key "Action & stay open (C-M-o)")
+            "<f5> e"   '(ivy-dispatch-done       :which-key "Call selected action & close (M-o)")
+            "<f5> f"   '(ivy-avy                 :which-key "Avy search (C-')")
+            "<f5> h"   '(hydra-ivy/body          :which-key "Show hydra")
+            "<f5> k"   '(ivy-kill-ring-save      :which-key "Save in kill ring")
+            "<f5> o"   '(ivy-occur               :which-key "Open occur buffer")
+            "<f5> r"   '(ivy-restrict-to-matches :which-key "Rematch")
+            "<f5> q"   '(ivy-toggle-regexp-quote :which-key "Toggle regexp quoting")
+            "<f5> y"   '(ivy-yank-word           :which-key "Yank from buffer")
+            "M-y" #'ivy-next-line)                       ; for yank-pop flow
+  (:keymaps 'ivy-occur-grep-mode-map
+            "DEL"  #'ivy-occur-delete-candidate)       ; orig C-d
   :init
   (add-hook 'ivy-occur-mode-hook (lambda ()
-                                 (evil-make-intercept-map ivy-occur-mode-map 'normal)
-                                 (evil-normalize-keymaps 'normal)))
+                                   (evil-make-intercept-map ivy-occur-mode-map 'normal)
+                                   (evil-normalize-keymaps 'normal)))
   (add-hook 'ivy-mode-hook (lambda ()
                              (setq ivy-height (/ (+ 2 (frame-height)) 3))))
   (setq ivy-use-virtual-buffers t                           ; add ‘recentf-mode’ and bookmarks to ‘ivy-switch-buffer’.
@@ -849,7 +848,7 @@
         ivy-on-del-error-function nil                       ; too many backspaces doesn't exit
         ivy-dynamic-exhibit-delay-ms 200                    ; dynamic collection delay
         ivy-re-builders-alist
-           '((t . ivy--regex-ignore-order)))                ; allow input not in order
+        '((t . ivy--regex-ignore-order)))                ; allow input not in order
   :config
   (ivy-mode 1))
 
@@ -873,23 +872,23 @@
   :load-path "lisp/swiper"
   :general
   (:keymaps 'global :prefix "<f4>"
-           "a" #'counsel-apropos
-           "b" #'counsel-mark-ring
-           "D" #'counsel-dired-jump
-           "l" #'counsel-linux-app
-           "i" #'counsel-info-lookup-symbol
-           "j" #'counsel-bookmark
-           "k" #'counsel-descbinds
-           "p" #'counsel-package
-           "r" #'counsel-recentf
-           "s"  '(:ignore t :which-key "Search→" )
-           "u" #'counsel-unicode-char)
+            "a" #'counsel-apropos
+            "b" #'counsel-mark-ring
+            "D" #'counsel-dired-jump
+            "l" #'counsel-linux-app
+            "i" #'counsel-info-lookup-symbol
+            "j" #'counsel-bookmark
+            "k" #'counsel-descbinds
+            "p" #'counsel-package
+            "r" #'counsel-recentf
+            "s"  '(:ignore t :which-key "Search→" )
+            "u" #'counsel-unicode-char)
   (:keymaps 'global :prefix "<f4> s"
-           "a" #'me:counsel-projectile-ag
-           "b" #'swiper
-           "l" #'counsel-locate
-           "g" #'counsel-git-grep
-           "s" #'swiper-all)
+            "a" #'me:counsel-projectile-ag
+            "b" #'swiper
+            "l" #'counsel-locate
+            "g" #'counsel-git-grep
+            "s" #'swiper-all)
   ("C-h b"  #'counsel-descbinds)
   ("M-x"    #'counsel-M-x)
   ("M-y"    #'counsel-yank-pop)
@@ -936,7 +935,7 @@
   (:prefix "<f7>" "x"  '(:ignore t :which-key "Run→" ))
   (:prefix "<f7>" "s"  '(:ignore t :which-key "Search→" ))
   (:prefix "<SPC>" :states '(normal visual emacs)
-        "m"    #'projectile-compile-project)
+           "m"    #'projectile-compile-project)
   :init
   (setq projectile-completion-system 'ivy
         projectile-globally-ignored-files #'( "TAGS" "GTAGS" "GRTAGS" "GPATH" )
@@ -956,7 +955,7 @@
   (use-package persp-projectile
     :demand
     :general
-      ("<f7> <f7>"  #'projectile-persp-switch-project)
+    ("<f7> <f7>"  #'projectile-persp-switch-project)
     :config)
   (projectile-mode 1))
 
@@ -964,27 +963,27 @@
   :after ( counsel projectile )
   :demand t     ; required because use-package-always-defer is t
   :general
-    ("<f7> f" #'counsel-projectile-ag)
+  ("<f7> f" #'counsel-projectile-ag)
   :config)
 
 (use-package perspective
   :after projectile
   :init
   :general
-    ("<f7> r"     #'persp-rename)
-    ("s-<right>"  #'persp-next)
-    ("s-<left>"   #'persp-prev)
-    (:prefix "C-x"
-            "x"  '(:ignore t :which-key "Perspective→" ))
+  ("<f7> r"     #'persp-rename)
+  ("s-<right>"  #'persp-next)
+  ("s-<left>"   #'persp-prev)
+  (:prefix "C-x"
+           "x"  '(:ignore t :which-key "Perspective→" ))
   :config
-    (unless (daemonp)
-      (setq persp-initial-frame-name (projectile-project-name)))
-    (persp-mode))
+  (unless (daemonp)
+    (setq persp-initial-frame-name (projectile-project-name)))
+  (persp-mode))
 
 ;; Highlight delimiters by depth
 (use-package rainbow-delimiters
   :init
-    (me:add-hook-with-delay 'prog-mode-hook 8 #'rainbow-delimiters-mode)
+  (me:add-hook-with-delay 'prog-mode-hook 8 #'rainbow-delimiters-mode)
   :config)
 
 ;; color color strings
@@ -1091,19 +1090,19 @@
   (defun me:adoc-mode-flyspell-verify ()
     "flyspell function to ignore certain asciidoc markup"
     (and
-      (not (save-excursion
+     (not (save-excursion
             (let ((this (point)))
               (and
-                (re-search-backward "^\\([\\.\\+-]\\{4,\\}\\|`\\{3,\\}\\)" nil t)
-                (> this (point))
-                (progn
-                  (forward-line 1)
-                  (re-search-forward (concat "^" (regexp-quote (match-string 1))) nil t))))))
-      (not (save-excursion
+               (re-search-backward "^\\([\\.\\+-]\\{4,\\}\\|`\\{3,\\}\\)" nil t)
+               (> this (point))
+               (progn
+                 (forward-line 1)
+                 (re-search-forward (concat "^" (regexp-quote (match-string 1))) nil t))))))
+     (not (save-excursion
             (let ((count 0))
               (eq 1 (progn (while (re-search-backward "`" (line-beginning-position) t)
-                              (setq count (1+ count)))
-                            (- count (* 2 (/ count 2))))))))))
+                             (setq count (1+ count)))
+                           (- count (* 2 (/ count 2))))))))))
   (put 'adoc-mode 'flyspell-mode-predicate #'me:adoc-mode-flyspell-verify)
   :mode
   (("\\.ad\\'" . adoc-mode)
@@ -1195,22 +1194,22 @@
 (use-package compile
   :commands compile
   :general
-    (:states '(normal visual emacs)
-    :prefix "<SPC>"
-      "o"          #'me:switch-to-compile-buffer
-      "r"          #'recompile)
-    (:keymaps 'compilation-mode-map
-              "<up>" #'compilation-previous-error
-              "<down>" #'compilation-next-error
-              "<prior>" #'compilation-previous-file
-              "<next>" #'compilation-next-file
-              "<f5> r" #'me:rotate-skip-threshold
-              "<SPC>" nil
-              "g" nil
-              "j" nil
-              "k" nil
-              "h" nil
-              "l" nil)
+  (:states '(normal visual emacs)
+           :prefix "<SPC>"
+           "o"          #'me:switch-to-compile-buffer
+           "r"          #'recompile)
+  (:keymaps 'compilation-mode-map
+            "<up>" #'compilation-previous-error
+            "<down>" #'compilation-next-error
+            "<prior>" #'compilation-previous-file
+            "<next>" #'compilation-next-file
+            "<f5> r" #'me:rotate-skip-threshold
+            "<SPC>" nil
+            "g" nil
+            "j" nil
+            "k" nil
+            "h" nil
+            "l" nil)
   :config
   (defun me:switch-to-compile-buffer ()
     (interactive)
@@ -1218,29 +1217,29 @@
   (defun me:rotate-skip-threshold ()
     (interactive)
     (compilation-set-skip-threshold
-      (cond ((= compilation-skip-threshold 1) 2)
-            ((= compilation-skip-threshold 2) 0)
-            (t 1))))
+     (cond ((= compilation-skip-threshold 1) 2)
+           ((= compilation-skip-threshold 2) 0)
+           (t 1))))
   :init
   (setq compilation-scroll-output t
         compilation-ask-about-save nil    ; save all modified
         compilation-auto-jump-to-first-error t
         compilation-finish-functions (lambda (_buf str)
-          (compilation-set-skip-threshold 1)
-          (x-urgency-hint (selected-frame))
-          (if (null (string-match ".*exited abnormally.*" str))
-              ;;if no errors, make the compilation window go away in a few seconds
-              (progn
-                (run-at-time "2 sec" nil 'delete-windows-on (get-buffer-create "*compilation*"))
-                (message "No Compilation Errors!"))
-        compilation-skip-threshold 2)))
+                                       (compilation-set-skip-threshold 1)
+                                       (x-urgency-hint (selected-frame))
+                                       (if (null (string-match ".*exited abnormally.*" str))
+                                           ;;if no errors, make the compilation window go away in a few seconds
+                                           (progn
+                                             (run-at-time "2 sec" nil 'delete-windows-on (get-buffer-create "*compilation*"))
+                                             (message "No Compilation Errors!"))
+                                         compilation-skip-threshold 2)))
   (add-hook 'compilation-start-hook
             (lambda (_proc) (compilation-set-skip-threshold 2)))
 
   (add-hook 'compilation-mode-hook (lambda ()
-                                        (when (fboundp 'evil-make-intercept-map)
-                                          (evil-make-intercept-map compilation-mode-map 'normal)
-                                          (evil-normalize-keymaps)))))
+                                     (when (fboundp 'evil-make-intercept-map)
+                                       (evil-make-intercept-map compilation-mode-map 'normal)
+                                       (evil-normalize-keymaps)))))
 
 ;; view symbols of libraries
 (use-package elf-mode
@@ -1255,7 +1254,7 @@
   (setq woman-use-topic-at-point t                          ; man page on word at point if exists
         Man-notify-method 'aggressive)                      ; show&select man page in other window
   :general
-    ("<f4> m" #'woman)
+  ("<f4> m" #'woman)
   :config
   (set-face-attribute 'Man-overstrike nil :inherit font-lock-type-face :bold t)
   (set-face-attribute 'Man-underline nil :inherit font-lock-keyword-face :underline t))
@@ -1285,17 +1284,17 @@
   (if (file-readable-p "~/Dropbox/Notes")
       (setq deft-directory "~/Dropbox/Notes"))
   :general
-    ("<f4> n"     #'deft)
+  ("<f4> n"     #'deft)
   :init
   (setq deft-directory "~/Notes"   ; can be overridden in config
         deft-recursive t
         deft-use-filter-string-for-filename t
         deft-file-naming-rules '((nospace . "_")
-                                  (noslash . "_")
-                                  (case-fn . downcase))
-        ; first extension in list is used for new files.
+                                 (noslash . "_")
+                                 (case-fn . downcase))
+                                        ; first extension in list is used for new files.
         deft-extensions '("md" "txt" "text" "markdown" "mmd" "org")
-                                      ; deft auto-save interferes with whitespace-butler, so disable
+                                        ; deft auto-save interferes with whitespace-butler, so disable
         deft-auto-save-interval 0)
   (add-hook 'deft-mode-hook
             (lambda ()
@@ -1341,7 +1340,7 @@
 ;; See issues #451, #205, #150
 (use-package company
   :general
-    ("s-d"        #'company-complete)
+  ("s-d"        #'company-complete)
   :init
   (setq company-minimum-prefix-length 1            ; just one char needed
         company-dabbrev-downcase nil)              ; never downcase
@@ -1401,16 +1400,16 @@
 (use-package yasnippet
   :commands ( yas-expand-snippet )
   :general
-    ("<s-return>" #'yas-expand)
-    (:prefix "C-c"
-            "&" '(:ignore t :which-key "Yasnippet→" ))
+  ("<s-return>" #'yas-expand)
+  (:prefix "C-c"
+           "&" '(:ignore t :which-key "Yasnippet→" ))
   :init
   (add-hook 'yas-before-expand-snippet-hook         ; evil-insert at each slot
             (lambda()
-                  (let ((p (point)) (m (mark)))
-                    (evil-insert-state)
-                    (goto-char p)
-                    (set-mark m))))
+              (let ((p (point)) (m (mark)))
+                (evil-insert-state)
+                (goto-char p)
+                (set-mark m))))
   (add-hook 'prog-mode-hook 'yas-minor-mode)
   (add-hook 'text-mode-hook 'yas-minor-mode)
   :config
@@ -1456,8 +1455,8 @@
   ;; in the default case (must use "+ or "* to override)
   ;; This assumes select-enable-clipboard is set to nil as well
   (add-hook 'evil-local-mode-hook (lambda ()
-                                (setq-default interprogram-paste-function nil
-                                              interprogram-cut-function nil)))
+                                    (setq-default interprogram-paste-function nil
+                                                  interprogram-cut-function nil)))
   (setq-default evil-symbol-word-search t   ; misnamed: t is search for symbols, not words
                 evil-shift-width 3)         ; shift by ideal width :)
   (setq evil-want-C-w-delete nil            ; want C-w for windows commands
@@ -1469,49 +1468,49 @@
         evil-search-module #'evil-search)
 
   (setq evil-normal-state-tag   (propertize " N " 'face '((:background "DarkGoldenrod2" :foreground "black")))
-          evil-emacs-state-tag    (propertize " E " 'face '((:background "SkyBlue2"       :foreground "black")))
-          evil-insert-state-tag   (propertize " I " 'face '((:background "chartreuse3"    :foreground "black")))
-          evil-replace-state-tag  (propertize " R " 'face '((:background "chocolate"      :foreground "black")))
-          evil-motion-state-tag   (propertize " M " 'face '((:background "plum3"          :foreground "black")))
-          evil-visual-state-tag   (propertize " V " 'face '((:background "gray"           :foreground "black")))
-          evil-operator-state-tag (propertize " O " 'face '((:background "sandy brown"    :foreground "black"))))
+        evil-emacs-state-tag    (propertize " E " 'face '((:background "SkyBlue2"       :foreground "black")))
+        evil-insert-state-tag   (propertize " I " 'face '((:background "chartreuse3"    :foreground "black")))
+        evil-replace-state-tag  (propertize " R " 'face '((:background "chocolate"      :foreground "black")))
+        evil-motion-state-tag   (propertize " M " 'face '((:background "plum3"          :foreground "black")))
+        evil-visual-state-tag   (propertize " V " 'face '((:background "gray"           :foreground "black")))
+        evil-operator-state-tag (propertize " O " 'face '((:background "sandy brown"    :foreground "black"))))
   :general
-    ("s-j" #'evil-window-down)
-    ("s-k" #'evil-window-up)
-    ("s-h" #'evil-window-left)
-    ("s-l" #'evil-window-right)
-    (:states '(normal visual) :keymaps 'override
-    :prefix "<SPC>"
-      ";"          #'evil-jump-forward
-      ","          #'evil-jump-backward
-      "a"          #'align
-      "f"          #'avy-goto-word-1
-      "g"          #'avy-goto-char-2
-      "<SPC>"      #'avy-goto-char-timer
-      "h"          #'hydra-diff-hl/body
-      "l"          #'avy-goto-char-in-line
-      "p"          #'hydra-paste/body
-      "x"          #'exchange-point-and-mark)
-    (:states '(normal visual) :prefix "<SPC>" :keymaps 'override
-             "s"  (general-simulate-key "\"*" :state 'normal :keymap nil :lookup nil :name me:simulate-selection-reg )
-             "c"  (general-simulate-key "\"+" :state 'normal :keymap nil :lookup nil :name me:simulate-clipboard-reg ))
-    (:keymaps '(normal visual ) "<escape>" #'keyboard-quit)
+  ("s-j" #'evil-window-down)
+  ("s-k" #'evil-window-up)
+  ("s-h" #'evil-window-left)
+  ("s-l" #'evil-window-right)
+  (:states '(normal visual) :keymaps 'override
+           :prefix "<SPC>"
+           ";"          #'evil-jump-forward
+           ","          #'evil-jump-backward
+           "a"          #'align
+           "f"          #'avy-goto-word-1
+           "g"          #'avy-goto-char-2
+           "<SPC>"      #'avy-goto-char-timer
+           "h"          #'hydra-diff-hl/body
+           "l"          #'avy-goto-char-in-line
+           "p"          #'hydra-paste/body
+           "x"          #'exchange-point-and-mark)
+  (:states '(normal visual) :prefix "<SPC>" :keymaps 'override
+           "s"  (general-simulate-key "\"*" :state 'normal :keymap nil :lookup nil :name me:simulate-selection-reg )
+           "c"  (general-simulate-key "\"+" :state 'normal :keymap nil :lookup nil :name me:simulate-clipboard-reg ))
+  (:keymaps '(normal visual ) "<escape>" #'keyboard-quit)
 
-    ;; Move via visual lines
-    (:keymaps 'normal "j"   #'evil-next-visual-line)
-    (:keymaps 'normal "k"   #'evil-previous-visual-line)
+  ;; Move via visual lines
+  (:keymaps 'normal "j"   #'evil-next-visual-line)
+  (:keymaps 'normal "k"   #'evil-previous-visual-line)
 
-    ;; Scroll keeping cursor stationary
-    (:keymaps '( normal insert visual ) "C-j" #'evil-scroll-line-up)       ; ^y
-    (:keymaps '( normal insert visual )  "C-k" #'evil-scroll-line-down)     ; ^e
+  ;; Scroll keeping cursor stationary
+  (:keymaps '( normal insert visual ) "C-j" #'evil-scroll-line-up)       ; ^y
+  (:keymaps '( normal insert visual )  "C-k" #'evil-scroll-line-down)     ; ^e
 
-    ;; Overload shifts so that they don't lose the selection
-    (:keymaps 'visual
-              ">"           #'me:evil-shift-right-visual
-              "<tab>"       #'me:evil-shift-right-visual)
-    (:keymaps 'visual
-              "<"           #'me:evil-shift-left-visual
-              "<backtab>"   #'me:evil-shift-left-visual)
+  ;; Overload shifts so that they don't lose the selection
+  (:keymaps 'visual
+            ">"           #'me:evil-shift-right-visual
+            "<tab>"       #'me:evil-shift-right-visual)
+  (:keymaps 'visual
+            "<"           #'me:evil-shift-left-visual
+            "<backtab>"   #'me:evil-shift-left-visual)
 
   :config
 
@@ -1565,8 +1564,8 @@
   :after evil
   :general
   (:states '(normal visual) :keymaps 'override
-   :prefix "g"
-      "-"          #'evil-operator-string-inflection)
+           :prefix "g"
+           "-"          #'evil-operator-string-inflection)
   :init)
 
 (use-package evil-collection
@@ -1584,7 +1583,7 @@
 
 (use-package shell-pop
   :general
-    ("<f4> t"     #'shell-pop)
+  ("<f4> t"     #'shell-pop)
   :config
   (setq shell-pop-internal-mode "ansi-term"
         shell-pop-term-shell "/bin/bash"
@@ -1651,8 +1650,8 @@
   (setq git-timemachine-mode-map (make-sparse-keymap))  ;; override all bindings
   ;; evil-motion-state when in timemachine mode
   (add-hook 'git-timemachine-mode-hook (lambda ()
-                                           (when (fboundp 'evil-motion-state)
-                                             (evil-motion-state))))
+                                         (when (fboundp 'evil-motion-state)
+                                           (evil-motion-state))))
   :config
   (defun me:git-timemachine-show-commit ()
     "Show commit for current revision."
@@ -1667,17 +1666,17 @@
   ;; navigation and all should be good.
   (eval '(defhydra hydra-timemachine
            (:hint nil
-            :body-pre (git-timemachine)
-            :foreign-keys run )
-    "Time machine"
-    ("C-p" #'git-timemachine-show-previous-revision "Previous revision" :column "Navigation")
-    ("C-n" #'git-timemachine-show-next-revision "Next revision")
-    ("C-c h" #'git-timemachine-show-current-revision "Current revision")
-    ("C-c v" #'me:git-timemachine-show-commit "Show commit")
-    ("C-c C-c" #'git-timemachine-quit "Quit" :color blue )
-    ("C-c b" #'git-timemachine-blame "Show culprits" :column "Operations")
-    ("C-c r" #'git-timemachine-kill-revision "Yank revision")
-    ("C-c s" #'git-timemachine-kill-abbreviated-revision "Yank abbreviated revision")))
+                  :body-pre (git-timemachine)
+                  :foreign-keys run )
+           "Time machine"
+           ("C-p" #'git-timemachine-show-previous-revision "Previous revision" :column "Navigation")
+           ("C-n" #'git-timemachine-show-next-revision "Next revision")
+           ("C-c h" #'git-timemachine-show-current-revision "Current revision")
+           ("C-c v" #'me:git-timemachine-show-commit "Show commit")
+           ("C-c C-c" #'git-timemachine-quit "Quit" :color blue )
+           ("C-c b" #'git-timemachine-blame "Show culprits" :column "Operations")
+           ("C-c r" #'git-timemachine-kill-revision "Yank revision")
+           ("C-c s" #'git-timemachine-kill-abbreviated-revision "Yank abbreviated revision")))
   :general
   (:keymaps 'global :prefix "<f9>"  "t" #'hydra-timemachine/body))
 
@@ -1697,10 +1696,10 @@
 ;; will be in emacs.d/init-<prefix>-<ident>.el
 (defun me:load-init-file (prefix ident)
   (let ((file-name (expand-file-name (concat "init-" prefix "-" (me:replace-all ident "/" "-") ".el") user-emacs-directory)))
-  ;; (message "looking for %s" file-name)
-  (when (file-exists-p file-name)
-    ;; (message "loading %s" file-name)
-    (load-file file-name))))
+    ;; (message "looking for %s" file-name)
+    (when (file-exists-p file-name)
+      ;; (message "loading %s" file-name)
+      (load-file file-name))))
 
 (me:load-init-file "system" (symbol-name system-type))
 (me:load-init-file "host" (system-name))
