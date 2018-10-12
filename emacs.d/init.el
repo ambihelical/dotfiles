@@ -1305,7 +1305,8 @@
   :hook ((c-mode . eglot-ensure)
          (c++-mode . eglot-ensure))
   :init
-  (setq eglot-events-buffer-size 0)     ;; events are verbose, so disable
+  (setq eglot-ignored-server-capabilites '( :hoverProvider :documentHighlightProvider)
+        eglot-events-buffer-size 0)     ;; events are verbose, so disable
   :config
   ;; project-find-function which uses projectile methods to find
   ;; the projectile project associated with a directory.
