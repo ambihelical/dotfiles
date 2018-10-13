@@ -122,22 +122,28 @@ FUN function to call on each directory node"
         (dmtime (plist-get dnode :mtime)))
     (and (eq 't (car dattr)) (not (equal dmtime (nth 5 dattr))))))
 
-(defun projet--update-dnode (pnode rnode dnode dpath)
+(defun projet--update-dnode (pnode rnode dnode rpath dpath)
   (message "Updating path %s" dpath)
   (let ((fattrs (directory-files-and-attributes dpath nil nil t))
         (olddirs (plist-get dnode :dirs))
         (newfiles '())
-        (newdirs (make-hash-table :test 'equal)))
+        (newdirs (make-hash-table :test 'equal))
+        (relpath (string-remove-prefix rpath dpath)))
     (dolist (fattr fattrs)
       (cond
+       ;; this dir
        ((equal (car fattr) ".")
         (plist-put dnode :mtime (nth 6 fattr)))
+       ;; parent dir
        ((equal (car fattr) ".."))
-       ((stringp (nth 1 fattr)))     ;; symbolic link
-       ((null (nth 1 fattr))         ;; file
+       ;; symbolic link
+       ((stringp (nth 1 fattr)))
+       ;; file
+       ((null (nth 1 fattr))
         (unless (projet--should-ignore pnode rnode (car fattr))
-          (push (car fattr) newfiles)))
-       ((eq 't (nth 1 fattr))        ;; directory
+          (push (concat relpath (car fattr)) newfiles)))
+       ;; directory
+       ((eq 't (nth 1 fattr))
         (let ((dirname (file-name-as-directory (car fattr))))
           (unless (projet--should-ignore pnode rnode dirname)
             (if-let ((oldnode (gethash (car fattr) olddirs)))
