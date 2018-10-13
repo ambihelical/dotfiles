@@ -12,7 +12,7 @@ if [ "$host" == "hum" ]; then
 	 # - compose is right alt
 	 setxkbmap -option 'caps:hyper' -option 'compose:ralt'
 	 xrandr --output DVI-I-1 --primary
-	 xrandr --output DVI-I-1 --left-of HDMI-1
+	 xrandr --output HDMI-1 --right-of DVI-I-1 --rotate left
 	 dropbox start -i
 	 lockminutes=0
 elif [ "$host" == "jh-rvueb" ]; then
