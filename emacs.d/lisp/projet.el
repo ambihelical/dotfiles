@@ -155,14 +155,25 @@ FUN function to call on each directory node"
     (plist-put dnode :dirs newdirs)
     (plist-put dnode :files newfiles)))
 
-(defun projet--index-project (pnode)
+(defun projet--clean-project (pnode)
   (projet--foreach-root
    pnode rnode
    (projet--foreach-dir
     rnode dnode
-    (let ((dpath (plist-get dnode :path)))
-      ;;(message "indexing path %s" dpath)
-      (when (projet--dnode-changed-p dnode dpath)
-        (projet--update-dnode pnode rnode dnode dpath))))))
+    (progn
+      (plist-put dnode :mtime nil)
+      (clrhash (plist-get dnode :dirs))
+      (plist-put dnode :files nil)))))
+
+(defun projet--index-project (pnode)
+  (projet--foreach-root
+   pnode rnode
+   (let ((rpath (plist-get rnode :path)))
+     (projet--foreach-dir
+      rnode dnode
+      (let ((dpath (plist-get dnode :path)))
+        ;;(message "indexing path %s" dpath)
+        (when (projet--dnode-changed-p dnode dpath)
+          (projet--update-dnode pnode rnode dnode rpath dpath)))))))
 
 (provide 'projet)
