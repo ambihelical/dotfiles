@@ -38,10 +38,6 @@
                                 ("Fantasque Sans Mono" . "Fantasque Sans Mono-12")
                                 ("DejaVu Sans Mono" . "DejaVu Sans Mono-11")))
 
-;; replace prefix part of a string
-(defun me:replace-prefix (prefix input)
-  (replace-regexp-in-string ( concat "^" (regexp-quote prefix)) "" input))
-
 ;; replace any matches in a string
 (defun me:replace-all (input from to)
   (replace-regexp-in-string (regexp-quote from) to input nil))
@@ -253,8 +249,8 @@
 
   (setq frame-title-format
         '((:eval (if (buffer-file-name)
-                     (me:replace-prefix (abbreviate-file-name default-directory)
-                                        (abbreviate-file-name buffer-file-name))
+                     (string-remove-prefix (abbreviate-file-name default-directory)
+                                           (abbreviate-file-name buffer-file-name))
                    "%b"))
           " %* ["
           (:eval (abbreviate-file-name default-directory))
