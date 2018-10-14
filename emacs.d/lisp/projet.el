@@ -123,7 +123,7 @@ FUN function to call on each directory node"
     (and (eq 't (car dattr)) (not (equal dmtime (nth 5 dattr))))))
 
 (defun projet--update-dnode (pnode rnode dnode rpath dpath)
-  (message "Updating path %s" dpath)
+  ;;(message "Updating path %s" dpath)
   (let ((fattrs (directory-files-and-attributes dpath nil nil t))
         (olddirs (plist-get dnode :dirs))
         (newfiles '())
@@ -141,7 +141,7 @@ FUN function to call on each directory node"
        ;; file
        ((null (nth 1 fattr))
         (unless (projet--should-ignore pnode rnode (car fattr))
-          (push (concat relpath (car fattr)) newfiles)))
+          (push (concat dpath (car fattr)) newfiles)))
        ;; directory
        ((eq 't (nth 1 fattr))
         (let ((dirname (file-name-as-directory (car fattr))))
@@ -175,5 +175,18 @@ FUN function to call on each directory node"
         ;;(message "indexing path %s" dpath)
         (when (projet--dnode-changed-p dnode dpath)
           (projet--update-dnode pnode rnode dnode rpath dpath)))))))
+
+(defun projet--find-file-regex (pnode regex)
+  (let ((matches))
+    (projet--foreach-root
+     pnode rnode
+     (let* ((rpath (plist-get rnode :path))
+            (rlen (length rpath)))
+       (projet--foreach-dir
+        rnode dnode
+        (cl-loop for file in (plist-get dnode :files)
+                 when (string-match-p regex file rlen)
+                 do (push file matches)))))
+    matches))
 
 (provide 'projet)
