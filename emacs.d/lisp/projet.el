@@ -1,5 +1,11 @@
 ;;; -*- lexical-binding: t; -*-
 
+(require 'cl)
+(require 'project)
+
+;; declare our devotion to speed at all costs
+(cl-declaim (optimize (speed 3) (safety 0)))
+
 (defcustom projective-max-active-projects 10
   "Maximum number of projects to keep in memory."
   :type '(integer)
@@ -17,48 +23,46 @@
           (mapconcat #'identity (mapcar #'dired-glob-regexp globs) "\\|" )
           "\\)"))
 
+(cl-defstruct (projet--pnode (:constructor projet--pnode--create)
+                             (:copier nil))
+  roots project last-used last-saved)
 
-(defun projet--create-dnode (path)
-  "Create a new directory node.
-NAME is the path of the directory relative to parent."
-  (list :path path                ;; name of directory relative to parent
-        :mtime nil                ;; mtime of directory when last indexed
-        :dirs (make-hash-table :test 'equal)   ;; child dirname -> dnode
-        :files nil))              ;; list of child files
+(cl-defstruct (projet--dnode (:constructor projet--dnode--create)
+                             (:copier nil))
+  path mtime dirs files ignore-re keep-re)
 
-(defun projet--create-rnode (pnode path)
-  "Create a new root dnode.
-PATH is the absolute path of the root."
-  (let ((iglobs (project-ignores (plist-get pnode :project) path))
-        (rnode (projet--create-dnode path)))
-    (plist-put rnode :ignore-re (projet--globs-to-regexp iglobs))
-    (plist-put rnode :keep-re "$^")))
+(cl-defun projet--pnode-create (project &rest args)
+  (when-let* ((pnode (apply #'projet--pnode--create
+                            :project project :last-used (current-time) args))
+              (roots (mapcar #'file-name-as-directory (project-roots project)))
+              (rnodes (mapcar
+                       (lambda (path) (projet--rnode-create pnode path))
+                       roots)))
+    (setf (projet--pnode-roots pnode) rnodes)
+    ;; add project to active projects and prune
+    (puthash (cdr project) pnode projet--active-projects)
+    (projet--prune-active-projects)
+    pnode))
 
-(defun projet--create-pnode (project)
-  "Create a new project
-PROJECT is a project.el project identifier
-Returns the new project node"
-  (let* ((roots (mapcar #'file-name-as-directory (project-roots project)))
-         (pnode (list :project project                ;; project.el project identifier
-                      :roots nil                      ;; list of root dnodes
-                      :last-used (current-time)       ;; when used last (used to prune)
-                      :last-saved nil)))                 ;; when last saved
-    ;; create root dnode for each project root
-    (let ((rnodes (mapcar
-                   (lambda (path) (projet--create-rnode pnode path))
-                   roots)))
-      (plist-put pnode :roots rnodes)
-      ;; add project to active projects and limit size of that hash
-      (puthash (cdr project) pnode projet--active-projects)
-      (projet--prune-active-projects)
-      pnode)))
+(cl-defun projet--dnode-create (path &rest args)
+  (apply #'projet--dnode--create
+         :path path
+         :dirs (make-hash-table :test 'equal)
+         args))
+
+(cl-defun projet--rnode-create (pnode path)
+  (let* ((iglobs (project-ignores (projet--pnode-project pnode) path))
+         (ignore (projet--globs-to-regexp iglobs)))
+    (projet--dnode-create path
+                          :ignore-re ignore
+                          :keep-re "$^")))
 
 (defun projet--find-rnode (pnode dpath)
   "Find the rnode corresponding to directory path DPATH
   PNODE is the project node
   DPATH is the path of a directory"
-  (seq-find (lambda (rnode) (string-prefix-p (plist-get rnode :path) dpath))
-            (plist-get pnode :roots)))
+  (seq-find (lambda (rnode) (string-prefix-p (projet--dnode-path rnode) dpath))
+            (projet--pnode-roots pnode)))
 
 (defun projet--find-dnode (pnode rnode dpath)
   "Find dnode associated with directory path DPATH.
@@ -66,18 +70,18 @@ PNODE is the project node.
 RNODE is the root dnode.
 Returns dnode or nil if not found"
   (when-let* ((dnode rnode)
-              (rootpath (plist-get rnode :path))
+              (rootpath (projet--dnode-path rnode))
               (relpath (substring dpath (length rootpath))))
     (unless (string-empty-p relpath)
       (let ((dirs (split-string (directory-file-name relpath) "/")))
         (while (and dnode dirs)
-          (setq dnode (gethash (car dirs) (plist-get dnode :dirs)))
+          (setq dnode (gethash (car dirs) (projet--dnode-dirs dnode)))
           (setq dirs (cdr dirs)))))
     dnode))
 
 (defun projet--should-ignore (pnode rnode name)
-  (let ((ignore-re (plist-get rnode :ignore-re))
-        (keep-re (plist-get rnode :keep-re)))
+  (let ((ignore-re (projet--dnode-ignore-re rnode))
+        (keep-re (projet--dnode-keep-re rnode)))
     (and (string-match ignore-re name)
          (not (string-match keep-re name)))))
 
@@ -88,11 +92,11 @@ FUN function to call on each directory node"
   (funcall fun dnode)
   (maphash (lambda (name dir)
              (projet--traverse-dnode dir fun))
-           (plist-get dnode :dirs)))
+           (projet--dnode-dirs dnode)))
 
 (defmacro projet--foreach-root (pnode rvar body)
   "Traverse the root directories, setting RVAR to the root dnode of each"
-  `(dolist (,rvar (plist-get pnode :roots))
+  `(dolist (,rvar (projet--pnode-roots pnode))
      (progn ,body)))
 
 (defmacro projet--foreach-dir (rnode dvar body)
@@ -102,38 +106,41 @@ FUN function to call on each directory node"
 (defun projet--print-tree (pnode)
   (projet--foreach-root
    pnode rnode
-   (let* ((rpath (plist-get rnode :path))
+   (let* ((rpath (projet--dnode-path rnode))
           (rdepth (length (split-string rpath "/")))
-          (count 0))
+          (dcount 0)
+          (tcount 0))
      (projet--foreach-dir
       rnode dnode
-      (let* ((fcount (length (plist-get dnode :files)))
-             (dpath (plist-get dnode :path))
+      (let* ((fcount (length (projet--dnode-files dnode)))
+             (dpath (projet--dnode-path dnode))
              (depth (- (length (split-string dpath "/")) rdepth))
              (name (file-name-nondirectory (directory-file-name dpath))))
-        (setq count (1+ count))
+        (setq dcount (1+ dcount))
+        (setq tcount (+ tcount fcount))
         (message "%s%s -> %d files"
                  (make-string (* depth 2) ?\s)
                  name fcount )))
-     (message "#### Total %d ####" count))))
+     (message "#### Dirs %d  Files %d ####" dcount tcount))))
 
 (defun projet--dnode-changed-p (dnode dpath)
   (let ((dattr (file-attributes dpath))
-        (dmtime (plist-get dnode :mtime)))
+        (dmtime (projet--dnode-mtime dnode)))
     (and (eq 't (car dattr)) (not (equal dmtime (nth 5 dattr))))))
 
 (defun projet--update-dnode (pnode rnode dnode rpath dpath)
   ;;(message "Updating path %s" dpath)
   (let ((fattrs (directory-files-and-attributes dpath nil nil t))
-        (olddirs (plist-get dnode :dirs))
+        (olddirs (projet--dnode-dirs dnode))
         (newfiles '())
         (newdirs (make-hash-table :test 'equal))
         (relpath (string-remove-prefix rpath dpath)))
     (dolist (fattr fattrs)
+      ;;(message "processing %s" (car fattr))
       (cond
        ;; this dir
        ((equal (car fattr) ".")
-        (plist-put dnode :mtime (nth 6 fattr)))
+        (setf (projet--dnode-mtime dnode) (nth 6 fattr)))
        ;; parent dir
        ((equal (car fattr) ".."))
        ;; symbolic link
@@ -149,11 +156,11 @@ FUN function to call on each directory node"
             (if-let ((oldnode (gethash (car fattr) olddirs)))
                 (puthash (car fattr) oldnode newdirs)
               (puthash (car fattr)
-                       (projet--create-dnode (concat dpath dirname))
+                       (projet--dnode-create (concat dpath dirname))
                        newdirs)))))
        (t nil)))
-    (plist-put dnode :dirs newdirs)
-    (plist-put dnode :files newfiles)))
+    (setf (projet--dnode-dirs dnode) newdirs)
+    (setf (projet--dnode-files dnode) newfiles)))
 
 (defun projet--clean-project (pnode)
   (projet--foreach-root
@@ -161,17 +168,17 @@ FUN function to call on each directory node"
    (projet--foreach-dir
     rnode dnode
     (progn
-      (plist-put dnode :mtime nil)
-      (clrhash (plist-get dnode :dirs))
-      (plist-put dnode :files nil)))))
+      (setf (projet--dnode-mtime dnode) nil)
+      (clrhash (projet--dnode-dirs dnode))
+      (setf (projet--dnode-files dnode) nil)))))
 
 (defun projet--index-project (pnode)
   (projet--foreach-root
    pnode rnode
-   (let ((rpath (plist-get rnode :path)))
+   (let ((rpath (projet--dnode-path rnode)))
      (projet--foreach-dir
       rnode dnode
-      (let ((dpath (plist-get dnode :path)))
+      (let ((dpath (projet--dnode-path dnode)))
         ;;(message "indexing path %s" dpath)
         (when (projet--dnode-changed-p dnode dpath)
           (projet--update-dnode pnode rnode dnode rpath dpath)))))))
@@ -180,11 +187,11 @@ FUN function to call on each directory node"
   (let ((matches))
     (projet--foreach-root
      pnode rnode
-     (let* ((rpath (plist-get rnode :path))
+     (let* ((rpath (projet--dnode-path rnode))
             (rlen (length rpath)))
        (projet--foreach-dir
         rnode dnode
-        (cl-loop for file in (plist-get dnode :files)
+        (cl-loop for file in (projet--dnode-files dnode)
                  when (string-match-p regex file rlen)
                  do (push file matches)))))
     matches))
