@@ -80,10 +80,8 @@ Returns dnode or nil if not found"
     dnode))
 
 (defun projet--should-ignore (pnode rnode name)
-  (let ((ignore-re (projet--dnode-ignore-re rnode))
-        (keep-re (projet--dnode-keep-re rnode)))
-    (and (string-match ignore-re name)
-         (not (string-match keep-re name)))))
+  (and (string-match (projet--dnode-ignore-re rnode) name)
+       (not (string-match (projet--dnode-keep-re rnode) name))))
 
 (defun projet--traverse-dnode (dnode fun)
   "Traverse a directory.
@@ -96,12 +94,10 @@ FUN function to call on each directory node"
 
 (defmacro projet--foreach-root (pnode rvar body)
   "Traverse the root directories, setting RVAR to the root dnode of each"
-  `(dolist (,rvar (projet--pnode-roots pnode))
-     (progn ,body)))
+  `(dolist (,rvar (projet--pnode-roots pnode)) ,body))
 
 (defmacro projet--foreach-dir (rnode dvar body)
-  `(projet--traverse-dnode rnode
-                               (lambda (,dvar) (progn ,body))))
+  `(projet--traverse-dnode rnode (lambda (,dvar) ,body)))
 
 (defun projet--print-tree (pnode)
   (projet--foreach-root
@@ -187,8 +183,7 @@ FUN function to call on each directory node"
   (let ((matches))
     (projet--foreach-root
      pnode rnode
-     (let* ((rpath (projet--dnode-path rnode))
-            (rlen (length rpath)))
+     (let ((rlen (length (projet--dnode-path rnode))))
        (projet--foreach-dir
         rnode dnode
         (cl-loop for file in (projet--dnode-files dnode)
