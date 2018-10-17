@@ -88,9 +88,8 @@ Returns dnode or nil if not found"
 DNODE directory node to traverse.
 FUN function to call on each directory node"
   (funcall fun dnode)
-  (maphash (lambda (name dir)
-             (projet--traverse-dnode dir fun))
-           (projet--dnode-dirs dnode)))
+  (dolist (dir (hash-table-values (projet--dnode-dirs dnode)))
+    (projet--traverse-dnode dir fun)))
 
 (defmacro projet--foreach-root (pnode rvar body)
   "Traverse the root directories, setting RVAR to the root dnode of each"
