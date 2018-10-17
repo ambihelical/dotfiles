@@ -129,32 +129,34 @@ FUN function to call on each directory node"
   (let ((fattrs (directory-files-and-attributes dpath nil nil t))
         (olddirs (projet--dnode-dirs dnode))
         (newfiles '())
-        (newdirs (make-hash-table :test 'equal))
-        (relpath (string-remove-prefix rpath dpath)))
+        (newdirs (make-hash-table :test 'equal)))
+
     (dolist (fattr fattrs)
-      ;;(message "processing %s" (car fattr))
-      (cond
-       ;; this dir
-       ((equal (car fattr) ".")
-        (setf (projet--dnode-mtime dnode) (nth 6 fattr)))
-       ;; parent dir
-       ((equal (car fattr) ".."))
-       ;; symbolic link
-       ((stringp (nth 1 fattr)))
-       ;; file
-       ((null (nth 1 fattr))
-        (unless (projet--should-ignore pnode rnode (car fattr))
-          (push (concat dpath (car fattr)) newfiles)))
-       ;; directory
-       ((eq 't (nth 1 fattr))
-        (let ((dirname (file-name-as-directory (car fattr))))
-          (unless (projet--should-ignore pnode rnode dirname)
-            (if-let ((oldnode (gethash (car fattr) olddirs)))
-                (puthash (car fattr) oldnode newdirs)
-              (puthash (car fattr)
-                       (projet--dnode-create (concat dpath dirname))
-                       newdirs)))))
-       (t nil)))
+      (let ((type (cadr fattr)))
+        (cond
+         ;; file
+         ((null type)
+          (unless (projet--should-ignore pnode rnode (car fattr))
+            (push (concat dpath (car fattr)) newfiles)))
+         ;; dir
+         ((eq 't type)
+          (cond
+           ;; this dir
+           ((equal (car fattr) ".")
+            (setf (projet--dnode-mtime dnode) (nth 6 fattr)))
+           ;; parent dir
+           ((equal (car fattr) ".."))
+           (t
+            (let ((dirname (file-name-as-directory (car fattr))))
+              (unless (projet--should-ignore pnode rnode dirname)
+                (if-let ((oldnode (gethash (car fattr) olddirs)))
+                    (puthash (car fattr) oldnode newdirs)
+                  (puthash (car fattr)
+                           (projet--dnode-create (concat dpath dirname))
+                           newdirs)))))))
+         ;; symbolic link
+         ((stringp type)))))
+
     (setf (projet--dnode-dirs dnode) newdirs)
     (setf (projet--dnode-files dnode) newfiles)))
 
