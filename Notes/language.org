@@ -91,3 +91,7 @@
 	=-Wl,--noundefined=
 ** See what what libraries an ELF executable or shared lib needs
 	=readelf -d <file>=
+* Elisp
+** How to time code
+   require 'benchmark
+   (benchmark-elapse (fn args))
