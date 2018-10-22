@@ -80,6 +80,7 @@ Returns dnode or nil if not found"
     dnode))
 
 (defun projek--should-ignore (pnode rnode name)
+  (thread-yield)
   (and (string-match (projek--dnode-ignore-re rnode) name)
        (not (string-match (projek--dnode-keep-re rnode) name))))
 
@@ -173,6 +174,7 @@ FUN function to call on each directory node"
     (projek--foreach-dir dnode in rnode
       (let ((dpath (projek--dnode-path dnode)))
         ;; (message "indexing path %s" dpath)
+        (thread-yield)
         (when (projek--dnode-changed-p dnode dpath)
           (projek--update-dnode pnode rnode dnode dpath))))))
 
@@ -191,6 +193,7 @@ FUN function to call on each directory node"
     (projek--foreach-root rnode in pnode
       (projek--foreach-dir dnode in rnode
         (progn
+          (thread-yield)
           ;;(message "adding file from %s" (projek--dnode-path dnode))
           (setq files (append (projek--dnode-files dnode) files)))))
     files))
