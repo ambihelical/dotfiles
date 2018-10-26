@@ -74,7 +74,10 @@
 	=su -c '<command>' root=
 ** Search man pages
 	=apropos <keyword>=
-
+** Convert address in crash backtrace to file location
+   =addr2line -e executable dump-address=
+   - executable is program or shared object
+   - dump-address is hex address directly from backtrace
 * Bash
 ** Redirections
 *** redirect stderr to err.log
