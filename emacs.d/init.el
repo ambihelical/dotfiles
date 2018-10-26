@@ -1029,6 +1029,7 @@
   (defconst me:language (expand-file-name "Notes/language.org" me:data-directory))
   (defconst me:system (expand-file-name "Notes/system.org" me:data-directory))
   (defconst me:android (expand-file-name "Notes/android.org" me:data-directory))
+  (setq org-return-follows-link t)
   (add-hook 'org-capture-mode-hook #'evil-insert-state)
   (setq org-capture-templates `(("c" "Command notes")
                                 ("ug" "Using Git" entry (file+headline ,me:command "Git"))
@@ -1051,8 +1052,17 @@
   :config
   (defun me:search-notes ()
     (interactive)
-    (counsel-ag nil (expand-file-name "Notes" me:data-directory) "-i" nil))
-  (use-package evil-org :config :demand))
+    (counsel-ag nil (expand-file-name "Notes" me:data-directory) "-i" nil)))
+
+(use-package evil-org
+  :after ( org evil )
+  :hook (( org-mode ) . evil-org-mode)
+  :hook (( evil-org-mode ) . evil-org-set-key-theme)
+  :init
+  (setq evil-org-key-theme '( navigation insert  textobjects additional calendar return ))
+  :config
+  (require 'evil-org-agenda)
+  (evil-org-agenda-set-keys))
 
 (use-package org-projectile
   :after ( projectile org )
@@ -1062,7 +1072,13 @@
   (org-projectile-per-project)
   (setq org-projectile-per-project-filepath "todo.org")
   (setq org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
-  (push (org-projectile-project-todo-entry) org-capture-templates))
+  (add-to-list 'org-capture-templates
+               (org-projectile-project-todo-entry :capture-character "rn"
+                                                  :capture-heading "Project Note"
+                                                  :capture-template "* NOTE %i %?\n %a"))
+  (add-to-list 'org-capture-templates
+               (org-projectile-project-todo-entry :capture-character "rd"
+                                                  :capture-heading "Project Todo")))
 
 (use-package org-bullets
   :init
