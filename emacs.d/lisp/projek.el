@@ -7,20 +7,20 @@
 ;; declare our devotion to speed at all costs
 (cl-declaim (optimize (speed 3) (safety 0)))
 
-(defcustom projek-active-projects 10
+(defcustom projek-recent-projects 10
   "Maximum number of projects to keep in memory."
   :type '(integer)
-  :group 'projective)
+  :group 'projek)
 
 (defconst projek-cache-dir
   (expand-file-name "emacs/projek/" (or (getenv "XDG_CACHE_HOME")  "~/.cache"))
   "Path to top-level cache directory for projek package")
 
-(defvar projek--active-projects (make-hash-table :test 'equal)
-  "Map of key-path to project node")
+(defvar projek--recent-projects (make-hash-table :test 'equal)
+  "Map of project.el identifier (type . path) to project node")
 
-;; TBD
-(defun projek--prune-active-projects () "Remove old projects")
+(defvar projek--current-project nil
+  "project.el identifier (type . path) of current project")
 
 ;; Utility functions
 (defun projek--globs-to-regexp (globs)
@@ -67,10 +67,35 @@
                        (lambda (path) (projek--rnode-create pnode roots-cache path))
                        roots)))
     (setf (projek--pnode-roots pnode) rnodes)
-    ;; add project to active projects and prune
-    (puthash (cdr project) pnode projek--active-projects)
-    (projek--prune-active-projects)
+    ;; add project to recent projects and prune
+    (puthash project pnode projek--recent-projects)
+    (projek--prune-recent-projects)
     pnode))
+
+;; TBD
+(defun projek--prune-recent-projects ())
+
+(defun projek--recent-projects ()
+  (hash-table-keys projek--recent-projects))
+
+
+(defun projek-activate-project (project)
+  (unless (equal projek--current-project project)
+    (let ((pnode (or (gethash project projek--recent-projects)
+                     (projek--pnode-create project))))
+      (projek--activate-pnode pnode))))
+
+(defun projek-deactivate-project (project)
+  (when-let ((pnode (gethash project projek--recent-projects)))
+    (projek--save-project pnode)))
+
+(defun projek--activate-pnode (pnode)
+  (let ((project (projek--pnode-project pnode)))
+    (puthash project pnode projek--recent-projects)
+    (projek-deactivate-project projek--current-project)
+    (setf (projek--pnode-last-used pnode) (current-time)
+          projek--current-project project)
+    (projek--prune-recent-projects)))
 
 (defun projek--project-cache-dir (pnode &optional subdir)
   "Return the path of the project's cache dir or optionally a directory within it"
