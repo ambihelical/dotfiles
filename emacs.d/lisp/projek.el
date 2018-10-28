@@ -1,7 +1,8 @@
 ;;; -*- lexical-binding: t; -*-
 
-(require 'cl)
+(require 'cl-lib)
 (require 'project)
+(require 'subr-x)
 
 ;; declare our devotion to speed at all costs
 (cl-declaim (optimize (speed 3) (safety 0)))
@@ -11,17 +12,43 @@
   :type '(integer)
   :group 'projective)
 
+(defconst projek-cache-dir
+  (expand-file-name "emacs/projek/" (or (getenv "XDG_CACHE_HOME")  "~/.cache"))
+  "Path to top-level cache directory for projek package")
+
 (defvar projek--active-projects (make-hash-table :test 'equal)
   "Map of key-path to project node")
-
 
 ;; TBD
 (defun projek--prune-active-projects () "Remove old projects")
 
+;; Utility functions
 (defun projek--globs-to-regexp (globs)
   (concat "\\(?:"
           (mapconcat #'identity (mapcar #'dired-glob-regexp globs) "\\|" )
           "\\)"))
+
+(defun projek--flatten-path (path)
+  "Replace path delimiters with legal but unlikely file name characters"
+  (replace-regexp-in-string "[/]" "!" path t t))
+
+(defun projek--read-object(path)
+  "Read object from PATH."
+  (with-demoted-errors
+      "Error during object read: %S"
+    (when (file-exists-p path)
+      (with-temp-buffer
+        (insert-file-contents path)
+        (read (buffer-string))))))
+
+(defun projek--write-object (object path)
+  "Write lisp object OBJECT to PATH"
+  (if (file-writable-p path)
+      (with-temp-file path
+        (insert (prin1-to-string object)))
+    (message "Unable to write object to [%s]" path)))
+
+;; End Utility functions
 
 (cl-defstruct (projek--pnode (:constructor projek--pnode--create)
                              (:copier nil))
@@ -35,8 +62,9 @@
   (when-let* ((pnode (apply #'projek--pnode--create
                             :project project :last-used (current-time) args))
               (roots (mapcar #'file-name-as-directory (project-roots project)))
+              (roots-cache (projek--project-cache-dir pnode "roots"))
               (rnodes (mapcar
-                       (lambda (path) (projek--rnode-create pnode path))
+                       (lambda (path) (projek--rnode-create pnode roots-cache path))
                        roots)))
     (setf (projek--pnode-roots pnode) rnodes)
     ;; add project to active projects and prune
@@ -44,18 +72,38 @@
     (projek--prune-active-projects)
     pnode))
 
+(defun projek--project-cache-dir (pnode &optional subdir)
+  "Return the path of the project's cache dir or optionally a directory within it"
+  (let* ((project-dir (cdr (projek--pnode-project pnode)))
+         (project-file-name (projek--flatten-path project-dir))
+         (project-cache-dir (expand-file-name project-file-name projek-cache-dir)))
+    (if subdir
+        (expand-file-name subdir project-cache-dir)
+      project-cache-dir)))
+
+
 (cl-defun projek--dnode-create (path &rest args)
   (apply #'projek--dnode--create
          :path path
          :dirs (make-hash-table :test 'equal)
          args))
 
-(cl-defun projek--rnode-create (pnode path)
+(cl-defun projek--rnode-create (pnode roots-cache path)
   (let* ((iglobs (project-ignores (projek--pnode-project pnode) path))
-         (ignore (projek--globs-to-regexp iglobs)))
-    (projek--dnode-create path
-                          :ignore-re ignore
-                          :keep-re "$^")))
+         (ignore (projek--globs-to-regexp iglobs))
+         (rpath-cache (expand-file-name (projek--flatten-path path) roots-cache)))
+    (or (projek--read-object rpath-cache)
+        (projek--dnode-create path
+                              :ignore-re ignore
+                              :keep-re "$^"))))
+
+(defun projek--save-project (pnode)
+  (let ((roots-cache (projek--project-cache-dir pnode "roots")))
+    (make-directory roots-cache t)
+    (projek--foreach-root rnode in pnode
+      (let* ((rpath (projek--dnode-path rnode))
+             (rpath-cache (expand-file-name (projek--flatten-path rpath) roots-cache)))
+        (projek--write-object rnode rpath-cache)))))
 
 (defun projek--find-rnode (pnode dpath)
   "Find the rnode corresponding to directory path DPATH
