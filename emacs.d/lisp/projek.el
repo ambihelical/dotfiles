@@ -79,23 +79,25 @@
   (hash-table-keys projek--recent-projects))
 
 
+;; TBD start/stop indexing as appropriate
 (defun projek-activate-project (project)
   (unless (equal projek--current-project project)
+    (projek-deactivate-project projek--current-project)
     (let ((pnode (or (gethash project projek--recent-projects)
                      (projek--pnode-create project))))
-      (projek--activate-pnode pnode))))
+      (projek--activate-pnode pnode)
+      (puthash project pnode projek--recent-projects)
+      (setf projek--current-project project)
+      (projek--prune-recent-projects))))
 
 (defun projek-deactivate-project (project)
   (when-let ((pnode (gethash project projek--recent-projects)))
-    (projek--save-project pnode)))
+    (projek--save-project pnode)
+    (setf projek--current-project nil)))
 
 (defun projek--activate-pnode (pnode)
   (let ((project (projek--pnode-project pnode)))
-    (puthash project pnode projek--recent-projects)
-    (projek-deactivate-project projek--current-project)
-    (setf (projek--pnode-last-used pnode) (current-time)
-          projek--current-project project)
-    (projek--prune-recent-projects)))
+    (setf (projek--pnode-last-used pnode) (current-time))))
 
 (defun projek--project-cache-dir (pnode &optional subdir)
   "Return the path of the project's cache dir or optionally a directory within it"
