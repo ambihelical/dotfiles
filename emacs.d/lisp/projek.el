@@ -7,8 +7,8 @@
 ;; declare our devotion to speed at all costs
 (cl-declaim (optimize (speed 3) (safety 0)))
 
-(defcustom projek-recent-projects 10
-  "Maximum number of projects to keep in memory."
+(defcustom projek-max-recent-projects 10
+  "Maximum number of recent projects to keep in memory."
   :type '(integer)
   :group 'projek)
 
@@ -73,10 +73,21 @@
     pnode))
 
 ;; TBD
-(defun projek--prune-recent-projects ())
+(defun projek--prune-recent-projects ()
+  (let ((sorted-projs (reverse (projek--recent-projects))))
+    (while (> (length sorted-projs) projek-max-recent-projects)
+      (remhash (pop sorted-projs) projek--recent-projects))))
 
-(defun projek--recent-projects ()
-  (hash-table-keys projek--recent-projects))
+
+(defun projek-recent-projects ()
+  "Return recent project.el identifiers, most recently used first"
+  (let* ((pnodes (hash-table-values projek--recent-projects))
+         (sorted-pnodes
+          (sort pnodes
+                (lambda (lhs rhs)
+                  (time-less-p (projek--pnode-last-used rhs)
+                               (projek--pnode-last-used lhs))))))
+    (mapcar (lambda (elem) (projek--pnode-project elem)) sorted-pnodes)))
 
 
 ;; TBD start/stop indexing as appropriate
