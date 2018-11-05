@@ -355,4 +355,37 @@ FUN function to call on each directory node"
                       (when file (find-file file)))
             :unwind #'projek--stop-search))
 
+(defvar projek--indexing-thread nil)
+(defvar projek--indexing-lock (make-mutex "projek:index"))
+(defvar projek--indexing-condition (make-condition-variable projek--indexing-lock "projek:index"))
+(defvar projek--indexing-timer nil)
+
+(defun projek--start-indexing-timer ()
+  (when projek--indexing-timer
+    (cancel-timer projek--indexing-timer))
+  (setq projek--indexing-timer (run-at-time 10 nil 'projek--trigger-indexing)))
+
+(defun projek--trigger-indexing ()
+  (with-mutex projek--indexing-lock
+    (condition-notify projek--indexing-condition)))
+
+(defun projek--index-main ()
+  (unwind-protect
+      (while t
+        (with-mutex projek--indexing-lock
+          (condition-wait projek--indexing-condition))
+        (projek--index-project (projek--current-pnode))
+        (projek--start-indexing-timer))))
+
+(defun projek--start-indexing ()
+  (projek--stop-indexing)
+  (setq projek--indexing-thread (make-thread #'projek--index-main "projek:index"))
+  (projek--start-indexing-timer))
+
+(defun projek--stop-indexing ()
+  (when projek--indexing-thread
+    (thread-signal projek--indexing-thread 'abort nil)
+    (thread-join projek--indexing-thread)))
+
+
 (provide 'projek)
