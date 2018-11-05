@@ -72,6 +72,10 @@
     (projek--prune-recent-projects)
     pnode))
 
+(defun projek--current-pnode ()
+  "Return pnode of current project or nil if none"
+  (gethash projek--current-project projek--recent-projects))
+
 ;; TBD
 (defun projek--prune-recent-projects ()
   (let ((sorted-projs (reverse (projek--recent-projects))))
@@ -283,5 +287,72 @@ FUN function to call on each directory node"
           ;;(message "adding file from %s" (projek--dnode-path dnode))
           (setq files (append (projek--dnode-files dnode) files)))))
     files))
+
+
+(defvar projek--search-results nil)
+(defvar projek--search-thread nil)
+(defvar projek--search-timer nil)
+(defvar projek--search-history nil)
+
+(defun projek--start-search-timer ()
+  ;;(message "starting search timer")
+  (setq projek--search-timer (run-at-time 0.25 nil 'projek--update-results)))
+
+(defun projek--update-results ()
+  ;;  (message "update-results")
+  (when projek--search-results
+    (ivy--set-candidates projek--search-results)
+    (ivy--insert-minibuffer (ivy--format ivy--all-candidates)))
+  (projek--start-search-timer))
+
+(defun projek--find-files-async (pnode regex)
+  ;;(message "find-files-async")
+  (setq projek--search-results nil)
+  (unwind-protect
+      (projek--foreach-root rnode in pnode
+        (let ((rlen (length (projek--dnode-path rnode))))
+          (projek--foreach-dir dnode in rnode
+            (progn
+              (thread-yield)
+              (cl-loop for file in (projek--dnode-files dnode)
+                       when (string-match-p regex file rlen)
+                       do (push file projek--search-results))))))))
+
+(defun projek--stop-search ()
+  ;;(message "stop-search")
+  (when projek--search-timer
+    (cancel-timer projek--search-timer)
+    (setq projek--search-timer nil))
+  (when projek--search-thread
+    (thread-signal projek--search-thread 'abort nil)
+    (thread-join projek--search-thread)
+    (setq projek--search-thread nil)))
+
+;; assumes timer and thread are not running
+;; TBD: make function to update results a parameter
+(defun projek--start-search (pnode regex)
+  ;;(message "start-search for %s" regex)
+  (setq projek--search-results nil)
+  (setq projek--search-thread
+        (make-thread
+         (lambda ()
+           (projek--find-files-async pnode regex)) "projek:search"))
+  (projek--start-search-timer))
+
+;; TBD: how to get rid of ivy--regex
+(defun projek--search-function (str &rest _unused)
+  (projek--stop-search)
+  (when-let ((pnode (projek--current-pnode)))
+    (projek--start-search pnode (ivy--regex str))
+    '("" "working...")))
+
+(defun projek-counsel-find-file ()
+  (interactive)
+  (ivy-read "File: " #'projek--search-function
+            :dynamic-collection t
+            :history 'projek--search-history
+            :action (lambda (file)
+                      (when file (find-file file)))
+            :unwind #'projek--stop-search))
 
 (provide 'projek)
