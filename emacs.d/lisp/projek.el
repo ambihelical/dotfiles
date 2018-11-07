@@ -128,28 +128,6 @@ FUN function to call on each directory node"
   (dolist (dir (hash-table-values (projek--dnode-dirs dnode)))
     (projek--traverse-dnode dir fun)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  Support functions
-
-(defun projek--prune-recent-projects ()
-  (let ((sorted-projs (reverse projek--recent-projects)))
-    (while (> (length sorted-projs) projek-max-recent-projects)
-      (remhash (pop sorted-projs) projek--recent-projects))))
-
-(defun projek--activate-pnode (pnode)
-  (let ((project (projek--pnode-project pnode)))
-    (setf (projek--pnode-last-used pnode) (current-time))))
-
-(defun projek--save-project (pnode)
-  (let ((roots-cache (projek--project-cache-dir pnode "roots")))
-    (make-directory roots-cache t)
-    (projek--foreach-root rnode in pnode
-      (when (projek--rnode-dirty rnode)
-        (let* ((rpath (projek--dnode-path rnode))
-               (rpath-cache (expand-file-name (projek--flatten-path rpath) roots-cache)))
-          (setf (projek--rnode-dirty rnode) nil)
-          (projek--write-object rnode rpath-cache))))))
-
 (defun projek--find-rnode (pnode dpath)
   "Find the rnode corresponding to directory path DPATH
   PNODE is the project node
@@ -172,10 +150,50 @@ Returns dnode or nil if not found"
           (setq dirs (cdr dirs)))))
     dnode))
 
-(defun projek--should-ignore (pnode rnode name)
-  (thread-yield)
-  (and (string-match (projek--rnode-ignore-re rnode) name)
-       (not (string-match (projek--rnode-keep-re rnode) name))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Indexing
+
+(defvar projek--indexing-thread nil)
+(defvar projek--indexing-lock (make-mutex "projek:index"))
+(defvar projek--indexing-condition (make-condition-variable projek--indexing-lock "projek:index"))
+(defvar projek--indexing-timer nil)
+
+(defun projek--start-indexing-timer ()
+  (when projek--indexing-timer
+    (cancel-timer projek--indexing-timer))
+  (setq projek--indexing-timer (run-at-time 10 nil 'projek--trigger-indexing)))
+
+(defun projek--trigger-indexing ()
+  (with-mutex projek--indexing-lock
+    (condition-notify projek--indexing-condition)))
+
+(defun projek--index-main ()
+  (unwind-protect
+      (while t
+        (with-mutex projek--indexing-lock
+          (condition-wait projek--indexing-condition))
+        (projek--index-project (projek--current-pnode))
+        (projek--start-indexing-timer))))
+
+(defun projek--start-indexing ()
+  (projek--stop-indexing)
+  (setq projek--indexing-thread (make-thread #'projek--index-main "projek:index"))
+  (projek--start-indexing-timer))
+
+(defun projek--stop-indexing ()
+  (when projek--indexing-thread
+    (thread-signal projek--indexing-thread 'abort nil)
+    (thread-join projek--indexing-thread)))
+
+(defun projek--index-project (pnode)
+  (projek--foreach-root rnode in pnode
+    (projek--foreach-dir dnode in rnode
+      (let ((dpath (projek--dnode-path dnode)))
+        ;; (message "indexing path %s" dpath)
+        (thread-yield)
+        (when (projek--dnode-changed-p dnode dpath)
+          (projek--update-dnode pnode rnode dnode dpath)
+          (setf (projek--rnode-dirty rnode) t))))))
 
 (defun projek--dnode-changed-p (dnode dpath)
   ;;(message "path changed check %s" dpath)
@@ -219,6 +237,13 @@ Returns dnode or nil if not found"
     (setf (projek--dnode-dirs dnode) newdirs)
     (setf (projek--dnode-files dnode) newfiles)))
 
+(defun projek--should-ignore (pnode rnode name)
+  (and (string-match (projek--rnode-ignore-re rnode) name)
+       (not (string-match (projek--rnode-keep-re rnode) name))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Project lifetime
+
 (defun projek-recent-projects ()
   "Return recent project.el identifiers, most recently used first"
   (let* ((pnodes (hash-table-values projek--recent-projects))
@@ -244,6 +269,29 @@ Returns dnode or nil if not found"
   (when-let ((pnode (gethash project projek--recent-projects)))
     (projek--save-project pnode)
     (setf projek--current-project nil)))
+
+(defun projek--prune-recent-projects ()
+  (let ((sorted-projs (reverse projek--recent-projects)))
+    (while (> (length sorted-projs) projek-max-recent-projects)
+      (remhash (pop sorted-projs) projek--recent-projects))))
+
+(defun projek--activate-pnode (pnode)
+  (let ((project (projek--pnode-project pnode)))
+    (setf (projek--pnode-last-used pnode) (current-time))))
+
+(defun projek--save-project (pnode)
+  (let ((roots-cache (projek--project-cache-dir pnode "roots")))
+    (make-directory roots-cache t)
+    (projek--foreach-root rnode in pnode
+      (when (projek--rnode-dirty rnode)
+        (let* ((rpath (projek--dnode-path rnode))
+               (rpath-cache (expand-file-name (projek--flatten-path rpath) roots-cache)))
+          (setf (projek--rnode-dirty rnode) nil)
+          (projek--write-object rnode rpath-cache))))))
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;; Miscellanea
+;; Not sure any of these are needed
 
 (defun projek--print-tree (pnode)
   (projek--foreach-root rnode in pnode
@@ -271,16 +319,6 @@ Returns dnode or nil if not found"
         (clrhash (projek--dnode-dirs dnode))
         (setf (projek--dnode-files dnode) nil)))))
 
-(defun projek--index-project (pnode)
-  (projek--foreach-root rnode in pnode
-    (projek--foreach-dir dnode in rnode
-      (let ((dpath (projek--dnode-path dnode)))
-        ;; (message "indexing path %s" dpath)
-        (thread-yield)
-        (when (projek--dnode-changed-p dnode dpath)
-          (projek--update-dnode pnode rnode dnode dpath)
-          (setf (projek--rnode-dirty rnode) t))))))
-
 (defun projek--find-file-regex (pnode regex)
   (let ((matches))
     (projek--foreach-root rnode in pnode
@@ -301,6 +339,8 @@ Returns dnode or nil if not found"
           (setq files (append (projek--dnode-files dnode) files)))))
     files))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Searching
 
 (defvar projek--search-results nil)
 (defvar projek--search-thread nil)
@@ -367,38 +407,5 @@ Returns dnode or nil if not found"
             :action (lambda (file)
                       (when file (find-file file)))
             :unwind #'projek--stop-search))
-
-(defvar projek--indexing-thread nil)
-(defvar projek--indexing-lock (make-mutex "projek:index"))
-(defvar projek--indexing-condition (make-condition-variable projek--indexing-lock "projek:index"))
-(defvar projek--indexing-timer nil)
-
-(defun projek--start-indexing-timer ()
-  (when projek--indexing-timer
-    (cancel-timer projek--indexing-timer))
-  (setq projek--indexing-timer (run-at-time 10 nil 'projek--trigger-indexing)))
-
-(defun projek--trigger-indexing ()
-  (with-mutex projek--indexing-lock
-    (condition-notify projek--indexing-condition)))
-
-(defun projek--index-main ()
-  (unwind-protect
-      (while t
-        (with-mutex projek--indexing-lock
-          (condition-wait projek--indexing-condition))
-        (projek--index-project (projek--current-pnode))
-        (projek--start-indexing-timer))))
-
-(defun projek--start-indexing ()
-  (projek--stop-indexing)
-  (setq projek--indexing-thread (make-thread #'projek--index-main "projek:index"))
-  (projek--start-indexing-timer))
-
-(defun projek--stop-indexing ()
-  (when projek--indexing-thread
-    (thread-signal projek--indexing-thread 'abort nil)
-    (thread-join projek--indexing-thread)))
-
 
 (provide 'projek)
