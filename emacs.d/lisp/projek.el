@@ -22,7 +22,8 @@
 (defvar projek--current-project nil
   "project.el identifier (type . path) of current project")
 
-;; Utility functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Generic Utility functions
 (defun projek--globs-to-regexp (globs)
   (concat "\\(?:"
           (mapconcat #'identity (mapcar #'dired-glob-regexp globs) "\\|" )
@@ -48,7 +49,8 @@
         (insert (prin1-to-string object)))
     (message "Unable to write object to [%s]" path)))
 
-;; End Utility functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Core Functions
 
 (cl-defstruct (projek--pnode (:constructor projek--pnode--create)
                              (:copier nil))
@@ -99,43 +101,6 @@
   "Return pnode of current project or nil if none"
   (gethash projek--current-project projek--recent-projects))
 
-(defun projek--prune-recent-projects ()
-  (let ((sorted-projs (reverse (projek--recent-projects))))
-    (while (> (length sorted-projs) projek-max-recent-projects)
-      (remhash (pop sorted-projs) projek--recent-projects))))
-
-
-(defun projek-recent-projects ()
-  "Return recent project.el identifiers, most recently used first"
-  (let* ((pnodes (hash-table-values projek--recent-projects))
-         (sorted-pnodes
-          (sort pnodes
-                (lambda (lhs rhs)
-                  (time-less-p (projek--pnode-last-used rhs)
-                               (projek--pnode-last-used lhs))))))
-    (mapcar (lambda (elem) (projek--pnode-project elem)) sorted-pnodes)))
-
-
-;; TBD start/stop indexing as appropriate
-(defun projek-activate-project (project)
-  (unless (equal projek--current-project project)
-    (projek-deactivate-project projek--current-project)
-    (let ((pnode (or (gethash project projek--recent-projects)
-                     (projek--pnode-create project))))
-      (projek--activate-pnode pnode)
-      (puthash project pnode projek--recent-projects)
-      (setf projek--current-project project)
-      (projek--prune-recent-projects))))
-
-(defun projek-deactivate-project (project)
-  (when-let ((pnode (gethash project projek--recent-projects)))
-    (projek--save-project pnode)
-    (setf projek--current-project nil)))
-
-(defun projek--activate-pnode (pnode)
-  (let ((project (projek--pnode-project pnode)))
-    (setf (projek--pnode-last-used pnode) (current-time))))
-
 (defun projek--project-cache-dir (pnode &optional subdir)
   "Return the path of the project's cache dir or optionally a directory within it"
   (let* ((project-dir (cdr (projek--pnode-project pnode)))
@@ -145,6 +110,35 @@
         (expand-file-name subdir project-cache-dir)
       project-cache-dir)))
 
+(defmacro projek--foreach-root (rvar in pnode body)
+  "Traverse the root directories, setting RVAR to the root dnode of each"
+  (declare (indent 3))
+  `(dolist (,rvar (projek--pnode-roots ,pnode)) ,body))
+
+(defmacro projek--foreach-dir (dvar in rnode body)
+  "Traverse the dnodes of a root directory, setting DVAR to each dnode"
+  (declare (indent 3))
+  `(projek--traverse-dnode ,rnode (lambda (,dvar) ,body)))
+
+(defun projek--traverse-dnode (dnode fun)
+  "Traverse a directory.
+DNODE directory node to traverse.
+FUN function to call on each directory node"
+  (funcall fun dnode)
+  (dolist (dir (hash-table-values (projek--dnode-dirs dnode)))
+    (projek--traverse-dnode dir fun)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  Support functions
+
+(defun projek--prune-recent-projects ()
+  (let ((sorted-projs (reverse (projek--recent-projects))))
+    (while (> (length sorted-projs) projek-max-recent-projects)
+      (remhash (pop sorted-projs) projek--recent-projects))))
+
+(defun projek--activate-pnode (pnode)
+  (let ((project (projek--pnode-project pnode)))
+    (setf (projek--pnode-last-used pnode) (current-time))))
 
 (defun projek--save-project (pnode)
   (let ((roots-cache (projek--project-cache-dir pnode "roots")))
@@ -180,41 +174,6 @@ Returns dnode or nil if not found"
   (thread-yield)
   (and (string-match (projek--dnode-ignore-re rnode) name)
        (not (string-match (projek--dnode-keep-re rnode) name))))
-
-(defun projek--traverse-dnode (dnode fun)
-  "Traverse a directory.
-DNODE directory node to traverse.
-FUN function to call on each directory node"
-  (funcall fun dnode)
-  (dolist (dir (hash-table-values (projek--dnode-dirs dnode)))
-    (projek--traverse-dnode dir fun)))
-
-(defmacro projek--foreach-root (rvar in pnode body)
-  "Traverse the root directories, setting RVAR to the root dnode of each"
-  (declare (indent 3))
-  `(dolist (,rvar (projek--pnode-roots ,pnode)) ,body))
-
-(defmacro projek--foreach-dir (dvar in rnode body)
-  (declare (indent 3))
-  `(projek--traverse-dnode ,rnode (lambda (,dvar) ,body)))
-
-(defun projek--print-tree (pnode)
-  (projek--foreach-root rnode in pnode
-    (let* ((rpath (projek--dnode-path rnode))
-           (rdepth (length (split-string rpath "/")))
-           (dcount 0)
-           (tcount 0))
-      (projek--foreach-dir dnode in rnode
-        (let* ((fcount (length (projek--dnode-files dnode)))
-               (dpath (projek--dnode-path dnode))
-               (depth (- (length (split-string dpath "/")) rdepth))
-               (name (file-name-nondirectory (directory-file-name dpath))))
-          (setq dcount (1+ dcount))
-          (setq tcount (+ tcount fcount))
-          (message "%s%s -> %d files"
-                   (make-string (* depth 2) ?\s)
-                   name fcount )))
-      (message "#### Dirs %d  Files %d ####" dcount tcount))))
 
 (defun projek--dnode-changed-p (dnode dpath)
   ;;(message "path changed check %s" dpath)
@@ -257,6 +216,50 @@ FUN function to call on each directory node"
 
     (setf (projek--dnode-dirs dnode) newdirs)
     (setf (projek--dnode-files dnode) newfiles)))
+
+(defun projek-recent-projects ()
+  "Return recent project.el identifiers, most recently used first"
+  (let* ((pnodes (hash-table-values projek--recent-projects))
+         (sorted-pnodes
+          (sort pnodes
+                (lambda (lhs rhs)
+                  (time-less-p (projek--pnode-last-used rhs)
+                               (projek--pnode-last-used lhs))))))
+    (mapcar (lambda (elem) (projek--pnode-project elem)) sorted-pnodes)))
+
+;; TBD start/stop indexing as appropriate
+(defun projek-activate-project (project)
+  (unless (equal projek--current-project project)
+    (projek-deactivate-project projek--current-project)
+    (let ((pnode (or (gethash project projek--recent-projects)
+                     (projek--pnode-create project))))
+      (projek--activate-pnode pnode)
+      (puthash project pnode projek--recent-projects)
+      (setf projek--current-project project)
+      (projek--prune-recent-projects))))
+
+(defun projek-deactivate-project (project)
+  (when-let ((pnode (gethash project projek--recent-projects)))
+    (projek--save-project pnode)
+    (setf projek--current-project nil)))
+
+(defun projek--print-tree (pnode)
+  (projek--foreach-root rnode in pnode
+    (let* ((rpath (projek--dnode-path rnode))
+           (rdepth (length (split-string rpath "/")))
+           (dcount 0)
+           (tcount 0))
+      (projek--foreach-dir dnode in rnode
+        (let* ((fcount (length (projek--dnode-files dnode)))
+               (dpath (projek--dnode-path dnode))
+               (depth (- (length (split-string dpath "/")) rdepth))
+               (name (file-name-nondirectory (directory-file-name dpath))))
+          (setq dcount (1+ dcount))
+          (setq tcount (+ tcount fcount))
+          (message "%s%s -> %d files"
+                   (make-string (* depth 2) ?\s)
+                   name fcount )))
+      (message "#### Dirs %d  Files %d ####" dcount tcount))))
 
 (defun projek--clean-project (pnode)
   (projek--foreach-root rnode in pnode
