@@ -132,7 +132,7 @@ FUN function to call on each directory node"
 ;;  Support functions
 
 (defun projek--prune-recent-projects ()
-  (let ((sorted-projs (reverse (projek--recent-projects))))
+  (let ((sorted-projs (reverse projek--recent-projects)))
     (while (> (length sorted-projs) projek-max-recent-projects)
       (remhash (pop sorted-projs) projek--recent-projects))))
 
