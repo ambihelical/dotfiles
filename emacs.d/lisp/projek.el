@@ -56,7 +56,13 @@
 
 (cl-defstruct (projek--dnode (:constructor projek--dnode--create)
                              (:copier nil))
-  path mtime dirs files ignore-re keep-re)
+  path mtime dirs files)
+
+(cl-defstruct (projek--rnode (:constructor projek--rnode--create)
+                             (:copier nil)
+                             (:include projek--dnode))
+  ignore-re (keep-re "$^") dirty)
+
 
 (cl-defun projek--pnode-create (project &rest args)
   (when-let* ((pnode (apply #'projek--pnode--create
@@ -72,11 +78,27 @@
     (projek--prune-recent-projects)
     pnode))
 
+(cl-defun projek--dnode-create (path &rest args)
+  (apply #'projek--dnode--create
+         :path path
+         :dirs (make-hash-table :test 'equal)
+         args))
+
+(cl-defun projek--rnode-create (pnode roots-cache path &rest args)
+  (let* ((iglobs (project-ignores (projek--pnode-project pnode) path))
+         (ignore (projek--globs-to-regexp iglobs))
+         (rpath-cache (expand-file-name (projek--flatten-path path) roots-cache)))
+    (or (projek--read-object rpath-cache)
+        (apply #'projek--rnode--create
+               :path path
+               :dirs (make-hash-table :test 'equal)
+               :ignore-re ignore
+               args))))
+
 (defun projek--current-pnode ()
   "Return pnode of current project or nil if none"
   (gethash projek--current-project projek--recent-projects))
 
-;; TBD
 (defun projek--prune-recent-projects ()
   (let ((sorted-projs (reverse (projek--recent-projects))))
     (while (> (length sorted-projs) projek-max-recent-projects)
@@ -123,21 +145,6 @@
         (expand-file-name subdir project-cache-dir)
       project-cache-dir)))
 
-
-(cl-defun projek--dnode-create (path &rest args)
-  (apply #'projek--dnode--create
-         :path path
-         :dirs (make-hash-table :test 'equal)
-         args))
-
-(cl-defun projek--rnode-create (pnode roots-cache path)
-  (let* ((iglobs (project-ignores (projek--pnode-project pnode) path))
-         (ignore (projek--globs-to-regexp iglobs))
-         (rpath-cache (expand-file-name (projek--flatten-path path) roots-cache)))
-    (or (projek--read-object rpath-cache)
-        (projek--dnode-create path
-                              :ignore-re ignore
-                              :keep-re "$^"))))
 
 (defun projek--save-project (pnode)
   (let ((roots-cache (projek--project-cache-dir pnode "roots")))
