@@ -63,7 +63,7 @@
 (cl-defstruct (projek--rnode (:constructor projek--rnode--create)
                              (:copier nil)
                              (:include projek--dnode))
-  ignore-re (keep-re "$^") dirty)
+  ignore-re (keep-re "$^") (dirty t))
 
 
 (cl-defun projek--pnode-create (project &rest args)
@@ -144,9 +144,11 @@ FUN function to call on each directory node"
   (let ((roots-cache (projek--project-cache-dir pnode "roots")))
     (make-directory roots-cache t)
     (projek--foreach-root rnode in pnode
-      (let* ((rpath (projek--dnode-path rnode))
-             (rpath-cache (expand-file-name (projek--flatten-path rpath) roots-cache)))
-        (projek--write-object rnode rpath-cache)))))
+      (when (projek--rnode-dirty rnode)
+        (let* ((rpath (projek--dnode-path rnode))
+               (rpath-cache (expand-file-name (projek--flatten-path rpath) roots-cache)))
+          (setf (projek--rnode-dirty rnode) nil)
+          (projek--write-object rnode rpath-cache))))))
 
 (defun projek--find-rnode (pnode dpath)
   "Find the rnode corresponding to directory path DPATH
@@ -172,8 +174,8 @@ Returns dnode or nil if not found"
 
 (defun projek--should-ignore (pnode rnode name)
   (thread-yield)
-  (and (string-match (projek--dnode-ignore-re rnode) name)
-       (not (string-match (projek--dnode-keep-re rnode) name))))
+  (and (string-match (projek--rnode-ignore-re rnode) name)
+       (not (string-match (projek--rnode-keep-re rnode) name))))
 
 (defun projek--dnode-changed-p (dnode dpath)
   ;;(message "path changed check %s" dpath)
@@ -276,7 +278,8 @@ Returns dnode or nil if not found"
         ;; (message "indexing path %s" dpath)
         (thread-yield)
         (when (projek--dnode-changed-p dnode dpath)
-          (projek--update-dnode pnode rnode dnode dpath))))))
+          (projek--update-dnode pnode rnode dnode dpath)
+          (setf (projek--rnode-dirty rnode) t))))))
 
 (defun projek--find-file-regex (pnode regex)
   (let ((matches))
