@@ -307,7 +307,7 @@
   :ensure nil
   :defer 2
   :config
-  (setq auto-revert-check-vc-info nil                         ; don't update branch on auto-revert
+  (setq auto-revert-check-vc-info t                           ; check periodically for new vc info
         auto-revert-verbose nil)                              ; don't tell me about auto reverts
   :diminish auto-revert-mode)
 
