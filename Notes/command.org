@@ -54,7 +54,7 @@
 	=git rebase --onto <graft-point> <excluding> <including>=
 	- <graft-point> defaults to <including>
 	- <including> defaults to current branch HEAD
-	- <excluding> is the commit to start the graft
+	- <excluding> exclude this commit (and earlier) from graft
 
 ** Modify Commit author
    git commit --amend --author="Adolf Hitler <derfuhrer@blitzkrieg.com>"

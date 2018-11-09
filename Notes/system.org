@@ -61,6 +61,8 @@
    touch /etc/network/iptables.up.rules
    iptables-apply    # answer y
    service iptables-persistent save
+** Show ipv6 address zone id
+   ip addr show   # index is the item number
 * Mac
 ** Mount cifs mount
 	=cifs://url.com/mount-point=
