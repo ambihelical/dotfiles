@@ -231,7 +231,19 @@
   (add-hook 'emacs-lisp-mode-hook
             (lambda ()
               (modify-syntax-entry ?- "w")))                  ; hyphens are parts of words
+  (add-hook 'emacs-lisp-mode-hook
+            (defun me:lexical-binding ()
+              (when (and (bobp) (eobp))
+                (setq lexical-binding t)
+                (insert ";;; -*- lexical-binding: t; -*-\n\n"))))
   :interpreter (("emacs" . emacs-lisp-mode)))
+
+(use-package highlight-function-calls
+  :init
+  :config
+  ;; more subtle highlighting for functions
+  (set-face-attribute 'highlight-function-calls-face nil :inherit font-lock-type-face :underline nil :italic t )
+  :hook ( emacs-lisp-mode . highlight-function-calls-mode))
 
 ;; built-in frame package
 ;; Because there is no window package, window config is here as well
