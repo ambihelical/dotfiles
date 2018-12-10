@@ -110,6 +110,7 @@
       fast-but-imprecise-scrolling t                        ; quick and dirty scrolling
       history-length 1000                                   ; length of history
       history-delete-duplicates t                           ; don't allow repeated history
+      imenu-max-item-length 200                             ; default of 60 too short for some c++ methods
       inhibit-splash-screen t                               ; no splash
       inhibit-startup-echo-area-message t                   ; no startup message
       inhibit-startup-message t                             ; no startup message
