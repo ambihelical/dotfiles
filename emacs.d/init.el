@@ -295,6 +295,7 @@
   (setq enable-recursive-minibuffers t)                        ; allow recursive edit
   (add-hook 'minibuffer-setup-hook #'me:minibuffer-setup)
   (add-hook 'minibuffer-exit-hook #'me:minibuffer-exit)
+  (add-hook 'mouse-leave-buffer-hook #'me:minibuffer-kill)
   :config
   (savehist-mode t)                        ; save minibuffer history (savehist)
   (minibuffer-depth-indicate-mode t)       ; show recursive edit depth (mb-depth)

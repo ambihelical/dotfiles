@@ -86,4 +86,9 @@
   (setq inhibit-message (> (minibuffer-depth) 1)
         gc-cons-threshold me:normal-gc-cons-threshold))
 
+;; kill the minibuffer
+(defun me:minibuffer-kill ()
+  (when (and (>= (recursion-depth) 1) (active-minibuffer-window))
+    (abort-recursive-edit)))
+
 (provide 'utilities)
