@@ -19,11 +19,19 @@
 (defun me:rotate-fill-column ()
   "Rotate the current fill-column between 70 and 120 incrementing by 10"
   (interactive)
-  (setq fill-column (cond ((< fill-column 120) (+ fill-column 10))
-                          ((>= fill-column 120) 70)))
+  (me:set-fill-column (cond ((< fill-column 120) (+ fill-column 10))
+                            ((>= fill-column 120) 70))))
+
+;;;###autoload
+(defun me:set-fill-column (&optional arg)
+  (setq fill-column arg)
   (message "fill-column is %s" fill-column)
   (whitespace-mode -1)
   (whitespace-mode))
+
+(defun me:read-fill-column ()
+  (interactive)
+  (me:set-fill-column (read-number "Set fill column to: " 120)))
 
 (defconst me:powerline-separators #'( alternate arrow arrow-fade bar box brace butt chamfer contour curve rounded roundstub wave zigzag utf-8))
 (defvar me:current-powerline-separator-index 12)               ; current powerline separator index

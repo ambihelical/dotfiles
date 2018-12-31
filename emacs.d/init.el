@@ -205,6 +205,7 @@
   :general
   ("s-1"     #'me:find-other-file)
   ("s-c"     #'me:rotate-fill-column)
+  ("<f4> c"  #'me:read-fill-column)
   ("<f4> 1"  #'me:ps-one-per-page)
   ("<f4> 2"  #'me:ps-two-per-page)
   ("s-\\"    #'me:next-powerline-separator)
