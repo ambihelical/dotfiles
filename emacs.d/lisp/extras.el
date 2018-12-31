@@ -33,20 +33,6 @@
   (interactive)
   (me:set-fill-column (read-number "Set fill column to: " 120)))
 
-(defconst me:powerline-separators #'( alternate arrow arrow-fade bar box brace butt chamfer contour curve rounded roundstub wave zigzag utf-8))
-(defvar me:current-powerline-separator-index 12)               ; current powerline separator index
-
-;;;###autoload
-(defun me:next-powerline-separator ()
-  "Rotate the powerline seperator style"
-  (interactive)
-  (if (not me:current-powerline-separator-index)
-      (setq me:current-powerline-separator-index 0))
-  (setq me:current-powerline-separator-index (% (+ me:current-powerline-separator-index 1) (length me:powerline-separators)))
-  (setq powerline-default-separator (nth me:current-powerline-separator-index me:powerline-separators))
-  (message "%s" powerline-default-separator)
-  (spaceline-compile))
-
 ;;;###autoload
 (defun me:ps-two-per-page (&optional prefix)
   "Print buffer 2-up.  Use prefix to save to file"
