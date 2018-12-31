@@ -25,6 +25,12 @@ font pango:Ubuntu Mono Bold 12
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
+# more window adjustment area
+default_border pixel 4
+
+# hide edges at screen edge
+hide_edge_borders both
+
 # start a terminal
 bindsym $mod+Return exec urxvt&
 
