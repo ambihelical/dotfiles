@@ -1032,13 +1032,21 @@
   ("<f8> a" #'org-agenda)
   ("<f8> s" #'me:search-notes)
   ("<f8> c" #'counsel-org-capture)
+  ("s-e" #'org-toggle-latex-fragment)
+  (:prefix "C-c"
+           "C-x"  '(:ignore t :which-key "Org→" ))
   :init
   (defconst me:command (expand-file-name "Notes/command.org" me:data-directory))
   (defconst me:language (expand-file-name "Notes/language.org" me:data-directory))
   (defconst me:system (expand-file-name "Notes/system.org" me:data-directory))
   (defconst me:android (expand-file-name "Notes/android.org" me:data-directory))
-  (setq org-return-follows-link t)
   (add-hook 'org-capture-mode-hook #'evil-insert-state)
+  (add-hook 'org-babel-after-execute-hook #'me:redisplay-inline-images)
+  (setq org-confirm-babel-evaluate #'me:babel-should-confirm
+        org-plantuml-jar-path (expand-file-name "java/plantuml.jar" me:data-directory)
+        org-ascii-bullets '((ascii 42) (latin1 167) (utf-8 8226))
+        org-return-follows-link t
+        org-ascii-headline-spacing '(0 . 0))
   (setq org-capture-templates `(("c" "Command notes")
                                 ("ug" "Using Git" entry (file+headline ,me:command "Git"))
                                 ("ul" "Using Linux" entry (file+headline ,me:command  "Linux" ))
@@ -1058,6 +1066,13 @@
   :mode
   (("\\.org\\'" . org-mode))
   :config
+  (org-babel-do-load-languages 'org-babel-load-languages '((plantuml . t) (ditaa . t)))
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.2))
+  (defun me:redisplay-inline-images ()
+    (when org-inline-image-overlays
+      (org-redisplay-inline-images)))
+  (defun me:babel-should-confirm (lang body)
+    (not (member lang '( "plantuml" "ditaa" ))))
   (defun me:search-notes ()
     (interactive)
     (counsel-ag nil (expand-file-name "Notes" me:data-directory) "-i" nil)))
