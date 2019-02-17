@@ -17,6 +17,7 @@
 (unless (package-installed-p 'use-package )
   (package-install 'use-package))
 (eval-when-compile
+  (require 'subr-x)                                               ; need string functions
   (setq use-package-enable-imenu-support t)                       ; support for packages in imenu
   (require 'use-package))
 
