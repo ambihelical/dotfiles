@@ -127,7 +127,13 @@
       scroll-down-aggressively 0.01                         ; don't jump when scrolling down
       scroll-up-aggressively 0.01                           ; don't jump when scrolling up
       safe-local-variable-values                            ; allow these values in .dir-locals.el
-      '((evil-indent-convert-tabs . t))
+      '((dtrt-indent-force-offset . 8)                      ; way too much
+        (dtrt-indent-force-offset . 4)                      ; too much
+        (dtrt-indent-force-offset . 3)                      ; perfect
+        (dtrt-indent-force-offset . 2)                      ; annoying
+        (dtrt-indent-force-offset . 1)                      ; psycho
+        (dtrt-indent-force-tabs-mode . 1)
+        (dtrt-indent-force-tabs-mode . -1))
       scalable-fonts-allowed t                              ; allow any scalable font
       select-enable-clipboard nil                           ; make cut/paste function correctly (select)
       sentence-end-double-space nil                         ; sentences end with one space
@@ -1176,10 +1182,14 @@
   :config)
 
 (use-package dtrt-indent
+  :load-path "lisp/dtrt-indent"
   :hook (( prog-mode text-mode ) . dtrt-indent-mode)
   :init
   (setq dtrt-indent-run-after-smie t)
-  :config)
+  :config
+  ;; make sure tab-width is set as well
+  (push '(prog-mode tab-width) dtrt-indent-hook-generic-mapping-list)
+  (push '(text-mode tab-width) dtrt-indent-hook-generic-mapping-list))
 
 (use-package aggressive-indent
   :hook (( emacs-lisp-mode ) . aggressive-indent-mode)
