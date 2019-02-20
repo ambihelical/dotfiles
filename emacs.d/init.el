@@ -971,6 +971,16 @@
         projectile-cache-file (expand-file-name "projectile-cache" me:emacs-cache-directory)
         projectile-enable-caching t)
   :config
+
+  (defun me:add-project-templates ()
+    (add-to-list 'org-capture-templates `("pn" "Project Notes" entry (file+headline ,(me:project-path "Notes/notes.org") "Notes")))
+    (add-to-list 'org-capture-templates `("pd" "Project Tasks" entry (file+headline ,(me:project-path "Notes/notes.org") "TODOs")
+                                          "* TODO %?\n  %i\n  %a")))
+  (defun me:project-path ( &optional path)
+    (if path
+        (expand-file-name path (projectile-project-root))
+      (projectile-project-root)))
+
   (use-package persp-projectile
     :demand
     :general
@@ -1035,12 +1045,11 @@
 
 (use-package org
   :commands org-capture
-  :defines org-capture-templates
   :general
   ("<f8> t" #'org-todo-list)
   ("<f8> a" #'org-agenda)
-  ("<f8> s" #'me:search-notes)
-  ("<f8> c" #'counsel-org-capture)
+  ("<f8> <f8>" #'me:search-notes)
+  ("<f8> c" #'me:org-capture)
   ("s-e" #'org-toggle-latex-fragment)
   (:prefix "C-c"
            "C-x"  '(:ignore t :which-key "Org→" ))
@@ -1049,6 +1058,7 @@
   (defconst me:language (expand-file-name "Notes/language.org" me:data-directory))
   (defconst me:system (expand-file-name "Notes/system.org" me:data-directory))
   (defconst me:android (expand-file-name "Notes/android.org" me:data-directory))
+  (defconst me:home-notes (expand-file-name "Notes/notes.org" "~"))
   (add-hook 'org-capture-mode-hook #'evil-insert-state)
   (add-hook 'org-babel-after-execute-hook #'me:redisplay-inline-images)
   (setq org-confirm-babel-evaluate #'me:babel-should-confirm
@@ -1056,21 +1066,20 @@
         org-ascii-bullets '((ascii 42) (latin1 167) (utf-8 8226))
         org-return-follows-link t
         org-ascii-headline-spacing '(0 . 0))
-  (setq org-capture-templates `(("c" "Command notes")
-                                ("ug" "Using Git" entry (file+headline ,me:command "Git"))
-                                ("ul" "Using Linux" entry (file+headline ,me:command  "Linux" ))
-                                ("ub" "Using Bash" entry (file+headline ,me:command  "Bash" ))
-                                ("s" "System notes")
-                                ("sl" "Administrating Linux " entry (file+headline ,me:system "Linux"))
-                                ("sm" "Administrating Mac" entry (file+headline ,me:system "Mac"))
-                                ("p" "Language notes")
-                                ("pe" "Elisp" entry (file+headline ,me:language  "Elisp" ))
-                                ("pp" "Python" entry (file+headline ,me:language  "Python" ))
-                                ("pc" "C++" entry (file+headline ,me:language "C++" ))
-                                ("a" "Android Notes")
-                                ("ag" "Android General" entry (file+headline ,me:android  "General" ))
-                                ("ab" "Android Build System" entry (file+headline ,me:android  "Build System" ))
-                                ("aa" "Android Architecture" entry (file+headline ,me:android  "Architecture" ))))
+  (setq org-capture-templates nil)
+  (setq me:org-capture-templates `(("to" "General Tasks" entry (file+headline ,me:home-notes "Tasks") "* TODO %?\n  %i\n  %a")
+                                   ("no" "General Notes" entry (file+headline ,me:home-notes "Notes"))
+                                   ("gi" "Using Git" entry (file+headline ,me:command "Git"))
+                                   ("li" "Using Linux" entry (file+headline ,me:command  "Linux" ))
+                                   ("ba" "Using Bash" entry (file+headline ,me:command  "Bash" ))
+                                   ("la" "Administrating Linux " entry (file+headline ,me:system "Linux"))
+                                   ("ma" "Administrating Mac" entry (file+headline ,me:system "Mac"))
+                                   ("el" "Elisp" entry (file+headline ,me:language  "Elisp" ))
+                                   ("py" "Python" entry (file+headline ,me:language  "Python" ))
+                                   ("c+" "C++" entry (file+headline ,me:language "C++" ))
+                                   ("ag" "Android General" entry (file+headline ,me:android  "General" ))
+                                   ("ab" "Android Build System" entry (file+headline ,me:android  "Build System" ))
+                                   ("aa" "Android Architecture" entry (file+headline ,me:android  "Architecture" ))))
 
   :mode
   (("\\.org\\'" . org-mode))
@@ -1082,9 +1091,19 @@
       (org-redisplay-inline-images)))
   (defun me:babel-should-confirm (lang body)
     (not (member lang '( "plantuml" "ditaa" ))))
+  (defun me:org-capture ()
+    (interactive)
+    (setq org-capture-templates me:org-capture-templates)
+    (me:add-project-templates)
+    (counsel-org-capture))
   (defun me:search-notes ()
     (interactive)
-    (counsel-ag nil (expand-file-name "Notes" me:data-directory) "-i" nil)))
+    (let* ((dot-notes (expand-file-name "Notes" me:data-directory))
+           (proj-notes (me:project-path "Notes"))
+           (home-notes (expand-file-name "Notes" "~"))
+           (proj-notes-path (if (file-exists-p proj-notes) proj-notes ""))
+           (home-notes-path (if (file-exists-p home-notes) home-notes "")))
+      (counsel-rg nil dot-notes (concat " -- " home-notes-path " " proj-notes-path) nil))))
 
 (use-package evil-org
   :after ( org evil )
@@ -1095,22 +1114,6 @@
   :config
   (require 'evil-org-agenda)
   (evil-org-agenda-set-keys))
-
-(use-package org-projectile
-  :after ( projectile org )
-  :demand t     ; required because use-package-always-defer is t
-  :init
-  :config
-  (org-projectile-per-project)
-  (setq org-projectile-per-project-filepath "todo.org")
-  (setq org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
-  (add-to-list 'org-capture-templates
-               (org-projectile-project-todo-entry :capture-character "rn"
-                                                  :capture-heading "Project Note"
-                                                  :capture-template "* NOTE %i %?\n %a"))
-  (add-to-list 'org-capture-templates
-               (org-projectile-project-todo-entry :capture-character "rd"
-                                                  :capture-heading "Project Todo")))
 
 (use-package org-bullets
   :init
