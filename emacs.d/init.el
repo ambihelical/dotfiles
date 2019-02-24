@@ -1281,6 +1281,19 @@
   (add-hook 'org-mode-hook #'org-bullets-mode)
   :config)
 
+;; TODO:
+;; recommended by rustic install docs
+;; (add-hook 'eglot--managed-mode-hook (lambda() (flymake-mode -1)))
+(use-package rustic
+  :custom
+  (rustic-lsp-client 'eglot)
+  (rustic-lsp-server 'rls)
+  (rustic-compile-display-method (lambda (buf) (display-buffer-pop-up-window buf nil)))
+  (rustic-match-angle-brackets nil))   ;; t slows down scrolling a lot
+
+(use-package toml-mode)
+
+
 (use-package cmake-mode
   :config
   :init
@@ -1587,6 +1600,7 @@
   :init
   (setq company-minimum-prefix-length 2            ; # chars needed for completion
         company-idle-delay 1
+        company-tooltip-align-annotations t        ; needed for racer??
         company-dabbrev-downcase nil)              ; never downcase
   :config
   (company-tng-configure-default)
