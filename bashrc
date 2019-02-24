@@ -93,6 +93,7 @@ gprompt() {
 	#                1                2      3                4   5
 	local regex='^## ([-a-zA-Z0-9/_]+)(\.\.\.([-a-zA-Z0-9/_]+)( \[([^\[]*)\]){0,1}){0,1}$'
 	local detachedRe='^## HEAD[\t\ ]+\(no branch\)$'
+	local noCommitsRe='^## No commits yet on ([-a-zA-Z0-9/_]+)'
 	local marks aheadN behindN
 	if [[ ${lines[0]} =~ $regex ]]; then
 		lbranch=${BASH_REMATCH[1]}
@@ -128,6 +129,8 @@ gprompt() {
 		fi
 	elif [[ ${lines[0]} =~ $detachedRe ]]; then
 		lbranch="<detached HEAD>"
+	elif [[ ${lines[0]} =~ $noCommitsRe ]]; then
+		lbranch=${BASH_REMATCH[1]}
 	else
 		lbranch="<Parse Error>"
 	fi
