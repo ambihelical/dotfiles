@@ -13,6 +13,7 @@
 [ -d ~/extern/gccarm-dev/bin ] && PATH=~/extern/gccarm-dev/bin:"${PATH}"    # arm gcc cross compiler
 [ -d /usr/lib/ccache ] && PATH=/usr/lib/ccache:"${PATH}"                    # compile cache
 [ -d ~/.local/bin ] && PATH=~/.local/bin:"${PATH}"                            # locally installed execs
+[ -d ~/.cargo/bin/ ] && PATH=~/.cargo/bin:"${PATH}"                         # rust cargo, until XDG'd
 [ -d ~/bin ] && PATH=~/bin:"${PATH}"                                        # my utilities
 [ -d ~/bin/${OSTYPE} ] && PATH=~/bin/${OSTYPE}:"${PATH}"                    # my utilities, os specific
 [ -d ~/Android/Sdk/platform-tools ] && PATH=~/Android/Sdk/platform-tools:"${PATH}"         # adb, fastboot, etc
@@ -344,6 +345,11 @@ export PYTHONSTARTUP=${XDG_CONFIG_HOME}/pythonrc
 export IPYTHONDIR=${XDG_CONFIG_HOME}/ipython
 # avoids ~/.mplayer
 export MPLAYER_HOME=${XDG_CONFIG_HOME}/mplayer
+# setup rust's intermediate directory to be in the cache
+export CARGO_TARGET_DIR=${XDG_CACHE_HOME}/cargo/target
+[ -d ${CARGO_TARGET_DIR} ] || mkdir -p ${CARGO_TARGET_DIR}
+# setup sscache for rust if installed
+command -v sccache > /dev/null && export RUSTC_WRAPPER=sccache
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
