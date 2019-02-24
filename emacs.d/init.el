@@ -1275,6 +1275,24 @@
   (add-hook 'org-mode-hook #'org-bullets-mode)
   :config)
 
+(use-package rust-mode
+  :config
+  :init
+  (setq rust-match-angle-brackets nil))  ; workaround performance issue
+
+(use-package cargo
+  :init
+  (setq cargo-process--enable-rust-backtrace t)
+  :hook (rust-mode . cargo-minor-mode))
+
+(use-package flycheck-rust
+  :init
+  :config
+  :hook ( rust-mode . flycheck-rust-setup ))
+
+(use-package toml-mode)
+
+
 (use-package cmake-mode
   :config
   :init
@@ -1541,6 +1559,7 @@
             "<f6> c"  #'eglot-code-actions
             "<f6> h"  #'eglot-help-at-point)
   :hook ((c-mode . eglot-ensure)
+         (rust-mode . eglot-ensure)
          (c++-mode . eglot-ensure))
   :init
   (setq eglot-ignored-server-capabilites '( :documentHighlightProvider)
@@ -1582,6 +1601,7 @@
   :init
   (setq company-minimum-prefix-length 2            ; # chars needed for completion
         company-idle-delay 1
+        company-tooltip-align-annotations t        ; needed for racer??
         company-dabbrev-downcase nil)              ; never downcase
   :config
   (company-tng-configure-default)
