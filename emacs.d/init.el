@@ -1680,6 +1680,9 @@
             "<backtab>"   #'me:evil-shift-left-visual)
 
   :config
+  ;; move visual block up or down
+  (define-key evil-visual-state-map "J" (concat ":m '>+1" (kbd "RET") "gv=gv"))
+  (define-key evil-visual-state-map "K" (concat ":m '<-2" (kbd "RET") "gv=gv"))
 
   (defun me:evil-shift-left-visual ()
     (interactive)
