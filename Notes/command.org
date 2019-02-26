@@ -32,6 +32,11 @@
 
 ** Push to branch
 	=git push remote-name branch-name=
+    =git push -u origin branch:remote-branch=  # create remote branch & set tracking branch
+
+** Checkout remote branch
+   git co -b local-name remote/branch       # checkout remote branch with local name
+   git co -t remote/branch                  # checkout remote track with same name
 
 ** Search commit contents
 	=git log --grep=string=        # commits where string exists
@@ -59,6 +64,17 @@
 ** Modify Commit author
    git commit --amend --author="Adolf Hitler <derfuhrer@blitzkrieg.com>"
    git commit --amend --reset-author    # reset to config value
+
+** Split up commit during interactive rebase
+  - edit the commit
+  - reset HEAD^   # optionally just some files
+  - add and commit each seperate piece
+  - continue rebase
+
+** Updating super-repo
+  - add each changed submodule
+  - commit super-repo
+
 * Linux
 ** Xargs with input not at end of command
 	=e.g. =cmd|xargs -I LINE cp LINE dest=
@@ -108,9 +124,20 @@
 ** Rename files
 	=for fn in *pattern*; do echo mv $fn ${fn/old-pat/new-pat}; done | /bin/bash=
 
+** Difference two directories
+    diff -rq dir1 dir2
+    meld dir1 dir2   # untested
+
 ** Terminal screen size
 	LINES=#
 	COLUMNS=#
+
+** Send file to FTP server
+   curl -T $fn ftp://ftp3.realtek.com --user user:password
+
+** Port scan
+    # can trigger firewalls and get you blocked!
+    nmap [-Pn] [-p port[-port]] ipaddr
 
 ** Strict mode
 	=set -euo pipefail=
@@ -121,6 +148,15 @@
 		rm -rf "#tempfile#"
 	}
 	try myexit EXIT
+
+** Null Utility - colon expands arguments but does nothing
+    false || { : $foo ; }
+
+    if false
+    then :
+    else
+    echo "true"
+    fi
 
 ** Create temporary directory, Linux or OSX
 	=tmpdir=$(mktemp -d 2>/dev/null || mktemp -d -t 'template-pattern')=
@@ -150,3 +186,32 @@
 * Cmake
 ** Generate compile_commands.json
 	add -DCMAKE_EXPORT_COMPILE_COMMANDS=ON to cmake invocations
+** Create cmake external project
+
+    This is an example, something that didn't get used, but it worked:
+
+    Here CMAKE_COMMAND expands to the path of the current cmake executable,
+    this can be a different cmake if needed
+
+    Note there is no CONFIGURE_COMMAND, the CMAKE_COMMAND detects this is a
+    cmake configure (I think)
+
+
+    ExternalProject_Add(ta-demux
+        PREFIX "${CMAKE_CURRENT_BINARY_DIR}/libdemux/"
+        DEPENDS ""
+        SOURCE_DIR ${src_demux}
+        BUILD_IN_SOURCE 0
+        CMAKE_COMMAND ${CMAKE_COMMAND}
+        CMAKE_ARGS
+            -DCMAKE_C_COMPILER=${TRUSTZONE_TOOLCHAIN_PREFIX}gcc
+            -DCMAKE_RANLIB=${TRUSTZONE_TOOLCHAIN_PREFIX}ranlib
+            -DCMAKE_C_FLAGS=${cflags_demux}
+            -DJUNE_DEMUX_COMPILE_OPTIONS=${cflags_demux}
+            -DJUNE_TOPDIR=${JUNE_TOPDIR}
+        BUILD_COMMAND
+            COMMAND make -j${jlevel} VPATH=${src_demux} coredemux
+        INSTALL_COMMAND
+            COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/lib/
+            COMMAND cp libcoredemux.a ${CMAKE_CURRENT_BINARY_DIR}/lib/
+    )
