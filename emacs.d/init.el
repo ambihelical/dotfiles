@@ -1051,6 +1051,7 @@
                                                    projectile-root-bottom-up
                                                    projectile-root-local)
         projectile-use-git-grep t
+        projectile-project-compilation-cmd ""     ;; workaround for stupid projectile bug
         projectile-enable-caching t)
   :config
   (defun me:counsel-ag-project ()
