@@ -1108,9 +1108,10 @@
 (use-package evil-org
   :after ( org evil )
   :hook (( org-mode ) . evil-org-mode)
-  :hook (( evil-org-mode ) . evil-org-set-key-theme)
   :init
-  (setq evil-org-key-theme '( navigation insert  textobjects additional calendar return ))
+  (add-hook 'evil-org-mode-hook (lambda ()
+                                  (evil-org-set-key-theme
+                                   '( navigation insert  textobjects additional calendar return ))))
   :config
   (require 'evil-org-agenda)
   (evil-org-agenda-set-keys))
