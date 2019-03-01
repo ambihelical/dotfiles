@@ -12,9 +12,10 @@
 [ -d ~/bin ] && PATH=~/bin:"${PATH}"                                        # my utilities
 [ -d ~/bin/${OSTYPE} ] && PATH=~/bin/${OSTYPE}:"${PATH}"                    # my utilities, os specific
 [ -d ~/Android/Sdk/platform-tools ] && PATH=~/Android/Sdk/platform-tools:"${PATH}"         # adb, fastboot, etc
+[ -d ~/extern/ChibiOS-RT ] && export CHIBIOS=~/extern/ChibiOS-RT            # chibios development
 
 export ACKRC=${XDG_CONFIG_HOME}/ack
-[ -d ~/extern/ChibiOS-RT ] && export CHIBIOS=~/extern/ChibiOS-RT            # chibios development
+export RIPGREP_CONFIG_PATH=${XDG_CONFIG_HOME}/ripgrep/config
 
 # If not running interactively, don't do anything more
 [ -z "$PS1" ] && return
