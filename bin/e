@@ -1,2 +1,10 @@
-#!/bin/sh
-emacsclient --no-wait --create-frame --alternate-editor="" $*
+#!/bin/bash
+
+# Open files with emacs in client/server mode
+# when file is -, read from stdin
+
+if [[ $# -ge 1 ]] && [[ "$1" == "-" ]]; then
+tmpfile=$(mktemp) && cat > $tmpfile && emacsclient26 -nc -a "" -e "(find-file \"$tmpfile\")" -e '(set-visited-file-name nil)' -e '(rename-buffer "*stdin*" t)'; rm -f $tmpfile
+else
+emacsclient26 -nc -a "" $@
+fi

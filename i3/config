@@ -307,8 +307,8 @@ bindsym $mod+g exec i3-input -F '[con_mark="%s"] focus' -l 1 -P 'Go to: '
 bindsym $mod+w exec i3-input -F 'rename workspace to "%s"' -P 'Workspace name: '
 
 # edit current selection or clipboard in gvim
-bindsym $mod+apostrophe exec --no-startup-id xclip -o | gvim - &
-bindsym $mod+Shift+apostrophe exec --no-startup-id xclip -selection c -o | gvim - &
+bindsym $mod+apostrophe exec --no-startup-id xclip -o | ~/bin/e -
+bindsym $mod+Shift+apostrophe exec --no-startup-id xclip -selection c -o | ~/bin/e -
 
 # copy primary selection to clipboard
 bindsym $mod+c exec --no-startup-id xclip -o | xclip -i -selection c
