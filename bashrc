@@ -274,6 +274,14 @@ if [ -d /usr/local/share/bash-completion/completions ]; then
 		. $file
 	done
 fi
+# also pickup any local completions in ${XDG_DATA_HOME}/bash-completion/completions/
+# N.B. This will be done automatically by bash-completion v2.8, but this should
+# do no harm until distros are updated.
+if [ -d ${XDG_DATA_HOME}/bash-completion/completions ]; then
+	for file in ${XDG_DATA_HOME}/bash-completion/completions/*; do
+		. $file
+	done
+fi
 
 
 # Enable autojump
