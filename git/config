@@ -6,6 +6,7 @@
 	br = branch
 	sm = submodule
 	smu = submodule update --init --recursive
+	list = log --pretty=format:'%h %s' -50
 	lg = forest --pretty=format:'%Cred%h%Creset - %Cgreen(%cr)%Creset %s%C(yellow)%d%Creset' --abbrev-commit --date=relative -50
 	lga = forest --all --pretty=format:'%Cred%h%Creset - %Cgreen(%cr)%Creset %s%C(yellow)%d%Creset' --abbrev-commit --date=relative -50
 	lr = forest --reverse --pretty=format:'%Cred%h%Creset - %Cgreen(%cr)%Creset %s%C(yellow)%d%Creset' --abbrev-commit --date=relative -50
