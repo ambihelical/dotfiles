@@ -792,12 +792,6 @@
             "<f5> p" #'peep-dired)
   :config)
 
-;; Use perl-like Regexp for all minibuffer input
-(use-package pcre2el
-  :defer 1
-  :config
-  (pcre-mode))
-
 (use-package flyspell
   :general
   ("s-f"        #'flyspell-auto-correct-previous-word)
@@ -905,11 +899,12 @@
             "s"  '(:ignore t :which-key "Search→" )
             "u" #'counsel-unicode-char)
   (:keymaps 'global :prefix "<f4> s"
-            "a" #'me:counsel-projectile-ag
-            "b" #'swiper
+            "a" #'me:counsel-ag-here
             "l" #'counsel-locate
             "g" #'counsel-git-grep
-            "s" #'swiper-all)
+            "s" #'me:counsel-rg-here
+            "w" #'swiper
+            "W" #'swiper-all)
   ("C-h b"  #'counsel-descbinds)
   ("M-x"    #'counsel-M-x)
   ("M-y"    #'counsel-yank-pop)
@@ -929,14 +924,17 @@
     "Find files in project or fallback to current directory"
     (interactive)
     (if (and (fboundp 'projectile-project-p) (projectile-project-p))
-        (counsel-projectile-find-file)
+        (projectile-find-file)
       (counsel-find-file)))
-  (defun me:counsel-projectile-ag (arg)
-    "Search using ag in project or if prefix or not in project, ask for dir and args"
-    (interactive "P")
-    (if (and (not arg) (fboundp 'projectile-project-p) (projectile-project-p))
-        (counsel-ag "" (projectile-project-root) "")
-      (counsel-ag)))
+  (defun me:counsel-ag-here ()
+    "Search using ag in default directory"
+    (interactive)
+    (counsel-ag nil default-directory))
+  (defun me:counsel-rg-here ()
+    "Search using ripgrep in default directory"
+    (interactive)
+    (counsel-rg nil default-directory))
+
   (counsel-mode 1))
 
 ;; allow grep buffers to be editted
@@ -957,6 +955,10 @@
   (:prefix "<f7>" "s"  '(:ignore t :which-key "Search→" ))
   (:prefix "<SPC>" :states '(normal visual emacs)
            "m"    #'projectile-compile-project)
+  (:prefix "<f7> s" :keymaps 'projectile-mode-map
+           "a" #'me:counsel-ag-project
+           "r" nil  ;; unbind projectile-ripgrep
+           "s" #'me:counsel-rg-project)
   :init
   (setq projectile-completion-system 'ivy
         projectile-globally-ignored-files #'( "TAGS" "GTAGS" "GRTAGS" "GPATH" )
@@ -971,6 +973,18 @@
         projectile-cache-file (expand-file-name "projectile-cache" me:emacs-cache-directory)
         projectile-enable-caching t)
   :config
+  (defun me:counsel-ag-project ()
+    "Search using ag in project"
+    (interactive)
+    (if (and (fboundp 'projectile-project-p) (projectile-project-p))
+        (counsel-ag nil (projectile-project-root))
+      (message "Not in a project")))
+  (defun me:counsel-rg-project ()
+    "Search using ripgrep in project"
+    (interactive)
+    (if (and (fboundp 'projectile-project-p) (projectile-project-p))
+        (counsel-rg nil (projectile-project-root))
+      (message "Not in a project")))
 
   (defun me:add-project-templates ()
     (add-to-list 'org-capture-templates `("pn" "Project Notes" entry (file+headline ,(me:project-path "Notes/notes.org") "Notes")))
@@ -987,13 +1001,6 @@
     ("<f7> <f7>"  #'projectile-persp-switch-project)
     :config)
   (projectile-mode 1))
-
-(use-package counsel-projectile
-  :after ( counsel projectile )
-  :demand t     ; required because use-package-always-defer is t
-  :general
-  ("<f7> f" #'counsel-projectile-ag)
-  :config)
 
 (use-package perspective
   :after projectile
