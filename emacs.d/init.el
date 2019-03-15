@@ -880,11 +880,12 @@
 
 ;; add some ivy buffer information
 (use-package ivy-rich
-  :disabled
   :after ivy
+  :init
+  (setq ivy-format-function #'ivy-format-function-line)
   :config
-  (ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer)
-  :demand)
+  (ivy-rich-mode)
+  :demand t)
 
 (use-package counsel
   :defines counsel-yank-pop-preselect-last
