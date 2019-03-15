@@ -1128,6 +1128,10 @@
   :hook (( emacs-lisp-mode ) . aggressive-indent-mode)
   :config)
 
+(use-package scratch
+  :general
+  ("<f4> <RET>" #'scratch))
+
 (use-package markdown-mode
   :config
   :mode
