@@ -54,8 +54,10 @@ ff() {
 	[ "$1" = "-i" ] && op="iname" && shift
 	name=$1
 	shift
-	pat="*${name}*"
-	find . -${op} $pat $@
+	pat='*'
+	pat+=${name}
+	pat+='*'
+	find . -${op} "$pat" $@
 }
 
 # output current column
