@@ -1645,7 +1645,7 @@
   :general
   ("<f4> t"     #'shell-pop)
   :config
-  (setq shell-pop-internal-mode "ansi-term"
+  (setq shell-pop-internal-mode "eshell"
         shell-pop-term-shell "/bin/bash"
         shell-pop-window-size 40
         shell-pop-window-position "bottom"
