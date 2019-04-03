@@ -1172,6 +1172,17 @@
   (("\\.py\\'" . python-mode)
    ("\\.py3\\'" . python-mode)))
 
+;; N.B. will need to run jedi:setup-server once
+(use-package company-jedi
+  :hook ((python-mode . me:setup-jedi))
+  :init
+  (setq jedi:complete-on-dot t)
+  :config
+  (defun me:setup-jedi()
+    (jedi:setup)
+    (delete 'company-capf company-backends)
+    (add-to-list 'company-backends 'company-jedi)))
+
 (use-package ruby-mode
   :config
   :mode
