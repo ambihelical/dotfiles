@@ -1479,7 +1479,8 @@
 (use-package flycheck
   :init
   (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
-  (setq flycheck-mode-line-prefix "☑")
+  (setq flycheck-mode-line-prefix "☑"
+        flycheck-idle-change-delay 3)     ;; default of 0.5s is too noisy
   (me:add-hook-with-delay 'prog-mode-hook 3 #'flycheck-mode)
   :general
   (:prefix "C-c"
