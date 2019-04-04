@@ -364,7 +364,10 @@ fi
 # enable color support of ls and also add handy aliases
 if [ "$ecma" == "1" ]; then
 	# define LS_COLORS using dircolors if it exists
-	[ -x /usr/bin/dircolors ] && eval "`dircolors -b`"
+	if [ -x /usr/bin/dircolors ]; then
+		eval "`dircolors -b`"
+		export LS_COLORS+=':ow=01;33'   # make other-writable dirs readable
+	fi
 	alias ls="${_PRE_}ls --color=auto"
 	alias dir='${_PRE_}dir --color=auto'
 	alias grep='grep --color=auto'
