@@ -6,3 +6,4 @@
 /etc/group
 /etc/passwd
 /etc/exports
+/etc/X11
