@@ -17,7 +17,7 @@
 ;; me:select-nth-other-buffer.
 
 (defconst me:special-names #'("*scratch*" "*Messages*" "*ielm*" "*Help*" "*info*"))
-(defconst me:special-modes #'( dired-mode woman-mode magit-status-mode))
+(defconst me:special-modes #'( dired-mode woman-mode magit-status-mode compilation-mode))
 
 (defun me:useful-buffer (buffer)
   (let ((bufname (buffer-name buffer)))
