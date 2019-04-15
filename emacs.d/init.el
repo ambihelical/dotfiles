@@ -189,6 +189,7 @@
              me:select-3rd-other-buffer
              me:select-4th-other-buffer
              me:select-5th-other-buffer
+             me:disable-auto-revert-vc-in-tramp
              me:save-dirty-buffers)
   :general
   ("s-2"        #'me:select-2nd-other-buffer)
@@ -307,6 +308,9 @@
   :hook (( prog-mode text-mode ) . auto-revert-mode )
   :ensure nil
   :defer 2
+  :init
+  (add-hook 'find-file-hook #'me:disable-auto-revert-vc-in-tramp)
+  (add-hook 'after-save-hook #'me:disable-auto-revert-vc-in-tramp)
   :config
   (setq auto-revert-check-vc-info t                           ; check periodically for new vc info
         auto-revert-verbose nil)                              ; don't tell me about auto reverts
