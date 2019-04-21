@@ -1439,7 +1439,9 @@
         company-dabbrev-downcase nil)              ; never downcase
   (add-hook 'prog-mode-hook #'company-mode)
   :config
+  ;; N.B. takes evil out of insert mode when enabled
   (use-package company-quickhelp
+    :disabled t
     :demand
     :config
     (company-quickhelp-mode 1))
