@@ -1552,8 +1552,8 @@
            "p"          #'hydra-paste/body
            "x"          #'exchange-point-and-mark)
   (:states '(normal visual) :prefix "<SPC>" :keymaps 'override
-           "s"  (general-simulate-key "\"*" :state 'normal :keymap nil :lookup nil :name me:simulate-selection-reg )
-           "c"  (general-simulate-key "\"+" :state 'normal :keymap nil :lookup nil :name me:simulate-clipboard-reg ))
+           "s"  (general-simulate-key "\"*" :keymap nil :lookup nil :name me:simulate-selection-reg )
+           "c"  (general-simulate-key "\"+" :keymap nil :lookup nil :name me:simulate-clipboard-reg ))
   (:keymaps '(normal visual ) "<escape>" #'keyboard-quit)
 
   ;; Move via visual lines
