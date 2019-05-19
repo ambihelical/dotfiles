@@ -1425,15 +1425,20 @@
   :hook ((c-mode . eglot-ensure)
          (c++-mode . eglot-ensure))
   :init
-  (setq eglot-ignored-server-capabilites '( :hoverProvider :documentHighlightProvider)
-        eglot-events-buffer-size 0)     ;; events are verbose, so disable
+  (setq eglot-ignored-server-capabilites '( :documentHighlightProvider)
+        eglot-send-changes-idle-time 3    ;; be slower sending changes
+        eglot-events-buffer-size 100000)  ;; smaller events buffer
   :config
-  ;; use an absolute path for ccls cache
-  ;; ccls uses unique cache directory name for each project so there are no collisions
-  (let* ((cache-dir (expand-file-name "ccls-cache" me:cache-directory))
-         (init-str (concat "--init={\"cache\":{\"directory\":\"" cache-dir "\"}}")))
-    (add-to-list 'eglot-server-programs
-                 `((c++-mode c-mode) "ccls" ,init-str)))
+  ;; use clangd if present, otherwise assume ccls
+  (if-let ((clangd (seq-find #'executable-find '("clangd" "clangd-6.0"))))
+      (add-to-list 'eglot-server-programs
+                   `((c++-mode c-mode) ,clangd))
+    ;; use an absolute path for ccls cache
+    ;; ccls uses unique cache directory name for each project so there are no collisions
+    (let* ((cache-dir (expand-file-name "ccls-cache" me:cache-directory))
+           (init-str (concat "--init={\"cache\":{\"directory\":\"" cache-dir "\"}}")))
+      (add-to-list 'eglot-server-programs
+                   `((c++-mode c-mode) "ccls" ,init-str))))
 
   ;; project-find-function which uses projectile methods to find
   ;; the projectile project associated with a directory.
