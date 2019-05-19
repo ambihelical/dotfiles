@@ -1481,6 +1481,7 @@
 
 ;; polyglot language server interface
 (use-package eglot
+  :load-path "lisp/eglot"
   :after no-littering
   :general
   (:keymaps 'eglot-mode-map "<f5> a"  #'eglot-code-actions)
@@ -1489,6 +1490,9 @@
          (c++-mode . eglot-ensure))
   :init
   (setq eglot-ignored-server-capabilites '( :hoverProvider :documentHighlightProvider)
+        eglot-change-idle-timeout 3
+        eglot-suppress-modeline-doing t  ;; don't care what it is doing
+        eglot-suppress-modeline-pending t  ;; don't care what is waiting
         eglot-events-buffer-size 0)     ;; events are verbose, so disable
   :config
   ;; project-find-function which uses projectile methods to find
