@@ -1402,7 +1402,8 @@
   :general
   ("s-d"        #'company-complete)
   :init
-  (setq company-minimum-prefix-length 1            ; just one char needed
+  (setq company-minimum-prefix-length 2            ; # chars needed for completion
+        company-idle-delay 1
         company-dabbrev-downcase nil)              ; never downcase
   (add-hook 'prog-mode-hook #'company-mode)
   :config
