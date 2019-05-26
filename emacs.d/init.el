@@ -78,6 +78,7 @@
   (make-directory me:emacs-backup-directory t)                ; make sure backup dir exists
   (electric-indent-mode +1)                                   ; turn on electric mode globally (electric)
   (delete-selection-mode t)                                   ; pastes delete selection
+  (blink-cursor-mode -1)                                      ; don't blink cursor
   (run-at-time "1 hour" 3600 #'clean-buffer-list))            ; clear out old buffers every hour (midnight)
 
 ;; Reset all buffer's mode line to the default one
@@ -1333,8 +1334,6 @@
             "l" #'image-forward-hscroll))
 
 (use-package pdf-tools
-  :init
-  (add-hook 'pdf-view-mode-hook (lambda () (blink-cursor-mode -1)))
   :mode (("\\.pdf\\'" . pdf-view-mode))
   :config
   (pdf-tools-install))
