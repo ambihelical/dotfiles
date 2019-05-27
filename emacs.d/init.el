@@ -1274,7 +1274,7 @@
   :config
   (defun me:switch-to-compile-buffer ()
     (interactive)
-    (switch-to-buffer "*compilation*"))
+    (switch-to-buffer compilation-last-buffer))
   (defun me:rotate-skip-threshold ()
     (interactive)
     (compilation-set-skip-threshold
@@ -1285,13 +1285,13 @@
   (setq compilation-scroll-output t
         compilation-ask-about-save nil    ; save all modified
         compilation-auto-jump-to-first-error t
-        compilation-finish-functions (lambda (_buf str)
+        compilation-finish-functions (lambda (buf str)
                                        (compilation-set-skip-threshold 1)
                                        (x-urgency-hint (selected-frame))
                                        (if (null (string-match ".*exited abnormally.*" str))
                                            ;;if no errors, make the compilation window go away in a few seconds
                                            (progn
-                                             (run-at-time "2 sec" nil 'delete-windows-on (get-buffer-create "*compilation*"))
+                                             (run-at-time "2 sec" nil 'delete-windows-on buf)
                                              (message "No Compilation Errors!"))
                                          compilation-skip-threshold 2)))
   (add-hook 'compilation-start-hook
