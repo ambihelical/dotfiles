@@ -1334,9 +1334,9 @@
             "l" #'image-forward-hscroll))
 
 (use-package pdf-tools
-  :mode (("\\.pdf\\'" . pdf-view-mode))
+  :magic ("%PDF" . pdf-view-mode)
   :config
-  (pdf-tools-install))
+  (pdf-tools-install :no-query))
 
 (use-package deft
   :config
