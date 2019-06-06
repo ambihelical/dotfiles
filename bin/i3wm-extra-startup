@@ -6,33 +6,28 @@
 host=$(uname -n)
 lockminutes=30
 offminutes=60
+
+# setup keyboard
+${HOME}/bin/i3wm-keyboard-setup
+
+# setup displays
 if [ "$host" == "hum" ]; then
-	 # Apple Alum
-	 # - caps is hyper
-	 # - compose is right alt
-	 setxkbmap -option 'caps:hyper' -option 'compose:ralt'
 	 xrandr --output DVI-I-1 --primary --pos 0x0 --output HDMI-1 --rotate left --pos 1920x-600
 	 dropbox start -i
 	 lockminutes=0
 elif [ "$host" == "jh-rvueb" ]; then
-	# Realforce 87U
-	# - caps is hyper
-	# - swap alt/win so window keys next to spacebar
-	# - and make compose key be the old windows key
-	setxkbmap -option 'caps:hyper' -option 'altwin:swap_alt_win' -option 'compose:rwin'
 	xrandr --output HDMI-0 --primary --dpi 103
 	xrandr --output DVI-D-0 --right-of HDMI-0 --rotate left
 	lockminutes=15
 else
 	echo "Unknown host |$host|"
-	setxkbmap -option 'caps:hyper' -option 'compose:ralt'
 fi
-xkb=${HOME}/.config/xkb
-if [ -r "${xkb}" ]; then
-	setxkbmap -print | sed -e '/xkb_symbols/s/"[[:space:]]/+local&/' | xkbcomp -I${xkb} - ${DISPLAY}
-fi
+
+# desktop integration
 xsettingsd -c ~/.config/xsettingsd &
 /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &  # gui authentication
+
+# screen locking
 killall xautolock
 if [ ${lockminutes} -gt 0 ]; then
 	xautolock -detectsleep -time ${lockminutes} -locker '~/bin/i3wm-screen-lock' -notify 15 -notifier 'notify-send "Screen lock will occur in 15 seconds"' &
