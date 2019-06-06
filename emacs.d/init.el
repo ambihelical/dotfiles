@@ -31,9 +31,6 @@
 (defconst me:data-directory (or (getenv "XDG_DATA_HOME") "~/.local/share"))
 (defconst me:cache-directory (or (getenv "XDG_CACHE_HOME")  "~/.cache"))
 (defconst me:config-directory (or (getenv "XDG_CONFIG_HOME")  "~/.config"))
-;; emacs directories
-(defconst me:emacs-cache-directory (expand-file-name "emacs" me:cache-directory))
-(defconst me:emacs-backup-directory (expand-file-name "backups" me:emacs-cache-directory))
 ;; fonts in order of preference
 (defconst me:preferred-fonts #'(("Hack" . "Hack-10:autohint=true")
                                 ("Fantasque Sans Mono" . "Fantasque Sans Mono-12")
@@ -75,7 +72,6 @@
   (mouse-avoidance-mode 'animate)                             ; move mouse pointer out of way (avoid)
   (global-eldoc-mode -1)                                      ; turn off annoying eldoc mode (eldoc)
   (fset 'yes-or-no-p 'y-or-n-p)                               ; change stupid default y/n? y
-  (make-directory me:emacs-backup-directory t)                ; make sure backup dir exists
   (electric-indent-mode +1)                                   ; turn on electric mode globally (electric)
   (delete-selection-mode t)                                   ; pastes delete selection
   (blink-cursor-mode -1)                                      ; don't blink cursor
@@ -102,11 +98,7 @@
               indent-tabs-mode nil                          ; disable tabs, re-enable selectively
               indicate-empty-lines t                        ; show empty lines at end of buffer
               fill-column 120)                              ; auto-wrap only very long lines
-(setq auto-save-file-name-transforms
-      `((".*" ,me:emacs-backup-directory t))             ; autosave files in backup directory
-      ad-redefinition-action 'accept                        ; turn off 'xyz' got redefined warnings
-      backup-directory-alist
-      `((".*" . ,me:emacs-backup-directory))             ; backup files in backup directory
+(setq ad-redefinition-action 'accept                        ; turn off 'xyz' got redefined warnings
       confirm-kill-processes nil                            ; don't ask about killing processes at exit
       custom-file "/dev/null"                               ; disable customizations
       fast-but-imprecise-scrolling t                        ; quick and dirty scrolling
@@ -598,13 +590,22 @@
         paradox-automatically-star nil        ; Don't star automatically
         paradox-hide-wiki-packages t))
 
-(use-package recentf
-  :custom
-  (recentf-exclude '("COMMIT_EDITMSG\\'"
-                     ".*-autoloads\\.el\\'"
-                     "[/\\]\\.elpa/"
-                     ))
+;; keep .emacs.d clean
+;; N.B. Doesn't migrate, start with clean directory
+(use-package no-littering
+  :demand
   :config
+  (require 'recentf)
+  (add-to-list 'recentf-exclude no-littering-var-directory)
+  (add-to-list 'recentf-exclude no-littering-etc-directory))
+
+(use-package recentf
+  :config
+  (setq recentf-exclude `(,@recentf-exclude
+                          "COMMIT_EDITMSG\\'"
+                          ".*-autoloads\\.el\\'"
+                          "[/\\]\\.elpa/"
+                          ))
   (setq recentf-max-saved-items 200
         recentf-max-menu-items 15
         recentf-auto-cleanup 300) ; wait 5m before 1st cleanup
@@ -612,14 +613,13 @@
 
 ;; save buffer positions
 (use-package saveplace
+  :after no-littering
   :init
   (setq-default save-place t)
   :config
-  (setq save-place-file (expand-file-name "places" user-emacs-directory)
-        save-place-forget-unreadable-files nil)
+  (setq save-place-forget-unreadable-files nil)
   (save-place-mode t)
-  :defer 3)
-
+  :defer 1)
 
 ;; modal window resizing
 (use-package windresize
@@ -991,7 +991,6 @@
                                                    projectile-root-bottom-up
                                                    projectile-root-local)
         projectile-use-git-grep t
-        projectile-cache-file (expand-file-name "projectile-cache" me:emacs-cache-directory)
         projectile-enable-caching t)
   :config
   (defun me:counsel-ag-project ()
@@ -1395,6 +1394,7 @@
 
 ;; polyglot language server interface
 (use-package eglot
+  :after no-littering
   :general
   (:keymaps 'eglot-mode-map "<f5> a"  #'eglot-code-actions)
   :hook ((c-mode . eglot-ensure)
@@ -1419,7 +1419,7 @@
   (cl-defmethod eglot-initialization-options :around ((server eglot-cquery))
     (let* ((root (expand-file-name (car (project-roots (eglot--project server)))))
            (root-hashed (replace-regexp-in-string "\/" "!" (directory-file-name root) t t nil 1))
-           (cache-path (expand-file-name "cquery-cache.d" me:emacs-cache-directory))
+           (cache-path (expand-file-name "cquery-cache.d" no-littering-var-directory))
            (cache (expand-file-name root-hashed cache-path)))
       (append (list :cacheDirectory (file-name-as-directory cache)
                     :index '(:comments 2)
