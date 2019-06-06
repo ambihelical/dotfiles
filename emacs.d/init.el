@@ -591,6 +591,11 @@
         paradox-hide-wiki-packages t))
 
 (use-package recentf
+  :custom
+  (recentf-exclude '("COMMIT_EDITMSG\\'"
+                     ".*-autoloads\\.el\\'"
+                     "[/\\]\\.elpa/"
+                     ))
   :config
   (setq recentf-max-saved-items 200
         recentf-max-menu-items 15
