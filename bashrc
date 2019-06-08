@@ -305,10 +305,10 @@ set -o vi
 export PAGER=less
 
 # bash history control
-# ignore dups, append, increase size, put history in xdg dir
+# ignore dups, increase size, timestamp, append
 export HISTCONTROL=ignoreboth
 export HISTSIZE=2000
-export HISTTIMEFORMAT="%d%b_%H:%M "
+export HISTTIMEFORMAT="%d-%b-%H:%M "  # DOM-MON-HOUR:MIN
 shopt -s histappend
 
 #### Store various files in XDG directories
