@@ -638,6 +638,7 @@
   :init
   (setq tramp-terminal-type "dumb"                              ; avoid fancy prompts
         tramp-backup-directory-alist backup-directory-alist     ; keep backups local
+        tramp-verbose 2                                         ; don't tell us about connections
         tramp-default-method "ssh")                             ; use ssh by default
   :ensure nil)
 
