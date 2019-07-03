@@ -16,6 +16,10 @@
 [ -d $XDG_CACHE_HOME ] || mkdir -p $XDG_CACHE_HOME
 [ -d $XDG_CONFIG_HOME ] || mkdir -p $XDG_CONFIG_HOME
 
+
+# load site settings
+[ -e ${HOME}/.local/share/site-profile ] && source ${HOME}/.local/share/site-profile
+
 # Override certain utilities and programs to use XDG directories
 # Some of these are invoked only via dash, others are invoked
 # by gnome, via .desktop files.  These also circumvent ~/.bashrc

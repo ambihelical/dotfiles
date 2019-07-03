@@ -4,6 +4,10 @@
 # include sh/dash profile
 [ -e ${HOME}/.profile ] && source ${HOME}/.profile
 
+# include local settings
+
+[ -e ${HOME}/.local/share/site-bashrc ] && source ${HOME}/.local/share/site-bashrc
+
 # setup path. These are in reverse order of how they appear in the PATH value.
 
 [ -d ~/extern/gccarm-dev/bin ] && PATH=~/extern/gccarm-dev/bin:"${PATH}"    # arm gcc cross compiler
