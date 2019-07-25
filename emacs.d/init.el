@@ -1411,22 +1411,8 @@
     (if (boundp 'projectile-project-root-cache)
         (let ((root (projectile-project-root dir)))
           (and root (cons 'transient root)))))
-  (add-to-list 'project-find-functions #'me:project-finder)
+  (add-to-list 'project-find-functions #'me:project-finder))
 
-  ;; augment the eglot-initialization-options defined by eglot-cquery
-  ;; Store cache in ~/.cache/emacs/cquery-cache.d/<hash-of-project-path>
-  ;; Other options are straightforward
-  (cl-defmethod eglot-initialization-options :around ((server eglot-cquery))
-    (let* ((root (expand-file-name (car (project-roots (eglot--project server)))))
-           (root-hashed (replace-regexp-in-string "\/" "!" (directory-file-name root) t t nil 1))
-           (cache-path (expand-file-name "cquery-cache.d" no-littering-var-directory))
-           (cache (expand-file-name root-hashed cache-path)))
-      (append (list :cacheDirectory (file-name-as-directory cache)
-                    :index '(:comments 2)
-                    :threads 2
-                    :cacheFormat "msgpack")
-              (cl-call-next-method))))
-  (add-to-list 'eglot-server-programs '((c++-mode c-mode) eglot-cquery "~/extern/cquery-dev/build/release/bin/cquery")))
 
 ;; N.B. Completion when candidate is already typed out is broken in company.
 ;; See issues #451, #205, #150
