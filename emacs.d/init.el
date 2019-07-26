@@ -126,8 +126,7 @@
       select-enable-clipboard nil                           ; make cut/paste function correctly (select)
       sentence-end-double-space nil                         ; sentences end with one space
       standard-indent tab-width                             ; preferred indent
-      x-gtk-use-system-tooltips nil                         ; allow tooltip theming
-      view-read-only t)                                     ; show r/o files in view mode
+      x-gtk-use-system-tooltips nil)                        ; allow tooltip theming
 
 (add-hook 'after-init-hook                                  ; report init time
           (lambda ()
@@ -842,43 +841,96 @@
   ("<f2>"       #'ivy-switch-buffer)
   ("C-x b"      #'ivy-switch-buffer)
   (:keymaps 'ivy-minibuffer-map
-            "<escape>" #'minibuffer-keyboard-quit
-            "<f5> a"   '(ivy-read-action         :which-key "Select action (C-M-a)")
-            "<f5> c"   '(ivy-call                :which-key "Call & stay open (C-M-m)")
-            "<f5> d"   '(ivy-dispatching-call    :which-key "Action & stay open (C-M-o)")
-            "<f5> e"   '(ivy-dispatch-done       :which-key "Call selected action & close (M-o)")
-            "<f5> f"   '(ivy-avy                 :which-key "Avy search (C-')")
-            "<f5> h"   '(hydra-ivy/body          :which-key "Show hydra")
-            "<f5> k"   '(ivy-kill-ring-save      :which-key "Save in kill ring")
-            "<f5> o"   '(ivy-occur               :which-key "Open occur buffer")
-            "<f5> r"   '(ivy-restrict-to-matches :which-key "Rematch")
-            "<f5> q"   '(ivy-toggle-regexp-quote :which-key "Toggle regexp quoting")
-            "<f5> y"   '(ivy-yank-word           :which-key "Yank from buffer")
+            "<return>"  #'ivy-done
+            "<C-return>" #'me:ivy-call-and-next-line
+            "<C-S-return>" #'ivy-previous-line-and-call
+            "<M-return>" #'ivy-dispatching-done
+            "<C-right>" #'ivy-next-history-element
+            "<C-left>" #'ivy-previous-history-element
+            "<M-left>"  #'ivy-prev-action
+            "<M-right>" #'ivy-next-action
+            "<C-SPC>" #'me:ivy-toggle-mark-and-next-line
+            "<M-SPC>" #'ivy-toggle-marks
             "M-y" #'ivy-next-line)                       ; for yank-pop flow
-  (:keymaps 'ivy-occur-grep-mode-map
-            "DEL"  #'ivy-occur-delete-candidate)       ; orig C-d
+  ;; add some vim mappings in normal mode minibuffer
+  (:keymaps 'ivy-minibuffer-map :states 'normal
+            "C-b" #'ivy-scroll-down-command
+            "C-f" #'ivy-scroll-up-command
+            "G" #'ivy-end-of-buffer
+            "gg" #'ivy-beginning-of-buffer
+            "<up>" #'ivy-previous-line
+            "<down>" #'ivy-next-line)
+  ;;Bindings under C-c. These are for bindings which are less frequently
+  ;;used and/or hard to remember.  Frequent use bindings are duplicated for discovery.
+  (:keymaps 'ivy-minibuffer-map :prefix "C-c"
+            ;; These are the same as ivy
+            "C-o"   '(ivy-occur                         :which-key "Open occur buffer")
+            "C-s"  '(ivy-rotate-sort                    :which-key "Rotate sorting method")
+            ;; These have been moved so remove ivy's binding
+            "C-a"   nil
+            ;; Duplicates of ivy minibuffer bindings (old and new) for discoverability
+            "C-r"     '(ivy-reverse-i-search            :which-key "Search history ⧉")
+            "<C-left>"  '(ivy-previous-history-element  :which-key "Previous input history ⧉")
+            "<C-right>" '(ivy-next-history-element      :which-key "Next input history ⧉")
+            "<M-left>"  '(ivy-prev-action               :which-key "Previous action ⧉")
+            "<M-right>" '(ivy-next-action               :which-key "Next action ⧉")
+            "<return>" '(ivy-done                       :which-key "Call, exit ⧉")
+            "<C-return>" '(me:ivy-call-and-next-line    :which-key "Call, Next line ⧉")
+            "<C-S-return>" '(ivy-previous-line-and-call :which-key "Previous line, call ⧉")
+            "<M-return>" '(ivy-dispatching-done         :which-key "Get action, call, exit ⧉")
+            "<C-SPC>" '(me:ivy-toggle-mark-and-next-line  :which-key "Toggle mark, next line ⧉")
+            "M-SPC" '(ivy-toggle-marks                  :which-key "Toggle marks ⧉" :override t)
+            "M-j"     '(ivy-yank-word                   :which-key "Yank from buffer ⧉" :override t)
+            ;; New bindings for this prefix only
+            "t"  '(:ignore t :which-key "Toggles→" )
+            "C-c"     '(ivy-avy                         :which-key "Avy search")
+            "a"       '(ivy-read-action                 :which-key "Select default action")
+            "n"       '(ivy-immediate-done              :which-key "Exit with input instead of candidate")
+            "i"       '(ivy-insert-current              :which-key "Copy candidate to input")
+            "r"       '(ivy-restrict-to-matches         :which-key "Rematch matched candidates")
+            "w"       '(ivy-kill-ring-save              :which-key "Copy current candidates to kill ring")
+            "?"       '(ivy-help                        :which-key "Ivy Help"))
+  (:keymaps 'ivy-minibuffer-map :prefix "C-c t"
+            "i"  '(ivy-toggle-ignore :which-key "Toggle ignore")
+            "q"  '(ivy-toggle-regexp-quote :which-key "Toggle regex quoting")
+            "c"  '(ivy-toggle-calling :which-key "Toggle calling")
+            "f"  '(ivy-toggle-fuzzy :which-key "Toggle fuzzy")
+            "u"  '(ivy-toggle-case-fold :which-key "Toggle case folding"))
   :init
-  (add-hook 'ivy-occur-mode-hook (lambda ()
-                                   (evil-make-intercept-map ivy-occur-mode-map 'normal)
-                                   (evil-normalize-keymaps 'normal)))
-  (add-hook 'ivy-mode-hook (lambda ()
-                             (setq ivy-height (/ (+ 2 (frame-height)) 3))))
   (setq ivy-use-virtual-buffers t                           ; add ‘recentf-mode’ and bookmarks to ‘ivy-switch-buffer’.
         ivy-virtual-abbreviate 'full                        ; use full path for abbreviation
-        ivy-count-format ""                                 ; does not count candidates
+        ivy-count-format " (%-d) "                          ; show # candidates
+        ivy-pre-prompt-function #'ivy-action-name           ; show action before # candidates
         ivy-initial-inputs-alist nil                        ; no regexp by default
+        ivy-action-wrap t                                   ; wrap-around for actions
         ivy-on-del-error-function nil                       ; too many backspaces doesn't exit
-        ivy-dynamic-exhibit-delay-ms 200                    ; dynamic collection delay
         ivy-re-builders-alist
-        '((t . ivy--regex-ignore-order)))                ; allow input not in order
+        '((t . ivy--regex-ignore-order)))                   ; allow input not in order
   :config
-  (ivy-mode 1))
 
-;; add hydra accessable with C-o in minibuffer
-(use-package ivy-hydra
-  :after ivy
-  :commands (ivy-hydra/body)
-  :config)
+  ;; Make the default height be 1/3 of frame
+  (defun me:ivy-height-from-frame (caller)
+    (/ (+ 2 (frame-height)) 3))
+  (add-to-list  'ivy-height-alist '( t . me:ivy-height-from-frame) t)
+
+
+  (defun me:ivy-toggle-mark-and-next-line ()
+    (interactive)
+    (if (ivy--marked-p)
+        (ivy-unmark)
+      (ivy-mark)))
+
+  (defun me:ivy-call-and-next-line ()
+    (interactive)
+    (ivy-call)
+    (ivy-next-line))
+
+  (defun me:ivy-dispatch-call-and-next-line ()
+    (interactive)
+    (ivy-dispatching-call)
+    (ivy-next-line))
+
+  (ivy-mode 1))
 
 ;; add some ivy buffer information
 (use-package ivy-rich
@@ -1673,7 +1725,8 @@
   :after evil
   :defines evil-collection-company-use-tng
   :init
-  (setq evil-collection-company-use-tng t)
+  (setq evil-collection-company-use-tng t
+        evil-collection-setup-minibuffer t)
   :defer 1
   :config
   (evil-collection-init))
