@@ -1052,6 +1052,7 @@
                                                    projectile-root-local)
         projectile-use-git-grep t
         projectile-project-compilation-cmd ""     ;; workaround for stupid projectile bug
+        projectile-indexing-method 'hybrid      ;; default indexing method is total crap
         projectile-enable-caching t)
   :config
   (defun me:counsel-ag-project ()
