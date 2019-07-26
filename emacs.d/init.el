@@ -541,8 +541,15 @@
 ;; 26.1 built-in line numbers mode
 (use-package display-line-numbers
   :config
+  (defun me:rotate-line-number-type ()
+    (interactive)
+    (setq display-line-numbers
+          (pcase display-line-numbers
+            ((pred null) 'relative)
+            ('relative t)
+            (_ nil))))
   :general
-  ("<f10> l"      #'display-line-numbers-mode)
+  ("<f10> l"      #'me:rotate-line-number-type)
   :init
   (setq display-line-numbers-type 'relative))
 
