@@ -399,8 +399,9 @@ esac
 
 alias cd..="cd .."
 alias ls-x="ls -x"
-alias ack='mark && ack-grep'
 alias ag='mark && \ag'
+alias rg='mark && \rg'
+alias gg='mark && git grep'
 
 ##### OS Specific aliases #####
 
