@@ -1835,14 +1835,14 @@
                   :body-pre (git-timemachine)
                   :foreign-keys run )
            "Time machine"
-           ("C-p" #'git-timemachine-show-previous-revision "Previous revision" :column "Navigation")
-           ("C-n" #'git-timemachine-show-next-revision "Next revision")
-           ("C-c h" #'git-timemachine-show-current-revision "Current revision")
-           ("C-c v" #'git-timemachine-show-commit "Show commit")
+           ("s-p" #'git-timemachine-show-previous-revision "Previous revision" :column "Navigation")
+           ("s-n" #'git-timemachine-show-next-revision "Next revision")
+           ("s-c" #'git-timemachine-show-current-revision "Current revision")
            ("C-c C-c" #'git-timemachine-quit "Quit" :color blue )
-           ("C-c b" #'git-timemachine-blame "Show culprits" :column "Operations")
-           ("C-c r" #'git-timemachine-kill-revision "Yank revision")
-           ("C-c s" #'git-timemachine-kill-abbreviated-revision "Yank abbreviated revision")))
+           ("s-b" #'git-timemachine-blame "Show culprits" :column "Operations")
+           ("s-v" #'git-timemachine-show-commit "Show commit")
+           ("s-Y" #'git-timemachine-kill-revision "Yank revision")
+           ("s-y" #'git-timemachine-kill-abbreviated-revision "Yank abbreviated revision")))
   :general
   (:keymaps 'global :prefix "<f9>"  "t" #'hydra-timemachine/body))
 
