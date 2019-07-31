@@ -1205,6 +1205,10 @@
 (use-package rust-mode
   :config
   :init
+  ;; remove company-capf from company-backends
+  (add-hook 'rust-mode-hook (lambda ()
+                              (make-local-variable 'company-backends)
+                              (setq company-backends (delete 'company-capf company-backends))))
   (setq rust-match-angle-brackets nil))  ; workaround performance issue
 
 (use-package cargo
@@ -1285,6 +1289,7 @@
   :config
   (defun me:setup-jedi()
     (jedi:setup)
+    (make-local-variable 'company-backends)
     (delete 'company-capf company-backends)
     (add-to-list 'company-backends 'company-jedi)))
 
