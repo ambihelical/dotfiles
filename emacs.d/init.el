@@ -1243,6 +1243,7 @@
   :config
   (defun me:setup-jedi()
     (jedi:setup)
+    (make-local-variable 'company-backends)
     (delete 'company-capf company-backends)
     (add-to-list 'company-backends 'company-jedi)))
 
