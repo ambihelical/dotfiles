@@ -920,11 +920,24 @@
     (interactive)
     (let ((counsel-yank-pop-preselect-last t))
       (call-interactively (counsel-yank-pop))))
+  (defun me:find-file (prompt candidates action caller)
+    "Find a file from a list of files"
+    (ivy-read prompt candidates
+              :matcher #'counsel--find-file-matcher
+              :action action
+              :preselect (counsel--preselect-file)
+              :require-match t
+              :history 'file-name-history
+              :keymap counsel-find-file-map
+              :caller caller))
   (defun me:find-some-files ()
     "Find files in project or fallback to current directory"
     (interactive)
     (if (and (fboundp 'projectile-project-p) (projectile-project-p))
-        (projectile-find-file)
+        (let* ((project-root (projectile-ensure-project (projectile-project-root)))
+               (action (lambda (f) (with-ivy-window (find-file (expand-file-name f project-root)))))
+               (files (projectile-project-files project-root)))
+          (me:find-file "Find file: " files action 'me:find-some-files))
       (counsel-find-file)))
   (defun me:counsel-ag-here ()
     "Search using ag in default directory"
