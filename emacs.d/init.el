@@ -219,9 +219,9 @@
 (use-package emacs-lisp-mode
   :ensure nil
   :general
-  (:prefix "C-c"
-           "v"          #'pp-eval-last-sexp
-           "x"          #'pp-macroexpand-last-sexp)
+  (:keymaps 'emacs-lisp-mode-map :prefix "C-c"
+            "v"          #'pp-eval-last-sexp
+            "x"          #'pp-macroexpand-last-sexp)
   :init
   (add-hook 'emacs-lisp-mode-hook
             (lambda ()
@@ -280,6 +280,7 @@
   ("s-["   #'winner-undo)
   :defer 1
   :init
+  (setq winner-dont-bind-my-keys t)    ;; don't bind C-c left/right,etc
   :config
   (winner-mode t))
 
@@ -828,8 +829,9 @@
 ;; look up words
 (use-package define-word
   :general
-  ("C-c d" #'define-word-at-point)
-  ("C-c D" #'define-word)
+  (:keymaps 'normal :prefix "SPC"
+            "d" '(define-word-at-point :which-key "Define this word")
+            "D" '(define-word :which-key "Define word"))
   :config
   ;; advise define-word to set word limit based on frame height
   (defun me:advise-define-word (_word _service &optional _choose)
