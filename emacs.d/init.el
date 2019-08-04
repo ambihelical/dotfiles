@@ -1668,6 +1668,7 @@
   (setq which-key-max-description-length 40
         which-key-side-window-max-width 0.67
         which-key-side-window-max-height 0.5
+        which-key-sort-order 'which-key-local-then-key-order
         which-key-allow-evil-operators t)
   (which-key-mode)
   (which-key-setup-side-window-right-bottom)
