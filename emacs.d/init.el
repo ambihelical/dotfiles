@@ -456,7 +456,9 @@
   :diminish whitespace-mode)
 
 ;; Highlight cursor position in buffer
+;; Disabled it doesn't do much and slows things down
 (use-package beacon
+  :disabled t
   :if window-system
   :defer 3
   :init
