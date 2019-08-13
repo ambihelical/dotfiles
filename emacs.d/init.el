@@ -452,15 +452,6 @@
   (me:add-hook-with-delay 'text-mode-hook 3 #'whitespace-mode)
   :diminish whitespace-mode)
 
-;; Highlight cursor position in buffer
-(use-package beacon
-  :if window-system
-  :defer 3
-  :init
-  (setq beacon-blink-when-window-scrolls nil)
-  :config
-  (beacon-mode 1))
-
 (use-package adaptive-wrap
   :config
   :init
