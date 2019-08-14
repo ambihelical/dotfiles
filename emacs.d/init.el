@@ -1810,8 +1810,8 @@
     "Select and open revision of current file, with prefix opens in other window"
     (interactive (list (magit-read-branch-or-commit "Open revision") current-prefix-arg))
     (if arg
-        (switch-to-buffer-other-window (magit-find-file-noselect rev (buffer-file-name)))
-      (switch-to-buffer (magit-find-file-noselect rev (buffer-file-name))))))
+        (magit-find-file-other-window rev (buffer-file-name))
+      (magit-find-file rev (buffer-file-name)))))
 
 (use-package evil-magit
   :after magit
