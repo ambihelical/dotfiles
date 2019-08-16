@@ -91,10 +91,5 @@
   (when (and (>= (recursion-depth) 1) (active-minibuffer-window))
     (abort-recursive-edit)))
 
-;; Disable auto-revert-vc for remote files
-;;;###autoload
-(defun me:disable-auto-revert-vc-in-tramp ()
-  (when (and buffer-file-name (file-remote-p buffer-file-name))
-    (setq-local auto-revert-check-vc-info nil)))
 
 (provide 'utilities)

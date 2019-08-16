@@ -182,7 +182,6 @@
              me:select-3rd-other-buffer
              me:select-4th-other-buffer
              me:select-5th-other-buffer
-             me:disable-auto-revert-vc-in-tramp
              me:save-dirty-buffers)
   :general
   ("s-2"        #'me:select-2nd-other-buffer)
@@ -303,11 +302,15 @@
   :ensure nil
   :defer 2
   :init
-  (add-hook 'find-file-hook #'me:disable-auto-revert-vc-in-tramp)
-  (add-hook 'after-save-hook #'me:disable-auto-revert-vc-in-tramp)
+  ;; refresh vc state periodically for current buffer -- keep branch valid
+  (run-with-timer 15 15 #'vc-refresh-state)
   :config
-  (setq auto-revert-check-vc-info t                           ; check periodically for new vc info
-        auto-revert-verbose nil)                              ; don't tell me about auto reverts
+  ;; N.B. auto-revert-check-vc-info causes vc-refresh-state to be called
+  ;; on *every* file-backed buffer every 5s by default even if it isn't reverted.
+  ;; This causes vc-mode-line to be called for each such buffer.
+  ;; For this reason, never set this variable.
+  (setq auto-revert-check-vc-info nil              ; don't check periodically for new vc info
+        auto-revert-verbose nil)                   ; don't tell me about auto reverts
   :diminish auto-revert-mode)
 
 ;; built-in "simple" package
