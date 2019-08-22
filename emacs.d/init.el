@@ -1057,6 +1057,7 @@
         projectile-indexing-method 'hybrid      ;; default indexing method is total crap
         projectile-enable-caching t)
   :config
+  (add-to-list 'projectile-globally-ignored-directories ".ccls-cache")
   (defun me:counsel-ag-project ()
     "Search using ag in project"
     (interactive)
