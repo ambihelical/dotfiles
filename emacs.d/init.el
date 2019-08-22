@@ -893,6 +893,22 @@
   :init
   (setq ivy-format-function #'ivy-format-function-line)
   :config
+  ;; make candidate column and mode bigger, rearrange columns from default
+  (setq ivy-rich-display-transformers-list
+        (plist-put ivy-rich-display-transformers-list
+                   'ivy-switch-buffer
+                   '(:columns
+                     (
+                      (ivy-rich-switch-buffer-indicators (:width 4 :face error :align right))
+                      (ivy-rich-candidate (:width 40))
+                      (ivy-rich-switch-buffer-major-mode (:width 20 :face warning))
+                      (ivy-rich-switch-buffer-project (:width 15 :face success))
+                      (ivy-rich-switch-buffer-size (:width 7))
+                      (ivy-rich-switch-buffer-path (:width (lambda (x) (ivy-rich-switch-buffer-shorten-path x (ivy-rich-minibuffer-width 0.3)))))
+                      )
+                     :predicate
+                     (lambda (cand) (get-buffer cand)))))
+
   (ivy-rich-mode)
   :demand t)
 
