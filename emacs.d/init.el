@@ -1489,7 +1489,9 @@
   :load-path "lisp/eglot"
   :after no-littering
   :general
-  (:keymaps 'eglot-mode-map "<f5> a"  #'eglot-code-actions)
+  (:keymaps 'eglot-mode-map
+            "<f6> c"  #'eglot-code-actions
+            "<f6> h"  #'eglot-help-at-point)
   :hook ((c-mode . eglot-ensure)
          (rust-mode . eglot-ensure)
          (c++-mode . eglot-ensure))
