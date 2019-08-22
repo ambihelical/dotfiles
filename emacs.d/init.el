@@ -516,7 +516,7 @@
 
 ;; modeline tabs
 (use-package moody
-  :after hc-zenburn-theme
+  :after ( hc-zenburn-theme perspective )
   :demand
   :init
   (setq x-underline-at-descent-line t)
