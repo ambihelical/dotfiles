@@ -1547,7 +1547,7 @@
   (setq avy-all-windows 'all-frames))
 
 (use-package evil
-  :hook (( prog-mode text-mode ) . evil-mode )
+  :hook (( prog-mode text-mode ) . evil-local-mode)
   :init
   ;; make cut/paste more vim-like
   ;; mainly keep emacs cut/paste separate from system clipboard
