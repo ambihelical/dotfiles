@@ -1494,7 +1494,7 @@
          (rust-mode . eglot-ensure)
          (c++-mode . eglot-ensure))
   :init
-  (setq eglot-ignored-server-capabilites '( :hoverProvider :documentHighlightProvider)
+  (setq eglot-ignored-server-capabilites '( :documentHighlightProvider)
         eglot-change-idle-timeout 3
         eglot-suppress-modeline-doing t  ;; don't care what it is doing
         eglot-suppress-modeline-pending t  ;; don't care what is waiting
