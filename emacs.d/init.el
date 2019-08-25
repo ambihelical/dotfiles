@@ -1672,19 +1672,17 @@
   (:keymaps '( normal insert visual ) "C-j" #'evil-scroll-line-up)       ; ^y
   (:keymaps '( normal insert visual )  "C-k" #'evil-scroll-line-down)     ; ^e
 
-  ;; Overload shifts so that they don't lose the selection
+  ;; visual mode only mapping
   (:keymaps 'visual
+            ;; Overload shifts so that they don't lose the selection
             ">"           #'me:evil-shift-right-visual
-            "<tab>"       #'me:evil-shift-right-visual)
-  (:keymaps 'visual
+            "<tab>"       #'me:evil-shift-right-visual
             "<"           #'me:evil-shift-left-visual
-            "<backtab>"   #'me:evil-shift-left-visual)
-
+            "<backtab>"   #'me:evil-shift-left-visual
+            ;; Move visual selection up or down
+            "<M-j>"       (concat ":m '>+1" (kbd "RET") "gv=gv")
+            "<M-k>"       (concat ":m '<-2" (kbd "RET") "gv=gv"))
   :config
-  ;; move visual block up or down
-  (define-key evil-visual-state-map "J" (concat ":m '>+1" (kbd "RET") "gv=gv"))
-  (define-key evil-visual-state-map "K" (concat ":m '<-2" (kbd "RET") "gv=gv"))
-
   (defun me:evil-shift-left-visual ()
     (interactive)
     (evil-shift-left (region-beginning) (region-end))
