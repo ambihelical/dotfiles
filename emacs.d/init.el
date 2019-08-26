@@ -1775,6 +1775,20 @@
   :config
   (evil-collection-init))
 
+(use-package expand-region
+  :demand t
+  :after ( evil evil-collection )
+  :config
+  (defun evil-visual-char-or-expand-region ()
+    (interactive)
+    (if (region-active-p)
+        (call-interactively 'er/expand-region)
+      (evil-visual-char)))
+  (define-key evil-normal-state-map "v" 'evil-visual-char-or-expand-region)
+  (define-key evil-visual-state-map "v" 'evil-visual-char-or-expand-region)
+  (define-key evil-visual-state-map (kbd "M-v") 'er/contract-region)
+  (define-key evil-visual-state-map [escape] 'evil-visual-char))
+
 (use-package ws-butler
   :hook (( prog-mode text-mode ) . ws-butler-mode )
   :config)
