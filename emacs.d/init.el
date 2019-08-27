@@ -1453,15 +1453,12 @@
   (setq company-minimum-prefix-length 2            ; # chars needed for completion
         company-idle-delay 1
         company-dabbrev-downcase nil)              ; never downcase
-  (add-hook 'prog-mode-hook #'company-mode)
+  :hook ( prog-mode . company-mode))
+
+(use-package company-quickhelp
+  :hook (company-mode . company-quickhelp-mode)
   :config
-  ;; N.B. takes evil out of insert mode when enabled
-  (use-package company-quickhelp
-    :disabled t
-    :demand
-    :config
-    (company-quickhelp-mode 1))
-  )
+  (company-quickhelp-mode 1))
 
 (use-package counsel-gtags
   :commands ( counsel-gtags-find-definition
