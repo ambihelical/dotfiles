@@ -1715,6 +1715,7 @@
   :after evil
   :init
   (setq magit-completing-read-function 'ivy-completing-read   ; use ivy
+        magit-save-repository-buffers 'dontask                ; save repo modified buffers w/o asking
         magit-section-initial-visibility-alist '(( stashes . hide ))
         magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1
         magit-repository-directories '(( "~/dev" . 1)))
