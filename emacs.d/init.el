@@ -980,6 +980,12 @@
 
   (counsel-mode 1))
 
+;; better M-x
+(use-package amx
+  :hook (( ivy-mode ) . amx-mode)
+  :config
+  :init)
+
 ;; allow grep buffers to be editted
 (use-package wgrep
   :general
