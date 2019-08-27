@@ -495,7 +495,7 @@
   (setq sml/theme 'respectful
         size-indication-mode t
         sml/line-number-format "%4l"
-        sml/size-indication-format " %I"
+        sml/size-indication-format " %I "
         sml/col-number-format "%3C"
         sml/numbers-separator " "
         sml/no-confirm-load-theme t)
