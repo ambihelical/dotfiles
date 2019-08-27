@@ -1427,13 +1427,22 @@
 (use-package eglot
   :after no-littering
   :general
-  (:keymaps 'eglot-mode-map "<f5> a"  #'eglot-code-actions)
+  (:keymaps 'eglot-mode-map
+            "<f6> c"  #'eglot-code-actions
+            "<f6> h"  #'eglot-help-at-point)
   :hook ((c-mode . eglot-ensure)
          (c++-mode . eglot-ensure))
   :init
   (setq eglot-ignored-server-capabilites '( :hoverProvider :documentHighlightProvider)
         eglot-events-buffer-size 0)     ;; events are verbose, so disable
   :config
+  ;; use an absolute path for ccls cache
+  ;; ccls uses unique cache directory name for each project so there are no collisions
+  (let* ((cache-dir (expand-file-name "ccls-cache" me:cache-directory))
+         (init-str (concat "--init={\"cache\":{\"directory\":\"" cache-dir "\"}}")))
+    (add-to-list 'eglot-server-programs
+                 `((c++-mode c-mode) "ccls" ,init-str)))
+
   ;; project-find-function which uses projectile methods to find
   ;; the projectile project associated with a directory.
   ;; If projectile not loaded, or directory is not in a project,
