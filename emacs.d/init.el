@@ -1044,16 +1044,17 @@
     (if path
         (expand-file-name path (projectile-project-root))
       (projectile-project-root)))
-
-  (use-package persp-projectile
-    :demand
-    :general
-    ("<f7> <f7>"  #'projectile-persp-switch-project)
-    :config)
   (projectile-mode 1))
 
-(use-package perspective
+(use-package persp-projectile
   :after projectile
+  :demand
+  :general
+  ("<f7> <f7>"  #'projectile-persp-switch-project)
+  :config)
+
+(use-package perspective
+  :after persp-projectile
   :init
   :general
   ("<f7> r"     #'persp-rename)
@@ -1062,8 +1063,6 @@
   (:prefix "C-x"
            "x"  '(:ignore t :which-key "Perspective→" ))
   :config
-  (unless (daemonp)
-    (setq persp-initial-frame-name (projectile-project-name)))
   (persp-mode))
 
 ;; Highlight delimiters by depth
