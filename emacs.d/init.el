@@ -605,15 +605,16 @@
   (add-to-list 'recentf-exclude no-littering-etc-directory))
 
 (use-package recentf
+  :custom
+  (recentf-exclude `(,@recentf-exclude
+                     "COMMIT_EDITMSG\\'"
+                     ".*-autoloads\\.el\\'"
+                     "[/\\]\\.elpa/"
+                     ))
+  (recentf-max-saved-items 200)
+  (recentf-max-menu-items 15)
+  (recentf-auto-cleanup 300) ; wait 5m before 1st cleanup
   :config
-  (setq recentf-exclude `(,@recentf-exclude
-                          "COMMIT_EDITMSG\\'"
-                          ".*-autoloads\\.el\\'"
-                          "[/\\]\\.elpa/"
-                          ))
-  (setq recentf-max-saved-items 200
-        recentf-max-menu-items 15
-        recentf-auto-cleanup 300) ; wait 5m before 1st cleanup
   (recentf-mode))
 
 ;; save buffer positions
