@@ -1452,7 +1452,9 @@
 ;; See issues #451, #205, #150
 (use-package company
   :general
-  ("s-d"        #'company-complete)
+  ("s-d"     #'company-complete)  ; force completion
+  ;; N.B. return should do this but it seems to be overridden by something
+  ("C-<tab>" #'company-complete-selection)
   :init
   (setq company-minimum-prefix-length 2            ; # chars needed for completion
         company-idle-delay 1
