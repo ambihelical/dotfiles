@@ -1485,7 +1485,12 @@
 ;; See issues #451, #205, #150
 (use-package company
   :general
-  ("s-d"        #'company-complete)
+  ("s-d"     #'company-complete)  ; force completion
+  ;; N.B. Workaround company disabling backend expansion of parameters in tng mode
+  ;; Use this after tabbing to selection.  Normally any non-command key
+  ;; will trigger the completion but suppress parameter expansion, this avoids
+  ;; the suppression.
+  (:keymaps 'company-active-map "(" #'company-complete-selection)
   :init
   (setq company-minimum-prefix-length 2            ; # chars needed for completion
         company-idle-delay 1
