@@ -1672,10 +1672,10 @@
   :init)
 
 (use-package evil-collection
+  :custom
+  (evil-collection-company-use-tng t)
+  (evil-collection-setup-minibuffer t)
   :after evil
-  :defines evil-collection-company-use-tng
-  :init
-  (setq evil-collection-company-use-tng t)
   :defer 1
   :config
   (evil-collection-init))
