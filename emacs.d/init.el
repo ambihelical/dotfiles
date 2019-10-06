@@ -1114,6 +1114,7 @@
         org-plantuml-jar-path (expand-file-name "java/plantuml.jar" me:data-directory)
         org-ascii-bullets '((ascii 42) (latin1 167) (utf-8 8226))
         org-return-follows-link t
+        org-startup-indented t
         org-ascii-headline-spacing '(0 . 0))
   (setq org-capture-templates nil)
   (setq me:org-capture-templates `(("to" "General Tasks" entry (file+headline ,me:home-notes "Tasks") "* TODO %?\n  %i\n  %a")
