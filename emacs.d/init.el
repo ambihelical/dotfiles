@@ -1507,7 +1507,7 @@
          (rust-mode . eglot-ensure)
          (c++-mode . eglot-ensure))
   :init
-  (setq eglot-ignored-server-capabilites '( :hoverProvider :documentHighlightProvider)
+  (setq eglot-ignored-server-capabilites '( :documentHighlightProvider)
         eglot-send-changes-idle-time 3    ;; be slower sending changes
         eglot-events-buffer-size 0)     ;; events are verbose, so disable
   :config
