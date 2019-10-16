@@ -151,7 +151,7 @@
   :config
   (general-evil-setup t)
   (general-override-mode)
-  (general-define-key :prefix "<f4>" "g"     #'general-describe-keybindings)
+  (general-define-key :prefix "<f4>" "K"     #'general-describe-keybindings)
   (general-define-key "s-." #'repeat)
   (general-define-key "s-s" #'save-buffer)
   :demand)
@@ -913,10 +913,11 @@
             "a" #'counsel-apropos
             "b" #'counsel-mark-ring
             "D" #'counsel-dired-jump
-            "l" #'counsel-linux-app
+            "g" #'counsel-search
             "i" #'counsel-info-lookup-symbol
             "j" #'counsel-bookmark
             "k" #'counsel-descbinds
+            "l" #'counsel-linux-app
             "p" #'counsel-package
             "r" #'counsel-recentf
             "s"  '(:ignore t :which-key "Search→" )
@@ -936,6 +937,8 @@
   ("<f10> c" #'counsel-colors-emacs)
   ("<f10> w" #'counsel-colors-web)
   ("<f6> m" #'counsel-imenu)
+  :custom
+  (counsel-search-engine 'google)
   :init
   (setq counsel-yank-pop-separator "\n---\n")
   :config
@@ -972,6 +975,9 @@
     (counsel-rg nil default-directory))
 
   (counsel-mode 1))
+
+;; Need this for counsel-search
+(use-package request)
 
 ;; better M-x
 (use-package amx
