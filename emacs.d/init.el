@@ -1509,7 +1509,7 @@
   :init
   (setq eglot-ignored-server-capabilites '( :documentHighlightProvider)
         eglot-send-changes-idle-time 3    ;; be slower sending changes
-        eglot-events-buffer-size 0)     ;; events are verbose, so disable
+        eglot-events-buffer-size 100000)  ;; smaller events buffer
   :config
   ;; use an absolute path for ccls cache
   ;; ccls uses unique cache directory name for each project so there are no collisions
