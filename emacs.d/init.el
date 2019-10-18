@@ -293,7 +293,6 @@
   (add-hook 'minibuffer-exit-hook #'me:minibuffer-exit)
   (add-hook 'mouse-leave-buffer-hook #'me:minibuffer-kill)
   :config
-  (savehist-mode t)                        ; save minibuffer history (savehist)
   (minibuffer-depth-indicate-mode t)       ; show recursive edit depth (mb-depth)
   :demand)
 
@@ -618,6 +617,18 @@
   (setq save-place-forget-unreadable-files nil)
   (save-place-mode t)
   :defer 1)
+
+;; built-in package savehist
+(use-package savehist
+  :after no-littering
+  :ensure nil
+  :init
+  (setq savehist-additional-variables
+        '(kill-ring search-ring regexp-search-ring compile-history))
+  :config
+  (savehist-mode t)
+  :defer 0.5)
+
 
 ;; modal window resizing
 (use-package windresize
