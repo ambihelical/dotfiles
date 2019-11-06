@@ -10,7 +10,8 @@
 
 (setq package-archives '(("melpa" . "http://melpa.milkbox.net/packages/")
                          ("org"   . "http://orgmode.org/elpa/")
-                         ("gnu"   . "http://elpa.gnu.org/packages/")))
+                         ("gnu"   . "https://elpa.gnu.org/packages/"))
+      package-check-signature nil)
 (package-initialize)
 (unless package-archive-contents
   (package-refresh-contents))
