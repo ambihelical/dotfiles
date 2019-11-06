@@ -1572,6 +1572,10 @@
 
 (use-package evil
   :hook (( prog-mode text-mode ) . evil-local-mode)
+
+  :custom
+  (evil-want-keybinding nil)  ; use evil-collection instead (needs to be done early)
+
   :init
   ;; make cut/paste more vim-like
   ;; mainly keep emacs cut/paste separate from system clipboard
