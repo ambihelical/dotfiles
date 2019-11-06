@@ -8,6 +8,8 @@ if [[ $EUID -ne 0 ]]; then
 	exit 1
 fi
 
+script_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 p=""  # normal packages
 q=""  # packages that over-recommend
 if [ "${OSTYPE:0:10}" == 'linux-gnue' ]; then
@@ -17,6 +19,12 @@ if [ "${OSTYPE:0:10}" == 'linux-gnue' ]; then
 	p="$p python3-dev "
 	apt-get --quiet --yes --no-install-recommends install $p
 elif [ "${OSTYPE:0:5}" == 'linux' ]; then
+	. ${script_path}/../bin/common/linux.sh
+	linux=$(linux_distribution_name)
+	version=$(linux_distribution_version)
+
+ if [ "$linux" == 'Ubuntu' ]; then
+
   # documentation tools
 	q="$q doxygen"
 	p="$p manpages-dev manpages-posix-dev ncurses-doc"
@@ -36,6 +44,13 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	apt-get --quiet --ignore-missing --yes install $p
 	apt-get --quiet --ignore-missing --no-install-recommends --yes install $q
 	echo "NOTE: Install global via source, debian is out of date"
+ elif [ "$linux" == 'Fedora' ]; then
+
+	p="$p meld git-gui gitk"
+	p="$p autoconf automake "
+	p="$p poppler-devel poppler-glib-devel"
+	 dnf install -y $p
+ fi
 elif [ "${OSTYPE:0:6}" == 'darwin' ]; then
 	brew update
 	p="$p global --with-pygments "

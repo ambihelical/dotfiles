@@ -119,6 +119,7 @@ ${CFG}/xsettingsd: ${PWD}/xsettingsd
 # copy git config and then run private startup
 # to customize
 ${CFG}/git/config: ${PWD}/git/config
+	mkdir -p $(dir $@)
 	cp -f $< $@
 	i3wm-private-startup || true
 
