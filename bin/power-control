@@ -3,15 +3,23 @@
 linux=$(linux_distribution_name)
 version=$(linux_distribution_version)
 
-if [[ "$linux" != "Ubuntu" ]]; then
-	echo "Only Ubuntu for now"
+if [ "$linux" != "Ubuntu" -a "$linux" != "Fedora" ]; then
+	echo "Don't know how to handle ${linux}/${version}"
 	exit 1
 fi
 host=$(uname -n)
 
-# disable suspend for hosts where it is broken
-nosuspend=0
-[ "$host" == "jh-rvueb" ] && nosuspend=1
+# 1 if legacy dbus in use
+legacy=0
+# 1 if can suspend safely
+suspend=0
+# 1 if can hibernate safely
+hibernate=1
+
+#echo "linux $linux version $version host $host"
+[ "$linux" == "Ubuntu" -a "$version" -gt "1510" ] && suspend=1
+[ "$linux" == "Fedora" -a "$version" -ge "28" ] && suspend=1
+[ "$host" == "jh-rvueb" ] && suspend=0
 
 
 # Fixing hibernate problems: http://blog.roland-kluge.de/?p=793
@@ -22,33 +30,35 @@ systemd=1510
 
 case $1 in
 suspend)
-	if [ "$nosuspend" == "1" ]; then
+	if [ "$suspend" == "0" ]; then
 		echo "Suspend doesn't work on this machine! Last time I checked, anyway"
-	elif [ "$version" -ge "$systemd" ]; then
-		dbus-send --system --print-reply --dest="org.freedesktop.login1" /org/freedesktop/login1 org.freedesktop.login1.Manager.Suspend boolean:true
-	else
+	elif [ "$legacy" == 1 ]; then
 		dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Suspend
+	else
+		dbus-send --system --print-reply --dest="org.freedesktop.login1" /org/freedesktop/login1 org.freedesktop.login1.Manager.Suspend boolean:true
 	fi
 	;;
 hibernate)
-	if [ "$version" -ge "$systemd" ]; then
-		dbus-send --system --print-reply --dest="org.freedesktop.login1" /org/freedesktop/login1 org.freedesktop.login1.Manager.Hibernate boolean:true
-	else
+	if [ "$hibernate" == "0" ]; then
+		echo "Hibernate doesn't work on this machine! Last time I checked, anyway"
+	elif [ "$legacy" == "1" ]; then
 		dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Hibernate
+	else
+		dbus-send --system --print-reply --dest="org.freedesktop.login1" /org/freedesktop/login1 org.freedesktop.login1.Manager.Hibernate boolean:true
 	fi
 	;;
 restart)
-	if [ "$version" -ge "$systemd" ]; then
-		dbus-send --system --print-reply --dest="org.freedesktop.login1" /org/freedesktop/login1 org.freedesktop.login1.Manager.Reboot boolean:true
-	else
+	if [ "$legacy" == "1" ]; then
 		dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Restart
+	else
+		dbus-send --system --print-reply --dest="org.freedesktop.login1" /org/freedesktop/login1 org.freedesktop.login1.Manager.Reboot boolean:true
 	fi
 	;;
 shutdown)
-	if [ "$version" -ge "$systemd" ]; then
-		dbus-send --system --print-reply --dest="org.freedesktop.login1" /org/freedesktop/login1 org.freedesktop.login1.Manager.PowerOff boolean:true
-	else
+	if [ "$legacy" == "1" ]; then
 		dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Stop
+	else
+		dbus-send --system --print-reply --dest="org.freedesktop.login1" /org/freedesktop/login1 org.freedesktop.login1.Manager.PowerOff boolean:true
 	fi
 	;;
 esac

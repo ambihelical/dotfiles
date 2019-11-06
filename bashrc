@@ -1,6 +1,9 @@
 #!/bin/bash
 # Keep above line to force syntax highlighting
 
+# include system bashrc if it exists
+[ -e /etc/bashrc ] && source /etc/bashrc
+
 # include sh/dash profile
 [ -e ${HOME}/.profile ] && source ${HOME}/.profile
 
@@ -252,15 +255,20 @@ less_colors() {
 }
 
 if [ ${OSTYPE:0:5} == 'linux' ]; then
-	# create ssh agent if needed and add private key identities
-	export SSH_AGENT_PID=`pgrep -o -u $USER ssh-agent`
-	if [ "$SSH_AGENT_PID" != '' ]; then
-		export SSH_AUTH_SOCK="$(\ls $(find /tmp -type d -uid $(id -u) -name 'ssh-*' 2>/dev/null | head -n 1)/agent.*)"
-		echo "using existing ssh-agent $SSH_AGENT_PID on $SSH_AUTH_SOCK"
+	if [ -e ${XDG_CONFIG_HOME}/environment.d/ssh-agent.conf ]; then
+		source ${XDG_CONFIG_HOME}/environment.d/ssh-agent.conf
+		export SSH_AUTH_SOCK
 	else
-		eval `ssh-agent`
-		echo "created new ssh-agent"
-		ssh-add
+		# create ssh agent if needed and add private key identities
+		export SSH_AGENT_PID=`pgrep -o -u $USER ssh-agent`
+		if [ "$SSH_AGENT_PID" != '' ]; then
+			export SSH_AUTH_SOCK="$(\ls $(find /tmp -type d -uid $(id -u) -name 'ssh-*' 2>/dev/null | head -n 1)/agent.*)"
+			echo "using existing ssh-agent $SSH_AGENT_PID on $SSH_AUTH_SOCK"
+		else
+			eval `ssh-agent`
+			echo "created new ssh-agent"
+			ssh-add
+		fi
 	fi
 fi
 
@@ -357,8 +365,8 @@ _PRE_=
 [ ${OSTYPE:0:6} == 'darwin' ] && _PRE_="g"
 
 # make less more friendly for non-text input files, see lesspipe(1)
-which lesspipe > /dev/null && eval "$(SHELL=/bin/sh lesspipe)"
-which lesspipe.sh > /dev/null && eval "$(SHELL=/bin/sh lesspipe.sh)"
+which lesspipe >& /dev/null && eval "$(SHELL=/bin/sh lesspipe)"
+which lesspipe.sh >& /dev/null && eval "$(SHELL=/bin/sh lesspipe.sh)"
 
 # check for ECMA-48 terminal
 if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
