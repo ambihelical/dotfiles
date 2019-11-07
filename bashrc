@@ -422,7 +422,7 @@ linux*)
 	export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 
 	# simulate the osx commands:
-	alias open=gnome-open
+	alias open=xdg-open
 	alias pbcopy='xclip -selection clipboard'
 	alias pbpaste='xclip -selection clipboard -o'
 
