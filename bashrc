@@ -415,8 +415,13 @@ linux*)
 	# Use openjdk 8 by default
 	export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 
-	# simulate the osx commands:
-	alias open=gnome-open
+	# open files via xdg-open
+	open() {
+		for file in "$@"; do
+			xdg-open "$file" &
+		done
+	}
+
 	alias pbcopy='xclip -selection clipboard'
 	alias pbpaste='xclip -selection clipboard -o'
 
