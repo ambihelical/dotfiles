@@ -3,8 +3,12 @@
 # Open files with emacs in client/server mode
 # when file is -, read from stdin
 
+
+type emacsclient >& /dev/null && CLIENT=emacsclient
+type emacsclient26 >& /dev/null && CLIENT=emacsclient26
+
 if [[ $# -ge 1 ]] && [[ "$1" == "-" ]]; then
-tmpfile=$(mktemp) && cat > $tmpfile && emacsclient26 -nc -a "" -e "(find-file \"$tmpfile\")" -e '(set-visited-file-name nil)' -e '(rename-buffer "*stdin*" t)'; rm -f $tmpfile
+tmpfile=$(mktemp) && cat > $tmpfile && $CLIENT -nc -a "" -e "(find-file \"$tmpfile\")" -e '(set-visited-file-name nil)' -e '(rename-buffer "*stdin*" t)'; rm -f $tmpfile
 else
-emacsclient26 -nc -a "" $@
+$CLIENT -nc -a "" $@
 fi
