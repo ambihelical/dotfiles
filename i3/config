@@ -295,8 +295,8 @@ bindsym $mod+b exec firefox &
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 1 -- +5% && killall -SIGUSR1 i3status
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 1 -- -5% && killall -SIGUSR1 i3status
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 1 toggle
-bindsym $mod+equal exec wmctrl -c "Qalculate" || qalculate&
-bindsym XF86Calculator exec wmctrl -c "Qalculate" || qalculate&
+bindsym $mod+equal exec wmctrl -c "Qalculate" || qalculate || qalculate-gtk || qalculate-qt
+bindsym XF86Calculator exec wmctrl -c "Qalculate" || qalculate || qalculate-gtk || qalculate-qt
 bindsym XF86Mail [class="Thunderbird"] focus
 bindsym Shift+XF86Mail [class="Pidgin"] focus
 bindsym XF86Tools [class="Pithos"] focus
