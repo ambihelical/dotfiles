@@ -666,6 +666,7 @@
   ("C-t" '(:ignore t :which-key "Images→" ))
   ("M-s" '(:ignore t :which-key "Incremental search→" ))
   ("C-x" '(:ignore t :which-key "Miscellaneous" ))
+  :hook ( dired-mode . dired-hide-details-mode)
   :init
   (setq dired-recursive-deletes 'always
         dired-recursive-copies 'always
