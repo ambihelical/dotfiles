@@ -32,7 +32,7 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	p="$p python-dev python-pip"
  # desktop related
 	p="$p i3 i3-wm i3lock i3status xsettingsd udiskie wmctrl"
-	p="$p gsimplecal clipit gnome-alsamixer scrot xautolock"
+	p="$p clipit pavucontrol scrot xautolock"
  # nice to have apps & related
 	p="$p pithos"
 	p="$p qalculate"
@@ -77,7 +77,7 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 
  # desktop related
 	p="$p i3 i3-ipc i3lock i3status dmenu udiskie wmctrl py3status scrot"
-	p="$p rxvt-unicode-256color-ml scrot xautolock"
+	p="$p rxvt-unicode-256color-ml scrot xautolock pavucontrol"
 
 	dnf install -y $p
  fi
