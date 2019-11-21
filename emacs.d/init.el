@@ -33,9 +33,13 @@
 (defconst me:cache-directory (or (getenv "XDG_CACHE_HOME")  "~/.cache"))
 (defconst me:config-directory (or (getenv "XDG_CONFIG_HOME")  "~/.config"))
 ;; fonts in order of preference
-(defconst me:preferred-fonts #'(("Hack" . "Hack-10:autohint=true")
+(defconst me:preferred-fonts #'(("Hack" . "Hack-11:autohint=true")
                                 ("Fantasque Sans Mono" . "Fantasque Sans Mono-12")
                                 ("DejaVu Sans Mono" . "DejaVu Sans Mono-11")))
+
+;; host specific font handling
+(when (equal (system-name) "hum")
+  (add-to-list 'me:preferred-fonts '("Hack" . "Hack-10:autohint=true")))
 
 ;; replace any matches in a string
 (defun me:replace-all (input from to)
