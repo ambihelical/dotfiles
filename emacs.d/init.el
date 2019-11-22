@@ -1361,7 +1361,8 @@
            (t 1))))
   :init
   (setq compilation-scroll-output t
-        compilation-ask-about-save nil    ; save all modified
+        compilation-ask-about-save nil                 ; save all modified
+        compilation-always-kill t                      ; always kill existing process
         compilation-auto-jump-to-first-error t
         compilation-finish-functions (lambda (buf str)
                                        (compilation-set-skip-threshold 1)
