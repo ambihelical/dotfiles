@@ -57,9 +57,9 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	if [ $version -ge 1810 ]; then
 	  p="$p ripgrep"
 	else
-		curl -LO https://github.com/BurntSushi/ripgrep/releases/download/0.10.0/ripgrep_0.10.0_amd64.deb
-		dpkg -i ripgrep_0.10.0_amd64.deb
-		rm -f ripgrep_0.10.0_amd64.deb
+		curl -L -o ripgrep.deb https://github.com/BurntSushi/ripgrep/releases/download/11.0.2/ripgrep_11.0.2_amd64.deb
+		dpkg -i ripgrep.deb
+		rm -f ripgrep.deb
 	fi
 	apt-get --ignore-missing --quiet --yes install $p
 	easy_install3 pip
