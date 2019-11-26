@@ -55,6 +55,9 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	p="$p clang-tools-extra"  # clangd
 	p="$p poppler-devel poppler-glib-devel"
 
+	# language support
+	p="$p python2-virtualenv python3-virtualenv"
+
 	 dnf install -y $p
  fi
 elif [ "${OSTYPE:0:6}" == 'darwin' ]; then
