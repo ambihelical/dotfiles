@@ -985,11 +985,11 @@
   (defun me:counsel-ag-here ()
     "Search using ag in default directory"
     (interactive)
-    (counsel-ag nil default-directory))
+    (counsel-ag (thing-at-point 'symbol) default-directory))
   (defun me:counsel-rg-here ()
     "Search using ripgrep in default directory"
     (interactive)
-    (counsel-rg nil default-directory))
+    (counsel-rg (thing-at-point 'symbol) default-directory))
 
   (counsel-mode 1))
 
@@ -1043,13 +1043,13 @@
     "Search using ag in project"
     (interactive)
     (if (and (fboundp 'projectile-project-p) (projectile-project-p))
-        (counsel-ag nil (projectile-project-root))
+        (counsel-ag (thing-at-point 'symbol) (projectile-project-root))
       (message "Not in a project")))
   (defun me:counsel-rg-project ()
     "Search using ripgrep in project"
     (interactive)
     (if (and (fboundp 'projectile-project-p) (projectile-project-p))
-        (counsel-rg nil (projectile-project-root))
+        (counsel-rg (thing-at-point 'symbol) (projectile-project-root))
       (message "Not in a project")))
 
   (defun me:add-project-templates ()
@@ -1176,7 +1176,7 @@
            (home-notes (expand-file-name "Notes" "~"))
            (proj-notes-path (if (file-exists-p proj-notes) proj-notes ""))
            (home-notes-path (if (file-exists-p home-notes) home-notes "")))
-      (counsel-rg nil dot-notes (concat " -- " home-notes-path " " proj-notes-path) nil))))
+      (counsel-rg (thing-at-point 'symbol) dot-notes (concat " -- " home-notes-path " " proj-notes-path) nil))))
 
 (use-package evil-org
   :after ( org evil )
