@@ -1182,6 +1182,10 @@
 (use-package evil-org
   :after ( org evil )
   :hook (( org-mode ) . evil-org-mode)
+  :general
+  ;; workaround for org link RET in normal mode
+  ;; see https://github.com/Somelauw/evil-org-mode/issues/57
+  (:keymaps 'motion "<RET>" nil)
   :init
   (add-hook 'evil-org-mode-hook (lambda ()
                                   (evil-org-set-key-theme
