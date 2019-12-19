@@ -55,6 +55,9 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	p="$p clang-tools-extra"  # clangd
 	p="$p poppler-devel poppler-glib-devel"
 
+	# documentation tools
+	p="$p librsvg2-tools rst2pdf python3-docutils plantuml graphviz"
+
 	# language support
 	p="$p python2-virtualenv python3-virtualenv"
 
