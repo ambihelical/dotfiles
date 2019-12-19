@@ -1291,6 +1291,13 @@
    ("\\.adoc\\'" . adoc-mode)
    ("\\.asciidoc\\'" . adoc-mode)))
 
+;; built-in restructured text mode
+(use-package rst-mode
+  :ensure nil
+  :init
+  (setq rst-pdf-program "xdg-open"))
+
+
 (use-package python-mode
   :defines ( python-indent-offset python-indent-guess-indent-offset )
   :config
