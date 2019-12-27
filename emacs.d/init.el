@@ -1331,6 +1331,8 @@
   :init
   (setq rst-pdf-program "xdg-open"))
 
+(use-package sphinx-mode
+  :hook (( rst-mode ) . sphinx-mode))
 
 (use-package python-mode
   :defines ( python-indent-offset python-indent-guess-indent-offset )
