@@ -36,7 +36,7 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	p="$p cmake-qt-gui build-essential ccache"
 	p="$p clang-3.8 libclang-3.8-dev gcc-doc glibc-doc"
 	p="$p autoconf automake libtool gettext intltool"
-	p="$p ruby"
+	p="$p ruby python3.9"
   # version control
 	p="$p meld git-gui mercurial subversion "
   # libraries sometimes needed to build from source
