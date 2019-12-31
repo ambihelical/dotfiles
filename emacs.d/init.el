@@ -1495,6 +1495,8 @@
   (setq company-minimum-prefix-length 2            ; # chars needed for completion
         company-idle-delay 1
         company-dabbrev-downcase nil)              ; never downcase
+  :config
+  (company-tng-configure-default)
   :hook ( prog-mode . company-mode))
 
 (use-package company-quickhelp
@@ -1590,6 +1592,7 @@
 
   :custom
   (evil-want-keybinding nil)  ; use evil-collection instead (needs to be done early)
+  (evil-disable-insert-state-bindings t) ; allow emacs bindings in insert mode
 
   :init
   ;; make cut/paste more vim-like
@@ -1711,7 +1714,6 @@
 
 (use-package evil-collection
   :custom
-  (evil-collection-company-use-tng t)
   (evil-collection-setup-minibuffer t)
   :after evil
   :defer 1
