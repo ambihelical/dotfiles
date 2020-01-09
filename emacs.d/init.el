@@ -99,7 +99,7 @@
 ;; configuration I haven't figured out how to wedge into
 ;; use-package
 
-(setq-default tab-width 3                                   ; preferred tab width
+(setq-default tab-width 4                                   ; preferred tab width
               indent-tabs-mode nil                          ; disable tabs, re-enable selectively
               indicate-empty-lines t                        ; show empty lines at end of buffer
               fill-column 120)                              ; auto-wrap only very long lines
@@ -1297,12 +1297,15 @@
               (define-key c++-mode-map ":" #'self-insert-command)
               (define-key c++-mode-map ")" #'self-insert-command)
               (define-key c++-mode-map ";" #'self-insert-command)
+              (c-set-style "ambihelical" nil)
               (c-set-offset 'arglist-intro '+)               ; indent args extra
               (c-set-offset 'innamespace [0])))              ; no indentation in namespace
-  (setq c-default-style "ellemtel"                           ; similar to allman style
-        c-electric-pound-behavior (quote (alignleft))        ; cpp directives aligned to left
+  (setq c-electric-pound-behavior (quote (alignleft))        ; cpp directives aligned to left
         show-paren-mode 0)
   :config
+  ;; use ellemtel style but use c-basic-offset of 4
+  (c-add-style "ambihelical" '("ellemtel" (c-basic-offset . 4)))
+
   :mode
   (("\\.c\\'"   . c-mode)
    ("\\.cpp\\'" . c++-mode)
