@@ -263,7 +263,7 @@ for_window [class="Qalculate"] floating enable
 for_window [class="Update-manager"] floating enable
 for_window [class="MintUpdate.py"] floating enable
 for_window [class="Nm-connection-editor"] floating enable
-for_window [class="Gnome-calendar"] floating enable
+for_window [class="Gnome-calendar"] floating enable, border pixel 3
 for_window [class="Pavucontrol"] floating enable
 for_window [instance="scratch"] floating enable, move scratchpad, scratchpad show, \
 	resize set 1600 480, move position center, scratchpad show
