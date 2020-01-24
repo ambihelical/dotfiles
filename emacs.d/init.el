@@ -251,6 +251,9 @@
 ;; Because there is no window package, window config is here as well
 (use-package frame
   :ensure nil
+  :custom
+  (split-width-threshold 200)                ; don't split unless have 100 columns for each
+  (split-height-threshold 120)               ; almost never split vertically
   :general
   ("<f10> f"     #'toggle-frame-fullscreen)   ; frame
   ("s-`"        #'previous-buffer)           ; window
@@ -261,7 +264,6 @@
   (add-hook 'focus-out-hook #'me:save-dirty-buffers)          ; save on defocus
   (add-hook 'after-make-frame-functions #'me:set-frame-face)
   (mapc #'me:set-frame-face (frame-list))
-
   (setq frame-title-format
         '((:eval (if (buffer-file-name)
                      (string-remove-prefix (abbreviate-file-name default-directory)
@@ -270,7 +272,6 @@
           " %* ["
           (:eval (abbreviate-file-name default-directory))
           "]")                                               ; fancy title
-        split-width-threshold 240                              ; 2x ideal line width :)
         icon-title-format frame-title-format)                  ; use same title for unselected frame
   :config
   (defun me:switch-to-previous-buffer ()
