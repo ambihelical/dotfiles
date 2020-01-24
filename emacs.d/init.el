@@ -108,6 +108,7 @@
       custom-file "/dev/null"                               ; disable customizations
       debugger-stack-frame-as-list t                        ; show fns as (fn args) instead of fn(args)
       fast-but-imprecise-scrolling t                        ; quick and dirty scrolling
+      find-file-visit-truename t                            ; resolve symlinks finding files
       history-length 1000                                   ; length of history
       history-delete-duplicates t                           ; don't allow repeated history
       imenu-max-item-length 200                             ; default of 60 too short for some c++ methods
