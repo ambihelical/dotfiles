@@ -180,25 +180,6 @@
   :init
   (setq hydra-base-map (make-sparse-keymap)))
 
-;; frequently used functions
-(use-package utilities
-  :ensure nil
-  :commands (me:set-extra-font-attributes
-             me:minibuffer-setup
-             me:minibuffer-exit
-             me:select-2nd-other-buffer
-             me:select-3rd-other-buffer
-             me:select-4th-other-buffer
-             me:select-5th-other-buffer
-             me:save-dirty-buffers)
-  :general
-  ("s-2"        #'me:select-2nd-other-buffer)
-  ("s-3"        #'me:select-3rd-other-buffer)
-  ("s-4"        #'me:select-4th-other-buffer)
-  ("s-5"        #'me:select-5th-other-buffer)
-  :config
-  :load-path "lisp/")
-
 ;; infrequently used functions
 (use-package extras
   :commands (hydra-paste/body x-urgency-hint)
@@ -259,7 +240,10 @@
   ("s-`"        #'previous-buffer)           ; window
   ("s-~"        #'next-buffer)               ; window
   ("s-w"        #'other-window)              ; window
-  ("s-o"        #'me:switch-to-previous-buffer)
+  ("s-2"        #'me:window-2nd-buffer)
+  ("s-3"        #'me:window-3rd-buffer)
+  ("s-4"        #'me:window-4th-buffer)
+  ("s-5"        #'me:window-5th-buffer)
   :init
   (add-hook 'focus-out-hook #'me:save-dirty-buffers)          ; save on defocus
   (add-hook 'after-make-frame-functions #'me:set-frame-face)
@@ -274,9 +258,41 @@
           "]")                                               ; fancy title
         icon-title-format frame-title-format)                  ; use same title for unselected frame
   :config
-  (defun me:switch-to-previous-buffer ()
+
+  ;; save any dirty buffers
+  (defun me:save-dirty-buffers ()
+    "Save any dirty buffers"
     (interactive)
-    (switch-to-buffer (other-buffer (current-buffer) 1)))
+    (save-some-buffers t))
+
+
+  (defun me:window-nth-buffer (arg &optional prefix)
+    "Select the nth other buffer. Use prefix to put in other window"
+    (interactive "P")
+    (when-let* ((bufs (mapcar 'car (window-prev-buffers)))
+                (buffer (nth arg (remove (current-buffer) bufs))))
+      (switch-to-buffer buffer)))
+
+  (defun me:window-2nd-buffer (&optional prefix)
+    "Select 1st other buffer"
+    (interactive "P")
+    (me:window-nth-buffer 0 prefix))
+
+  (defun me:window-3rd-buffer (&optional prefix)
+    "Select 2nd other buffer"
+    (interactive "P")
+    (me:window-nth-buffer 1 prefix))
+
+  (defun me:window-4th-buffer (&optional prefix)
+    "Select 3rd other buffer"
+    (interactive "P")
+    (me:window-nth-buffer 2 prefix))
+
+  (defun me:window-5th-buffer (&optional prefix)
+    "Select 4th other buffer"
+    (interactive "P")
+    (me:window-nth-buffer 3 prefix))
+
   :demand)
 
 ;; built-in winner package
@@ -302,6 +318,27 @@
   (add-hook 'mouse-leave-buffer-hook #'me:minibuffer-kill)
   :config
   (minibuffer-depth-indicate-mode t)       ; show recursive edit depth (mb-depth)
+
+  ;; value of gc-cons-threshold to restore after minibuffer
+  (defconst me:normal-gc-cons-threshold gc-cons-threshold)
+
+  ;; inhibit messages in echo area when minibuffer enabled
+  ;; and set use large gc-cons-threshold
+  ;; see http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
+  (defun me:minibuffer-setup ()
+    (setq inhibit-message t
+          gc-cons-threshold most-positive-fixnum))
+
+  ;; undo that done in me:minibuffer-setup
+  (defun me:minibuffer-exit ()
+    (setq inhibit-message (> (minibuffer-depth) 1)
+          gc-cons-threshold me:normal-gc-cons-threshold))
+
+  ;; kill the minibuffer
+  (defun me:minibuffer-kill ()
+    (when (and (>= (recursion-depth) 1) (active-minibuffer-window))
+      (abort-recursive-edit)))
+
   :demand)
 
 ;; built-in autorevert package
@@ -457,6 +494,15 @@
   (add-hook 'whitespace-mode-hook 'me:set-extra-font-attributes)
   (me:add-hook-with-delay 'prog-mode-hook 3 #'whitespace-mode)
   (me:add-hook-with-delay 'text-mode-hook 3 #'whitespace-mode)
+  :config
+  ;; set font attributes after theme loads
+  (defun me:set-extra-font-attributes ()
+    (let ((bg (face-attribute 'default :background))
+          (fg (face-attribute 'default :foreground)))
+      (set-face-attribute 'whitespace-line nil :foreground 'unspecified :background "grey32")
+      (set-face-attribute 'whitespace-tab nil :foreground "grey32" :background bg )
+      (set-face-attribute 'whitespace-trailing nil :foreground fg :background "red" )))
+
   :diminish whitespace-mode)
 
 (use-package adaptive-wrap
