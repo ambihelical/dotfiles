@@ -58,18 +58,6 @@
                                         (set-buffer cur-buf)
                                         (funcall ,func))))))))))
 
-(defun me:set-frame-face (frame)
-  "Set font face for frame"
-  (select-frame frame)
-  (if (display-graphic-p)
-      (let* ((fonts (font-family-list))
-             (match (seq-find (lambda (elem) (member (car elem) fonts)) me:preferred-fonts)))
-        (if match
-            (let ((font-name (cdr match)))
-                                        ;(message "font name is %s" font-name)
-              (add-to-list 'default-frame-alist `(font . ,font-name))
-              (set-frame-font font-name t t))))))
-
 
 (defun me:extra-setup ()
   (tool-bar-mode 0)                                           ; no tool bar (tool-bar)
@@ -82,15 +70,6 @@
   (blink-cursor-mode -1)                                      ; don't blink cursor
   (run-at-time "1 hour" 3600 #'clean-buffer-list))            ; clear out old buffers every hour (midnight)
 
-;; Reset all buffer's mode line to the default one
-(defun me:reset-mode-lines ()
-  (mapc (lambda (buffer)
-          (if (or (buffer-file-name buffer)
-                  (not (equal (substring (buffer-name buffer) 0 1) " ")))
-              (with-current-buffer buffer
-                (kill-local-variable 'mode-line-format)
-                (force-mode-line-update t))))
-        (buffer-list)))
 
 ;; Run programming mode hooks
 ;; This is used for modes which should trigger programming mode hooks
@@ -247,7 +226,6 @@
   :init
   (add-hook 'focus-out-hook #'me:save-dirty-buffers)          ; save on defocus
   (add-hook 'after-make-frame-functions #'me:set-frame-face)
-  (mapc #'me:set-frame-face (frame-list))
   (setq frame-title-format
         '((:eval (if (buffer-file-name)
                      (string-remove-prefix (abbreviate-file-name default-directory)
@@ -265,6 +243,17 @@
     (interactive)
     (save-some-buffers t))
 
+  (defun me:set-frame-face (frame)
+    "Set font face for frame"
+    (select-frame frame)
+    (if (display-graphic-p)
+        (let* ((fonts (font-family-list))
+               (match (seq-find (lambda (elem) (member (car elem) fonts)) me:preferred-fonts)))
+          (if match
+              (let ((font-name (cdr match)))
+                                        ;(message "font name is %s" font-name)
+                (add-to-list 'default-frame-alist `(font . ,font-name))
+                (set-frame-font font-name t t))))))
 
   (defun me:window-nth-buffer (arg &optional prefix)
     "Select the nth other buffer. Use prefix to put in other window"
@@ -292,6 +281,8 @@
     "Select 4th other buffer"
     (interactive "P")
     (me:window-nth-buffer 3 prefix))
+
+  (mapc #'me:set-frame-face (frame-list))
 
   :demand)
 
@@ -555,7 +546,14 @@
         minions-mode-line-lighter "[☰]")
   (add-hook 'sml/after-setup-hook #'minions-mode)
   :config
-  (me:reset-mode-lines)
+  ;; Reset all buffer's mode line to the default one
+  (mapc (lambda (buffer)
+          (if (or (buffer-file-name buffer)
+                  (not (equal (substring (buffer-name buffer) 0 1) " ")))
+              (with-current-buffer buffer
+                (kill-local-variable 'mode-line-format)
+                (force-mode-line-update t))))
+        (buffer-list))
   :general
   ("<f10> m" #'minions-minor-modes-menu))
 
