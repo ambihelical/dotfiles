@@ -866,6 +866,24 @@
             "<f5> p" #'peep-dired)
   :config)
 
+(use-package dired-sidebar
+  :custom
+  (dired-sidebar-subtree-line-prefix "__")
+  (dired-sidebar-theme 'nerd)
+  (dired-sidebar-close-sidebar-on-file-open t)
+  :general
+  ("<f7> h"   #'dired-sidebar-toggle-sidebar)
+  ("<f4> h"   #'dired-sidebar-toggle-with-current-directory)
+  :init
+  (add-hook 'dired-sidebar-mode-hook
+            (lambda ()
+              (unless (file-remote-p default-directory)
+                (auto-revert-mode))))
+  :config
+  (push 'toggle-window-split dired-sidebar-toggle-hidden-commands)
+  (push 'rotate-windows dired-sidebar-toggle-hidden-commands))
+
+
 (use-package flyspell
   :general
   ("s-f"        #'flyspell-auto-correct-previous-word)
