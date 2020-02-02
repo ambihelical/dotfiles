@@ -311,19 +311,23 @@
   (minibuffer-depth-indicate-mode t)       ; show recursive edit depth (mb-depth)
 
   ;; value of gc-cons-threshold to restore after minibuffer
-  (defconst me:normal-gc-cons-threshold gc-cons-threshold)
+  (defvar me:normal-gc-cons-threshold gc-cons-threshold)
 
   ;; inhibit messages in echo area when minibuffer enabled
   ;; and set use large gc-cons-threshold
   ;; see http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
   (defun me:minibuffer-setup ()
+    (when (= (minibuffer-depth) 1)
+      (setq me:normal-gc-cons-threshold gc-cons-threshold))
     (setq inhibit-message t
           gc-cons-threshold most-positive-fixnum))
 
   ;; undo that done in me:minibuffer-setup
   (defun me:minibuffer-exit ()
-    (setq inhibit-message (> (minibuffer-depth) 1)
-          gc-cons-threshold me:normal-gc-cons-threshold))
+    (when (= (minibuffer-depth) 1)
+      ;;(message "gc thresh is %s setting to %s" gc-cons-threshold me:normal-gc-cons-threshold)
+      (setq gc-cons-threshold me:normal-gc-cons-threshold))
+    (setq inhibit-message (> (minibuffer-depth) 1)))
 
   ;; kill the minibuffer
   (defun me:minibuffer-kill ()
