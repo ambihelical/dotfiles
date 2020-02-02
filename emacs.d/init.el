@@ -1018,6 +1018,7 @@
   ("C-h b"  #'counsel-descbinds)
   ("M-x"    #'counsel-M-x)
   ("M-y"    #'counsel-yank-pop)
+  ("s-<f2>" #'me:find-window-buffer)
   ("<f3>"   #'me:find-some-files)
   ("<f10> t" #'counsel-load-theme)
   ("<f10> c" #'counsel-colors-emacs)
@@ -1051,6 +1052,19 @@
                (files (projectile-project-files project-root)))
           (me:find-file "Find file: " files action 'me:find-some-files))
       (counsel-find-file)))
+  (defun me:find-window-buffer()
+    (interactive)
+    "Find buffer from buffers previously used in window"
+    (when-let* ((allbufs (mapcar 'car (window-prev-buffers)))
+                (bufs (remove (current-buffer) allbufs))
+                (cands (mapcar #'buffer-name bufs)))
+      (ivy-read "Buffer: " cands
+                :matcher #'ivy--switch-buffer-matcher
+                :action #'ivy--switch-buffer-action
+                :caller 'ivy-switch-buffer
+                :history 'buffer-name-history
+                :preselect (buffer-name (other-buffer (current-buffer)))
+                :keymap ivy-switch-buffer-map)))
   (defun me:counsel-ag-here ()
     "Search using ag in default directory"
     (interactive)
