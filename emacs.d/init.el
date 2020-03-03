@@ -282,6 +282,8 @@
     (interactive "P")
     (me:window-nth-buffer 3 prefix))
 
+  (push '("/home-local/" . "/home/") directory-abbrev-alist)
+  (push '("/home-remote/" . "/home/") directory-abbrev-alist)
   (mapc #'me:set-frame-face (frame-list))
 
   :demand)
