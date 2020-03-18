@@ -1182,7 +1182,6 @@
   :config)
 
 (use-package dtrt-indent
-  :load-path "lisp/dtrt-indent"
   :hook (( prog-mode text-mode ) . dtrt-indent-mode)
   :init
   (setq dtrt-indent-run-after-smie t)
