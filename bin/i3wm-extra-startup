@@ -15,10 +15,13 @@ if [ "$host" == "hum" ]; then
 	 xrandr --output DVI-I-1 --primary --pos 0x0 --output HDMI-1 --rotate left --pos 1920x-600
 	 dropbox start -i
 	 lockminutes=0
+elif [ "$host" == "thud" ]; then
+	lockminutes=30
+    xset s off   # turn off screensaver
 elif [ "$host" == "jh-rvueb" ]; then
 	xrandr --output HDMI-0 --primary --dpi 103
 	xrandr --output DVI-D-0 --right-of HDMI-0 --rotate left
-	lockminutes=15
+	lockminutes=30
 elif [ "$host" == "twt21022" ]; then
 	xrandr --output eDP-1 --primary --pos 0x0 --output HDMI-1 --pos 1920x-1080
 	lockminutes=30
@@ -30,6 +33,8 @@ fi
 if [ "$host" == "twt21022" ]; then
 /usr/libexec/gsd-xsettings &
 /usr/libexec/gsd-a11y-settings &
+elif [ "$host" == "thud" ]; then
+echo "No extra integration for thud"
 else
 xsettingsd -c ~/.config/xsettingsd &
 /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &  # gui authentication
