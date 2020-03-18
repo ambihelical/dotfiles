@@ -3,6 +3,9 @@
 # Make sure some system packages are present. These are only the
 # most basic packages needed to set up a basic system, plus a few
 # nice-to-haves.
+#
+# Currently requires the following to already be installed:
+# pip, pip3, curl
 
 if [ $EUID -ne 0 ]; then
 	echo "This script must be run with root privileges" 1>&2
@@ -26,7 +29,7 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
  # cli tools
 	p="$p git-core gitk git-doc git-gui gpp"
 	p="$p ack-grep silversearcher-ag autojump htop screen unzip"
-	p="$p curl wget suckless-tools tree dstat xclip realpath a2ps"
+	p="$p curl wget suckless-tools tree dstat xclip a2ps"
  # python
 	p="$p python3 python3-gi python3-dev python3-setuptools"
 	p="$p python-dev python-pip"
@@ -36,10 +39,9 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
  # nice to have apps & related
 	p="$p pithos"
 	p="$p qalculate"
-	p="$p gparted nemo nemo-fileroller"
+	p="$p gparted"
 	p="$p vim-gnome rxvt-unicode-256color"
 	p="$p hunspell"
-	p="$p nemo-dropbox"
  # support for python stuff below
 	p="$p libiw-dev"
 
@@ -53,16 +55,22 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	elif [ $version -lt 1510 ]; then
 		p="$p ttf-ancient-fonts"
 	fi
-	# get ripgrep
+	if [ $version -ge 1804 ]; then
+		p="$p"
+	else
+		p="$p realpath"
+	fi
 	if [ $version -ge 1810 ]; then
 	  p="$p ripgrep"
 	else
-		curl -L -o ripgrep.deb https://github.com/BurntSushi/ripgrep/releases/download/11.0.2/ripgrep_11.0.2_amd64.deb
-		dpkg -i ripgrep.deb
-		rm -f ripgrep.deb
+		if [ "$(which rg)" == ""  ]; then
+			curl -L -o ripgrep.deb https://github.com/BurntSushi/ripgrep/releases/download/11.0.2/ripgrep_11.0.2_amd64.deb
+			dpkg -i ripgrep.deb
+			rm -f ripgrep.deb
+		fi
 	fi
 	apt-get --ignore-missing --quiet --yes install $p
-	easy_install3 pip
+	#easy_install3 pip
 	pip3 install --upgrade py3status netifaces colour psutil basiciw i3-py pygments
 	pip install --upgrade pygments
 

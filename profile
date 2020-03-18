@@ -90,6 +90,7 @@ export SUBVERSION_HOME=${XDG_CONFIG_HOME}/subversion
 # avoids ~/.pip
 export PIP_CONFIG_FILE=${XDG_CONFIG_HOME}/pip/config
 export PIP_LOG_FILE=${XDG_CACHE_HOME}/pip/log
+[ -d ${XDG_CACHE_HOME}/pip/http ] || mkdir -p ${XDG_CACHE_HOME}/pip/http
 
 # avoids ~/.gem
 export GEM_HOME=${XDG_CONFIG_HOME}/gem
