@@ -172,6 +172,10 @@ ps1() {
 	local st_git="${fg_base}\[$(tput setab 6)\]"
 	local st_path="${fg_base}\[$(tput setab 4)\]"
 	local st_exit="$st_succeed"
+	local st_ssh=""
+	if [  "$SSH_CONNECTION" != "" ]; then
+		st_ssh=$reverse
+	fi
 
 	# Check the exit code of the previous command and display different
 	# colors in the prompt accordingly.
@@ -197,7 +201,7 @@ ps1() {
 	PS1=""
 	[ $(ccolumn) -gt 1 ] && PS1+="\n";
 	PS1+="${st_exit}┏━${reset}"
-	PS1+="${st_host}${host}${reset}"
+	PS1+="${st_ssh}${st_host}${host}${reset}"
 	PS1+="${st_git}${git}${reset}"
 	PS1+="${st_path}${path}${reset}"
 	# This one has better alignment, but symbola
