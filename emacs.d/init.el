@@ -1261,7 +1261,7 @@
            (home-notes (expand-file-name "Notes" "~"))
            (proj-notes-path (if (file-exists-p proj-notes) proj-notes ""))
            (home-notes-path (if (file-exists-p home-notes) home-notes "")))
-      (counsel-rg (thing-at-point 'symbol) dot-notes (concat " -- " home-notes-path " " proj-notes-path) nil))))
+      (counsel-rg (thing-at-point 'symbol) dot-notes (concat " -- " home-notes-path " " proj-notes-path " " dot-notes) nil))))
 
 (use-package evil-org
   :after ( org evil )
