@@ -452,6 +452,10 @@ linux*)
 	say() { echo "(audio_mode 'async)(SayText \"$*\")" | festival --pipe; }
 	alias vi='gvim -geometry 120x60-0 2>/dev/null'
 	alias lyx='lyx -geometry 800x1075-15+0'
+	# make desktop control centers work better for i3, etc
+	if [ "$(which gnome-control-center)" != "" ]; then
+		alias xdg-control-center='XDG_CURRENT_DESKTOP=GNOME gnome-control-center'
+	fi
 	;;
 
 darwin*)  # OSX
