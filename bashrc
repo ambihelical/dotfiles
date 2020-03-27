@@ -76,90 +76,15 @@ ccolumn()
 	 echo "${COL}"
 }
 
-# Print fancy git prompt information
-# Heavily modified from bash-powerline
-# - For speed, invoke git once instead of several times
-# - add remote branch and change formating
-gprompt() {
-	[ -x "$(which git)" ] || return    # git not found
-	local branch_changed_symbol='•'
-	local need_push_symbol='⇡'
-	local need_pull_symbol='⇣'
-
-	local git_eng="env LANG=C git"   # force git output in English to make our work easier
-
-	# get 1st two lines. First will be status line
-	# second may have modification status for first file
-	declare -a lines
-	mapfile -t lines < <($git_eng status --porcelain --branch --untracked-files=no 2>/dev/null|head -2)
-	[ -n "${lines[0]}" ] || return  # git branch not found
-
-	# how many commits local branch is ahead/behind of remote?
-	# looks like: ## local-branch...remote-branch [ahead 9]
-	#         or: ## local-branch...remote-branch [behind 9]
-	#         or: ## local-branch...remote-branch
-	#         or: ## local-branch
-	#         or: ## HEAD (no branch)
-	#                1                2      3                4   5
-	local regex='^## ([-a-zA-Z0-9/_]+)(\.\.\.([-a-zA-Z0-9/_]+)( \[([^\[]*)\]){0,1}){0,1}$'
-	local detachedRe='^## HEAD[\t\ ]+\(no branch\)$'
-	local noCommitsRe='^## No commits yet on ([-a-zA-Z0-9/_]+)'
-	local marks aheadN behindN
-	if [[ ${lines[0]} =~ $regex ]]; then
-		lbranch=${BASH_REMATCH[1]}
-		rbranch=${BASH_REMATCH[3]}
-		local slippage=${BASH_REMATCH[5]}
-		local aheadRe='ahead ([0-9]+)'
-		local behindRe='behind ([0-9]+)'
-		[[ "$slippage" =~ $aheadRe ]] && aheadN=${BASH_REMATCH[1]}
-		[[ "$slippage" =~ $behindRe ]] && behindN=${BASH_REMATCH[1]}
-		# check for common form where local branch name is same as remote branch
-		# if so, shorten things
-		local personalRe="^personal/([-a-zA-Z0-9_]+)/([-a-zA-Z0-9/_]+)$"
-		if [[ $lbranch =~ $personalRe ]]; then
-			if [[ "${BASH_REMATCH[1]}" == "${USER}" ]]; then
-				lbranch="~/${BASH_REMATCH[2]}"
-			else
-				lbranch="~${BASH_REMATCH[1]}/${BASH_REMATCH[2]}"
-			fi
-		fi
-		local remoteRe='^([-a-zA-Z0-9_]+)/([-a-zA-Z0-9/_]+){0,1}$'
-		if [[ $rbranch =~ $remoteRe ]]; then
-			local remote=${BASH_REMATCH[1]}
-			local branch=${BASH_REMATCH[2]}
-			if [[ $branch == $lbranch ]]; then
-				rbranch="$remote"
-			elif [[ $branch =~ $personalRe ]]; then
-				if [[ "${BASH_REMATCH[1]}" == "${USER}" ]]; then
-					rbranch="~/${BASH_REMATCH[2]}"
-				else
-					rbranch="~${BASH_REMATCH[1]}/${BASH_REMATCH[2]}"
-				fi
-			fi
-		fi
-	elif [[ ${lines[0]} =~ $detachedRe ]]; then
-		lbranch="<detached HEAD>"
-	elif [[ ${lines[0]} =~ $noCommitsRe ]]; then
-		lbranch=${BASH_REMATCH[1]}
-	else
-		lbranch="<Parse Error>"
-	fi
-	regex='^ *M'
-	[[ "${lines[1]}" =~ $regex ]] && marks+=" $branch_changed_symbol"
-
-	[ -n "$lbranch" ] && lmarks+="$lbranch"
-	[ -n "$aheadN" ] && lmarks+="$need_push_symbol$aheadN"
-	[ -n "$rbranch" ] && rmarks+=" ➜ $rbranch"
-	[ -n "$behindN" ] && rmarks+="$need_pull_symbol$behindN"
-
-	printf "$1$lmarks$rmarks$marks$2"
+# Output BELL to show urgency hint where supported
+urgency() {
+	 echo -ne "\a"
 }
 
-# Build fancy, color PS1
-# Heavily modified from bash-powerline
+# fancy ps1 w/o slow features like git
 # colors: black 0  red 1  green 2  yellow 3 blue 4 magenta 5 cyan 6 white 7
 #         add 8 for brighter colors
-ps1() {
+medium_ps1() {
 	local result=$?
 	local bold="\[$(tput bold)\]"
 	local reverse="\[$(tput rev)\]"
@@ -169,7 +94,6 @@ ps1() {
 	local st_fail="\[$(tput setaf 1)\]"
 	local st_succeed="\[$(tput setaf 2)\]"
 	local st_host="${fg_base}\[$(tput setab 5)\]"
-	local st_git="${fg_base}\[$(tput setab 6)\]"
 	local st_path="${fg_base}\[$(tput setab 4)\]"
 	local st_exit="$st_succeed"
 	local st_ssh=""
@@ -183,16 +107,11 @@ ps1() {
 		st_exit="$st_fail"
 	fi
 	local host=" ${USER}@${HOSTNAME} "
-	local git=$(gprompt ' ' ' ')
 	local path=" $(tilde ${PWD})"
 	local cols=$(tput cols)
 	local len=$(( ${#path}+${#host}+${#git}+2 ))
 	if [ $len -gt $cols ]; then
 		 host=''
-		 len=$(( ${#path}+${#host}+${#git}+2 ))
-	fi
-	if [ $len -gt $cols ]; then
-		 git=''
 		 len=$(( ${#path}+${#host}+${#git}+2 ))
 	fi
 	if [ $len -gt $cols ]; then
@@ -202,17 +121,11 @@ ps1() {
 	[ $(ccolumn) -gt 1 ] && PS1+="\n";
 	PS1+="${st_exit}┏━${reset}"
 	PS1+="${st_ssh}${st_host}${host}${reset}"
-	PS1+="${st_git}${git}${reset}"
 	PS1+="${st_path}${path}${reset}"
 	# This one has better alignment, but symbola
 	# font on 14.04 does not have this glyph:
 	# PS1+="\n${st_exit}┗━⯈${reset} "
 	PS1+="\n${st_exit}┗━▶${reset} "
-}
-
-# Output BELL to show urgency hint where supported
-urgency() {
-	 echo -ne "\a"
 }
 
 simple_ps1() {
@@ -391,19 +304,18 @@ if [ "$ecma" == "1" ]; then
 fi
 
 
-case "$TERM" in
-dumb*)
-	PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND ;}simple_ps1"
-	;;
-xterm*|rxvt*)
-# tell aosp not to mess with PROMPT_COMMAND
-	STAY_OFF_MY_LAWN=1
-# add fancy prompt, don't override PROMPT_COMMAND so autojump still works
-	PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND ;}ps1;urgency"
-	;;
-*)
-	;;
-esac
+STAY_OFF_MY_LAWN=1   # tell aosp not to mess with PROMPT_COMMAND
+
+# set prompt command. First see if it has already been set in case
+# we have sourced ~/.bashrc again, in which case it is better to
+# leave it alone.  medium_ps1 is first so it can pick up the last
+# command's status.
+if [[ $PROMPT_COMMAND =~ ";urgency" ]]; then
+	echo "PROMPT_COMMAND appears to already be set up"
+else
+	PROMPT_COMMAND="medium_ps1;${PROMPT_COMMAND:+$PROMPT_COMMAND ;}urgency"
+fi
+
 
 ##### Aliases & Bindings #####
 
