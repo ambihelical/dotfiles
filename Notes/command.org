@@ -94,6 +94,8 @@
    =addr2line -e executable dump-address=
    - executable is program or shared object
    - dump-address is hex address directly from backtrace
+** Ssh to screen session
+ssh -t $host screen -r $session
 * Bash
 ** Redirections
 *** redirect stderr to err.log
