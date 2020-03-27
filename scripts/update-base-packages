@@ -36,9 +36,9 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
  # desktop related
 	p="$p i3 i3-wm i3lock i3status xsettingsd udiskie wmctrl"
 	p="$p clipit pavucontrol scrot xautolock"
+	p="$p qalculate gnome-calendar"
  # nice to have apps & related
 	p="$p pithos"
-	p="$p qalculate"
 	p="$p gparted"
 	p="$p vim-gnome rxvt-unicode-256color"
 	p="$p hunspell"
