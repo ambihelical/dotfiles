@@ -9,13 +9,13 @@ if [ "$host" == "hum" ]; then
 	# - caps is hyper
 	# - swap alt/win so window keys next to spacebar
 	# - and make compose key be the old windows key
-	setxkbmap -option '' -option 'caps:hyper' -option 'altwin:swap_alt_win' -option 'compose:rwin'
-elif [ "$host" == "jh-rvueb" -o "$host" == "twt21022" ]; then
+	setxkbmap -option '' -option 'caps:hyper' -option 'compose:rwin'
+elif [ "$host" == "jh-rvueb" -o "$host" == "thud" ]; then
 	# Filco Majestouch Ninja
 	# - caps is hyper
 	# - swap alt/win so window keys next to spacebar
 	# - and make compose key be the old windows key
-	setxkbmap -option '' -option 'caps:hyper' -option 'altwin:swap_alt_win' -option 'compose:rwin'
+	setxkbmap -option '' -option 'caps:hyper' -option 'compose:rwin'
 else
 	# Unknown keyboard
 	# - caps is hyper
