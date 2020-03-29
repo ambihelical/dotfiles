@@ -68,7 +68,24 @@
   (electric-indent-mode +1)                                   ; turn on electric mode globally (electric)
   (delete-selection-mode t)                                   ; pastes delete selection
   (blink-cursor-mode -1)                                      ; don't blink cursor
-  (run-at-time "1 hour" 3600 #'clean-buffer-list))            ; clear out old buffers every hour (midnight)
+  (run-at-time "1 hour" 3600 #'clean-buffer-list)             ; clear out old buffers every hour (midnight)
+  (unless (display-graphic-p)
+    ;; use mouse in xterm mode
+    (xterm-mouse-mode t)
+    ;; handle xterm special sequences
+    (define-key input-decode-map "\e[46;5u" (kbd "C-."))
+    (define-key input-decode-map "\e[44;5u" (kbd "C-,"))
+    (define-key input-decode-map "\e[60;6u" (kbd "C-<"))
+    (define-key input-decode-map "\e[62;6u" (kbd "C->"))
+    (define-key input-decode-map "\e[59;5u" (kbd "C-;"))
+    (define-key input-decode-map "\e[40;6u" (kbd "C-("))
+    (define-key input-decode-map "\e[41;6u" (kbd "C-)"))
+    (define-key input-decode-map "\e[49;5u" (kbd "C-1"))
+    (define-key input-decode-map "\e[39;5u" (kbd "C-'"))
+    (define-key input-decode-map "\e[45;5u" (kbd "C--"))
+    (define-key input-decode-map "\e[43;6u" (kbd "C-+"))
+    (define-key input-decode-map "\e[61;5u" (kbd "C-="))
+    (define-key input-decode-map "\e[63;6u" (kbd "C-?"))))
 
 
 ;; Run programming mode hooks
@@ -161,7 +178,7 @@
   :commands (hydra-paste/body x-urgency-hint)
   :ensure nil
   :general
-  ("s-1"     #'me:find-other-file)
+  ("M-1"     #'me:find-other-file)
   ("<f4> c"  #'me:read-fill-column)
   ("<f4> 1"  #'me:ps-one-per-page)
   ("<f4> 2"  #'me:ps-two-per-page)
@@ -212,13 +229,13 @@
   (split-height-threshold 120)               ; almost never split vertically
   :general
   ("<f10> f"     #'toggle-frame-fullscreen)   ; frame
-  ("s-`"        #'previous-buffer)           ; window
-  ("s-~"        #'next-buffer)               ; window
-  ("s-w"        #'other-window)              ; window
-  ("s-2"        #'me:window-2nd-buffer)
-  ("s-3"        #'me:window-3rd-buffer)
-  ("s-4"        #'me:window-4th-buffer)
-  ("s-5"        #'me:window-5th-buffer)
+  ("M-`"        #'previous-buffer)           ; window
+  ("M-~"        #'next-buffer)               ; window
+  ("M-w"        #'other-window)              ; window
+  ("M-2"        #'me:window-2nd-buffer)
+  ("M-3"        #'me:window-3rd-buffer)
+  ("M-4"        #'me:window-4th-buffer)
+  ("M-5"        #'me:window-5th-buffer)
   :init
   (add-hook 'focus-out-hook #'me:save-dirty-buffers)          ; save on defocus
   (add-hook 'after-make-frame-functions #'me:set-frame-face)
@@ -291,8 +308,8 @@
 (use-package winner
   :ensure nil
   :general
-  ("s-]"   #'winner-redo)
-  ("s-["   #'winner-undo)
+  ("C-}"   #'winner-redo)
+  ("C-{"   #'winner-undo)
   :defer 1
   :init
   (setq winner-dont-bind-my-keys t)    ;; don't bind C-c left/right,etc
@@ -359,9 +376,9 @@
   :hook (( prog-mode text-mode ) . visual-line-mode )
   :ensure nil
   :general
-  ("s-n"        #'next-error)
-  ("s-p"        #'previous-error)
-  ("s-<backspace>"    #'kill-current-buffer)
+  ("M-n"        #'next-error)
+  ("M-p"        #'previous-error)
+  ("C-M-<backspace>"    #'kill-current-buffer)
   :init
   (setq kill-ring-max 200                      ; More killed items
         kill-do-not-save-duplicates t          ; No duplicates in kill ring
@@ -550,6 +567,8 @@
         minions-mode-line-lighter "[☰]")
   (add-hook 'sml/after-setup-hook #'minions-mode)
   :config
+  (unless (display-graphic-p)
+    (global-set-key [mode-line down-mouse-1] 'minions-minor-modes-menu))
   ;; Reset all buffer's mode line to the default one
   (mapc (lambda (buffer)
           (if (or (buffer-file-name buffer)
@@ -557,9 +576,7 @@
               (with-current-buffer buffer
                 (kill-local-variable 'mode-line-format)
                 (force-mode-line-update t))))
-        (buffer-list))
-  :general
-  ("<f10> m" #'minions-minor-modes-menu))
+        (buffer-list)))
 
 ;; modeline tabs
 (use-package moody
@@ -988,7 +1005,7 @@
   ("C-h b"  #'counsel-descbinds)
   ("M-x"    #'counsel-M-x)
   ("M-y"    #'counsel-yank-pop)
-  ("s-<f2>" #'me:find-window-buffer)
+  ("M-<f2>" #'me:find-window-buffer)
   ("<f3>"   #'me:find-some-files)
   ("<f10> t" #'counsel-load-theme)
   ("<f10> c" #'counsel-colors-emacs)
@@ -1075,6 +1092,13 @@
            "a" #'me:counsel-ag-project
            "r" nil  ;; unbind projectile-ripgrep
            "s" #'me:counsel-rg-project)
+  ;; For reasons I don't understand, if projectile's map
+  ;; has ESC in its map, this prevents the binding
+  ;; <f7> <f7> for persp-projectile, but only in "emacs -nw" mode!
+  ;; So getting rid of it here.
+  (:prefix "<f7>" :keymaps 'projectile-mode-map
+           "ESC" nil)
+
   :init
   (setq projectile-completion-system 'ivy
         projectile-globally-ignored-files #'( "TAGS" "GTAGS" "GRTAGS" "GPATH" )
@@ -1117,7 +1141,7 @@
   :after projectile
   :demand
   :general
-  ("<f7> <f7>"  #'projectile-persp-switch-project)
+  (:prefix "<f7>" "<f7>"  #'projectile-persp-switch-project)
   :config)
 
 (use-package perspective
@@ -1125,8 +1149,8 @@
   :init
   :general
   ("<f7> r"     #'persp-rename)
-  ("s-<right>"  #'persp-next)
-  ("s-<left>"   #'persp-prev)
+  ("M-<right>"  #'persp-next)
+  ("M-<left>"   #'persp-prev)
   (:prefix "C-x"
            "x"  '(:ignore t :which-key "Perspective→" ))
   :config
@@ -1548,7 +1572,7 @@
 ;; See issues #451, #205, #150
 (use-package company
   :general
-  ("s-d"     #'company-complete)  ; force completion
+  ("C-("     #'company-complete)  ; force completion
   ;; N.B. Workaround company disabling backend expansion of parameters in tng mode
   ;; Use this after tabbing to selection.  Normally any non-command key
   ;; will trigger the completion but suppress parameter expansion, this avoids
@@ -1869,14 +1893,14 @@
                   :body-pre (git-timemachine)
                   :foreign-keys run )
            "Time machine"
-           ("s-p" #'git-timemachine-show-previous-revision "Previous revision" :column "Navigation")
-           ("s-n" #'git-timemachine-show-next-revision "Next revision")
-           ("s-c" #'git-timemachine-show-current-revision "Current revision")
+           ("M-p" #'git-timemachine-show-previous-revision "Previous revision" :column "Navigation")
+           ("M-n" #'git-timemachine-show-next-revision "Next revision")
+           ("M-c" #'git-timemachine-show-current-revision "Current revision")
            ("C-c C-c" #'git-timemachine-quit "Quit" :color blue )
-           ("s-b" #'git-timemachine-blame "Show culprits" :column "Operations")
-           ("s-v" #'git-timemachine-show-commit "Show commit")
-           ("s-Y" #'git-timemachine-kill-revision "Yank revision")
-           ("s-y" #'git-timemachine-kill-abbreviated-revision "Yank abbreviated revision")))
+           ("M-b" #'git-timemachine-blame "Show culprits" :column "Operations")
+           ("M-v" #'git-timemachine-show-commit "Show commit")
+           ("M-Y" #'git-timemachine-kill-revision "Yank revision")
+           ("M-y" #'git-timemachine-kill-abbreviated-revision "Yank abbreviated revision")))
   :general
   (:keymaps 'global :prefix "<f9>"  "t" #'hydra-timemachine/body))
 
