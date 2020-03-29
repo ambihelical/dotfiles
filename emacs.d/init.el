@@ -137,8 +137,6 @@
   (general-evil-setup t)
   (general-override-mode)
   (general-define-key :prefix "<f4>" "K"     #'general-describe-keybindings)
-  (general-define-key "s-." #'repeat)
-  (general-define-key "s-s" #'save-buffer)
   :demand)
 
 ;; make describe-xxx more useful
@@ -164,7 +162,6 @@
   :ensure nil
   :general
   ("s-1"     #'me:find-other-file)
-  ("s-c"     #'me:rotate-fill-column)
   ("<f4> c"  #'me:read-fill-column)
   ("<f4> 1"  #'me:ps-one-per-page)
   ("<f4> 2"  #'me:ps-two-per-page)
@@ -806,8 +803,8 @@
 
 (use-package flyspell
   :general
-  ("s-f"        #'flyspell-auto-correct-previous-word)
-  ("s-S-f"      #'flyspell-correct-previous-word-generic)
+  ;; N.B. C-; is flyspell-correct-previous-word
+  ("C-M-;"      #'flyspell-correct-previous-word-generic)
   :init
   (setq ispell-personal-dictionary (expand-file-name "hunspell/words" me:config-directory))
   (me:add-hook-with-delay 'prog-mode-hook 10 #'flyspell-prog-mode)
@@ -1074,8 +1071,6 @@
   (:prefix "<f7>" "5"  '(:ignore t :which-key "Find→" ))
   (:prefix "<f7>" "x"  '(:ignore t :which-key "Run→" ))
   (:prefix "<f7>" "s"  '(:ignore t :which-key "Search→" ))
-  (:prefix "<SPC>" :states '(normal visual emacs)
-           "m"    #'projectile-compile-project)
   (:prefix "<f7> s" :keymaps 'projectile-mode-map
            "a" #'me:counsel-ag-project
            "r" nil  ;; unbind projectile-ripgrep
@@ -1178,7 +1173,8 @@
   ("<f8> a" #'org-agenda)
   ("<f8> <f8>" #'me:search-notes)
   ("<f8> c" #'me:org-capture)
-  ("s-e" #'org-toggle-latex-fragment)
+  (:keymaps 'normal :prefix "SPC"
+            "e" '(org-toggle-latex-fragment :which-key "Toggle latex fragment display"))
   (:prefix "C-c"
            "C-x"  '(:ignore t :which-key "Org→" ))
   :init
@@ -1674,10 +1670,6 @@
         evil-visual-state-tag   (propertize " V " 'face '((:background "gray"           :foreground "black")))
         evil-operator-state-tag (propertize " O " 'face '((:background "sandy brown"    :foreground "black"))))
   :general
-  ("s-j" #'evil-window-down)
-  ("s-k" #'evil-window-up)
-  ("s-h" #'evil-window-left)
-  ("s-l" #'evil-window-right)
   (:states '(normal visual) :keymaps 'override
            :prefix "<SPC>"
            ";"          #'evil-jump-forward
