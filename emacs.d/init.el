@@ -259,7 +259,9 @@
     (interactive "P")
     (when-let* ((bufs (mapcar 'car (window-prev-buffers)))
                 (buffer (nth arg (remove (current-buffer) bufs))))
-      (switch-to-buffer buffer)))
+      (if prefix
+          (switch-to-buffer-other-window buffer)
+        (switch-to-buffer buffer))))
 
   (defun me:window-2nd-buffer (&optional prefix)
     "Select 1st other buffer"
