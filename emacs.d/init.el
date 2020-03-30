@@ -1571,18 +1571,6 @@
   :config
   (company-quickhelp-mode 1))
 
-(use-package counsel-gtags
-  :commands ( counsel-gtags-find-definition
-              counsel-gtags-find-reference
-              counsel-gtags-find-file
-              counsel-gtags-dwim
-              counsel-gtags-create-tags
-              counsel-gtags-find-symbol)
-  :init
-  (add-hook 'c-mode-hook #'counsel-gtags-mode)
-  (add-hook 'c++-mode-hook #'counsel-gtags-mode)
-  :config)
-
 ;; built-in package for cross-references
 (use-package xref
   :demand
