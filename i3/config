@@ -32,10 +32,10 @@ default_border pixel 4
 hide_edge_borders both
 
 # start a terminal
-bindsym $mod+Return exec urxvt&
+bindsym $mod+Return exec xterm&
 
 # open scratch window if closed accidently
-bindsym $mod+Control+Return exec --no-startup-id urxvt -name scratch&
+bindsym $mod+Control+Return exec --no-startup-id xterm -name scratch&
 
 
 # kill focused window
@@ -252,7 +252,7 @@ exec --no-startup-id ~/bin/i3wm-extra-startup
 exec --no-startup-id nm-applet &
 exec --no-startup-id clipit &
 exec --no-startup-id thunderbird &
-exec --no-startup-id urxvt -name scratch &
+exec --no-startup-id xterm -name scratch &
 exec --no-startup-id udiskie --tray --no-notify --use-udisks2 &
 exec --no-startup-id ~/bin/i3wm-private-startup || true
 
@@ -273,6 +273,7 @@ for_window [class="Gcalctool"] title_format "<span font='Symbola Bold 12'>Σ</sp
 for_window [class="Qalculate"] title_format "<span font='Symbola Bold 12'>Σ</span> %title"
 for_window [class="Emacs"] title_format "<span foreground='aquamarine1' font_weight='bold'><span font='Symbola Bold 12'>ℰ</span> %title</span>"
 for_window [class="URxvt"] title_format "<span foreground='light steel blue' font_weight='bold'><span font='Symbola Bold 12'>↵</span> %title</span>"
+for_window [class="XTerm"] title_format "<span foreground='light steel blue' font_weight='bold'><span font='Symbola Bold 12'>↵</span> %title</span>"
 for_window [class="Firefox"] title_format "<span foreground='light salmon'><span font='Symbola Bold 12'>☯</span> %title</span>"
 for_window [class="Pithos"] title_format "<span font='Symbola Bold 12'>♫</span> %title"
 for_window [class="Thunderbird"] title_format "<span font='Symbola Bold 12'>ᛋ</span> %title"
