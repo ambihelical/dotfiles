@@ -1,3 +1,71 @@
+
+xterm*background: #2B2B2B
+xterm*foreground: #DEDEDE
+xterm*faceName: xft:DejaVu Sans Mono:size=10
+xterm*boldFont: xft:DejaVu Sans Mono:bold:size=10
+xterm*faceSize: 10
+xterm*saveLines: 12000
+xterm*scrollBar: false
+xterm*urgentOnBell: true
+xterm*loginshell: true
+
+! make sure to use 256 colors
+XTerm*termName: xterm-256color
+
+! do not update when contents offscreen
+xterm*fastScroll: true
+
+! async scrolling
+xterm*multiScroll: true
+
+! do not scroll when more output
+xterm*scrollTtyOutput: false
+
+! scroll on key input
+xterm*scrollKey: true
+
+! better meta key handling (emacs)
+! will still need mapping for e.g. C-;
+xterm*metaSendsEscape: true
+xterm*modifyOtherKeys: 1
+
+! enable copy/paste to clipboard
+xterm*VT100.Translations: #override \
+                 Ctrl Shift <Key>V:    insert-selection(CLIPBOARD) \n\
+                 Ctrl Shift <Key>C:    copy-selection(CLIPBOARD)
+
+xterm*colorUL: #86a2be
+
+! black
+xterm*color0  : #2E3436
+xterm*color8  : #555753
+! red
+xterm*color1  : #CC0000
+xterm*color9  : #EF2929
+! green
+xterm*color2  : #4E9A06
+xterm*color10 : #8AE234
+! yellow
+xterm*color3  : #C4A000
+xterm*color11 : #FCE94F
+! blue
+xterm*color4  : #3465A4
+xterm*color12 : #729FCF
+! magenta
+xterm*color5  : #75507B
+xterm*color13 : #AD7FA8
+! cyan
+xterm*color6  : #06989A
+xterm*color14 : #34E2E2
+! white
+xterm*color7  : #D3D7CF
+xterm*color15 : #EEEEEC
+
+
+!
+! Rxvt-unicode
+!
+
 URxvt*background: #2B2B2B
 URxvt*foreground: #DEDEDE
 URxvt*font: xft:DejaVu Sans Mono:size=9, xft:Symbola:size=9
