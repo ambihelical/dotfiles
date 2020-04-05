@@ -91,13 +91,14 @@
 ;;;###autoload
 (defun x-urgency-hint (frame &optional reset )
   "Set urgency hint on given frame. RESET will reset it"
-  (let* ((wm-hints (append (x-window-property "WM_HINTS" frame "WM_HINTS" nil nil t) nil))
-         (flags (car wm-hints)))
-    (setcar wm-hints
-            (if reset
-                (logand flags (lognot #x100))
-              (logior flags #x100)))
-    (x-change-window-property "WM_HINTS" wm-hints frame "WM_HINTS" 32 t)))
+  (with-demoted-errors "Unable to set urgency hint: %s"
+    (let* ((wm-hints (append (x-window-property "WM_HINTS" frame "WM_HINTS" nil nil t) nil))
+           (flags (car wm-hints)))
+      (setcar wm-hints
+              (if reset
+                  (logand flags (lognot #x100))
+                (logior flags #x100)))
+      (x-change-window-property "WM_HINTS" wm-hints frame "WM_HINTS" 32 t))))
 
 
 (provide 'extras)
