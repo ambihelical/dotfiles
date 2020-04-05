@@ -27,7 +27,7 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
  # fonts
 	p="$p ttf-mscorefonts-installer otf-stix unifont fonts-noto"
  # cli tools
-	p="$p git-core gitk git-doc git-gui gpp"
+	p="$p git-core git-doc gpp"
 	p="$p ack-grep silversearcher-ag autojump htop screen unzip"
 	p="$p curl wget suckless-tools tree dstat xclip a2ps"
  # python
@@ -40,7 +40,7 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
  # nice to have apps & related
 	p="$p pithos"
 	p="$p gparted"
-	p="$p vim-gnome rxvt-unicode-256color"
+	p="$p vim-gnome xterm rxvt-unicode-256color"
 	p="$p hunspell"
  # support for python stuff below
 	p="$p libiw-dev"

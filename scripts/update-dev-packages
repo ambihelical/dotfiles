@@ -38,7 +38,7 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	p="$p autoconf automake libtool gettext intltool"
 	p="$p ruby python3.9"
   # version control
-	p="$p meld git-gui mercurial subversion "
+	p="$p meld git-gui mercurial subversion gitk tig"
   # libraries sometimes needed to build from source
 	p="$p libncurses5-dev"
   # image file dev libs
@@ -56,7 +56,7 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	p="$p autoconf automake "
 
 	# version control
-	p="$p meld git-gui gitk"
+	p="$p meld git-gui gitk tig"
 
 	# editor support
 	p="$p clang-tools-extra"  # clangd
