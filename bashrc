@@ -77,8 +77,18 @@ ccolumn()
 }
 
 # Output BELL to show urgency hint where supported
+# also change title when PWD changes
 urgency() {
-	 echo -ne "\a"
+	if [ "$PREVPWD" != "$PWD" ]; then
+		local pwd=$(tilde $PWD)
+		local conn=""
+		if [  "$SSH_CONNECTION" != "" ]; then
+			conn="[${USER}@$(hostname)] "
+		fi
+		xtitle "${conn}${pwd}"
+		export PREVPWD="$PWD"
+	fi
+	echo -ne "\a"
 }
 
 # fancy ps1 w/o slow features like git
@@ -130,6 +140,16 @@ medium_ps1() {
 
 simple_ps1() {
 	 PS1="$(truncm $(tilde ${PWD}) 20)> "
+}
+
+set_title() {
+	local pwd=$(tilde $PWD)
+	local wat=$(history|tail -1|awk '{s=""; for (i=3;i<=NF;i++) s = s $i " "; print s}')
+	local conn=""
+	if [  "$SSH_CONNECTION" != "" ]; then
+		conn="[${USER}@$(hostname)] "
+	fi
+	xtitle "${conn}${pwd} ${wat}"
 }
 
 # cd relative to current git repo
@@ -321,6 +341,7 @@ if [[ $PROMPT_COMMAND =~ ";urgency" ]]; then
 else
 	PROMPT_COMMAND="medium_ps1;${PROMPT_COMMAND:+$PROMPT_COMMAND ;}urgency"
 fi
+PS0='$(set_title)'
 
 
 ##### Aliases & Bindings #####
