@@ -229,11 +229,17 @@ fi
 # use emacs in client mode as default editor
 # use vim as default editor and for command line editting style
 
+EMACS_FLAGS=
+if [  "$SSH_CONNECTION" != "" ]; then
+	EMACS_FLAGS="-nw"
+	EMACS_CLIENT_FLAGS="-t"
+fi
+alias emacs="\emacs ${EMACS_FLAGS} "
+
 if type emacsclient > /dev/null 2>&1;  then
 export ALTERNATE_EDITOR=""
 export EDITOR="emacsclient -t --alternate-editor="
-export VISUAL="emacsclient -c --alternate-editor="
-alias magit='emacsclient -c -n -e "(magit-status)"'
+export VISUAL="emacsclient -c ${EMACS_CLIENT_FLAGS} --alternate-editor="
 else
 export EDITOR=vim
 export VISUAL=gvim
