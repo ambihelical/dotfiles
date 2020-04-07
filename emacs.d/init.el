@@ -1014,6 +1014,7 @@
   ("<f6> m" #'counsel-imenu)
   :custom
   (counsel-search-engine 'google)
+  (counsel-rg-base-command "rg --max-columns 500 --with-filename --no-heading --line-number --color never %s")
   :init
   (setq counsel-yank-pop-separator "\n---\n")
   :config
