@@ -95,3 +95,6 @@ export PIP_LOG_FILE=${XDG_CACHE_HOME}/pip/log
 # avoids ~/.gem
 export GEM_HOME=${XDG_CONFIG_HOME}/gem
 export GEM_SPEC_CACHE=${XDG_CACHE_HOME}/gem
+
+# avoids ~/.screenrc
+export SCREENRC=${XDG_CONFIG_HOME}/screen

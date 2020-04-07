@@ -348,8 +348,6 @@ export LESSHISTFILE=${XDG_CACHE_HOME}/less/history
 [ -d ${XDG_CACHE_HOME}/less ] || mkdir -p ${XDG_CACHE_HOME}/less
 # avoids ~/.inputrc
 export INPUTRC=${XDG_CONFIG_HOME}/readline
-# avoids ~/.screenrc
-export SCREENRC=${XDG_CONFIG_HOME}/screen
 # avoids ~/.python_history (pythonrc must have code for this though)
 export PYTHONSTARTUP=${XDG_CONFIG_HOME}/pythonrc
 # avoids ~/.ipython
