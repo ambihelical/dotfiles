@@ -16,14 +16,14 @@ KERNEL := $(shell uname -s)
 GPP := gpp -DOS=${OS} -DHOST=${HOST} -DKERNEL=${KERNEL} -n -U '@[' ']@' '(' ',' ')' '(' ')' '\#' '' -M '@@' '\n' ' ' ' ' '\n' '(' ')'
 
 SHELL_FILES = ~/.bashrc ~/.bash_profile ${CFG}/readline ~/.profile
-DIR_FILES = ~/bin ~/.local/share/Notes
+DIR_FILES = ~/bin ${DATA}/Notes 
 BIN_FILES=$(foreach bin,$(notdir $(wildcard ${PWD}/bin/*)),~/bin/${bin})
 GIT_SCRIPTS_CMDS = forest wtf whoami fire undo tarball
 GIT_SCRIPTS = $(foreach cmd,${GIT_SCRIPTS_CMDS},~/bin/git-${cmd})
 XORG_FILES = ${CFG}/xsettingsd ~/.Xresources ${CFG}/xkb/symbols/local
 APP_FILES = ${CFG}/screen ${CFG}/ack $(CFG)/globalrc $(CFG)/pythonrc ${CFG}/rtags/rdmrc \
 				$(CFG)/gconf ${CFG}/ripgrep/config
-GIT_FILES = ${CFG}/git/config  ${CFG}/git/ignore
+GIT_FILES = ${CFG}/git/config  ${CFG}/git/ignore ${CFG}/tig/config ${DATA}/tig
 I3_FILES = ${CFG}/i3/config ${CFG}/i3/i3status.config ${CFG}/dunst/dunstrc \
            ${CFG}/gsimplecal/config ${CFG}/i3/three-pane.json
 VIM_FILES = ~/.vimrc ${CFG}/vim  ${CACHE}/vim
@@ -100,6 +100,10 @@ all: base dev i3 defaults
 
 ~/bin:
 	mkdir -p ~/bin
+
+${DATA}/tig:
+	mkdir -p $@
+
 
 ${CFG}/vim: ${PWD}/vim
 	${LN} $< $@
