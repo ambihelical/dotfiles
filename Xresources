@@ -13,10 +13,10 @@ xterm*loginshell: true
 xterm*termName: xterm-256color
 
 ! do not update when contents offscreen
-xterm*fastScroll: true
+!xterm*fastScroll: true
 
 ! async scrolling
-xterm*multiScroll: true
+!xterm*multiScroll: true
 
 ! do not scroll when more output
 xterm*scrollTtyOutput: false
