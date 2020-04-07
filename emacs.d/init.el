@@ -123,6 +123,9 @@
       use-file-dialog nil                                   ; never want gui file dialog
       use-dialog-box nil                                    ; never want dialog box for questions
       scroll-margin 5                                       ; show some lines around cursor when possible
+      scroll-conservatively 101                             ; only scroll enough to bring cursor to view
+      scroll-down-aggressively 0.01                         ; don't jump when scrolling down
+      scroll-up-aggressively 0.01                           ; don't jump when scrolling up
       safe-local-variable-values                            ; allow these values in .dir-locals.el
       '((evil-indent-convert-tabs . t))
       scalable-fonts-allowed t                              ; allow any scalable font
@@ -484,27 +487,6 @@
   :ensure nil
   :general
   ("<f10> e" #'eldoc-mode))
-
-(use-package smooth-scrolling
-  :config
-  (smooth-scrolling-mode t)
-  :defer 2
-  :init
-  (setq smooth-scroll-margin 5
-        smooth-scroll-strict-margins t))
-
-(use-package sublimity
-  :if window-system
-  :defer 1
-  :init
-  :config
-  (use-package sublimity-scroll
-    :ensure nil
-    :demand
-    :init
-    (setq sublimity-scroll-weight 6
-          sublimity-scroll-drift-length 2))
-  (sublimity-mode 1))
 
 ;; highlight keywords
 (use-package fic-mode
