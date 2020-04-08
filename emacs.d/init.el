@@ -1862,6 +1862,12 @@
   ("<f9> r"     #'magit-list-repositories)
   ("<f9> <f9>"  #'magit-status)
   :config
+  ;; I want these for buffer switching
+  (define-key magit-section-mode-map (kbd "M-1") nil)
+  (define-key magit-section-mode-map (kbd "M-2") nil)
+  (define-key magit-section-mode-map (kbd "M-3") nil)
+  (define-key magit-section-mode-map (kbd "M-4") nil)
+  (define-key magit-section-mode-map (kbd "M-5") nil)
   (defun me:magit-open-revision (rev arg)
     "Select and open revision of current file, with prefix opens in other window"
     (interactive (list (magit-read-branch-or-commit "Open revision") current-prefix-arg))
