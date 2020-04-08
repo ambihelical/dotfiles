@@ -406,6 +406,7 @@
   ("<f10> h" #'global-hl-line-mode)              ; toggle hl-line
   :init
   :config
+  (set-face-attribute 'hl-line nil :background "grey24")
   (global-hl-line-mode t)                       ; highlight current line (hl-line)
   :defer 1)
 
@@ -511,9 +512,9 @@
   (defun me:set-extra-font-attributes ()
     (let ((bg (face-attribute 'default :background))
           (fg (face-attribute 'default :foreground)))
-      (set-face-attribute 'whitespace-line nil :foreground 'unspecified :background "grey32")
+      (set-face-attribute 'whitespace-line nil :foreground 'unspecified :background "grey24")
       (set-face-attribute 'whitespace-tab nil :foreground "grey32" :background bg )
-      (set-face-attribute 'whitespace-trailing nil :foreground fg :background "red" )))
+      (set-face-attribute 'whitespace-trailing nil :foreground fg :background "PaleVioletRed1" )))
 
   :diminish whitespace-mode)
 
