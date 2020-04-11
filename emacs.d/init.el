@@ -399,6 +399,21 @@
   :config
   :demand)
 
+;; built-in "artist-mode" package
+;; No binding because this one will be rare
+(use-package artist-mode
+  :ensure nil
+  :init
+  ;; N.B. This assumes we invoke artist mode while in evil normal mode
+  (add-hook 'artist-mode-hook
+            (lambda ()
+              (if artist-mode
+                  ( evil-emacs-state t)
+                (evil-normal-state t))))
+  :general
+  (:prefix "C-c"
+           "C-a"  '(:ignore t :which-key "Artist→" )))
+
 ;; built-in "hl-line" package
 (use-package hl-line
   :ensure nil
