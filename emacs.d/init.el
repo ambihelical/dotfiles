@@ -1666,8 +1666,11 @@
 
   :custom
   (evil-want-keybinding nil)  ; use evil-collection instead (needs to be done early)
-  (evil-disable-insert-state-bindings t) ; allow emacs bindings in insert mode
   (evil-respect-visual-line-mode t)   ; movements respect visual line mode
+  (evil-want-C-u-delete t)              ; use vim C-u binding (M-u replaces)
+  (evil-want-C-u-scroll t)             ; use vim C-u binding (M-u replaces)
+  ;; N.B. This needs to be after evil-want-C-u-delete to work
+  (evil-disable-insert-state-bindings t) ; allow emacs bindings in insert mode
 
   :init
   ;; make cut/paste more vim-like
@@ -1713,6 +1716,9 @@
   ;; Scroll keeping cursor stationary
   (:keymaps '( normal insert visual ) "C-j" #'evil-scroll-line-up)       ; ^y
   (:keymaps '( normal insert visual )  "C-k" #'evil-scroll-line-down)     ; ^e
+
+  ;; N.B C-u replacement
+  (:keymaps 'global "M-u" #'universal-argument)
 
   ;; visual mode only mapping
   (:keymaps 'visual
