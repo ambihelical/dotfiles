@@ -1685,6 +1685,7 @@
   :custom
   (evil-want-keybinding nil)  ; use evil-collection instead (needs to be done early)
   (evil-disable-insert-state-bindings t) ; allow emacs bindings in insert mode
+  (evil-respect-visual-line-mode t)   ; movements respect visual line mode
 
   :init
   ;; make cut/paste more vim-like
@@ -1727,10 +1728,6 @@
            "s"  (general-simulate-key "\"*" :keymap nil :lookup nil :name me:simulate-selection-reg )
            "c"  (general-simulate-key "\"+" :keymap nil :lookup nil :name me:simulate-clipboard-reg ))
   (:keymaps '(normal visual ) "<escape>" #'keyboard-quit)
-
-  ;; Move via visual lines
-  (:keymaps 'normal "j"   #'evil-next-visual-line)
-  (:keymaps 'normal "k"   #'evil-previous-visual-line)
 
   ;; Scroll keeping cursor stationary
   (:keymaps '( normal insert visual ) "C-j" #'evil-scroll-line-up)       ; ^y
