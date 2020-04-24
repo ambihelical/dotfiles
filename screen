@@ -13,7 +13,7 @@ vbell off
 
 # status bar
 hardstatus on
-hardstatus alwayslastline "%{rk}%H %{gk}%c %{yk}%M%d %{wk}%?%-Lw%?%{bw}%n*%f %t%?(%u)%?%{wk}%?%+Lw%?"
+hardstatus alwayslastline "%{ky}%S%{kk} %{rk}%H %{gk}%c %{yk}%M%d %{wk}%?%-Lw%?%{bw}%n*%f %t%?(%u)%?%{wk}%?%+Lw%?"
 
 # xterm scrollback
 termcapinfo xterm* ti@:te@ 
