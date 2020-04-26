@@ -34,10 +34,6 @@ hide_edge_borders both
 # start a terminal
 bindsym $mod+Return exec xterm&
 
-# open scratch window if closed accidently
-bindsym $mod+Control+Return exec --no-startup-id xterm -name scratch&
-
-
 # kill focused window
 bindsym $mod+Shift+q kill
 
@@ -251,7 +247,7 @@ bindsym $mod+minus scratchpad show
 exec --no-startup-id ~/bin/i3wm-extra-startup
 exec --no-startup-id nm-applet &
 exec --no-startup-id clipit &
-exec --no-startup-id xterm -name scratch &
+exec --no-startup-id xterm -title "i3-scratch" &
 exec --no-startup-id udiskie --tray --no-notify --use-udisks2 &
 exec --no-startup-id ~/bin/i3wm-private-startup || true
 
@@ -264,7 +260,7 @@ for_window [class="MintUpdate.py"] floating enable
 for_window [class="Nm-connection-editor"] floating enable
 for_window [class="Gnome-calendar"] floating enable, border pixel 3
 for_window [class="Pavucontrol"] floating enable
-for_window [instance="scratch"] floating enable, move scratchpad, scratchpad show, \
+for_window [title="i3-scratch"] floating enable, move scratchpad, scratchpad show, \
 	resize set 1600 480, move position center, scratchpad show
 
 # title formatting
