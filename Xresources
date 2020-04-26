@@ -10,7 +10,7 @@ xterm*urgentOnBell: true
 xterm*loginshell: true
 
 ! make sure to use 256 colors
-XTerm*termName: xterm-256color
+xterm*termName: xterm-256color
 
 ! do not update when contents offscreen
 xterm*fastScroll: true
