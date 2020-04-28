@@ -332,6 +332,7 @@ fi
 
 STAY_OFF_MY_LAWN=1   # tell aosp not to mess with PROMPT_COMMAND
 
+if [[ "$TERM" != "dumb" ]]; then
 # set prompt command. First see if it has already been set in case
 # we have sourced ~/.bashrc again, in which case it is better to
 # leave it alone.  medium_ps1 is first so it can pick up the last
@@ -342,6 +343,7 @@ else
 	PROMPT_COMMAND="medium_ps1;${PROMPT_COMMAND:+$PROMPT_COMMAND ;}urgency"
 fi
 PS0='$(set_title)'
+fi
 
 
 ##### Aliases & Bindings #####
