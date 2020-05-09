@@ -11,3 +11,6 @@ set page-completions off
 
 set visible-stats On
 
+# history search w/o ctrl-r, type start than up/down arrow
+"\e[A": history-search-backward
+"\e[B": history-search-forward
