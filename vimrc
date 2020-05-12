@@ -97,22 +97,11 @@ endif
 
 
 """""""""""""""""""""" Plugin Options """""""""""""""""""""""
-" set up pathogen
-runtime bundle/vim-pathogen/autoload/pathogen.vim
-call pathogen#infect()
-call pathogen#helptags()
 
 " show spacing errors in various languages
 let c_space_errors=1
 let python_space_error_highlight = 1
 let ruby_space_errors=1 
-
-" Options for bufmru
-let g:bufmru_switchkey = "<CR>"
-
-"Options for NERDTree
-let NERDTreeDirArrows=1
-let NERDTreeIgnore=['.o$[[file]]','.a$[[file]]','autom4te.cache','Makefile.in$']
 
 " ignore lines that don't match any patterns defined for gcc
 let g:compiler_gcc_ignore_unmatched_lines=1
@@ -121,15 +110,6 @@ let g:compiler_gcc_ignore_unmatched_lines=1
 if has("macunix")
   let loaded_matchparen=1
 endif
-
-" Options for buffer browser
-let g:bufExplorerSplitVertical='v'       " Split vertically.
-let g:bufExplorerUseCurrentWindow=1          " Open using current window.
-
-" A.vim
-let g:alternateExtensions_m = "h"
-let g:alternateExtensions_mm = "h"
-let g:alternateExtensions_h = "c,cpp,cc,cxx,m,mm"
 
 " turn off netrw
 let g:loaded_netrw       = 1
@@ -140,13 +120,6 @@ let c_no_curly_error = 1
 
 " plantuml
 let g:plantuml_executable_script = 'java -jar ~/local/share/java/plantuml.jar'
-
-" airline
-let g:airline_left_sep=' '
-let g:airline_right_sep=' '
-let g:airline_detect_modified=1
-let g:airline#extensions#whitespace#mixed_indent_algo = 2
-
 
 """""""""""""""""""""""" Mappings """""""""""""""""""""""""""
 
@@ -224,15 +197,6 @@ map <F7> :make<CR>
 
 " Look up tag
 map <F6> <C-]>
-
-" Alternate file
-map <F5> :A<CR>
-map <S-F5> :AN<CR>
-
-" Various plugin windows
-map <F4> :NERDTreeToggle<CR>
-map <F3> :BufExplorer<CR>
-map <F2> :TagbarToggle<CR>
 
 
 """""""""""""""""""""" AutoCommands """"""""""""""""""""""""""
