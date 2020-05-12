@@ -1,5 +1,5 @@
 [global]
-    font = Cousine 10
+    font = DejaVu Sans Mono 11
 
     format = "%a: %s %b"
     sort = yes
@@ -36,7 +36,7 @@
 
 [urgency_low]
     background = "#222222"
-    foreground = "#888888"
+    foreground = "#ffffff"
     timeout = 10
 
 [urgency_normal]
@@ -49,11 +49,6 @@
     foreground = "#ffffff"
     timeout = 0
 
-
-[ignore]
-    appname = "Spotify"
-    summary = "*"
-    format = ""
 
 [ignore]
     appname = "Pithos"
