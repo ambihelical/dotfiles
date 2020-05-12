@@ -59,7 +59,6 @@ barex: ${BAREX_FILES}
 
 root: ${ETC_FILES}
 	udevadm control --reload-rules   # for udev rules
-	cd stdman && ./configure && make install && mandb
 	sysctl -w vm.swappiness=10    # we have adequate memory
 
 # fix some annoying default settings
