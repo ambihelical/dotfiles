@@ -964,7 +964,7 @@
                    '(:columns
                      (
                       (ivy-rich-switch-buffer-indicators (:width 4 :face error :align right))
-                      (ivy-rich-candidate (:width 40))
+                      (ivy-rich-candidate (:width 64))
                       (ivy-rich-switch-buffer-major-mode (:width 20 :face warning))
                       (ivy-rich-switch-buffer-project (:width 15 :face success))
                       (ivy-rich-switch-buffer-size (:width 7))
