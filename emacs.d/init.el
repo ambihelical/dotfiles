@@ -1822,6 +1822,9 @@
         shell-pop-universal-key "<f4> t"))
 
 (use-package which-key
+  :custom
+  (which-key-allow-evil-operators t)
+  (which-key-show-operator-state-maps t)
   :init
   :general
   ("<f5>" '(:ignore t :which-key "Major Mode Specific→" ))
@@ -1830,8 +1833,7 @@
   (setq which-key-max-description-length 40
         which-key-side-window-max-width 0.67
         which-key-side-window-max-height 0.5
-        which-key-sort-order 'which-key-local-then-key-order
-        which-key-allow-evil-operators t)
+        which-key-sort-order 'which-key-local-then-key-order)
   (which-key-mode)
   (which-key-setup-side-window-right-bottom)
   :defer 2
