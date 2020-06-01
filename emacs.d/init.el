@@ -182,7 +182,7 @@
   :ensure nil
   :general
   ("M-1"     #'me:find-other-file)
-  ("<f10> c"  #'me:read-fill-column)
+  ("<f10> s"  #'me:read-fill-column)
   ("<f4> 1"  #'me:ps-one-per-page)
   ("<f4> 2"  #'me:ps-two-per-page)
   :config
