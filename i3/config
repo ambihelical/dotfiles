@@ -40,6 +40,9 @@ bindsym $mod+Shift+q kill
 # start dmenu (a program launcher)
 bindsym $mod+d exec i3-dmenu-desktop --dmenu="rofi -dmenu -i -fn $dmenufn"
 
+# show bindings
+bindsym $mod+period exec bash -c "grep '^bindsym' ~/.config/i3/config|sed 's/bindsym//'|rofi -i -dmenu"
+
 # change focus
 bindsym $mod+h focus left
 bindsym $mod+j focus down
