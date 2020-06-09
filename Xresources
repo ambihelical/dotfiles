@@ -131,3 +131,6 @@ Xft.hintstyle:  hintfull
 Xft.lcdfilter:  lcddefault
 Xft.rgba:       rgb
 
+
+! rofi customization
+rofi.kb-cancel:  Escape,Control+g
