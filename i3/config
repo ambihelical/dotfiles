@@ -38,8 +38,7 @@ bindsym $mod+Return exec xterm&
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+Shift+d exec --no-startup-id dmenu_run -i -fn "$dmenufn"
-bindsym $mod+d exec i3-dmenu-desktop --dmenu="dmenu -i -fn $dmenufn"
+bindsym $mod+d exec i3-dmenu-desktop --dmenu="rofi -dmenu -i -fn $dmenufn"
 
 # change focus
 bindsym $mod+h focus left
