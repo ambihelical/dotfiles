@@ -39,7 +39,7 @@
 
 ;; host specific font handling
 (when (equal (system-name) "hum")
-  (add-to-list 'me:preferred-fonts '("Hack" . "Hack-10:autohint=true")))
+  (add-to-list 'me:preferred-fonts '("Roboto Mono" . "Roboto Mono-10:autohint=true")))
 
 ;; replace any matches in a string
 (defun me:replace-all (input from to)
