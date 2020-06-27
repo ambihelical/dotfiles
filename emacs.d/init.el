@@ -1079,6 +1079,19 @@
 (use-package projectile
   :after evil
   :demand t     ; required because use-package-always-defer is t
+  :custom
+  (projectile-completion-system 'ivy)
+  (projectile-globally-ignored-files #'( "TAGS" "GTAGS" "GRTAGS" "GPATH" ))
+  (projectile-globally-ignored-file-suffixes #'( ".o" ".so" ".a" ".ko" ".jar" ".bc" ".class"))
+  ;; we mainly want projects defined by a few markers and we always want to take the top-most marker.
+  ;; Reorder so other cases are secondary
+  (projectile-project-root-files #'( ".projectile" ))
+  (projectile-project-root-files-functions #'(projectile-root-top-down
+                                              projectile-root-bottom-up
+                                              projectile-root-local))
+  (projectile-use-git-grep t)
+  (projectile-indexing-method 'hybrid)      ;; default indexing method is total crap
+  (projectile-enable-caching t)
   :general
   (:keymaps 'projectile-mode-map "<f7>" 'projectile-command-map )  ; all projectile built in bindings off f7
   ("<f7> N"     #'projectile-clear-known-projects)
@@ -1099,19 +1112,8 @@
            "ESC" nil)
 
   :init
-  (setq projectile-completion-system 'ivy
-        projectile-globally-ignored-files #'( "TAGS" "GTAGS" "GRTAGS" "GPATH" )
-        projectile-globally-ignored-file-suffixes #'( ".o" ".so" ".a" ".ko" ".jar" ".bc" ".class")
-        ;; we mainly want projects defined by a few markers and we always want to take the top-most marker.
-        ;; Reorder so other cases are secondary
-        projectile-project-root-files #'( ".projectile" )
-        projectile-project-root-files-functions #'(projectile-root-top-down
-                                                   projectile-root-bottom-up
-                                                   projectile-root-local)
-        projectile-use-git-grep t
-        projectile-project-compilation-cmd ""     ;; workaround for stupid projectile bug
-        projectile-indexing-method 'hybrid      ;; default indexing method is total crap
-        projectile-enable-caching t)
+  (setq
+   projectile-project-compilation-cmd "")     ;; workaround for stupid projectile bug
   :config
   (defun me:counsel-ag-project ()
     "Search using ag in project"
