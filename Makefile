@@ -21,6 +21,7 @@ BIN_FILES=$(foreach bin,$(notdir $(wildcard ${PWD}/bin/*)),~/bin/${bin})
 GIT_SCRIPTS_CMDS = forest wtf whoami fire undo tarball
 GIT_SCRIPTS = $(foreach cmd,${GIT_SCRIPTS_CMDS},~/bin/git-${cmd})
 XORG_FILES = ${CFG}/xsettingsd ~/.Xresources ${CFG}/xkb/symbols/local
+OTHER_DIRS = ${CFG}/next
 APP_FILES = ${CFG}/screen ${CFG}/ack $(CFG)/globalrc $(CFG)/pythonrc ${CFG}/rtags/rdmrc \
 				$(CFG)/gconf ${CFG}/ripgrep/config ~/.editorconfig
 GIT_FILES = ${CFG}/git/config  ${CFG}/git/ignore ${CFG}/tig/config ${DATA}/tig
@@ -47,7 +48,7 @@ help:
 	@echo "   rust       - post rust installation setup"
 	@echo "   barex      - install .xsession, .Xmodmap"
 
-base: ${SHELL_FILES} ${DIR_FILES} ${BIN_FILES} ${XORG_FILES}
+base: ${SHELL_FILES} ${DIR_FILES} ${BIN_FILES} ${XORG_FILES} ${OTHER_FILES} ${OTHER_DIRS}
 	@echo "base configured"
 
 dev: ${VIM_FILES} ${APP_FILES} ${GIT_FILES} ${EMACS_FILES} ${GIT_SCRIPTS}
