@@ -66,6 +66,8 @@
 	fontdiff = -family \"DejaVu Sans Mono\" -size 10 -weight normal -slant roman -underline 0 -overstrike 0
 [push]
 	default = simple
+[pull]
+	ff = only
 [diff]
 	submodule = log
 	mnemonicprefix = true
