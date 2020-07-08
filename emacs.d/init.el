@@ -1362,8 +1362,8 @@
 (use-package js2-mode
   :config
   :mode
-  (("\\.js\\'" . js-mode)
-   ("\\.json\\'" . js-mode)))
+  (("\\.js\\'" . js2-mode)
+   ("\\.json\\'" . js2-mode)))
 
 ;; basic setup for java code
 (use-package java-mode
