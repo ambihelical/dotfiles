@@ -604,9 +604,9 @@
     (interactive)
     (setq display-line-numbers
           (pcase display-line-numbers
-            ((pred null) 'relative)
-            ('relative t)
-            (_ nil))))
+            ((pred null) t)
+            ('relative nil)
+            (t 'relative))))
   :general
   ("<f10> l"      #'me:rotate-line-number-type)
   :init
