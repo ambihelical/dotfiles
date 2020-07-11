@@ -17,11 +17,12 @@ if [ "$host" == "hum" ]; then
 	 lockminutes=0
 elif [ "$host" == "thud" ]; then
 	lockminutes=30
-    xset s off   # turn off screensaver
+	xset s off   # turn off screensaver
+	xrandr --output HDMI-1 --dpi 103 --left-of eDP-1
 elif [ "$host" == "jh-rvueb" ]; then
 	xrandr --output HDMI-0 --primary --dpi 103
 	xrandr --output DVI-D-0 --right-of HDMI-0 --rotate left
-	lockminutes=30
+	lockminutes=60
 elif [ "$host" == "twt21022" ]; then
 	xrandr --output eDP-1 --primary --pos 0x0 --output HDMI-1 --pos 1920x-1080
 	lockminutes=30
