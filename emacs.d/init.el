@@ -1291,20 +1291,16 @@
   (add-hook 'org-mode-hook #'org-bullets-mode)
   :config)
 
-(use-package rust-mode
+(use-package rustic
   :config
   :init
-  (setq rust-match-angle-brackets nil))  ; workaround performance issue
-
-(use-package cargo
-  :init
-  (setq cargo-process--enable-rust-backtrace t)
-  :hook (rust-mode . cargo-minor-mode))
-
-(use-package flycheck-rust
-  :init
-  :config
-  :hook ( rust-mode . flycheck-rust-setup ))
+  (setq rustic-lsp-client 'eglot
+        rustic-compile-display-method (lambda (buf) (display-buffer-pop-up-window buf nil))
+        rustic-match-angle-brackets nil   ;; t slows down scrolling a lot
+        rustic-lsp-server 'rls)   ;; TODO default is rust-analyzer
+  ;; recommended by rustic install docs
+  ;;(add-hook 'eglot--managed-mode-hook (lambda() (flymake-mode -1)))
+  )
 
 (use-package toml-mode)
 
