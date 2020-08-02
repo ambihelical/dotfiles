@@ -1085,10 +1085,10 @@
   (projectile-globally-ignored-file-suffixes #'( ".o" ".so" ".a" ".ko" ".jar" ".bc" ".class"))
   ;; we mainly want projects defined by a few markers and we always want to take the top-most marker.
   ;; Reorder so other cases are secondary
-  (projectile-project-root-files #'( ".projectile" ))
   (projectile-project-root-files-functions #'(projectile-root-top-down
                                               projectile-root-bottom-up
                                               projectile-root-local))
+  (projectile-project-root-files #'( ".projectile" ))
   (projectile-use-git-grep t)
   (projectile-indexing-method 'hybrid)      ;; default indexing method is total crap
   (projectile-enable-caching t)
@@ -1113,8 +1113,15 @@
 
   :init
   (setq
+   projectile-project-root-files #'( ".projectile" )
    projectile-project-compilation-cmd "")     ;; workaround for stupid projectile bug
   :config
+  ;; We really only want to top-down recognize projects that are marked
+  ;; with .projectile. Anything else is brain-damage.
+  ;; Projectile has a nifty "feature" where it sets up projectile-project-root-files
+  ;; to be umpteen different project marker files which goes against having
+  ;; a super-project, which of course many people have. Fuck projectile.
+  (setq projectile-project-root-files #'( ".projectile" ))
   (defun me:counsel-ag-project ()
     "Search using ag in project"
     (interactive)
