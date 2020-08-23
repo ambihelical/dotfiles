@@ -1802,6 +1802,7 @@
   (dolist (mode
            '(dired-mode
              finder-mode
+             image-mode
              image-dired-thumbnail-mode
              cquery-tree-mode
              paradox-menu-mode))
@@ -1820,6 +1821,30 @@
 (use-package evil-collection
   :custom
   (evil-collection-setup-minibuffer t)
+  ;; allow evilification for these modes:
+  (evil-collection-mode-list
+   `(
+     ansi-term
+     cmake-mode
+     dired
+     dired-sidebar
+     doc-view
+     elisp-mode
+     eshell
+     help
+     helpful
+     js2-mode
+     info
+     log-view
+     lua-mode
+     minibuffer
+     magit
+     magit-todos
+     (package-menu package)
+     (pdf pdf-view)
+     python
+     ruby-mode
+     woman))
   :after evil
   :defer 1
   :config
