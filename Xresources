@@ -119,10 +119,16 @@ Emacs*verticalScrollBars: off
 Emacs*menuBar: off
 
 ! blend in with theme for less flash at startup
-Emacs*background: #313131
-Emacs*foreground: #DCDCCC
-Emacs.mode-line.attributeForeground: #9cbf9c
-Emacs.mode-line.attributeBackground: #202020
+! hc-zenburn theme
+!Emacs*background: #313131
+!Emacs*foreground: #DCDCCC
+!Emacs.mode-line.attributeForeground: #9cbf9c
+!Emacs.mode-line.attributeBackground: #202020
+!modus-operandi
+Emacs*foreground: #000000
+Emacs*background: #ffffff
+Emacs.mode-line.attributeForeground: #505050
+Emacs.mode-line.attributeBackground: #f0f0f0
 
 ! Turn on subpixel rendering
 Xft.antialias:  rgba

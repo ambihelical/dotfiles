@@ -39,7 +39,7 @@
 
 ;; host specific font handling
 (when (equal (system-name) "hum")
-  (add-to-list 'me:preferred-fonts '("Roboto Mono" . "Roboto Mono-10:autohint=true")))
+  (add-to-list 'me:preferred-fonts '("Roboto Mono" . "Roboto Mono-11:autohint=true:weight=medium")))
 
 ;; replace any matches in a string
 (defun me:replace-all (input from to)
@@ -421,7 +421,6 @@
   ("<f10> h" #'global-hl-line-mode)              ; toggle hl-line
   :init
   :config
-  (set-face-attribute 'hl-line nil :background "grey24")
   (global-hl-line-mode t)                       ; highlight current line (hl-line)
   :defer 1)
 
@@ -506,8 +505,7 @@
   (defun me:set-extra-font-attributes ()
     (let ((bg (face-attribute 'default :background))
           (fg (face-attribute 'default :foreground)))
-      (set-face-attribute 'whitespace-line nil :foreground 'unspecified :background "grey24")
-      (set-face-attribute 'whitespace-tab nil :foreground "grey32" :background bg )
+      (set-face-attribute 'whitespace-tab nil :foreground "LightGrey" :background bg )
       (set-face-attribute 'whitespace-trailing nil :foreground fg :background "PaleVioletRed1" )))
 
   :diminish whitespace-mode)
@@ -526,23 +524,24 @@
   (miniedit-mode t)
   :init)
 
-(use-package hc-zenburn-theme
-  :init
-  (add-hook 'magit-mode-hook
-            (lambda ()
-              (set-face-attribute 'magit-diff-hunk-heading nil :box "#5e5e5e" :background "dark slate grey")
-              (set-face-attribute 'magit-diff-hunk-heading-highlight nil :box "#5e5e5e" :background "steel blue")))
+(use-package modus-operandi-theme
+  :custom
+  (modus-operandi-theme-slanted-constructs t)
+  (modus-operandi-theme-bold-constructs t)
+  (modus-operandi-theme-faint-syntax t)
+  (modus-operandi-theme-mode-line 'moody)
+  (modus-operandi-theme-completions 'moderate)
+  (modus-operandi-theme-fringes 'subtle)
+  (modus-operandi-theme-org-blocks 'rainbow)
+  (modus-operandi-theme-scale-headings 't)
+  (modus-operandi-theme-headings '((t . rainbow)))
   :config
-  ;; make visual and highlight more noticable
-  (set-face-attribute 'lazy-highlight nil :background "#5e5e5e")
-  (set-face-attribute 'region nil :background "#5e5e5e")
-  (set-face-attribute 'highlight nil :background "#5e5e5e")
+  (enable-theme 'modus-operandi)
   :defer 0)
-
 
 (use-package smart-mode-line
   :demand
-  :after hc-zenburn-theme
+  :after modus-operandi-theme
   :init
   (setq sml/theme 'respectful
         size-indication-mode t
@@ -575,22 +574,11 @@
 
 ;; modeline tabs
 (use-package moody
-  :after ( hc-zenburn-theme perspective )
+  :after ( modus-operandi-theme perspective )
   :demand
-  :init
-  (setq x-underline-at-descent-line t)
+  :custom
+  (x-underline-at-descent-line t)
   :config
-  (let ((line (face-attribute 'mode-line :underline)))
-    (set-face-attribute 'mode-line          nil :overline   line)
-    (set-face-attribute 'mode-line-inactive nil :overline   line)
-    (set-face-attribute 'mode-line-inactive nil :underline  line)
-    (set-face-attribute 'mode-line          nil :underline  line)
-    (set-face-attribute 'mode-line          nil :box        nil)
-    (set-face-attribute 'mode-line-inactive nil :box        nil))
-  ;; make mode lines more noticable
-  (set-face-attribute 'mode-line nil :background "#4e4e4e" :height 1.1)
-  (set-face-attribute 'mode-line-inactive nil :background "#3e3e3e" :height 0.9)
-  (set-face-attribute 'persp-selected-face nil :inherit nil)  ; theme fix for inactive modeline
   (moody-replace-mode-line-buffer-identification)
   (moody-replace-vc-mode))
 
