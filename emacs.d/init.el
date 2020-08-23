@@ -1,11 +1,10 @@
 ;;; -*- lexical-binding: t -*-
 
-(defconst me:gc-cons-threshold-original gc-cons-threshold)
+;; this is set in early-init and here in case emacs < 27
+;; the package gcmh sets it to a reasonable value later
 (setq gc-cons-threshold most-positive-fixnum)
-(add-hook 'after-init-hook (lambda () (setq gc-cons-threshold me:gc-cons-threshold-original)))
 
 ;; package management
-
 (require 'package)
 
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
@@ -146,6 +145,15 @@
 
 (run-with-idle-timer 0.1 nil #'me:extra-setup)
 
+;; garbage collection magic hack
+(use-package gcmh
+  :custom
+  (gcmh-verbose t)
+  ;; otherwise get GC times in 10s of seconds
+  (gcmh-high-cons-threshold #x10000000)
+  :config
+  (gcmh-mode 1)
+  :demand)
 
 ;; keymappings
 ;; N.B. Other keybindings defined in apropriate use-package
