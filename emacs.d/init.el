@@ -612,7 +612,7 @@
           (pcase display-line-numbers
             ((pred null) t)
             ('relative nil)
-            (t 'relative))))
+            (_ 'relative))))
   :general
   ("<f10> l"      #'me:rotate-line-number-type)
   :init
@@ -688,8 +688,6 @@
 ;; save buffer positions
 (use-package saveplace
   :after no-littering
-  :init
-  (setq-default save-place t)
   :config
   (setq save-place-forget-unreadable-files nil)
   (save-place-mode t)
