@@ -554,6 +554,7 @@
   (set-face-attribute 'lazy-highlight nil :background "#5e5e5e")
   (set-face-attribute 'region nil :background "#5e5e5e")
   (set-face-attribute 'highlight nil :background "#5e5e5e")
+  (enable-theme 'hc-zenburn)
   :defer 0)
 
 
