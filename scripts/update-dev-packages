@@ -39,8 +39,8 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	p="$p ruby python3.9"
   # version control
 	p="$p meld git-gui mercurial subversion gitk tig"
-  # libraries sometimes needed to build from source
-	p="$p libncurses5-dev"
+  # libraries sometimes needed to build from source, especially emacs
+	p="$p libncurses5-dev libgnutls-dev libjansson-dev libotf-dev"
   # image file dev libs
 	p="$p libgtk-3-dev libtiff5-dev libjpeg-dev libgif-dev libxpm-dev libpng-dev libmagick++-dev librsvg2-dev"
 	p="$p zlib1g-dev libpoppler-glib-dev libpoppler-private-dev"
