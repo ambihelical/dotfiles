@@ -254,7 +254,10 @@
   ("M-4"        #'me:window-4th-buffer)
   ("M-5"        #'me:window-5th-buffer)
   :init
-  (add-hook 'focus-out-hook #'me:save-dirty-buffers)          ; save on defocus
+  (add-function :after after-focus-change-function
+                (lambda () (unless (frame-focus-state)
+                             (save-some-buffers t))))
+
   (add-hook 'after-make-frame-functions #'me:set-frame-face)
   (setq frame-title-format
         '((:eval (if (buffer-file-name)
@@ -266,12 +269,6 @@
           "]")                                               ; fancy title
         icon-title-format frame-title-format)                  ; use same title for unselected frame
   :config
-
-  ;; save any dirty buffers
-  (defun me:save-dirty-buffers ()
-    "Save any dirty buffers"
-    (interactive)
-    (save-some-buffers t))
 
   (defun me:set-frame-face (frame)
     "Set font face for frame"
