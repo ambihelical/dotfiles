@@ -1885,9 +1885,9 @@
         shell-pop-universal-key "<f4> t"))
 
 (use-package which-key
-  :custom
-  (which-key-allow-evil-operators t)
-  (which-key-show-operator-state-maps t)
+  ;; :custom
+  ;; (which-key-allow-evil-operators t)
+  ;; (which-key-show-operator-state-maps t)
   :init
   :general
   ("<f5>" '(:ignore t :which-key "Major Mode Specific→" ))
