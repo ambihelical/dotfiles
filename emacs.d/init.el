@@ -366,9 +366,6 @@
   :hook (( prog-mode text-mode ) . auto-revert-mode )
   :ensure nil
   :defer 2
-  :init
-  ;; refresh vc state periodically for current buffer -- keep branch valid
-  (run-with-timer 15 15 #'vc-refresh-state)
   :custom
   ;; N.B. auto-revert-check-vc-info causes vc-refresh-state to be called
   ;; on *every* file-backed buffer every 5s by default even if it isn't reverted.
