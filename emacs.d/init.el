@@ -1865,6 +1865,8 @@
   :init
   (setq magit-completing-read-function 'ivy-completing-read   ; use ivy
         magit-save-repository-buffers 'dontask                ; save repo modified buffers w/o asking
+        magit-log-margin '(t "%Y-%m-%d %H:%M " magit-log-margin-width t 18)
+        magit-status-margin '(t "%Y-%m-%d %H:%M " magit-log-margin-width t 18)
         magit-section-initial-visibility-alist '(( stashes . hide ))
         magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1
         magit-repository-directories '(( "~/dev" . 1)))
@@ -1885,7 +1887,9 @@
   (define-key magit-section-mode-map (kbd "M-3") nil)
   (define-key magit-section-mode-map (kbd "M-4") nil)
   (define-key magit-section-mode-map (kbd "M-5") nil)
-  (define-key magit-status-mode-map (kbd "M-w") nil)
+  (define-key magit-mode-map (kbd "M-w") nil)
+  (define-key magit-mode-map (kbd "C-w") nil)
+  (define-key magit-mode-map (kbd "C-c C-m") #'magit-toggle-margin)
   (defun me:magit-open-revision (rev arg)
     "Select and open revision of current file, with prefix opens in other window"
     (interactive (list (magit-read-branch-or-commit "Open revision") current-prefix-arg))
