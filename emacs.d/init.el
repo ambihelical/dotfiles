@@ -1930,7 +1930,8 @@
   (define-key magit-section-mode-map (kbd "M-3") nil)
   (define-key magit-section-mode-map (kbd "M-4") nil)
   (define-key magit-section-mode-map (kbd "M-5") nil)
-  (define-key magit-status-mode-map (kbd "M-w") nil)
+  (define-key magit-mode-map (kbd "M-w") nil)
+  (define-key magit-mode-map (kbd "C-w") nil)
   (defun me:magit-open-revision (rev arg)
     "Select and open revision of current file, with prefix opens in other window"
     (interactive (list (magit-read-branch-or-commit "Open revision") current-prefix-arg))
