@@ -933,9 +933,9 @@
 ;; add some ivy buffer information
 (use-package ivy-rich
   :after ivy
-  :init
-  (setq ivy-format-function #'ivy-format-function-line)
   :config
+  ;; recommended by ivy-rich docs
+  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
   ;; make candidate column and mode bigger, rearrange columns from default
   (setq ivy-rich-display-transformers-list
         (plist-put ivy-rich-display-transformers-list
