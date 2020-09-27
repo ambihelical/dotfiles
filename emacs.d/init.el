@@ -382,7 +382,6 @@
   ;; For this reason, never set this variable.
   (auto-revert-check-vc-info nil)             ; don't check periodically for new vc info
   (auto-revert-verbose nil)                   ; don't tell me about auto reverts
-  :config
   :diminish auto-revert-mode)
 
 ;; built-in "simple" package
@@ -409,8 +408,6 @@
   :general
   (:prefix "C-x"
            "a"  '(:ignore t :which-key "Abbrev→" ))
-  :init
-  :config
   :demand)
 
 ;; built-in "artist-mode" package
@@ -433,7 +430,6 @@
   :ensure nil
   :general
   ("<f10> h" #'global-hl-line-mode)              ; toggle hl-line
-  :init
   :config
   (global-hl-line-mode t)                       ; highlight current line (hl-line)
   :defer 1)
@@ -444,7 +440,6 @@
   :general
   ("<f10> b"      #'menu-bar-mode)
   ("<f10> <f10>"   #'menu-bar-open)
-  :init
   :config
   (menu-bar-mode 0)                             ; no menu bar
   :demand)
@@ -457,7 +452,6 @@
   ("<f10> =" #'text-scale-adjust)
   :init
   (setq text-scale-mode-step 1.05)              ; text size increases by 5% (normally 20%)
-  :config
   :defer 3)
 
 ;; built-in prog-mode
@@ -472,7 +466,6 @@
 ;; built-in generic mode
 (use-package generic
   :ensure nil
-  :init
   :config
   (define-generic-mode 'selinux-contexts-mode
     '("#") nil nil
@@ -489,7 +482,6 @@
   :ensure nil
   :init
   (add-hook 'conf-mode-hook #'me:run-prog-mode-hooks)
-  :config
   :demand)
 
 ;; built-in eldoc mode
@@ -525,7 +517,6 @@
   :diminish whitespace-mode)
 
 (use-package adaptive-wrap
-  :config
   :init
   (setq-default adaptive-wrap-extra-indent 3)
   (me:add-hook-with-delay 'visual-line-mode-hook 3 #'adaptive-wrap-prefix-mode))
@@ -535,8 +526,7 @@
   (:keymap minibuffer-local-map
            "C-c e" #'miniedit)
   :config
-  (miniedit-mode t)
-  :init)
+  (miniedit-mode t))
 
 (use-package modus-operandi-theme
   :custom
@@ -632,8 +622,7 @@
 
 (use-package ruler-mode
   :general
-  ("<f10> u" #'ruler-mode)
-  :config)
+  ("<f10> u" #'ruler-mode))
 
 ;; better package manager
 (use-package paradox
@@ -743,13 +732,11 @@
         dired-listing-switches "-alh1vG --group-directories-first"    ; human readable sizes
         dired-auto-revert-buffer t       ; revert buffer on revisit
         dired-dwim-target t)             ; use existing dired buffer, if exists
-  :config
   :ensure nil)
 
 ;; implement empty subdir collapsing
 (use-package dired-collapse
-  :hook (dired-mode  . dired-collapse-mode)
-  :config)
+  :hook (dired-mode  . dired-collapse-mode))
 
 ;; implement dired-narrow function
 (use-package dired-narrow
@@ -764,18 +751,16 @@
   :general
   (:keymaps 'dired-mode-map
             "<backtab>" #'dired-subtree-cycle
-            "<tab>" #'dired-subtree-toggle)
-  :config)
+            "<tab>" #'dired-subtree-toggle))
 
 ;; edit dired buffers
 (use-package wdired
   :init
   (setq wdired-allow-to-change-permissions t)
-  :ensure nil
   :general
   (:keymaps 'dired-mode-map
             "<f5> w" #'wdired-change-to-wdired-mode)
-  :config)
+  :ensure nil)
 
 (use-package peep-dired
   :init
@@ -794,8 +779,7 @@
           map))
   :general
   (:keymaps 'dired-mode-map
-            "<f5> p" #'peep-dired)
-  :config)
+            "<f5> p" #'peep-dired))
 
 (use-package dired-sidebar
   :custom
@@ -850,8 +834,7 @@
   ;; advise define-word to set word limit based on frame height
   (defun me:advise-define-word (_word _service &optional _choose)
     (setq define-word-limit (/ (+ 2 (frame-height)) 3)))
-  (advice-add #'define-word :before #'me:advise-define-word)
-  :init)
+  (advice-add #'define-word :before #'me:advise-define-word))
 
 (use-package ivy
   :general
@@ -1066,9 +1049,7 @@
 
 ;; better M-x
 (use-package amx
-  :hook (( ivy-mode ) . amx-mode)
-  :config
-  :init)
+  :hook (( ivy-mode ) . amx-mode))
 
 ;; allow grep buffers to be editted
 (use-package wgrep
@@ -1146,14 +1127,12 @@
 
 (use-package persp-projectile
   :after projectile
-  :demand
   :general
   (:prefix "<f7>" "<f7>"  #'projectile-persp-switch-project)
-  :config)
+  :demand)
 
 (use-package perspective
   :after persp-projectile
-  :init
   :general
   ("<f7> r"     #'persp-rename)
   ("M-<right>"  #'persp-next)
@@ -1171,15 +1150,12 @@
 
 ;; color color strings
 (use-package rainbow-mode
-  :hook (( emacs-lisp-mode js-mode ) . rainbow-mode )
-  :init
-  :config)
+  :hook (( emacs-lisp-mode js-mode ) . rainbow-mode ))
 
 ;; Highlight cursor's surrounding parentheses
 (use-package highlight-parentheses
   :init
-  (me:add-hook-with-delay 'prog-mode-hook 8 #'highlight-parentheses-mode)
-  :config)
+  (me:add-hook-with-delay 'prog-mode-hook 8 #'highlight-parentheses-mode))
 
 (use-package dtrt-indent
   :hook (( prog-mode text-mode ) . dtrt-indent-mode)
@@ -1188,11 +1164,9 @@
   :config)
 
 (use-package aggressive-indent
-  :hook (( emacs-lisp-mode ) . aggressive-indent-mode)
-  :config)
+  :hook (( emacs-lisp-mode ) . aggressive-indent-mode))
 
 (use-package markdown-mode
-  :config
   :mode
   (("\\.markdown\\'" . markdown-mode)
    ("\\.md\\'" . markdown-mode)))
@@ -1277,9 +1251,7 @@
   (evil-org-agenda-set-keys))
 
 (use-package org-bullets
-  :init
-  (add-hook 'org-mode-hook #'org-bullets-mode)
-  :config)
+  :hook (( org-mode ) . org-bullets-mode))
 
 ;; TODO:
 ;; recommended by rustic install docs
@@ -1293,9 +1265,7 @@
 
 (use-package toml-mode)
 
-
 (use-package cmake-mode
-  :config
   :init
   (setq cmake-tab-width 3)
   :mode
@@ -1347,7 +1317,6 @@
 
 (use-package python-mode
   :defines ( python-indent-offset python-indent-guess-indent-offset )
-  :config
   :init
   (add-hook 'python-mode-hook
             (lambda ()
@@ -1373,26 +1342,22 @@
     (add-to-list 'company-backends 'company-jedi)))
 
 (use-package ruby-mode
-  :config
   :mode
   (("\\.\\(?:cap\\|gemspec\\|irbrc\\|gemrc\\|rake\\|rb\\|ru\\|thor\\)\\'" . ruby-mode)
    ("\\(?:Brewfile\\|Capfile\\|Gemfile\\(?:\\.[a-zA-Z0-9._-]+\\)?\\|[rR]akefile\\)\\'" . ruby-mode)))
 
 (use-package js2-mode
-  :config
   :mode
   (("\\.js\\'" . js2-mode)
    ("\\.json\\'" . js2-mode)))
 
 ;; basic setup for java code
 (use-package java-mode
-  :ensure nil
-  :init
-  :config
   :mode
   (("\\.java\\'" . java-mode))
   (("\\.aidl\\'" . java-mode))                               ; Hack AIDL syntax highlighting
-  (("\\.hal\\'" . java-mode)))                               ; Hack HIDL syntax highlighting
+  (("\\.hal\\'" . java-mode))                               ; Hack HIDL syntax highlighting
+  :ensure nil)
 
 (use-package cc-mode
   :init
@@ -1424,8 +1389,7 @@
            "C-v"  '(:ignore t :which-key "VLF→" ))
   :defer 0
   :init
-  (require 'vlf-setup)
-  :config)
+  (require 'vlf-setup))
 
 (use-package logview
   :general
@@ -1439,8 +1403,7 @@
 
 ;; font lock for newer c++ versions
 (use-package modern-cpp-font-lock
-  :hook ( c++-mode . modern-c++-font-lock-mode )
-  :config)
+  :hook ( c++-mode . modern-c++-font-lock-mode ))
 
 (use-package compile
   :commands compile
@@ -1495,13 +1458,10 @@
 
 ;; view symbols of libraries
 (use-package elf-mode
-  :init
   :magic
-  (("ELF" . elf-mode))
-  :config)
+  (("ELF" . elf-mode)))
 
 (use-package woman
-  :ensure nil
   :init
   (setq woman-use-topic-at-point t                          ; man page on word at point if exists
         Man-notify-method 'aggressive)                      ; show&select man page in other window
@@ -1509,11 +1469,10 @@
   ("<f4> m" #'woman)
   :config
   (set-face-attribute 'Man-overstrike nil :inherit font-lock-type-face :bold t)
-  (set-face-attribute 'Man-underline nil :inherit font-lock-keyword-face :underline t))
+  (set-face-attribute 'Man-underline nil :inherit font-lock-keyword-face :underline t)
+  :ensure nil)
 
 (use-package doc-view
-  :ensure nil
-  :config
   :init
   (setq doc-view-continuous t
         doc-view-resolution 144)
@@ -1522,7 +1481,8 @@
             "j" #'doc-view-next-line-or-next-page
             "k" #'doc-view-previous-line-or-previous-page
             "h" #'image-backward-hscroll
-            "l" #'image-forward-hscroll))
+            "l" #'image-forward-hscroll)
+  :ensure nil)
 
 (use-package pdf-tools
   :magic ("%PDF" . pdf-view-mode)
@@ -1607,21 +1567,19 @@
   :hook ( prog-mode . company-mode))
 
 (use-package company-quickhelp
-  :hook (company-mode . company-quickhelp-mode)
-  :config
-  (company-quickhelp-mode 1))
+  :hook (company-mode . company-quickhelp-mode))
 
 ;; built-in package for cross-references
 (use-package xref
   :demand
-  :ensure nil
   :config
   (add-to-list 'xref-prompt-for-identifier #'xref-find-references t)
   :general
   ("<f6> <f6>" #'xref-find-definitions)
   ("<f6> d"    #'xref-find-definitions-other-window)
   ("<f6> r"   #'xref-find-references)
-  ("<f6> a"   #'xref-find-apropos))
+  ("<f6> a"   #'xref-find-apropos)
+  :ensure nil)
 
 ;; ivy interface to xref
 (use-package ivy-xref
@@ -1658,8 +1616,7 @@
   (me:add-hook-with-delay 'prog-mode-hook 3 #'flycheck-mode)
   :general
   (:prefix "C-c"
-           "!"  '(:ignore t :which-key "Flycheck→" ))
-  :config)
+           "!"  '(:ignore t :which-key "Flycheck→" )))
 
 (use-package flycheck-pos-tip
   :init
@@ -1672,13 +1629,11 @@
   :general
   (:prefix "C-c"
            "@" '(:ignore t :which-key "HideShow→" ))
-  :config
   :init
   (me:add-hook-with-delay 'prog-mode-hook   5 #'hs-minor-mode))
 
 (use-package avy
   :commands ( avy-goto-word-1 avy-goto-char-2 avy-goto-char-in-line )
-  :config
   :init
   (setq avy-all-windows 'all-frames))
 
@@ -1801,8 +1756,7 @@
   :general
   (:states '(normal visual) :keymaps 'override
            :prefix "g"
-           "-"          #'evil-operator-string-inflection)
-  :init)
+           "-"          #'evil-operator-string-inflection))
 
 (use-package evil-collection
   :custom
@@ -1832,9 +1786,9 @@
      ruby-mode
      woman))
   :after evil
-  :defer 1
   :config
-  (evil-collection-init))
+  (evil-collection-init)
+  :defer 1)
 
 (use-package expand-region
   :demand t
@@ -1851,8 +1805,7 @@
   (define-key evil-visual-state-map [escape] 'evil-visual-char))
 
 (use-package ws-butler
-  :hook (( prog-mode text-mode ) . ws-butler-mode )
-  :config)
+  :hook (( prog-mode text-mode ) . ws-butler-mode ))
 
 (use-package shell-pop
   :general
@@ -1868,7 +1821,6 @@
   ;; :custom
   ;; (which-key-allow-evil-operators t)
   ;; (which-key-show-operator-state-maps t)
-  :init
   :general
   ("<f5>" '(:ignore t :which-key "Major Mode Specific→" ))
   ("<f5> <f5>"  #'which-key-show-major-mode)
@@ -1887,7 +1839,6 @@
   (add-hook 'with-editor-mode-hook (lambda ()
                                      (evil-insert-state)
                                      (setq fill-column 70)))
-  :config
   :diminish with-editor-mode)
 
 (use-package magit
@@ -1929,10 +1880,9 @@
 
 (use-package evil-magit
   :after magit
-  :demand t
-  :init
   :config
-  (evil-define-key* evil-magit-state magit-mode-map [escape] nil))
+  (evil-define-key* evil-magit-state magit-mode-map [escape] nil)
+  :demand t)
 
 (use-package git-timemachine
   :commands ( hydra-timemachine/body )
@@ -1963,7 +1913,6 @@
   (:keymaps 'global :prefix "<f9>"  "t" #'hydra-timemachine/body))
 
 (use-package popwin
-  :init
   :config
   (push '("*Async Shell Command*" :noselect t) popwin:special-display-config)
   (push '("*Completions*" :stick t :noselect t) popwin:special-display-config)
