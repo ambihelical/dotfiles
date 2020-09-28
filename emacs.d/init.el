@@ -1185,7 +1185,7 @@
   ("<f8> <f8>" #'me:search-notes)
   ("<f8> c" #'me:org-capture)
   (:keymaps 'normal :prefix "SPC"
-            "e" '(org-toggle-latex-fragment :which-key "Toggle latex fragment display"))
+            "e" '(org-latex-preview :which-key "Toggle latex fragment display"))
   (:prefix "C-c"
            "C-x"  '(:ignore t :which-key "Org→" ))
   :init
@@ -1221,7 +1221,7 @@
   (("\\.org\\'" . org-mode))
   :config
   (org-babel-do-load-languages 'org-babel-load-languages '((plantuml . t) (ditaa . t)))
-  (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.2))
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
   (defun me:redisplay-inline-images ()
     (when org-inline-image-overlays
       (org-redisplay-inline-images)))
