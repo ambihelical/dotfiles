@@ -31,14 +31,20 @@
 (defconst me:data-directory (or (getenv "XDG_DATA_HOME") "~/.local/share"))
 (defconst me:cache-directory (or (getenv "XDG_CACHE_HOME")  "~/.cache"))
 (defconst me:config-directory (or (getenv "XDG_CONFIG_HOME")  "~/.config"))
-;; fonts in order of preference
-(defconst me:preferred-fonts #'(("Hack" . "Hack-11:autohint=true")
-                                ("Fantasque Sans Mono" . "Fantasque Sans Mono-12")
-                                ("DejaVu Sans Mono" . "DejaVu Sans Mono-11")))
 
-;; host specific font handling
-(when (equal (system-name) "hum")
-  (add-to-list 'me:preferred-fonts '("Roboto Mono" . "Roboto Mono-11:autohint=true:weight=medium")))
+(defconst me:default-font-height
+  (pcase (system-name)
+    ("hum" 11)
+    (_ 12)))
+
+(if (display-graphic-p)
+    (let ((fonts (font-family-list))
+          (fh (* me:default-font-height 10)))   ;; default is in 1/10 points
+      (if (member "Roboto Mono" fonts)
+          (set-face-attribute 'default nil :font "Roboto Mono:autohint=true" :height fh :weight 'medium)
+        (if (member "Hack" fonts)
+            (set-face-attribute 'default nil :font "Hack:autohint=true" :height fh)
+          (set-face-attribute 'default nil :font "DejaVu Sans Mono" :height fh)))))
 
 ;; replace any matches in a string
 (defun me:replace-all (input from to)
@@ -252,7 +258,6 @@
                 (lambda () (unless (frame-focus-state)
                              (save-some-buffers t))))
 
-  (add-hook 'after-make-frame-functions #'me:set-frame-face)
   (setq frame-title-format
         '((:eval (if (buffer-file-name)
                      (string-remove-prefix (abbreviate-file-name default-directory)
@@ -263,18 +268,6 @@
           "]")                                               ; fancy title
         icon-title-format frame-title-format)                  ; use same title for unselected frame
   :config
-
-  (defun me:set-frame-face (frame)
-    "Set font face for frame"
-    (select-frame frame)
-    (if (display-graphic-p)
-        (let* ((fonts (font-family-list))
-               (match (seq-find (lambda (elem) (member (car elem) fonts)) me:preferred-fonts)))
-          (if match
-              (let ((font-name (cdr match)))
-                                        ;(message "font name is %s" font-name)
-                (add-to-list 'default-frame-alist `(font . ,font-name))
-                (set-frame-font font-name t t))))))
 
   (defun me:window-nth-buffer (arg &optional prefix)
     "Select the nth other buffer. Use prefix to put in other window"
@@ -307,8 +300,6 @@
 
   (push '("/home-local/" . "/home/") directory-abbrev-alist)
   (push '("/home-remote/" . "/home/") directory-abbrev-alist)
-  (mapc #'me:set-frame-face (frame-list))
-
   :demand)
 
 ;; built-in winner package
