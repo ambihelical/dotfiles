@@ -106,6 +106,7 @@
               fill-column 120)                              ; auto-wrap only very long lines
 (setq ad-redefinition-action 'accept                        ; turn off 'xyz' got redefined warnings
       confirm-kill-processes nil                            ; don't ask about killing processes at exit
+      create-lockfiles nil                                  ; no lockfiles (.#file)
       custom-file "/dev/null"                               ; disable customizations
       debugger-stack-frame-as-list t                        ; show fns as (fn args) instead of fn(args)
       fast-but-imprecise-scrolling t                        ; quick and dirty scrolling
