@@ -710,6 +710,23 @@
   (tramp-terminal-type "dumb")                              ; avoid fancy prompts
   :ensure nil)
 
+(use-package counsel-tramp
+  :custom
+  (counsel-tramp-control-master t)
+  :hook (counsel-tramp-pre-command . me:counsel-tramp-pre-command)
+  :hook (counsel-tramp-post-command . me:counsel-tramp-post-command)
+  :config
+  (defun me:counsel-tramp-pre-command ()
+    (global-aggressive-indent-mode 0)
+    ;; (editor-config-mode 0)
+    (projectile-mode 0))
+  (defun me:counsel-tramp-post-command ()
+    (global-aggressive-indent-mode 1)
+    ;; (editor-config-mode 1)
+    (projectile-mode 1))
+  :general
+  ("<f4> f"  #'counsel-tramp))
+
 (use-package dired
   :general
   ("<f4> d"   #'dired-jump)
