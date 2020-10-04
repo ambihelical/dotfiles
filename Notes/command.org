@@ -94,8 +94,6 @@
    =addr2line -e executable dump-address=
    - executable is program or shared object
    - dump-address is hex address directly from backtrace
-** Ssh to screen session
-ssh -t $host screen -r $session
 * Bash
 ** Redirections
 *** redirect stderr to err.log
@@ -185,6 +183,16 @@ ssh -t $host screen -r $session
 * Gtags
 ** Create GTAGS files for a set of directories
    Find ./dir1 ./dir2 ./dir3 |gtags --file=-
+* Ssh
+** Ssh to screen session
+=ssh -t $host screen -r $session=
+** Give public key to another host
+=ssh-copy-id -i ~/.ssh/id_rsa.pub user@host=
+** Generate key
+=ssh-keygen=
+** Remove password login (after ssh access set up)
+=passwd -l user=
+
 * Cmake
 ** Generate compile_commands.json
 	add -DCMAKE_EXPORT_COMPILE_COMMANDS=ON to cmake invocations

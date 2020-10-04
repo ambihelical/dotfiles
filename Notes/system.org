@@ -46,6 +46,19 @@
 	  <path-to-export-as-nfs> <ipaddr>/24(ro,no_root_squash,async,no_subtree_check)
 	- service is nfs-kernel-server
 
+** ssh setup
+
+*** Master session for faster connection
+- in ~/.ssh/config:
+  Host *
+    ControlMaster auto
+    ControlPath ~/.ssh/master-%r@%h:%p
+    ControlPersist 30m
+    ServerAliveInterval 60
+
+*** Allow ssh access under ufw
+ =ufw allow in proto tcp from <ip> to any port 22=
+
 ** mount vfat usb drive with open permissions
 	=mount -tvfat -orw,umask=000 <device> <mount-point>=
    =mount -tvfat -oro,umask=000 <device> <mount-point>=
