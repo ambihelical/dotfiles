@@ -615,11 +615,11 @@
 (use-package diff-hl
   :hook ((prog-mode text-mode) . diff-hl-mode)
   :commands (hydra-diff-hl/body)
-  :init
-  (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh)
-  ;; NB: this doesn't work with dired-subtree, so disabling for now
-  ;; (add-hook 'dired-mode-hook #'diff-hl-dired-mode)
   :config
+  (defun me:diff-hl-refresh-buffer ()
+    "Refresh diff-hl in the current buffer"
+    (interactive)
+    (diff-hl-update))
   (diff-hl-margin-mode t)
   ;; Define diff-hl hydra
   (eval '(defhydra hydra-diff-hl (:hint nil)
@@ -627,6 +627,7 @@
            ("j" diff-hl-next-hunk "Goto next hunk" :column "Navigation")
            ("k" diff-hl-previous-hunk "Goto previous hunk" )
            ("v" diff-hl-diff-goto-hunk "Show hunk" :column "Operations")
+           ("g" me:diff-hl-refresh-buffer "Refresh buffer")
            ("r" diff-hl-revert-hunk "Revert hunk at point or all in region"))))
 
 (use-package ruler-mode
