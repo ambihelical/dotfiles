@@ -3,7 +3,7 @@
 	ci = commit
 	cia = commit --amend
 	co = checkout
-	br = branch -vv
+	br = branch -vv --sort=-authordate
 	sm = submodule
 	smu = submodule update --init --recursive
 	list = log --pretty=format:'%h %s' -50
