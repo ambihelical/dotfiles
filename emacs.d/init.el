@@ -1733,10 +1733,7 @@
             ">"           #'me:evil-shift-right-visual
             "<tab>"       #'me:evil-shift-right-visual
             "<"           #'me:evil-shift-left-visual
-            "<backtab>"   #'me:evil-shift-left-visual
-            ;; Move visual selection up or down
-            "<M-j>"       (concat ":m '>+1" (kbd "RET") "gv=gv")
-            "<M-k>"       (concat ":m '<-2" (kbd "RET") "gv=gv"))
+            "<backtab>")   #'me:evil-shift-left-visual
   :config
   (defun me:evil-shift-left-visual ()
     (interactive)
