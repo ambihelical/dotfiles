@@ -32,19 +32,13 @@
 (defconst me:cache-directory (or (getenv "XDG_CACHE_HOME")  "~/.cache"))
 (defconst me:config-directory (or (getenv "XDG_CONFIG_HOME")  "~/.config"))
 
-(defconst me:default-font-height
+(defconst me:default-font
   (pcase (system-name)
-    ("hum" 11)
-    (_ 12)))
+    ("hum" "Roboto Mono-11:autohint=true")
+    ("thud" "Roboto Mono-12:autohint=true")
+    (_ "DejaVu Sans Mono-12")))
 
-(if (display-graphic-p)
-    (let ((fonts (font-family-list))
-          (fh (* me:default-font-height 10)))   ;; default is in 1/10 points
-      (if (member "Roboto Mono" fonts)
-          (set-face-attribute 'default nil :font "Roboto Mono:autohint=true" :height fh :weight 'medium)
-        (if (member "Hack" fonts)
-            (set-face-attribute 'default nil :font "Hack:autohint=true" :height fh)
-          (set-face-attribute 'default nil :font "DejaVu Sans Mono" :height fh)))))
+(add-to-list 'default-frame-alist `(font . ,me:default-font))
 
 ;; replace any matches in a string
 (defun me:replace-all (input from to)
