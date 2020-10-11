@@ -40,10 +40,6 @@
 
 (add-to-list 'default-frame-alist `(font . ,me:default-font))
 
-;; replace any matches in a string
-(defun me:replace-all (input from to)
-  (replace-regexp-in-string (regexp-quote from) to input nil))
-
 ;; run hook function on buffer after a delay
 (defmacro me:add-hook-with-delay (hook delay func)
   `(add-hook ,hook
@@ -1947,15 +1943,3 @@
   (push '("*General Keybindings*" :width 120 :position right) popwin:special-display-config)
   (popwin-mode 1)
   :defer 2)
-
-;; Load system-dependent init file if it exists
-;; will be in emacs.d/init-<prefix>-<ident>.el
-(defun me:load-init-file (prefix ident)
-  (let ((file-name (expand-file-name (concat "init-" prefix "-" (me:replace-all ident "/" "-") ".el") user-emacs-directory)))
-    ;; (message "looking for %s" file-name)
-    (when (file-exists-p file-name)
-      ;; (message "loading %s" file-name)
-      (load-file file-name))))
-
-(me:load-init-file "system" (symbol-name system-type))
-(me:load-init-file "host" (system-name))
