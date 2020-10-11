@@ -93,10 +93,8 @@
 ;; configuration I haven't figured out how to wedge into
 ;; use-package
 
-(setq-default tab-width 4                                   ; preferred tab width
-              indent-tabs-mode nil                          ; disable tabs, re-enable selectively
-              indicate-empty-lines t                        ; show empty lines at end of buffer
-              fill-column 120)                              ; auto-wrap only very long lines
+(setq-default fill-column 120                              ; auto-wrap only very long lines
+              indicate-empty-lines t)                       ; show empty lines at end of buffer
 (setq ad-redefinition-action 'accept                        ; turn off 'xyz' got redefined warnings
       confirm-kill-processes nil                            ; don't ask about killing processes at exit
       create-lockfiles nil                                  ; no lockfiles (.#file)
@@ -125,12 +123,9 @@
       scroll-conservatively 101                             ; only scroll enough to bring cursor to view
       scroll-down-aggressively 0.01                         ; don't jump when scrolling down
       scroll-up-aggressively 0.01                           ; don't jump when scrolling up
-      safe-local-variable-values                            ; allow these values in .dir-locals.el
-      '((evil-indent-convert-tabs . t))
       scalable-fonts-allowed t                              ; allow any scalable font
       select-enable-clipboard nil                           ; make cut/paste function correctly (select)
       sentence-end-double-space nil                         ; sentences end with one space
-      standard-indent tab-width                             ; preferred indent
       x-gtk-use-system-tooltips nil)                        ; allow tooltip theming
 
 (add-hook 'after-init-hook                                  ; report init time
@@ -702,16 +697,19 @@
 (use-package counsel-tramp
   :custom
   (counsel-tramp-control-master t)
+  ;; PR #234 added ssh to this regex, this removes it
+  (editorconfig-exclude-regexps (eval-when-compile
+                                  (rx string-start (or "http" "https" "ftp" "sftp" "rsync") ":")))
   :hook (counsel-tramp-pre-command . me:counsel-tramp-pre-command)
   :hook (counsel-tramp-post-command . me:counsel-tramp-post-command)
   :config
   (defun me:counsel-tramp-pre-command ()
     (global-aggressive-indent-mode 0)
-    ;; (editor-config-mode 0)
+    (editorconfig-mode 0)
     (projectile-mode 0))
   (defun me:counsel-tramp-post-command ()
     (global-aggressive-indent-mode 1)
-    ;; (editor-config-mode 1)
+    (editorconfig-mode 1)
     (projectile-mode 1))
   :general
   ("<f4> f"  #'counsel-tramp))
@@ -1163,11 +1161,14 @@
   :init
   (me:add-hook-with-delay 'prog-mode-hook 8 #'highlight-parentheses-mode))
 
-(use-package dtrt-indent
-  :hook (( prog-mode text-mode ) . dtrt-indent-mode)
+(use-package editorconfig
   :init
-  (setq dtrt-indent-run-after-smie t)
-  :config)
+  (setq editorconfig-lisp-use-default-indent t)   ; restores alignment for elisp
+  :demand
+  :custom
+  (editorconfig-trim-whitespaces-mode 'ws-butler-mode)
+  :config
+  (editorconfig-mode 1))
 
 (use-package aggressive-indent
   :hook (( emacs-lisp-mode ) . aggressive-indent-mode))
