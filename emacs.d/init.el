@@ -37,22 +37,7 @@
     ("hum" "Roboto Mono-11:autohint=true")
     ("thud" "Roboto Mono-12:autohint=true")
     (_ "DejaVu Sans Mono-12")))
-
 (add-to-list 'default-frame-alist `(font . ,me:default-font))
-
-;; run hook function on buffer after a delay
-(defmacro me:add-hook-with-delay (hook delay func)
-  `(add-hook ,hook
-             (lambda ()
-               (let ((cur-buf (current-buffer)))
-                 (run-at-time ,delay nil
-                              (lambda ()
-                                (save-current-buffer
-                                  (if (buffer-live-p cur-buf)
-                                      (progn
-                                        (set-buffer cur-buf)
-                                        (funcall ,func))))))))))
-
 
 (defun me:extra-setup ()
   (tool-bar-mode 0)                                           ; no tool bar (tool-bar)
@@ -195,19 +180,17 @@
 ;; built-in emacs-lisp-mode package
 (use-package emacs-lisp-mode
   :ensure nil
+  :hook (emacs-lisp-mode . me:emacs-lisp-config)
   :general
   (:keymaps 'emacs-lisp-mode-map :prefix "C-c"
             "v"          #'pp-eval-last-sexp
             "x"          #'pp-macroexpand-last-sexp)
   :init
-  (add-hook 'emacs-lisp-mode-hook
-            (lambda ()
-              (modify-syntax-entry ?- "w")))                  ; hyphens are parts of words
-  (add-hook 'emacs-lisp-mode-hook
-            (defun me:lexical-binding ()
-              (when (and (bobp) (eobp))
-                (setq lexical-binding t)
-                (insert ";;; -*- lexical-binding: t; -*-\n\n"))))
+  (defun me:emacs-lisp-config ()
+    (modify-syntax-entry ?- "w")                  ; hyphens are parts of words
+    (when (and (bobp) (eobp))                     ; put lexical binding in empty files
+      (setq lexical-binding t)
+      (insert ";;; -*- lexical-binding: t; -*-\n\n")))
   :interpreter (("emacs" . emacs-lisp-mode)))
 
 (use-package highlight-function-calls
@@ -215,7 +198,7 @@
   :config
   ;; more subtle highlighting for functions
   (set-face-attribute 'highlight-function-calls-face nil :inherit font-lock-type-face :underline nil :italic t )
-  :hook ( emacs-lisp-mode . highlight-function-calls-mode))
+  :hook (emacs-lisp-mode . highlight-function-calls-mode))
 
 ;; built-in frame package
 ;; Because there is no window package, window config is here as well
@@ -316,11 +299,11 @@
 ;; built-in minibuffer package
 (use-package minibuffer
   :ensure nil
-  :init
-  (setq enable-recursive-minibuffers t)                        ; allow recursive edit
-  (add-hook 'minibuffer-setup-hook #'me:minibuffer-setup)
-  (add-hook 'minibuffer-exit-hook #'me:minibuffer-exit)
-  (add-hook 'mouse-leave-buffer-hook #'me:minibuffer-kill)
+  :hook (minibuffer-setup . me:minibuffer-setup)
+  :hook (minibuffer-exit . me:minibuffer-exit)
+  :hook (mouse-leave-buffer . me:minibuffer-kill)
+  :custom
+  (enable-recursive-minibuffers t)                        ; allow recursive edit
   :config
   (minibuffer-depth-indicate-mode t)       ; show recursive edit depth (mb-depth)
 
@@ -361,8 +344,7 @@
   ;; This causes vc-mode-line to be called for each such buffer.
   ;; For this reason, never set this variable.
   (auto-revert-check-vc-info nil)             ; don't check periodically for new vc info
-  (auto-revert-verbose nil)                   ; don't tell me about auto reverts
-  :diminish auto-revert-mode)
+  (auto-revert-verbose nil))                  ; don't tell me about auto reverts
 
 ;; built-in "simple" package
 (use-package simple
@@ -393,14 +375,13 @@
 ;; built-in "artist-mode" package
 ;; No binding because this one will be rare
 (use-package artist-mode
+  :hook (artist-mode . me:artist-mode-config)
   :ensure nil
   :init
-  ;; N.B. This assumes we invoke artist mode while in evil normal mode
-  (add-hook 'artist-mode-hook
-            (lambda ()
-              (if artist-mode
-                  ( evil-emacs-state t)
-                (evil-normal-state t))))
+  (defun me:artist-mode-config ()
+    (if artist-mode
+        ( evil-emacs-state t)
+      (evil-normal-state t)))
   :general
   (:prefix "C-c"
            "C-a"  '(:ignore t :which-key "Artist→" )))
@@ -437,11 +418,10 @@
 ;; built-in prog-mode
 (use-package prog-mode
   :ensure nil
-  :init
-  (add-hook 'prog-mode-hook
-            (lambda ()
-              (modify-syntax-entry ?_ "w")))                 ; underscores are parts of words
-  :config)
+  :hook (prog-mode . me:prog-mode-config)
+  :config
+  (defun me:prog-mode-config ()
+    (modify-syntax-entry ?_ "w")))                 ; underscores are parts of words
 
 ;; built-in generic mode
 (use-package generic
@@ -460,8 +440,7 @@
 ;; build-in configure file mode
 (use-package conf-mode
   :ensure nil
-  :init
-  (add-hook 'conf-mode-hook #'me:run-prog-mode-hooks)
+  :hook (conf-mode . me:run-prog-mode-hooks)
   :demand)
 
 ;; built-in eldoc mode
@@ -472,34 +451,29 @@
 
 ;; highlight keywords
 (use-package fic-mode
-  :config
-  (setq fic-highlighted-words `( "TODO" "HACK" "KLUDGE" "FIXME" "TRICKY" "BUG" ))
-  :init
-  (me:add-hook-with-delay 'prog-mode-hook 10 #'fic-mode))
+  :hook (prog-mode . fic-mode)
+  :custom
+  (fic-highlighted-words `( "TODO" "HACK" "KLUDGE" "FIXME" "TRICKY" "BUG" )))
 
 (use-package whitespace
+  :hook ((prog-mode text-mode) . whitespace-mode )
+  :hook (whitespace-mode . me:set-extra-font-attributes)
   :config
   (setq whitespace-line-column nil                      ; highlight past fill-column
         whitespace-style '(face trailing tabs tab-mark lines-tail space-before-tab)
         whitespace-display-mappings '((tab-mark 9 [9657 9] [92 9])))
-  :init
-  (add-hook 'whitespace-mode-hook 'me:set-extra-font-attributes)
-  (me:add-hook-with-delay 'prog-mode-hook 3 #'whitespace-mode)
-  (me:add-hook-with-delay 'text-mode-hook 3 #'whitespace-mode)
   :config
   ;; set font attributes after theme loads
   (defun me:set-extra-font-attributes ()
     (let ((bg (face-attribute 'default :background))
           (fg (face-attribute 'default :foreground)))
       (set-face-attribute 'whitespace-tab nil :foreground "LightGrey" :background bg )
-      (set-face-attribute 'whitespace-trailing nil :foreground fg :background "PaleVioletRed1" )))
-
-  :diminish whitespace-mode)
+      (set-face-attribute 'whitespace-trailing nil :foreground fg :background "PaleVioletRed1" ))))
 
 (use-package adaptive-wrap
-  :init
-  (setq-default adaptive-wrap-extra-indent 3)
-  (me:add-hook-with-delay 'visual-line-mode-hook 3 #'adaptive-wrap-prefix-mode))
+  :hook (visual-line-mode . adaptive-wrap-prefix-mode )
+  :custom
+  (adaptive-wrap-extra-indent 3))
 
 (use-package miniedit
   :general
@@ -539,11 +513,11 @@
 
 ;; add modeline popup
 (use-package minions                    ; A minor-mode menu for the mode line
-  :init
-  (setq minions-direct '(flycheck-mode overwrite-mode)
-        minions-mode-line-delimiters nil
-        minions-mode-line-lighter "[☰]")
-  (add-hook 'sml/after-setup-hook #'minions-mode)
+  :hook (sml/after-setup . minions-mode)
+  :custom
+  (minions-direct '(flycheck-mode overwrite-mode))
+  (minions-mode-line-delimiters nil)
+  (minions-mode-line-lighter "[☰]")
   :config
   (unless (display-graphic-p)
     (global-set-key [mode-line down-mouse-1] 'minions-minor-modes-menu))
@@ -725,7 +699,7 @@
   ("C-t" '(:ignore t :which-key "Images→" ))
   ("M-s" '(:ignore t :which-key "Incremental search→" ))
   ("C-x" '(:ignore t :which-key "Miscellaneous" ))
-  :hook ( dired-mode . dired-hide-details-mode)
+  :hook (dired-mode . dired-hide-details-mode)
   :init
   (setq dired-recursive-deletes 'always
         dired-recursive-copies 'always
@@ -763,12 +737,8 @@
   :ensure nil)
 
 (use-package peep-dired
+  :hook ( peep-dired . me:peep-dired-config )
   :init
-  ;; This makes peep-dired-mode-map override all evil mappings
-  ;; evil-make-overriding-map doesn't handle j and k for some reason.
-  (add-hook 'peep-dired-hook (lambda ()
-                               (evil-make-intercept-map peep-dired-mode-map 'normal)
-                               (evil-normalize-keymaps 'normal)))
   (setq peep-dired-mode-map
         (let ((map (make-sparse-keymap)))
           (define-key map (kbd "j")         #'peep-dired-next-file)
@@ -777,11 +747,16 @@
           (define-key map (kbd "C-b")       #'peep-dired-scroll-page-up)
           (define-key map (kbd "q")         #'peep-dired)
           map))
+  :config
+  (defun me:peep-dired-config ()
+    (evil-make-intercept-map peep-dired-mode-map 'normal)
+    (evil-normalize-keymaps 'normal))
   :general
   (:keymaps 'dired-mode-map
             "<f5> p" #'peep-dired))
 
 (use-package dired-sidebar
+  :hook (dired-sidebar-mode . me:dired-sidebar-config)
   :custom
   (dired-sidebar-subtree-line-prefix "__")
   (dired-sidebar-theme 'nerd)
@@ -789,24 +764,22 @@
   :general
   ("<f7> h"   #'dired-sidebar-toggle-sidebar)
   ("<f4> h"   #'dired-sidebar-toggle-with-current-directory)
-  :init
-  (add-hook 'dired-sidebar-mode-hook
-            (lambda ()
-              (unless (file-remote-p default-directory)
-                (auto-revert-mode))))
   :config
+  (defun me:dired-sidebar-config ()
+    (unless (file-remote-p default-directory)
+      (auto-revert-mode)))
   (push 'toggle-window-split dired-sidebar-toggle-hidden-commands)
   (push 'rotate-windows dired-sidebar-toggle-hidden-commands))
 
 
 (use-package flyspell
+  :hook (prog-mode . flyspell-prog-mode)
+  :hook (text-mode . flyspell-mode)
   :general
   ;; N.B. C-; is flyspell-correct-previous-word
   ("C-M-;"      #'flyspell-correct-previous-word-generic)
   :init
   (setq ispell-personal-dictionary (expand-file-name "hunspell/words" me:config-directory))
-  (me:add-hook-with-delay 'prog-mode-hook 10 #'flyspell-prog-mode)
-  (me:add-hook-with-delay 'text-mode-hook 10 #'flyspell-mode)
   ;; setup spell check, prefer hunspell
   (cond
    ((executable-find "hunspell")
@@ -1049,7 +1022,7 @@
 
 ;; better M-x
 (use-package amx
-  :hook (( ivy-mode ) . amx-mode))
+  :hook (ivy-mode . amx-mode))
 
 ;; allow grep buffers to be editted
 (use-package wgrep
@@ -1144,9 +1117,7 @@
 
 ;; Highlight delimiters by depth
 (use-package rainbow-delimiters
-  :init
-  (me:add-hook-with-delay 'prog-mode-hook 8 #'rainbow-delimiters-mode)
-  :config)
+  :hook (prog-mode . rainbow-delimiters-mode ))
 
 ;; color color strings
 (use-package rainbow-mode
@@ -1154,8 +1125,7 @@
 
 ;; Highlight cursor's surrounding parentheses
 (use-package highlight-parentheses
-  :init
-  (me:add-hook-with-delay 'prog-mode-hook 8 #'highlight-parentheses-mode))
+  :hook ( prog-mode . highlight-parentheses-mode ))
 
 (use-package editorconfig
   :init
@@ -1167,7 +1137,7 @@
   (editorconfig-mode 1))
 
 (use-package aggressive-indent
-  :hook (( emacs-lisp-mode ) . aggressive-indent-mode))
+  :hook ( emacs-lisp-mode . aggressive-indent-mode))
 
 (use-package markdown-mode
   :mode
@@ -1175,6 +1145,8 @@
    ("\\.md\\'" . markdown-mode)))
 
 (use-package org
+  :hook (org-capture-mode . evil-insert-state)
+  :hook (org-babel-after-execute . me:redisplay-inline-images)
   :commands org-capture
   :general
   ("<f8> t" #'org-todo-list)
@@ -1191,8 +1163,6 @@
   (defconst me:system (expand-file-name "Notes/system.org" me:data-directory))
   (defconst me:android (expand-file-name "Notes/android.org" me:data-directory))
   (defconst me:home-notes (expand-file-name "Notes/notes.org" "~"))
-  (add-hook 'org-capture-mode-hook #'evil-insert-state)
-  (add-hook 'org-babel-after-execute-hook #'me:redisplay-inline-images)
   (setq org-confirm-babel-evaluate #'me:babel-should-confirm
         org-plantuml-jar-path (expand-file-name "java/plantuml.jar" me:data-directory)
         org-ascii-bullets '((ascii 42) (latin1 167) (utf-8 8226))
@@ -1240,7 +1210,7 @@
 
 (use-package evil-org
   :after ( org evil )
-  :hook (( org-mode ) . evil-org-mode)
+  :hook (org-mode . evil-org-mode)
   :general
   ;; workaround for org link RET in normal mode
   ;; see https://github.com/Somelauw/evil-org-mode/issues/57
@@ -1254,7 +1224,7 @@
   (evil-org-agenda-set-keys))
 
 (use-package org-bullets
-  :hook (( org-mode ) . org-bullets-mode))
+  :hook (org-mode . org-bullets-mode))
 
 ;; TODO:
 ;; recommended by rustic install docs
@@ -1287,14 +1257,11 @@
 ;; may be fixed in 25.1 or so
 (use-package adoc-mode
   :defines (company-dabbrev-downcase company-dabbrev-ignore-case)
-  :init
-  (add-hook 'adoc-mode-hook
-            (lambda ()
-              (setq company-dabbrev-downcase nil     ; don't downcase completions
-                    company-dabbrev-ignore-case nil  ; don't keep prefix
-                    evil-shift-width 4               ; set tabs 4 spaces
-                    tab-width 4)))
+  :hook (adoc-mode . me:adoc-mode-config)
   :config
+  (defun me:adoc-mode-config ()
+    (setq company-dabbrev-downcase nil     ; don't downcase completions
+          company-dabbrev-ignore-case nil))  ; don't keep prefix
   (defun me:adoc-mode-flyspell-verify ()
     "flyspell function to ignore certain asciidoc markup"
     (and
@@ -1324,25 +1291,26 @@
   (setq rst-pdf-program "xdg-open"))
 
 (use-package sphinx-mode
-  :hook (( rst-mode ) . sphinx-mode))
+  :hook (rst-mode . sphinx-mode))
 
 (use-package python-mode
+  :hook (python-mode . me:python-mode-config)
   :defines ( python-indent-offset python-indent-guess-indent-offset )
-  :init
-  (add-hook 'python-mode-hook
-            (lambda ()
-              (semantic-mode t)
-              (setq evil-shift-width 4)
-              (setq python-indent-offset 4)
-              (setq python-indent-guess-indent-offset t)
-              (setq tab-width 4)))
+  :config
+  ;; TODO - editorconfig may make some of this obsolete
+  (defun me:python-mode-config ()
+    (semantic-mode t)
+    (setq evil-shift-width 4)
+    (setq python-indent-offset 4)
+    (setq python-indent-guess-indent-offset t)
+    (setq tab-width 4))
   :mode
   (("\\.py\\'" . python-mode)
    ("\\.py3\\'" . python-mode)))
 
 ;; N.B. will need to run jedi:setup-server once
 (use-package company-jedi
-  :hook ((python-mode . me:setup-jedi))
+  :hook (python-mode . me:setup-jedi)
   :init
   (setq jedi:complete-on-dot t)
   :config
@@ -1371,27 +1339,26 @@
   :ensure nil)
 
 (use-package cc-mode
-  :init
-  (add-hook 'c++-mode-hook
-            (lambda ()
-              (define-key c++-mode-map ":" #'self-insert-command)
-              (define-key c++-mode-map ")" #'self-insert-command)
-              (define-key c++-mode-map ";" #'self-insert-command)
-              (c-set-style "ambihelical" nil)
-              (c-set-offset 'arglist-intro '+)               ; indent args extra
-              (c-set-offset 'innamespace [0])))              ; no indentation in namespace
-  (setq c-electric-pound-behavior (quote (alignleft))        ; cpp directives aligned to left
-        show-paren-mode 0)
+  :hook (c++-mode . me:c++-mode-config )
+  :hook (c-mode . me:c-mode-config )
+  :custom
+  (c-electric-pound-behavior (quote (alignleft)))  ; cpp directives aligned to left
+  (show-paren-mode 0)                              ; don't visualize matching parens
   :config
-  ;; use ellemtel style but use c-basic-offset of 4
-  (c-add-style "ambihelical" '("ellemtel" (c-basic-offset . 4)))
-
+  (defun me:c-mode-config ()
+    ;; ambihelical style - use ellemtel style but use c-basic-offset of 4
+    (c-add-style "ambihelical" '("ellemtel" (c-basic-offset . 4)))
+    (c-set-style "ambihelical" nil)
+    (c-set-offset 'arglist-intro '+)               ; indent args extra
+    (c-set-offset 'innamespace [0]))               ; no indentation in namespace
+  (defun me:c++-mode-config ()
+    (me:c-mode-config)
+    (define-key c++-mode-map ":" #'self-insert-command)
+    (define-key c++-mode-map ")" #'self-insert-command)
+    (define-key c++-mode-map ";" #'self-insert-command))
   :mode
-  (("\\.c\\'"   . c-mode)
-   ("\\.cpp\\'" . c++-mode)
-   ("\\.cxx\\'" . c++-mode)
-   ("\\.h\\'"   . c++-mode)
-   ("\\.hpp\\'" . c++-mode)))
+  (("\\.\\(cpp\\|cxx\\|h\\|hpp\\)\\'" . c++-mode)
+   ("\\.c\\'"   . c-mode)))
 
 ;; i3 configs
 (use-package i3wm-config-mode)
@@ -1605,6 +1572,7 @@
 
 (use-package yasnippet
   :commands ( yas-expand-snippet )
+  :hook ((prog-mode text-mode) . yas-minor-mode)
   :general
   ("<s-return>" #'yas-expand)
   (:prefix "C-c"
@@ -1616,35 +1584,31 @@
                 (evil-insert-state)
                 (goto-char p)
                 (set-mark m))))
-  (add-hook 'prog-mode-hook 'yas-minor-mode)
-  (add-hook 'text-mode-hook 'yas-minor-mode)
   :config
   (define-key yas-minor-mode-map (kbd "<tab>") nil) ; don't use <tab>
   (define-key yas-minor-mode-map (kbd "TAB") nil))   ; don't use TAB
 
 (use-package flycheck
-  :init
-  (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
-  (setq flycheck-mode-line-prefix "☑"
-        flycheck-idle-change-delay 3)     ;; default of 0.5s is too noisy
-  (me:add-hook-with-delay 'prog-mode-hook 3 #'flycheck-mode)
+  :hook (prog-mode . flycheck-mode)
+  :custom
+  (flycheck-disabled-checkers '(emacs-lisp-checkdoc))
+  (flycheck-mode-line-prefix "☑")
+  (flycheck-idle-change-delay 3)     ;; default of 0.5s is too noisy
   :general
   (:prefix "C-c"
            "!"  '(:ignore t :which-key "Flycheck→" )))
 
 (use-package flycheck-pos-tip
-  :init
-  (add-hook 'flycheck-mode-hook #'flycheck-pos-tip-mode)
-  :config
-  (setq flycheck-pos-tip-timeout 3))
+  :hook (flycheck-mode . flycheck-pos-tip-mode)
+  :custom
+  (flycheck-pos-tip-timeout 3))
 
 ;; enable code folding (evil has bindings)
 (use-package hideshow
+  :hook (prog-mode . hs-minor-mode)
   :general
   (:prefix "C-c"
-           "@" '(:ignore t :which-key "HideShow→" ))
-  :init
-  (me:add-hook-with-delay 'prog-mode-hook   5 #'hs-minor-mode))
+           "@" '(:ignore t :which-key "HideShow→" )))
 
 (use-package avy
   :commands ( avy-goto-word-1 avy-goto-char-2 avy-goto-char-in-line )
@@ -1747,8 +1711,7 @@
     (:keymaps 'motion "gc" #'evil-commentary)
     (:keymaps 'motion "gy" #'evil-commentary-yank)
     :config
-    (evil-commentary-mode)
-    :diminish evil-commentary-mode)
+    (evil-commentary-mode))
 
   ;; want to start deft in insert mode
   (evil-set-initial-state 'deft-mode 'insert)
@@ -1853,15 +1816,14 @@
   (set-face-attribute 'which-key-local-map-description-face nil :height me:which-key-scale)
   (which-key-mode)
   (which-key-setup-side-window-right-bottom)
-  :defer 2
-  :diminish which-key-mode)
+  :defer 2)
 
 (use-package with-editor
-  :init
-  (add-hook 'with-editor-mode-hook (lambda ()
-                                     (evil-insert-state)
-                                     (setq fill-column 70)))
-  :diminish with-editor-mode)
+  :hook (with-editor-mode . me:with-editor-mode-config)
+  :config
+  (defun me:with-editor-mode-config ()
+    (evil-insert-state)
+    (setq fill-column 70)))
 
 (use-package magit
   :after evil
