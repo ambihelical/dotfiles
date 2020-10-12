@@ -299,38 +299,15 @@
 ;; built-in minibuffer package
 (use-package minibuffer
   :ensure nil
-  :hook (minibuffer-setup . me:minibuffer-setup)
-  :hook (minibuffer-exit . me:minibuffer-exit)
   :hook (mouse-leave-buffer . me:minibuffer-kill)
   :custom
   (enable-recursive-minibuffers t)                        ; allow recursive edit
   :config
   (minibuffer-depth-indicate-mode t)       ; show recursive edit depth (mb-depth)
-
-  ;; value of gc-cons-threshold to restore after minibuffer
-  (defvar me:normal-gc-cons-threshold gc-cons-threshold)
-
-  ;; inhibit messages in echo area when minibuffer enabled
-  ;; and set use large gc-cons-threshold
-  ;; see http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
-  (defun me:minibuffer-setup ()
-    (when (= (minibuffer-depth) 1)
-      (setq me:normal-gc-cons-threshold gc-cons-threshold))
-    (setq inhibit-message t
-          gc-cons-threshold most-positive-fixnum))
-
-  ;; undo that done in me:minibuffer-setup
-  (defun me:minibuffer-exit ()
-    (when (= (minibuffer-depth) 1)
-      ;;(message "gc thresh is %s setting to %s" gc-cons-threshold me:normal-gc-cons-threshold)
-      (setq gc-cons-threshold me:normal-gc-cons-threshold))
-    (setq inhibit-message (> (minibuffer-depth) 1)))
-
-  ;; kill the minibuffer
   (defun me:minibuffer-kill ()
+    "kill the minibuffer"
     (when (and (>= (recursion-depth) 1) (active-minibuffer-window))
       (abort-recursive-edit)))
-
   :demand)
 
 ;; built-in autorevert package
