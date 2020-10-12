@@ -4,18 +4,27 @@
 ;; the package gcmh sets it to a reasonable value later
 (setq gc-cons-threshold most-positive-fixnum)
 
-;; package management
-(require 'package)
+;; call early-init.el and then package-initialize when emacs version < 27.x
+(when (eval-when-compile (version< emacs-version "27"))
+  (load (expand-file-name "early-init.el" user-emacs-directory))
+  (package-initialize))
 
+;; package management
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ("org"   . "http://orgmode.org/elpa/")
                          ("gnu"   . "https://elpa.gnu.org/packages/"))
       package-check-signature nil)
+
+(require 'package)
+
 (package-initialize)
 (unless package-archive-contents
   (package-refresh-contents))
+
+;; use-package
 (unless (package-installed-p 'use-package )
   (package-install 'use-package))
+
 (eval-when-compile
   (require 'subr-x)                                               ; need string functions
   (setq use-package-enable-imenu-support t)                       ; support for packages in imenu
