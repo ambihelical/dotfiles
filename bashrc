@@ -362,6 +362,8 @@ alias ls-x="ls -x"
 alias ag='mark && \ag'
 alias rg='mark && \rg'
 alias gg='mark && git grep'
+# show images in terminal
+alias iopen='img2sixel -b vt340color'
 
 ##### OS Specific aliases #####
 

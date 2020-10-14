@@ -40,7 +40,7 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
  # nice to have apps & related
 	p="$p pithos"
 	p="$p gparted"
-	p="$p vim-gnome xterm rxvt-unicode-256color"
+	p="$p vim-gnome xterm rxvt-unicode-256color libsixel-bin"
 	p="$p hunspell"
  # support for python stuff below
 	p="$p libiw-dev"

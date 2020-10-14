@@ -12,6 +12,9 @@ xterm*loginshell: true
 ! make sure to use 256 colors
 xterm*termName: xterm-256color
 
+! experimental enable sixel graphics
+xterm*decTerminalID: vt340
+
 ! do not update when contents offscreen
 !xterm*fastScroll: true
 
