@@ -1393,6 +1393,9 @@
    ("\\.h\\'"   . c++-mode)
    ("\\.hpp\\'" . c++-mode)))
 
+;; i3 configs
+(use-package i3wm-config-mode)
+
 ;; very large file support
 (use-package vlf
   :general
