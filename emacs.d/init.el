@@ -1625,6 +1625,7 @@
   (evil-want-C-u-scroll t)             ; use vim C-u binding (M-u replaces)
   ;; N.B. This needs to be after evil-want-C-u-delete to work
   (evil-disable-insert-state-bindings t) ; allow emacs bindings in insert mode
+  (evil-undo-system 'undo-fu)
 
   :init
   ;; make cut/paste more vim-like
@@ -1638,7 +1639,6 @@
                 evil-shift-width tab-width)         ; shift by ideal width :)
   (setq evil-want-C-w-delete nil            ; want C-w for windows commands
         evil-want-C-w-in-emacs-state t      ; ditto
-        evil-want-C-i-jump nil              ; need TAB for other things
         evil-mode-line-format '( before . mode-line-front-space)
         evil-search-module #'evil-search)
 
@@ -1728,6 +1728,9 @@
 
   (evil-mode 1))
 
+(use-package undo-fu
+  :after evil)
+
 (use-package evil-string-inflection
   :after evil
   :general
@@ -1751,7 +1754,6 @@
      help
      helpful
      js2-mode
-     info
      log-view
      lua-mode
      minibuffer
