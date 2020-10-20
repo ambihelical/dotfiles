@@ -138,11 +138,6 @@
             (message "Time to initialize: %s"
                      (emacs-init-time))))
 
-(add-hook 'makefile-mode-hook
-          (lambda ()
-            (setq indent-tabs-mode t)                        ; tabs are needed
-            (modify-syntax-entry ?+ "." )))                  ; + is punctuation
-
 (run-with-idle-timer 0.1 nil #'me:extra-setup)
 
 ;; garbage collection magic hack
@@ -1282,6 +1277,14 @@
   :mode
   (("CMakeLists\\.txt\\'" . cmake-mode)
    ("\\.cmake\\'" . cmake-mode)))
+
+;; built-in makefile mode
+(use-package make-mode
+  :ensure nil
+  :hook ( makefile-mode . me:makefile-mode-config )
+  :config
+  (defun me:makefile-mode-config ()
+    (modify-syntax-entry ?+ "." )))                  ; + is punctuation
 
 ;; n.b. buffer-face-mode screws up completion popups
 ;; may be fixed in 25.1 or so
