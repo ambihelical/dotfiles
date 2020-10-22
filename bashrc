@@ -30,6 +30,27 @@ export RIPGREP_CONFIG_PATH=${XDG_CONFIG_HOME}/ripgrep/config
 
 ################ Interactive Portion ###############
 
+if [ ${OSTYPE:0:5} == 'linux' ]; then
+	if [ -e ${XDG_CONFIG_HOME}/environment.d/ssh-agent.conf ]; then
+		source ${XDG_CONFIG_HOME}/environment.d/ssh-agent.conf
+		export SSH_AUTH_SOCK
+	else
+		# create ssh agent if needed and add private key identities
+		export SSH_AGENT_PID=`pgrep -o -u $USER ssh-agent`
+		if [ "$SSH_AGENT_PID" != '' ]; then
+			export SSH_AUTH_SOCK="$(\ls $(find /tmp -type d -uid $(id -u) -name 'ssh-*' 2>/dev/null | head -n 1)/agent.*)"
+			echo "using existing ssh-agent $SSH_AGENT_PID on $SSH_AUTH_SOCK"
+		else
+			eval `ssh-agent`
+			echo "created new ssh-agent"
+			ssh-add
+		fi
+	fi
+fi
+
+# make tramp work better hopefully
+[[ "${TERM}" == dumb ]] && PS1='$ ' && return
+
 # echo only the outside N characters of the string provided, using an ellipsis to
 # indicate removed characters.  Strings shorter than N are unmolested.
 # $1 - string to echo
@@ -191,24 +212,6 @@ less_colors() {
 	colors+='LESS_TERMCAP_ue=$(tput sgr0)'
 	echo $colors
 }
-
-if [ ${OSTYPE:0:5} == 'linux' ]; then
-	if [ -e ${XDG_CONFIG_HOME}/environment.d/ssh-agent.conf ]; then
-		source ${XDG_CONFIG_HOME}/environment.d/ssh-agent.conf
-		export SSH_AUTH_SOCK
-	else
-		# create ssh agent if needed and add private key identities
-		export SSH_AGENT_PID=`pgrep -o -u $USER ssh-agent`
-		if [ "$SSH_AGENT_PID" != '' ]; then
-			export SSH_AUTH_SOCK="$(\ls $(find /tmp -type d -uid $(id -u) -name 'ssh-*' 2>/dev/null | head -n 1)/agent.*)"
-			echo "using existing ssh-agent $SSH_AGENT_PID on $SSH_AUTH_SOCK"
-		else
-			eval `ssh-agent`
-			echo "created new ssh-agent"
-			ssh-add
-		fi
-	fi
-fi
 
 # Enable Bash completion
 if [ -f /usr/share/bash-completion/bash_completion ]; then
