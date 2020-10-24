@@ -646,8 +646,14 @@
   :custom
   (tramp-backup-directory-alist backup-directory-alist)     ; keep backups local
   (tramp-verbose 2)                                         ; don't tell us about connections
-  (tramp-default-method "ssh")                              ; use ssh by default
+  (tramp-default-method "sshx")                             ; use sshx by default
   (tramp-terminal-type "dumb")                              ; avoid fancy prompts
+  (tramp-chunksize 4050)                                    ; via doc for this var
+  :config
+  ;; use dash on jh-rvueb
+  (add-to-list 'tramp-connection-properties
+               (list (regexp-quote "/ssh:.*@jh-rvueb:")
+                     "remote-shell" "/bin/dash"))
   :ensure nil)
 
 (use-package counsel-tramp
