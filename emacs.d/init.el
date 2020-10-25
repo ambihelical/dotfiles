@@ -1578,7 +1578,7 @@
         company-dabbrev-downcase nil)              ; never downcase
   :config
   (company-tng-configure-default)
-  :hook ( prog-mode . company-mode))
+  :hook ( (prog-mode text-mode) . company-mode))
 
 (use-package company-quickhelp
   :hook (company-mode . company-quickhelp-mode))
