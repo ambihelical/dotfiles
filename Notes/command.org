@@ -96,18 +96,18 @@
    - dump-address is hex address directly from backtrace
 * Bash
 ** Redirections
-*** redirect stderr to err.log
-    =cmd 2> err.log=
-*** redirect stderr to stdout
-    =cmd 2>&1=
-*** redirect stderr & stdout to file
-    =cmd &> log=
-*** redirect stderr & stdout, append to file
-    =cmd >> log 2>&1=
 
-*** Save all output to file
-    =cmd 2>&1 | tee file=
-    =cmd 2>&1 | tee -a file=
+|------------------+-------------------------------|
+| Redirection      | Description                   |
+|------------------+-------------------------------|
+| cmd 2> err.log   | stderr to err.log             |
+| cmd 2>&1         | stderr to stdout              |
+| cmd &> log       | stderr and out to file        |
+| cmd >> log 2>&1  | stderr and out append to file |
+| ...\vert tee file    | also save to file             |
+| ...\vert tee -a file | also append to file           |
+|------------------+-------------------------------|
+
 ** Find type of command
 	=type CMD=
 ** Unset environment var
@@ -116,10 +116,15 @@
 	=find PATH -print0 | xargs -0 COMMAND=
 ** notice new binaries
 	=hash -r=
-** useful variables:
-  - $# - number parameters
-  - $@ - list of parameters
-  - ${var%.*} - strip extension
+** useful variable expansions
+
+|-----------+----------------------|
+| Variable  | Description          |
+|-----------+----------------------|
+| $#        | Number of parameters |
+| $@        | List of parameters   |
+| ${var%.*} | Strip extension      |
+|-----------+----------------------|
 
 ** Rename files
 	=for fn in *pattern*; do echo mv $fn ${fn/old-pat/new-pat}; done | /bin/bash=
@@ -144,20 +149,24 @@
 	IFS=$'\n\t'
 
 ** Run function when script exits
-	function myexit {
-		rm -rf "#tempfile#"
-	}
-	try myexit EXIT
-
+#+begin_src bash
+  function myexit {
+	  rm -rf "#tempfile#"
+  }
+  try myexit EXIT
+#+end_src
 ** Null Utility - colon expands arguments but does nothing
-    false || { : $foo ; }
+#+begin_src bash
+  # expand args but do nothing
+  false || { : $foo ; }
 
-    if false
-    then :
-    else
-    echo "true"
-    fi
-
+  # poor man's unless
+  if false
+  then :
+  else
+	  echo "true"
+  fi
+#+end_src
 ** Create temporary directory, Linux or OSX
 	=tmpdir=$(mktemp -d 2>/dev/null || mktemp -d -t 'template-pattern')=
 
@@ -166,10 +175,6 @@
 
 ** Export pgp key
    =gpg --export -a "user name" > gpg.key.asc=
-
-** Expand arguments but do nothing (aka :)
-	- =false || { : $foo ; }=
-   - can use for then block if nothing to do when true
 
 ** Batch renames
    =rename 's/sch/rep' file-glob=
@@ -206,22 +211,23 @@
     Note there is no CONFIGURE_COMMAND, the CMAKE_COMMAND detects this is a
     cmake configure (I think)
 
-
-    ExternalProject_Add(ta-demux
-        PREFIX "${CMAKE_CURRENT_BINARY_DIR}/libdemux/"
-        DEPENDS ""
-        SOURCE_DIR ${src_demux}
-        BUILD_IN_SOURCE 0
-        CMAKE_COMMAND ${CMAKE_COMMAND}
-        CMAKE_ARGS
-            -DCMAKE_C_COMPILER=${TRUSTZONE_TOOLCHAIN_PREFIX}gcc
-            -DCMAKE_RANLIB=${TRUSTZONE_TOOLCHAIN_PREFIX}ranlib
-            -DCMAKE_C_FLAGS=${cflags_demux}
-            -DJUNE_DEMUX_COMPILE_OPTIONS=${cflags_demux}
-            -DJUNE_TOPDIR=${JUNE_TOPDIR}
-        BUILD_COMMAND
-            COMMAND make -j${jlevel} VPATH=${src_demux} coredemux
-        INSTALL_COMMAND
-            COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/lib/
-            COMMAND cp libcoredemux.a ${CMAKE_CURRENT_BINARY_DIR}/lib/
-    )
+    #+begin_src cmake
+	  ExternalProject_Add(ta-demux
+		  PREFIX "${CMAKE_CURRENT_BINARY_DIR}/libdemux/"
+		  DEPENDS ""
+		  SOURCE_DIR ${src_demux}
+		  BUILD_IN_SOURCE 0
+		  CMAKE_COMMAND ${CMAKE_COMMAND}
+		  CMAKE_ARGS
+			  -DCMAKE_C_COMPILER=${TRUSTZONE_TOOLCHAIN_PREFIX}gcc
+			  -DCMAKE_RANLIB=${TRUSTZONE_TOOLCHAIN_PREFIX}ranlib
+			  -DCMAKE_C_FLAGS=${cflags_demux}
+			  -DJUNE_DEMUX_COMPILE_OPTIONS=${cflags_demux}
+			  -DJUNE_TOPDIR=${JUNE_TOPDIR}
+		  BUILD_COMMAND
+			  COMMAND make -j${jlevel} VPATH=${src_demux} coredemux
+		  INSTALL_COMMAND
+			  COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/lib/
+			  COMMAND cp libcoredemux.a ${CMAKE_CURRENT_BINARY_DIR}/lib/
+	  )
+	#+end_src
