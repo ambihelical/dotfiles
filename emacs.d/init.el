@@ -1817,7 +1817,8 @@
   :hook (with-editor-mode . me:with-editor-mode-config)
   :config
   (defun me:with-editor-mode-config ()
-    (evil-insert-state)
+    (when (and (eq 0 (current-column)) (bolp) (eolp))    ; insert if line is empty
+      (evil-insert-state))
     (setq fill-column 70)))
 
 (use-package magit
@@ -1826,10 +1827,19 @@
   (setq magit-completing-read-function 'ivy-completing-read   ; use ivy
         magit-save-repository-buffers 'dontask                ; save repo modified buffers w/o asking
         magit-log-margin '(t "%Y-%m-%d %H:%M " magit-log-margin-width t 18)
-        magit-status-margin '(t "%Y-%m-%d %H:%M " magit-log-margin-width t 18)
+        magit-status-margin '(t "%Y-%m-%d %H:%M " magit-log-margin-width nil 18)
         magit-section-initial-visibility-alist '(( stashes . hide ))
         magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1
         magit-repository-directories '(( "~/dev" . 1)))
+  ;; fullscreen magit and restore configuration when done. This and other
+  ;; things stolen from:
+  ;; https://jakemccrary.com/blog/2020/11/14/speeding-up-magit/
+  (defadvice magit-status (around magit-fullscreen activate)
+    (window-configuration-to-register :magit-fullscreen)
+    ad-do-it
+    (delete-other-windows))
+  (defadvice magit-quit-window (after magit-restore-screen activate)
+    (jump-to-register :magit-fullscreen))
   :general
   ("<f9> a"     #'magit-commit-amend)
   ("<f9> b"     #'magit-blame)
@@ -1850,6 +1860,11 @@
   (define-key magit-mode-map (kbd "M-w") nil)
   (define-key magit-mode-map (kbd "C-w") nil)
   (define-key magit-mode-map (kbd "C-c C-m") #'magit-toggle-margin)
+  ;; remove time consuming sections, most to least here, for worst repo I use
+  (remove-hook 'magit-status-sections-hook 'magit-insert-status-headers)
+  (remove-hook 'magit-status-sections-hook 'magit-insert-stashes)
+  (remove-hook 'magit-status-sections-hook 'magit-insert-tags-header)
+  (remove-hook 'magit-status-sections-hook 'magit-insert-unpulled-from-upstream)
   (defun me:magit-open-revision (rev arg)
     "Select and open revision of current file, with prefix opens in other window"
     (interactive (list (magit-read-branch-or-commit "Open revision") current-prefix-arg))
