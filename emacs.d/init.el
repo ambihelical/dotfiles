@@ -1840,6 +1840,14 @@
         which-key-side-window-max-width 0.67
         which-key-side-window-max-height 0.5
         which-key-sort-order 'which-key-local-then-key-order)
+  (defconst me:which-key-scale 0.80)
+  (set-face-attribute 'which-key-key-face nil :height me:which-key-scale)
+  (set-face-attribute 'which-key-separator-face nil :height me:which-key-scale)
+  (set-face-attribute 'which-key-note-face nil :height me:which-key-scale)
+  (set-face-attribute 'which-key-special-key-face nil :height me:which-key-scale)
+  (set-face-attribute 'which-key-group-description-face nil :height me:which-key-scale)
+  (set-face-attribute 'which-key-command-description-face nil :height me:which-key-scale)
+  (set-face-attribute 'which-key-local-map-description-face nil :height me:which-key-scale)
   (which-key-mode)
   (which-key-setup-side-window-right-bottom)
   :defer 2
