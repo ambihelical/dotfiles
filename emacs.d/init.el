@@ -1349,6 +1349,10 @@
    ("\\(?:Brewfile\\|Capfile\\|Gemfile\\(?:\\.[a-zA-Z0-9._-]+\\)?\\|[rR]akefile\\)\\'" . ruby-mode)))
 
 (use-package js2-mode
+  :general
+  ("<f4> q" #'counsel-jq)
+  :config
+  (use-package counsel-jq)
   :mode
   (("\\.js\\'" . js2-mode)
    ("\\.json\\'" . js2-mode)))
