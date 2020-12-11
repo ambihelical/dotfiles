@@ -446,7 +446,7 @@
   :hook (whitespace-mode . me:set-extra-font-attributes)
   :config
   (setq whitespace-line-column nil                      ; highlight past fill-column
-        whitespace-style '(face trailing tabs tab-mark lines-tail space-before-tab)
+        whitespace-style '(face trailing tabs tab-mark space-before-tab)
         whitespace-display-mappings '((tab-mark 9 [9657 9] [92 9])))
   :config
   ;; set font attributes after theme loads
@@ -455,6 +455,16 @@
           (fg (face-attribute 'default :foreground)))
       (set-face-attribute 'whitespace-tab nil :foreground "LightGrey" :background bg )
       (set-face-attribute 'whitespace-trailing nil :foreground fg :background "PaleVioletRed1" ))))
+
+(use-package display-fill-column-indicator
+  :hook ((prog-mode text-mode) . display-fill-column-indicator-mode )
+  :general
+  ("<f10> i"      #'display-fill-column-indicator-mode)
+  :custom
+  (display-fill-column-indicator-character ?\u2502)
+  :config
+  (set-face-attribute 'fill-column-indicator nil :foreground "LightGrey" :font "DejaVu Sans Mono-14")
+  :ensure nil)
 
 (use-package adaptive-wrap
   :hook (visual-line-mode . adaptive-wrap-prefix-mode )
