@@ -463,7 +463,10 @@
   :custom
   (display-fill-column-indicator-character ?\u2502)
   :config
-  (set-face-attribute 'fill-column-indicator nil :foreground "LightGrey" :font "DejaVu Sans Mono-14")
+  ;; use large font to reduce gaps, need slightly darker for terminal use
+  (if (display-graphic-p)
+      (set-face-attribute 'fill-column-indicator nil :foreground "WhiteSmoke" :font "DejaVu Sans Mono-14")
+    (set-face-attribute 'fill-column-indicator nil :foreground "grey30"))
   :ensure nil)
 
 (use-package adaptive-wrap
@@ -479,6 +482,7 @@
   (miniedit-mode t))
 
 (use-package modus-operandi-theme
+  :if window-system
   :custom
   (modus-operandi-theme-slanted-constructs t)
   (modus-operandi-theme-bold-constructs t)
@@ -493,9 +497,25 @@
   (enable-theme 'modus-operandi)
   :defer 0)
 
+(use-package modus-vivendi-theme
+  :if (null window-system)
+  :custom
+  (modus-operandi-theme-slanted-constructs t)
+  (modus-operandi-theme-bold-constructs t)
+  (modus-operandi-theme-faint-syntax t)
+  (modus-operandi-theme-mode-line 'moody)
+  (modus-operandi-theme-completions 'moderate)
+  (modus-operandi-theme-fringes 'subtle)
+  (modus-operandi-theme-org-blocks 'rainbow)
+  (modus-operandi-theme-scale-headings 't)
+  (modus-operandi-theme-headings '((t . rainbow)))
+  :config
+  (enable-theme 'modus-vivendi)
+  :defer 0)
+
 (use-package smart-mode-line
   :demand
-  :after modus-operandi-theme
+  :after (:any modus-operandi-theme modus-vivendi-theme)
   :init
   (setq sml/theme 'respectful
         size-indication-mode t
@@ -528,7 +548,7 @@
 
 ;; modeline tabs
 (use-package moody
-  :after ( modus-operandi-theme perspective )
+  :after (:all (:any modus-operandi-theme modus-vivendi-theme) perspective )
   :demand
   :custom
   (x-underline-at-descent-line t)
