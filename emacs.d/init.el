@@ -457,7 +457,7 @@
       (set-face-attribute 'whitespace-trailing nil :foreground fg :background "PaleVioletRed1" ))))
 
 (use-package display-fill-column-indicator
-  :hook ((prog-mode text-mode) . display-fill-column-indicator-mode )
+  :hook ((prog-mode text-mode with-editor-mode) . display-fill-column-indicator-mode )
   :general
   ("<f10> i"      #'display-fill-column-indicator-mode)
   :custom
