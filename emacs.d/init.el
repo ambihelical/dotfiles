@@ -48,6 +48,18 @@
     (_ "DejaVu Sans Mono-12")))
 (add-to-list 'default-frame-alist `(font . ,me:default-font))
 
+;; Setup theme load hook
+(defvar me:after-load-theme-hook nil
+  "Hook run after a color theme is loaded using `load-theme'.")
+(defun me:run-after-load-theme-hook (&rest _)
+  "Run `me:after-load-theme-hook'."
+  (run-hooks 'me:after-load-theme-hook))
+(advice-add #'load-theme :after #'me:run-after-load-theme-hook)
+
+;; N.B. some init code depends on this being set correctly
+(defvar me:theme-is-dark-p nil
+  "true if theme is dark")
+
 (defun me:extra-setup ()
   (tool-bar-mode 0)                                           ; no tool bar (tool-bar)
   (scroll-bar-mode 0)                                         ; no scroll bar (scroll-bar)
@@ -450,27 +462,39 @@
 
 (use-package whitespace
   :hook ((prog-mode text-mode) . whitespace-mode )
-  :hook (whitespace-mode . me:set-extra-font-attributes)
+  :hook ((whitespace-mode me:after-load-theme ) . me:whitespace-after-theme-change)
   :config
   (setq whitespace-line-column nil                      ; highlight past fill-column
         whitespace-style '(face trailing tabs tab-mark space-before-tab)
         whitespace-display-mappings '((tab-mark 9 [9657 9] [92 9])))
   :config
   ;; set font attributes after theme loads
-  (defun me:set-extra-font-attributes ()
+  (defun me:whitespace-after-theme-change ()
     (let ((bg (face-attribute 'default :background))
           (fg (face-attribute 'default :foreground)))
-      (set-face-attribute 'whitespace-tab nil :foreground "LightGrey" :background bg )
+      (if me:theme-is-dark-p
+          (set-face-attribute 'whitespace-tab nil :foreground "grey30" :background bg )
+        (set-face-attribute 'whitespace-tab nil :foreground "LightGrey" :background bg ))
       (set-face-attribute 'whitespace-trailing nil :foreground fg :background "PaleVioletRed1" ))))
 
 (use-package display-fill-column-indicator
   :hook ((prog-mode text-mode with-editor-mode) . display-fill-column-indicator-mode )
+  :hook (me:after-load-theme . me:display-fill-column-indicator-after-theme-change)
   :general
   ("<f10> i"      #'display-fill-column-indicator-mode)
   :custom
   (display-fill-column-indicator-character ?\u2502)
   :config
-  (set-face-attribute 'fill-column-indicator nil :foreground "LightGrey" :font "DejaVu Sans Mono-14")
+  (defun me:display-fill-column-indicator-after-theme-change ()
+    ;; N.B. DejaVu Sans Mono has the extra long vertical bar which connects
+    (if me:theme-is-dark-p
+        (if (display-graphic-p)
+            (set-face-attribute 'fill-column-indicator nil :foreground "grey30" :font "DejaVu Sans Mono-14")
+          (set-face-attribute 'fill-column-indicator nil :foreground "grey30"))
+      ;; For console, WhiteSmoke is too light to show, so LightGrey is used
+      (if (display-graphic-p)
+          (set-face-attribute 'fill-column-indicator nil :background "white" :foreground "WhiteSmoke" :font "DejaVu Sans Mono-14")
+        (set-face-attribute 'fill-column-indicator nil :foreground "LightGrey"))))
   :ensure nil)
 
 (use-package adaptive-wrap
@@ -485,24 +509,32 @@
   :config
   (miniedit-mode t))
 
-(use-package modus-operandi-theme
+(use-package modus-themes
+  :init
+  ;; make sure this load theme hook runs first so it can setup variables
+  (add-hook 'me:after-load-theme-hook 'me:modus-themes-after-load-theme -100)
   :custom
-  (modus-operandi-theme-slanted-constructs t)
-  (modus-operandi-theme-bold-constructs t)
-  (modus-operandi-theme-faint-syntax t)
-  (modus-operandi-theme-mode-line 'moody)
-  (modus-operandi-theme-completions 'moderate)
-  (modus-operandi-theme-fringes 'subtle)
-  (modus-operandi-theme-org-blocks 'rainbow)
-  (modus-operandi-theme-scale-headings 't)
-  (modus-operandi-theme-headings '((t . rainbow)))
+  (modus-themes-italic-constructs t)
+  (modus-themes-bold-constructs t)
+  (modus-themes-mode-line '(moody accented))
+  (modus-themes-completions 'moderate)
+  (modus-themes-fringes 'subtle)
+  (modus-themes-org-blocks 'tinted-background)
+  (modus-themes-scale-headings 't)
+  (modus-themes-headings '((t . (rainbow))))
   :config
-  (enable-theme 'modus-operandi)
+  (defun me:modus-themes-after-load-theme ()
+    (setq me:theme-is-dark-p (eq (modus-themes--current-theme) 'modus-vivendi)))
+  (modus-themes-load-themes)
+  ;; initially use dark theme for console
+  (if (window-system)
+      (modus-themes-load-operandi)
+    (modus-themes-load-vivendi))
   :defer 0)
 
 (use-package smart-mode-line
   :demand
-  :after modus-operandi-theme
+  :after (:any modus-operandi-theme modus-vivendi-theme)
   :init
   (setq sml/theme 'respectful
         size-indication-mode t
@@ -535,7 +567,7 @@
 
 ;; modeline tabs
 (use-package moody
-  :after ( modus-operandi-theme perspective )
+  :after (:all (:any modus-operandi-theme modus-vivendi-theme) perspective )
   :demand
   :custom
   (x-underline-at-descent-line t)
@@ -1811,25 +1843,26 @@
         shell-pop-universal-key "<f4> t"))
 
 (use-package which-key
-  ;; :custom
-  ;; (which-key-allow-evil-operators t)
-  ;; (which-key-show-operator-state-maps t)
+  :hook (me:after-load-theme . me:which-key-after-theme-change)
+  :custom
+  (which-key-max-description-length 40)
+  (which-key-side-window-max-width 0.67)
+  (which-key-side-window-max-height 0.5)
+  (which-key-sort-order 'which-key-local-then-key-order)
   :general
   ("<f5>" '(:ignore t :which-key "Major Mode Specific→" ))
   ("<f5> <f5>"  #'which-key-show-major-mode)
   :config
-  (setq which-key-max-description-length 40
-        which-key-side-window-max-width 0.67
-        which-key-side-window-max-height 0.5
-        which-key-sort-order 'which-key-local-then-key-order)
-  (defconst me:which-key-scale 0.80)
-  (set-face-attribute 'which-key-key-face nil :height me:which-key-scale)
-  (set-face-attribute 'which-key-separator-face nil :height me:which-key-scale)
-  (set-face-attribute 'which-key-note-face nil :height me:which-key-scale)
-  (set-face-attribute 'which-key-special-key-face nil :height me:which-key-scale)
-  (set-face-attribute 'which-key-group-description-face nil :height me:which-key-scale)
-  (set-face-attribute 'which-key-command-description-face nil :height me:which-key-scale)
-  (set-face-attribute 'which-key-local-map-description-face nil :height me:which-key-scale)
+  ;; set face scaling after theme change, otherwise these get overridden.
+  (defun me:which-key-after-theme-change ()
+    (defconst me:which-key-scale 0.80)
+    (set-face-attribute 'which-key-key-face nil :height me:which-key-scale)
+    (set-face-attribute 'which-key-separator-face nil :height me:which-key-scale)
+    (set-face-attribute 'which-key-note-face nil :height me:which-key-scale)
+    (set-face-attribute 'which-key-special-key-face nil :height me:which-key-scale)
+    (set-face-attribute 'which-key-group-description-face nil :height me:which-key-scale)
+    (set-face-attribute 'which-key-command-description-face nil :height me:which-key-scale)
+    (set-face-attribute 'which-key-local-map-description-face nil :height me:which-key-scale))
   (which-key-mode)
   (which-key-setup-side-window-right-bottom)
   :defer 2)
