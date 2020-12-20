@@ -297,11 +297,10 @@ export PYTHONSTARTUP=${XDG_CONFIG_HOME}/pythonrc
 export IPYTHONDIR=${XDG_CONFIG_HOME}/ipython
 # avoids ~/.mplayer
 export MPLAYER_HOME=${XDG_CONFIG_HOME}/mplayer
-# setup rust's intermediate directory to be in the cache
-export CARGO_TARGET_DIR=${XDG_CACHE_HOME}/cargo/target
-[ -d ${CARGO_TARGET_DIR} ] || mkdir -p ${CARGO_TARGET_DIR}
 # setup sscache for rust if installed
 command -v sccache > /dev/null && export RUSTC_WRAPPER=sccache
+# enable rust backtraces
+export RUST_BACKTRACE=1
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
