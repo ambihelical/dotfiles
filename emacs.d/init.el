@@ -1256,8 +1256,9 @@
   :custom
   (rustic-lsp-client 'eglot)
   (rustic-lsp-server 'rls)
-  (rustic-compile-display-method (lambda (buf) (display-buffer-pop-up-window buf nil)))
-  (rustic-match-angle-brackets nil))   ;; t slows down scrolling a lot
+  (rustic-compile-backtrace 1)      ; sets RUST_BACKTRACE=1
+  (rustic-match-angle-brackets nil)   ; t slows down scrolling a lot
+  (rustic-compile-display-method (lambda (buf) (display-buffer-pop-up-window buf nil))))
 
 (use-package toml-mode)
 
