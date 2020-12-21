@@ -52,7 +52,6 @@
   (tool-bar-mode 0)                                           ; no tool bar (tool-bar)
   (scroll-bar-mode 0)                                         ; no scroll bar (scroll-bar)
   (mouse-avoidance-mode 'animate)                             ; move mouse pointer out of way (avoid)
-  (global-eldoc-mode -1)                                      ; turn off annoying eldoc mode (eldoc)
   (fset 'yes-or-no-p 'y-or-n-p)                               ; change stupid default y/n? y
   (electric-indent-mode +1)                                   ; turn on electric mode globally (electric)
   (delete-selection-mode t)                                   ; pastes delete selection
@@ -430,8 +429,15 @@
   :demand)
 
 ;; built-in eldoc mode
-(use-package eldoc-mode
+(use-package eldoc
   :ensure nil
+  :general
+  ("<f6> h"  #'eldoc-doc-buffer)
+  :custom
+  (eldoc-echo-area-prefer-doc-buffer t)             ; show in *eldoc* buffer if showing & fits
+  (eldoc-echo-area-use-multiline-p 1)               ; one line at most in minibuffer
+  :config
+  (global-eldoc-mode t)
   :general
   ("<f10> e" #'eldoc-mode))
 
@@ -1526,8 +1532,7 @@
   :after no-littering
   :general
   (:keymaps 'eglot-mode-map
-            "<f6> c"  #'eglot-code-actions
-            "<f6> h"  #'eglot-help-at-point)
+            "<f6> c"  #'eglot-code-actions)
   :hook ((rust-mode . eglot-ensure))
   :init
   (setq eglot-ignored-server-capabilites '( :documentHighlightProvider)
@@ -1947,6 +1952,7 @@
   (push '("*Completions*" :stick t :noselect t) popwin:special-display-config)
   (push '(Man-mode :stick t :height 20) popwin:special-display-config)
   (push '("*undo-tree*" :stick t :width 60 :position right) popwin:special-display-config)
+  (push '("*eldoc*" :width 60 :position right :noselect t) popwin:special-display-config)
   (push '("*General Keybindings*" :width 120 :position right) popwin:special-display-config)
   (popwin-mode 1)
   :defer 2)
