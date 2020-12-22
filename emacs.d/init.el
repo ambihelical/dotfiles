@@ -208,7 +208,6 @@
             "x"          #'pp-macroexpand-last-sexp)
   :init
   (defun me:emacs-lisp-config ()
-    (modify-syntax-entry ?- "w")                  ; hyphens are parts of words
     (when (and (bobp) (eobp))                     ; put lexical binding in empty files
       (setq lexical-binding t)
       (insert ";;; -*- lexical-binding: t; -*-\n\n")))
@@ -412,14 +411,6 @@
   :init
   (setq text-scale-mode-step 1.05)              ; text size increases by 5% (normally 20%)
   :defer 3)
-
-;; built-in prog-mode
-(use-package prog-mode
-  :ensure nil
-  :hook (prog-mode . me:prog-mode-config)
-  :config
-  (defun me:prog-mode-config ()
-    (modify-syntax-entry ?_ "w")))                 ; underscores are parts of words
 
 ;; built-in generic mode
 (use-package generic
@@ -1664,6 +1655,7 @@
 
 (use-package evil
   :hook (( prog-mode text-mode ) . evil-local-mode)
+  :hook ( evil-local-mode . me:evil-local-mode-config)
 
   :custom
   (evil-want-keybinding nil)  ; use evil-collection instead (needs to be done early)
@@ -1675,13 +1667,6 @@
   (evil-undo-system 'undo-fu)
 
   :init
-  ;; make cut/paste more vim-like
-  ;; mainly keep emacs cut/paste separate from system clipboard
-  ;; in the default case (must use "+ or "* to override)
-  ;; This assumes select-enable-clipboard is set to nil as well
-  (add-hook 'evil-local-mode-hook (lambda ()
-                                    (setq-default interprogram-paste-function nil
-                                                  interprogram-cut-function nil)))
   (setq-default evil-symbol-word-search t   ; misnamed: t is search for symbols, not words
                 evil-shift-width tab-width)         ; shift by ideal width :)
   (setq evil-want-C-w-delete nil            ; want C-w for windows commands
@@ -1729,6 +1714,17 @@
             "<"           #'me:evil-shift-left-visual
             "<backtab>")   #'me:evil-shift-left-visual
   :config
+  ;; configuration to run on local mode hook
+  (defun me:evil-local-mode-config ()
+    ;; Make evil words the same as symbol, so word motion
+    ;; works more like vi, especially for snake_case
+    (defalias 'forward-evil-word 'forward-evil-symbol)
+    ;; make cut/paste more vim-like
+    ;; mainly keep emacs cut/paste separate from system clipboard
+    ;; in the default case (must use "+ or "* to override)
+    ;; This assumes select-enable-clipboard is set to nil as well
+    (setq-default interprogram-paste-function nil
+                  interprogram-cut-function nil))
   (defun me:evil-shift-left-visual ()
     (interactive)
     (evil-shift-left (region-beginning) (region-end))
