@@ -1228,6 +1228,10 @@
            (home-notes-path (if (file-exists-p home-notes) home-notes "")))
       (counsel-rg (thing-at-point 'symbol) dot-notes (concat " -- " home-notes-path " " proj-notes-path " " dot-notes) nil))))
 
+(use-package valign
+  :hook ((org-mode markdown-mode) . valign-mode)
+  :custom (valign-fancy-bar t))
+
 (use-package evil-org
   :after ( org evil )
   :hook (org-mode . evil-org-mode)
