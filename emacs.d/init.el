@@ -1258,10 +1258,10 @@
 (use-package org-bullets
   :hook (org-mode . org-bullets-mode))
 
-;; TODO:
-;; recommended by rustic install docs
-;; (add-hook 'eglot--managed-mode-hook (lambda() (flymake-mode -1)))
 (use-package rustic
+  :init
+  ;; recommended by rustic install docs
+  (add-hook 'eglot--managed-mode-hook (lambda() (flymake-mode -1)))
   :custom
   (rustic-lsp-client 'eglot)
   (rustic-lsp-server 'rls)
@@ -1545,11 +1545,13 @@
   :after no-littering
   :general
   (:keymaps 'eglot-mode-map
+            "<f6> x"  #'eglot-rename
             "<f6> c"  #'eglot-code-actions)
-  :hook ((rust-mode . eglot-ensure))
+  :hook ((rust-mode c++-mode c-mode) . eglot-ensure)
   :init
   (setq eglot-ignored-server-capabilites '( :documentHighlightProvider)
         eglot-send-changes-idle-time 3    ;; be slower sending changes
+        eglot-extend-to-xref t            ;; external files ok
         eglot-events-buffer-size 100000)  ;; smaller events buffer
   :config
   ;; use clangd if present, otherwise assume ccls
@@ -1572,7 +1574,6 @@
         (let ((root (projectile-project-root dir)))
           (and root (cons 'transient root)))))
   (add-to-list 'project-find-functions #'me:project-finder))
-
 
 ;; N.B. Completion when candidate is already typed out is broken in company.
 ;; See issues #451, #205, #150
