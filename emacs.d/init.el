@@ -1250,10 +1250,10 @@
 (use-package org-bullets
   :hook (org-mode . org-bullets-mode))
 
-;; TODO:
-;; recommended by rustic install docs
-;; (add-hook 'eglot--managed-mode-hook (lambda() (flymake-mode -1)))
 (use-package rustic
+  :init
+  ;; recommended by rustic install docs
+  (add-hook 'eglot--managed-mode-hook (lambda() (flymake-mode -1)))
   :custom
   (rustic-lsp-client 'eglot)
   (rustic-lsp-server 'rls)
