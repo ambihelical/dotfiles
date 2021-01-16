@@ -687,8 +687,8 @@
   :custom
   (counsel-tramp-control-master t)
   ;; PR #234 added ssh to this regex, this removes it
-  (editorconfig-exclude-regexps (eval-when-compile
-                                  (rx string-start (or "http" "https" "ftp" "sftp" "rsync") ":")))
+  (editorconfig-exclude-regexps (list (eval-when-compile
+					(rx string-start "/" (or "http" "https" "ftp" "sftp" "rsync") ":"))))
   :hook (counsel-tramp-pre-command . me:counsel-tramp-pre-command)
   :hook (counsel-tramp-post-command . me:counsel-tramp-post-command)
   :config
