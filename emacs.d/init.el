@@ -83,6 +83,7 @@
 ;; use-package
 
 (setq-default fill-column 120                              ; auto-wrap only very long lines
+              tab-width 4                                   ; default tab width
               indicate-empty-lines t)                       ; show empty lines at end of buffer
 (setq ad-redefinition-action 'accept                        ; turn off 'xyz' got redefined warnings
       confirm-kill-processes nil                            ; don't ask about killing processes at exit
@@ -686,19 +687,14 @@
 (use-package counsel-tramp
   :custom
   (counsel-tramp-control-master t)
-  ;; PR #234 added ssh to this regex, this removes it
-  (editorconfig-exclude-regexps (list (eval-when-compile
-					(rx string-start "/" (or "http" "https" "ftp" "sftp" "rsync") ":"))))
   :hook (counsel-tramp-pre-command . me:counsel-tramp-pre-command)
   :hook (counsel-tramp-post-command . me:counsel-tramp-post-command)
   :config
   (defun me:counsel-tramp-pre-command ()
     (global-aggressive-indent-mode 0)
-    (editorconfig-mode 0)
     (projectile-mode 0))
   (defun me:counsel-tramp-post-command ()
     (global-aggressive-indent-mode 1)
-    (editorconfig-mode 1)
     (projectile-mode 1))
   :general
   ("<f4> f"  #'counsel-tramp))
@@ -1145,15 +1141,6 @@
 ;; Highlight cursor's surrounding parentheses
 (use-package highlight-parentheses
   :hook ( prog-mode . highlight-parentheses-mode ))
-
-(use-package editorconfig
-  :init
-  (setq editorconfig-lisp-use-default-indent t)   ; restores alignment for elisp
-  :demand
-  :custom
-  (editorconfig-trim-whitespaces-mode 'ws-butler-mode)
-  :config
-  (editorconfig-mode 1))
 
 (use-package aggressive-indent
   :hook ( emacs-lisp-mode . aggressive-indent-mode))
