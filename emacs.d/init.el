@@ -1867,12 +1867,6 @@
         (magit-find-file-other-window rev (buffer-file-name))
       (magit-find-file rev (buffer-file-name)))))
 
-(use-package evil-magit
-  :after magit
-  :config
-  (evil-define-key* evil-magit-state magit-mode-map [escape] nil)
-  :demand t)
-
 (use-package git-timemachine
   :commands ( hydra-timemachine/body )
   :init
