@@ -824,7 +824,36 @@
     (setq define-word-limit (/ (+ 2 (frame-height)) 3)))
   (advice-add #'define-word :before #'me:advise-define-word))
 
+
+(use-package selectrum
+  :general
+  ;;("<f4> <f4>"  #'ivy-resume)
+  ("<f2>"       #'switch-to-buffer)
+  :config
+  (selectrum-mode +1))
+
+(use-package prescient
+  :after selectrum
+  :config
+  (selectrum-prescient-mode +1))
+
+(use-package selectrum-prescient
+  :demand
+  :after selectum
+  :config
+  (prescient-persist-mode +1))
+
+(use-package consult
+  :after selectrum
+  :demand
+  :general
+  ("<f3>" #'consult-find)
+  :config
+  (autoload 'projectile-project-root "projectile")
+  (setq consult-project-root-function #'projectile-project-root))
+
 (use-package ivy
+  :disabled
   :general
   ("<f4> <f4>"  #'ivy-resume)
   ("<f2>"       #'ivy-switch-buffer)
@@ -907,7 +936,7 @@
     (interactive)
     (if (ivy--marked-p)
         (ivy-unmark)
-      (ivy-mark)))
+	  (ivy-mark)))
 
   (defun me:ivy-call-and-next-line ()
     (interactive)
@@ -947,6 +976,7 @@
   :demand t)
 
 (use-package counsel
+  :disabled
   :defines counsel-yank-pop-preselect-last
   :commands (  counsel-file-jump counsel-find-file)
   :general
@@ -1036,8 +1066,8 @@
 (use-package request)
 
 ;; better M-x
-(use-package amx
-  :hook (ivy-mode . amx-mode))
+;;(use-package amx
+;;  :hook (ivy-mode . amx-mode))
 
 ;; allow grep buffers to be editted
 (use-package wgrep
