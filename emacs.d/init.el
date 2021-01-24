@@ -826,31 +826,41 @@
 
 
 (use-package selectrum
-  :general
-  ;;("<f4> <f4>"  #'ivy-resume)
-  ("<f2>"       #'switch-to-buffer)
+  :demand t
   :config
   (selectrum-mode +1))
 
 (use-package prescient
-  :after selectrum
-  :config
-  (selectrum-prescient-mode +1))
-
-(use-package selectrum-prescient
-  :demand
-  :after selectum
+  :demand t
   :config
   (prescient-persist-mode +1))
 
-(use-package consult
-  :after selectrum
-  :demand
-  :general
-  ("<f3>" #'consult-find)
+(use-package selectrum-prescient
+  :after ( selectrum prescient )
+  :demand t
   :config
+  (selectrum-prescient-mode +1))
+
+(use-package consult
+  :custom
+  (consult-narrow-key (kbd "C-c C-c"))
+  :general
+  ("<f2>"  #'consult-buffer)
+  ("<f3>"  #'me:find-fd)
+  :config
+  (defun me:find-fd (&optional dir)
+    (interactive "P")
+    (let ((consult-find-command '("fd" "--color=never" "--full-path")))
+      (consult-find dir)))
   (autoload 'projectile-project-root "projectile")
   (setq consult-project-root-function #'projectile-project-root))
+
+(use-package marginalia
+  :demand t
+  :init
+  (marginalia-mode)
+  (advice-add #'marginalia-cycle :after
+              (lambda () (when (bound-and-true-p selectrum-mode) (selectrum-exhibit)))))
 
 (use-package ivy
   :disabled
@@ -1066,8 +1076,11 @@
 (use-package request)
 
 ;; better M-x
-;;(use-package amx
-;;  :hook (ivy-mode . amx-mode))
+(use-package amx
+  :disabled
+  :custom
+  (amx-backend 'selectrum)
+  :hook (selectrum-mode . amx-mode))
 
 ;; allow grep buffers to be editted
 (use-package wgrep
@@ -1078,7 +1091,7 @@
   :after evil
   :demand t     ; required because use-package-always-defer is t
   :custom
-  (projectile-completion-system 'ivy)
+  (projectile-completion-system 'default)
   (projectile-globally-ignored-files #'( "TAGS" "GTAGS" "GRTAGS" "GPATH" ))
   (projectile-globally-ignored-file-suffixes #'( ".o" ".so" ".a" ".ko" ".jar" ".bc" ".class"))
   ;; we mainly want projects defined by a few markers and we always want to take the top-most marker.
@@ -1609,6 +1622,7 @@
 
 ;; ivy interface to xref
 (use-package ivy-xref
+  :disabled
   :commands (ivy-xref-show-xrefs)
   :after xref
   :init
@@ -1881,7 +1895,7 @@
 (use-package magit
   :after evil
   :init
-  (setq magit-completing-read-function 'ivy-completing-read   ; use ivy
+  (setq magit-completing-read-function 'selectrum-completing-read   ; use selectrum
         magit-save-repository-buffers 'dontask                ; save repo modified buffers w/o asking
         magit-log-margin '(t "%Y-%m-%d %H:%M " magit-log-margin-width t 18)
         magit-status-margin '(t "%Y-%m-%d %H:%M " magit-log-margin-width nil 18)
