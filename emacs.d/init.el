@@ -185,6 +185,7 @@
             "x"          #'pp-macroexpand-last-sexp)
   :init
   (defun me:emacs-lisp-config ()
+	(setq indent-tabs-mode nil)
     (when (and (bobp) (eobp))                     ; put lexical binding in empty files
       (setq lexical-binding t)
       (insert ";;; -*- lexical-binding: t; -*-\n\n")))
