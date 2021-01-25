@@ -1050,8 +1050,10 @@
            (proj-notes (me:project-path "Notes"))
            (home-notes (expand-file-name "Notes" "~"))
            (proj-notes-path (if (file-exists-p proj-notes) proj-notes ""))
-           (home-notes-path (if (file-exists-p home-notes) home-notes "")))
-      (consult-ripgrep dot-notes (concat (thing-at-point 'symbol) " -- " home-notes-path " " proj-notes-path " " dot-notes)))))
+           (home-notes-path (if (file-exists-p home-notes) home-notes ""))
+		   (all-paths (list " -- " home-notes-path proj-notes-path dot-notes))
+		   (consult-ripgrep-command (append consult-ripgrep-command all-paths)))
+      (consult-ripgrep dot-notes (thing-at-point 'symbol)))))
 
 (use-package valign
   :hook ((org-mode markdown-mode) . valign-mode)
