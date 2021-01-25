@@ -166,24 +166,13 @@
 
 ;; infrequently used functions
 (use-package extras
-  :commands (hydra-paste/body x-urgency-hint)
+  :commands (x-urgency-hint)
   :ensure nil
   :general
   ("M-1"     #'me:find-other-file)
   ("<f10> s"  #'me:read-fill-column)
   ("<f4> 1"  #'me:ps-one-per-page)
   ("<f4> 2"  #'me:ps-two-per-page)
-  :config
-  ;; Define paste hydra.
-  ;; eval to avoid pulling in hydra via macro expansion
-  ;; Note would like to also redefine C-n, C-p, but these require
-  ;; last-command to be a paste, and using a hydra messes with that,
-  ;; last-command will be hydra-paste/body
-  (eval '(defhydra hydra-paste (:hint nil)
-           "Pasting (see also C-n, C-p)"
-           ("b" me:paste-then-earlier "Paste above, earlier kill" :column "")
-           ("a" me:paste-then-later "Paste below, later kill" )
-           ("y" me:counsel-yank-pop-preselect-last "Select from kill ring")))
   :load-path "lisp/")
 
 ;; built-in emacs-lisp-mode package
@@ -595,7 +584,7 @@
 ;; better package manager
 (use-package paradox
   :general
-  ("<f4> P"     #'me:paradox-list-packages)
+  ("<f4> p"     #'me:paradox-list-packages)
   (:keymaps 'paradox-menu-mode-map
             "j" #'paradox-next-entry
             "k" #'paradox-previous-entry)
@@ -809,8 +798,7 @@
     (setq ispell-program-name "aspell")
     ;; Please note ispell-extra-args contains ACTUAL parameters passed to aspell
     (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))))
-  :config
-  (use-package flyspell-correct-ivy :demand))
+  :config)
 
 ;; look up words
 (use-package define-word
@@ -846,12 +834,45 @@
   (consult-narrow-key (kbd "C-c C-c"))
   :general
   ("<f2>"  #'consult-buffer)
-  ("<f3>"  #'me:find-fd)
+  ("M-<f2>" #'me:find-window-buffer)
+  ("<f3>"  #'me:consult-find-fd)
+  ("M-y"    #'consult-yank-pop)
+  ("<f10> t" #'consult-theme)
+  ("<f10> c" #'read-color)
+  ("<help> a"    #'consult-apropos)
+  (:keymaps 'global :prefix "<f4>"
+            "a" #'consult-apropos
+            "m" #'consult-mark
+			"j" #'consult-bookmark
+			"l" #'consult-line
+			"r" #'me:consult-ripgrep-here
+			"u" #'insert-char
+            "l" #'consult-locate)
   :config
-  (defun me:find-fd (&optional dir)
+  ;; find file using fd
+  (defun me:consult-find-fd (&optional dir)
     (interactive "P")
     (let ((consult-find-command '("fd" "--color=never" "--full-path")))
       (consult-find dir)))
+  ;; search using ripgrep
+  (defun me:consult-ripgrep-here ()
+    "Search using ripgrep in default directory"
+    (interactive)
+    (consult-ripgrep default-directory (thing-at-point 'symbol)))
+  ;; TODO: implement consult version
+  ;; (defun me:find-window-buffer()
+  ;;   (interactive)
+  ;;   "Find buffer from buffers previously used in window"
+  ;;   (when-let* ((allbufs (mapcar 'car (window-prev-buffers)))
+  ;;               (bufs (remove (current-buffer) allbufs))
+  ;;               (cands (mapcar #'buffer-name bufs)))
+  ;;     (ivy-read "Buffer: " cands
+  ;; 					   :matcher #'ivy--switch-buffer-matcher
+  ;; 					   :action #'ivy--switch-buffer-action
+  ;; 					   :caller 'ivy-switch-buffer
+  ;; 					   :history 'buffer-name-history
+  ;; 					   :preselect (buffer-name (other-buffer (current-buffer)))
+  ;; 					   :keymap ivy-switch-buffer-map)))
   (autoload 'projectile-project-root "projectile")
   (setq consult-project-root-function #'projectile-project-root))
 
@@ -861,226 +882,6 @@
   (marginalia-mode)
   (advice-add #'marginalia-cycle :after
               (lambda () (when (bound-and-true-p selectrum-mode) (selectrum-exhibit)))))
-
-(use-package ivy
-  :disabled
-  :general
-  ("<f4> <f4>"  #'ivy-resume)
-  ("<f2>"       #'ivy-switch-buffer)
-  ("C-x b"      #'ivy-switch-buffer)
-  (:keymaps 'ivy-minibuffer-map
-            "<return>"  #'ivy-done
-            "<C-return>" #'me:ivy-call-and-next-line
-            "<C-S-return>" #'ivy-previous-line-and-call
-            "<M-return>" #'ivy-dispatching-done
-            "<C-right>" #'ivy-next-history-element
-            "<C-left>" #'ivy-previous-history-element
-            "<M-left>"  #'ivy-prev-action
-            "<M-right>" #'ivy-next-action
-            "<C-SPC>" #'me:ivy-toggle-mark-and-next-line
-            "<M-SPC>" #'ivy-toggle-marks
-            "M-y" #'ivy-next-line)                       ; for yank-pop flow
-  ;; add some vim mappings in normal mode minibuffer
-  (:keymaps 'ivy-minibuffer-map :states 'normal
-            "C-b" #'ivy-scroll-down-command
-            "C-f" #'ivy-scroll-up-command
-            "G" #'ivy-end-of-buffer
-            "gg" #'ivy-beginning-of-buffer
-            "<up>" #'ivy-previous-line
-            "<down>" #'ivy-next-line)
-  ;;Bindings under C-c. These are for bindings which are less frequently
-  ;;used and/or hard to remember.  Frequent use bindings are duplicated for discovery.
-  (:keymaps 'ivy-minibuffer-map :prefix "C-c"
-            ;; These are the same as ivy
-            "C-o"   '(ivy-occur                         :which-key "Open occur buffer")
-            "C-s"  '(ivy-rotate-sort                    :which-key "Rotate sorting method")
-            ;; These have been moved so remove ivy's binding
-            "C-a"   nil
-            ;; Duplicates of ivy minibuffer bindings (old and new) for discoverability
-            "C-r"     '(ivy-reverse-i-search            :which-key "Search history ⧉")
-            "<C-left>"  '(ivy-previous-history-element  :which-key "Previous input history ⧉")
-            "<C-right>" '(ivy-next-history-element      :which-key "Next input history ⧉")
-            "<M-left>"  '(ivy-prev-action               :which-key "Previous action ⧉")
-            "<M-right>" '(ivy-next-action               :which-key "Next action ⧉")
-            "<return>" '(ivy-done                       :which-key "Call, exit ⧉")
-            "<C-return>" '(me:ivy-call-and-next-line    :which-key "Call, Next line ⧉")
-            "<C-S-return>" '(ivy-previous-line-and-call :which-key "Previous line, call ⧉")
-            "<M-return>" '(ivy-dispatching-done         :which-key "Get action, call, exit ⧉")
-            "<C-SPC>" '(me:ivy-toggle-mark-and-next-line  :which-key "Toggle mark, next line ⧉")
-            "M-SPC" '(ivy-toggle-marks                  :which-key "Toggle marks ⧉" :override t)
-            "M-j"     '(ivy-yank-word                   :which-key "Yank from buffer ⧉" :override t)
-            ;; New bindings for this prefix only
-            "t"  '(:ignore t :which-key "Toggles→" )
-            "C-c"     '(ivy-avy                         :which-key "Avy search")
-            "a"       '(ivy-read-action                 :which-key "Select default action")
-            "n"       '(ivy-immediate-done              :which-key "Exit with input instead of candidate")
-            "i"       '(ivy-insert-current              :which-key "Copy candidate to input")
-            "r"       '(ivy-restrict-to-matches         :which-key "Rematch matched candidates")
-            "w"       '(ivy-kill-ring-save              :which-key "Copy current candidates to kill ring")
-            "?"       '(ivy-help                        :which-key "Ivy Help"))
-  (:keymaps 'ivy-minibuffer-map :prefix "C-c t"
-            "i"  '(ivy-toggle-ignore :which-key "Toggle ignore")
-            "q"  '(ivy-toggle-regexp-quote :which-key "Toggle regex quoting")
-            "c"  '(ivy-toggle-calling :which-key "Toggle calling")
-            "f"  '(ivy-toggle-fuzzy :which-key "Toggle fuzzy")
-            "u"  '(ivy-toggle-case-fold :which-key "Toggle case folding"))
-  :init
-  (setq ivy-use-virtual-buffers t                           ; add ‘recentf-mode’ and bookmarks to ‘ivy-switch-buffer’.
-        ivy-virtual-abbreviate 'full                        ; use full path for abbreviation
-        ivy-count-format " (%-d) "                          ; show # candidates
-        ivy-pre-prompt-function #'ivy-action-name           ; show action before # candidates
-        ivy-initial-inputs-alist nil                        ; no regexp by default
-        ivy-action-wrap t                                   ; wrap-around for actions
-        ivy-on-del-error-function nil                       ; too many backspaces doesn't exit
-        ivy-re-builders-alist
-        '((t . ivy--regex-ignore-order)))                   ; allow input not in order
-  :config
-
-  ;; Make the default height be 1/3 of frame
-  (defun me:ivy-height-from-frame (caller)
-    (/ (+ 2 (frame-height)) 3))
-  (add-to-list  'ivy-height-alist '( t . me:ivy-height-from-frame) t)
-
-
-  (defun me:ivy-toggle-mark-and-next-line ()
-    (interactive)
-    (if (ivy--marked-p)
-        (ivy-unmark)
-	  (ivy-mark)))
-
-  (defun me:ivy-call-and-next-line ()
-    (interactive)
-    (ivy-call)
-    (ivy-next-line))
-
-  (defun me:ivy-dispatch-call-and-next-line ()
-    (interactive)
-    (ivy-dispatching-call)
-    (ivy-next-line))
-
-  (ivy-mode 1))
-
-;; add some ivy buffer information
-(use-package ivy-rich
-  :after ivy
-  :config
-  ;; recommended by ivy-rich docs
-  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
-  ;; make candidate column and mode bigger, rearrange columns from default
-  (setq ivy-rich-display-transformers-list
-        (plist-put ivy-rich-display-transformers-list
-                   'ivy-switch-buffer
-                   '(:columns
-                     (
-                      (ivy-rich-switch-buffer-indicators (:width 4 :face error :align right))
-                      (ivy-rich-candidate (:width 64))
-                      (ivy-rich-switch-buffer-major-mode (:width 20 :face warning))
-                      (ivy-rich-switch-buffer-project (:width 15 :face success))
-                      (ivy-rich-switch-buffer-size (:width 7))
-                      (ivy-rich-switch-buffer-path (:width (lambda (x) (ivy-rich-switch-buffer-shorten-path x (ivy-rich-minibuffer-width 0.3)))))
-                      )
-                     :predicate
-                     (lambda (cand) (get-buffer cand)))))
-
-  (ivy-rich-mode)
-  :demand t)
-
-(use-package counsel
-  :disabled
-  :defines counsel-yank-pop-preselect-last
-  :commands (  counsel-file-jump counsel-find-file)
-  :general
-  (:keymaps 'global :prefix "<f4>"
-            "a" #'counsel-apropos
-            "b" #'counsel-mark-ring
-            "D" #'counsel-dired-jump
-            "g" #'counsel-search
-            "i" #'counsel-info-lookup-symbol
-            "j" #'counsel-bookmark
-            "k" #'counsel-descbinds
-            "l" #'counsel-linux-app
-            "p" #'counsel-package
-            "r" #'counsel-recentf
-            "s"  '(:ignore t :which-key "Search→" )
-            "u" #'counsel-unicode-char)
-  (:keymaps 'global :prefix "<f4> s"
-            "a" #'me:counsel-ag-here
-            "l" #'counsel-locate
-            "g" #'counsel-git-grep
-            "s" #'me:counsel-rg-here
-            "w" #'swiper
-            "W" #'swiper-all)
-  ("C-h b"  #'counsel-descbinds)
-  ("M-x"    #'counsel-M-x)
-  ("M-y"    #'counsel-yank-pop)
-  ("M-<f2>" #'me:find-window-buffer)
-  ("<f3>"   #'me:find-some-files)
-  ("<f10> t" #'counsel-load-theme)
-  ("<f10> c" #'counsel-colors-emacs)
-  ("<f10> w" #'counsel-colors-web)
-  ("<f6> m" #'counsel-imenu)
-  :custom
-  (counsel-search-engine 'google)
-  (counsel-rg-base-command "rg --max-columns 500 --with-filename --no-heading --line-number --color never %s")
-  :init
-  (setq counsel-yank-pop-separator "\n---\n")
-  :config
-  (defun me:counsel-yank-pop-preselect-last ()
-    (interactive)
-    (let ((counsel-yank-pop-preselect-last t))
-      (call-interactively (counsel-yank-pop))))
-  (defun me:find-file (prompt candidates action caller)
-    "Find a file from a list of files"
-    (ivy-read prompt candidates
-              :matcher #'counsel--find-file-matcher
-              :action action
-              :preselect (counsel--preselect-file)
-              :require-match t
-              :history 'file-name-history
-              :keymap counsel-find-file-map
-              :caller caller))
-  (defun me:find-some-files ()
-    "Find files in project or fallback to current directory"
-    (interactive)
-    (if (and (fboundp 'projectile-project-p) (projectile-project-p))
-        (let* ((project-root (projectile-ensure-project (projectile-project-root)))
-               (action (lambda (f) (with-ivy-window (find-file (expand-file-name f project-root)))))
-               (files (projectile-project-files project-root)))
-          (me:find-file "Find file: " files action 'me:find-some-files))
-      (counsel-find-file)))
-  (defun me:find-window-buffer()
-    (interactive)
-    "Find buffer from buffers previously used in window"
-    (when-let* ((allbufs (mapcar 'car (window-prev-buffers)))
-                (bufs (remove (current-buffer) allbufs))
-                (cands (mapcar #'buffer-name bufs)))
-      (ivy-read "Buffer: " cands
-                :matcher #'ivy--switch-buffer-matcher
-                :action #'ivy--switch-buffer-action
-                :caller 'ivy-switch-buffer
-                :history 'buffer-name-history
-                :preselect (buffer-name (other-buffer (current-buffer)))
-                :keymap ivy-switch-buffer-map)))
-  (defun me:counsel-ag-here ()
-    "Search using ag in default directory"
-    (interactive)
-    (counsel-ag (thing-at-point 'symbol) default-directory))
-  (defun me:counsel-rg-here ()
-    "Search using ripgrep in default directory"
-    (interactive)
-    (counsel-rg (thing-at-point 'symbol) default-directory))
-
-  (counsel-mode 1))
-
-;; Need this for counsel-search
-(use-package request)
-
-;; better M-x
-(use-package amx
-  :disabled
-  :custom
-  (amx-backend 'selectrum)
-  :hook (selectrum-mode . amx-mode))
 
 ;; allow grep buffers to be editted
 (use-package wgrep
@@ -1112,9 +913,8 @@
   (:prefix "<f7>" "x"  '(:ignore t :which-key "Run→" ))
   (:prefix "<f7>" "s"  '(:ignore t :which-key "Search→" ))
   (:prefix "<f7> s" :keymaps 'projectile-mode-map
-           "a" #'me:counsel-ag-project
            "r" nil  ;; unbind projectile-ripgrep
-           "s" #'me:counsel-rg-project)
+           "s" #'me:consult-ripgrep-project)
   ;; For reasons I don't understand, if projectile's map
   ;; has ESC in its map, this prevents the binding
   ;; <f7> <f7> for persp-projectile, but only in "emacs -nw" mode!
@@ -1133,17 +933,11 @@
   ;; to be umpteen different project marker files which goes against having
   ;; a super-project, which of course many people have. Fuck projectile.
   (setq projectile-project-root-files #'( ".projectile" ))
-  (defun me:counsel-ag-project ()
-    "Search using ag in project"
-    (interactive)
-    (if (and (fboundp 'projectile-project-p) (projectile-project-p))
-        (counsel-ag (thing-at-point 'symbol) (projectile-project-root))
-      (message "Not in a project")))
-  (defun me:counsel-rg-project ()
+  (defun me:consult-ripgrep-project ()
     "Search using ripgrep in project"
     (interactive)
     (if (and (fboundp 'projectile-project-p) (projectile-project-p))
-        (counsel-rg (thing-at-point 'symbol) (projectile-project-root))
+        (consult-ripgrep (projectile-project-root) (thing-at-point 'symbol))
       (message "Not in a project")))
 
   (defun me:add-project-templates ()
@@ -1248,7 +1042,8 @@
     (interactive)
     (setq org-capture-templates me:org-capture-templates)
     (me:add-project-templates)
-    (counsel-org-capture))
+    (org-capture))
+  ;; this doesn't work yet
   (defun me:search-notes ()
     (interactive)
     (let* ((dot-notes (expand-file-name "Notes" me:data-directory))
@@ -1256,7 +1051,7 @@
            (home-notes (expand-file-name "Notes" "~"))
            (proj-notes-path (if (file-exists-p proj-notes) proj-notes ""))
            (home-notes-path (if (file-exists-p home-notes) home-notes "")))
-      (counsel-rg (thing-at-point 'symbol) dot-notes (concat " -- " home-notes-path " " proj-notes-path " " dot-notes) nil))))
+      (consult-ripgrep dot-notes (concat (thing-at-point 'symbol) " -- " home-notes-path " " proj-notes-path " " dot-notes)))))
 
 (use-package valign
   :hook ((org-mode markdown-mode) . valign-mode)
@@ -1381,10 +1176,6 @@
    ("\\(?:Brewfile\\|Capfile\\|Gemfile\\(?:\\.[a-zA-Z0-9._-]+\\)?\\|[rR]akefile\\)\\'" . ruby-mode)))
 
 (use-package js2-mode
-  :general
-  ("<f4> q" #'counsel-jq)
-  :config
-  (use-package counsel-jq)
   :mode
   (("\\.js\\'" . js2-mode)
    ("\\.json\\'" . js2-mode)))
@@ -1620,15 +1411,6 @@
   ("<f6> a"   #'xref-find-apropos)
   :ensure nil)
 
-;; ivy interface to xref
-(use-package ivy-xref
-  :disabled
-  :commands (ivy-xref-show-xrefs)
-  :after xref
-  :init
-  (setq xref-show-xrefs-function #'ivy-xref-show-xrefs
-        ivy-xref-use-file-path t))
-
 (use-package yasnippet
   :commands ( yas-expand-snippet )
   :hook ((prog-mode text-mode) . yas-minor-mode)
@@ -1713,7 +1495,6 @@
            "<SPC>"      #'avy-goto-char-timer
            "h"          #'hydra-diff-hl/body
            "l"          #'avy-goto-char-in-line
-           "p"          #'hydra-paste/body
            "x"          #'exchange-point-and-mark)
   (:states '(normal visual) :prefix "<SPC>" :keymaps 'override
            "s"  (general-simulate-key "\"*" :keymap nil :lookup nil :name me:simulate-selection-reg )
@@ -1810,6 +1591,7 @@
    `(
      ansi-term
      cmake-mode
+	 consult
      dired
      dired-sidebar
      doc-view
