@@ -1044,16 +1044,16 @@
     (setq org-capture-templates me:org-capture-templates)
     (me:add-project-templates)
     (org-capture))
-  ;; this doesn't work yet
   (defun me:search-notes ()
     (interactive)
     (let* ((dot-notes (expand-file-name "Notes" me:data-directory))
            (proj-notes (me:project-path "Notes"))
            (home-notes (expand-file-name "Notes" "~"))
-           (proj-notes-path (if (file-exists-p proj-notes) proj-notes ""))
-           (home-notes-path (if (file-exists-p home-notes) home-notes ""))
-		   (all-paths (list " -- " home-notes-path proj-notes-path dot-notes))
-		   (consult-ripgrep-command (append consult-ripgrep-command all-paths)))
+           (proj-notes-path (if (file-exists-p proj-notes) proj-notes nil))
+           (home-notes-path (if (file-exists-p home-notes) home-notes nil))
+           (cmd-short (remove "-e" (remove "." consult-ripgrep-command)))
+           (cmd-end (list home-notes-path proj-notes-path dot-notes "-e"))
+           (consult-ripgrep-command (append cmd-short cmd-end)))
       (consult-ripgrep dot-notes (thing-at-point 'symbol)))))
 
 (use-package valign
