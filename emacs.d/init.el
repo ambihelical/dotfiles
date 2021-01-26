@@ -844,11 +844,11 @@
   (:keymaps 'global :prefix "<f4>"
             "a" #'consult-apropos
             "m" #'consult-mark
-			"j" #'consult-bookmark
-			"l" #'consult-line
-			"r" #'me:consult-ripgrep-here
-			"u" #'insert-char
-            "l" #'consult-locate)
+            "j" #'consult-bookmark
+            "l" #'consult-line
+            "s" #'me:consult-ripgrep-here
+            "u" #'insert-char
+            "o" #'consult-locate)
   :config
   ;; find file using fd
   (defun me:consult-find-fd (&optional dir)
@@ -912,16 +912,14 @@
   (:prefix "<f7>" "4"  '(:ignore t :which-key "Find→" ))
   (:prefix "<f7>" "5"  '(:ignore t :which-key "Find→" ))
   (:prefix "<f7>" "x"  '(:ignore t :which-key "Run→" ))
-  (:prefix "<f7>" "s"  '(:ignore t :which-key "Search→" ))
-  (:prefix "<f7> s" :keymaps 'projectile-mode-map
-           "r" nil  ;; unbind projectile-ripgrep
-           "s" #'me:consult-ripgrep-project)
   ;; For reasons I don't understand, if projectile's map
   ;; has ESC in its map, this prevents the binding
   ;; <f7> <f7> for persp-projectile, but only in "emacs -nw" mode!
   ;; So getting rid of it here.
   (:prefix "<f7>" :keymaps 'projectile-mode-map
+           "s" nil
            "ESC" nil)
+  (:prefix "<f7>" "s" #'me:consult-ripgrep-project)
 
   :init
   (setq
