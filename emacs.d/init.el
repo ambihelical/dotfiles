@@ -835,12 +835,12 @@
   (consult-narrow-key (kbd "C-c C-c"))
   :general
   ("<f2>"  #'consult-buffer)
-  ("M-<f2>" #'me:find-window-buffer)
   ("<f3>"  #'me:consult-find-fd)
   ("M-y"    #'consult-yank-pop)
   ("<f10> t" #'consult-theme)
   ("<f10> c" #'read-color)
   ("<help> a"    #'consult-apropos)
+  ("<f6> m" #'consult-imenu)
   (:keymaps 'global :prefix "<f4>"
             "a" #'consult-apropos
             "m" #'consult-mark
@@ -860,20 +860,6 @@
     "Search using ripgrep in default directory"
     (interactive)
     (consult-ripgrep default-directory (thing-at-point 'symbol)))
-  ;; TODO: implement consult version
-  ;; (defun me:find-window-buffer()
-  ;;   (interactive)
-  ;;   "Find buffer from buffers previously used in window"
-  ;;   (when-let* ((allbufs (mapcar 'car (window-prev-buffers)))
-  ;;               (bufs (remove (current-buffer) allbufs))
-  ;;               (cands (mapcar #'buffer-name bufs)))
-  ;;     (ivy-read "Buffer: " cands
-  ;; 					   :matcher #'ivy--switch-buffer-matcher
-  ;; 					   :action #'ivy--switch-buffer-action
-  ;; 					   :caller 'ivy-switch-buffer
-  ;; 					   :history 'buffer-name-history
-  ;; 					   :preselect (buffer-name (other-buffer (current-buffer)))
-  ;; 					   :keymap ivy-switch-buffer-map)))
   (autoload 'projectile-project-root "projectile")
   (setq consult-project-root-function #'projectile-project-root))
 
