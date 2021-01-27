@@ -34,7 +34,7 @@
   '(setq use-package-always-ensure t                              ; ensure by default
          use-package-always-defer t                               ; defer by default
          use-package-minimum-reported-time 0.03                   ; minimum time when verbose
-         use-package-verbose nil))                                 ; don't be verbose
+         use-package-verbose t))                                 ; don't be verbose
 
 ;; xdg directories
 (defconst me:data-directory (or (getenv "XDG_DATA_HOME") "~/.local/share"))
@@ -814,25 +814,31 @@
   (advice-add #'define-word :before #'me:advise-define-word))
 
 
+;; select items from list
 (use-package selectrum
   :demand t
+  :general
+  (:keymaps 'selectrum-minibuffer-map
+            "C-d" #'selectrum-next-page
+            "C-u" #'selectrum-previous-page)
   :config
   (selectrum-mode +1))
 
+;; effective sorting and filtering
 (use-package prescient
   :demand t
   :config
   (prescient-persist-mode +1))
 
+;; prescient for selectrum
 (use-package selectrum-prescient
   :after ( selectrum prescient )
   :demand t
   :config
   (selectrum-prescient-mode +1))
 
+;; completion-read functions
 (use-package consult
-  :custom
-  (consult-narrow-key (kbd "C-c C-c"))
   :general
   ("<f2>"  #'consult-buffer)
   ("M-<f2>"  #'me:find-window-buffer)
@@ -875,9 +881,12 @@
   (autoload 'projectile-project-root "projectile")
   (setq consult-project-root-function #'projectile-project-root))
 
+;; rich minibuffer annotations
 (use-package marginalia
   :demand t
-  :init
+  :general
+  (:keymaps 'minibuffer-local-map "C-<tab>" #'marginalia-cycle)
+  :config
   (marginalia-mode)
   (advice-add #'marginalia-cycle :after
               (lambda () (when (bound-and-true-p selectrum-mode) (selectrum-exhibit)))))
