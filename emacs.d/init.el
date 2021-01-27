@@ -882,6 +882,15 @@
   (advice-add #'marginalia-cycle :after
               (lambda () (when (bound-and-true-p selectrum-mode) (selectrum-exhibit)))))
 
+(use-package embark
+  :after selectrum
+  ;; TODO convert to general
+  :bind (:map minibuffer-local-map
+              ("C-o" . embark-act)
+              ("C-S-o" . embark-act-noexit)
+              :map embark-file-map
+              ("j" . dired-jump)))
+
 ;; allow grep buffers to be editted
 (use-package wgrep
   :general
