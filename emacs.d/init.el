@@ -835,6 +835,7 @@
   (consult-narrow-key (kbd "C-c C-c"))
   :general
   ("<f2>"  #'consult-buffer)
+  ("M-<f2>"  #'me:find-window-buffer)
   ("<f3>"  #'me:consult-find-fd)
   ("M-y"    #'consult-yank-pop)
   ("<f10> t" #'consult-theme)
@@ -860,6 +861,17 @@
     "Search using ripgrep in default directory"
     (interactive)
     (consult-ripgrep default-directory (thing-at-point 'symbol)))
+  (defun me:find-window-buffer()
+    (interactive)
+    "Find buffer from buffers previously used in window"
+    (when-let* ((allbufs (mapcar 'car (window-prev-buffers)))
+                (bufs (remove (current-buffer) allbufs))
+                (cands (mapcar #'buffer-name bufs))
+                (buf-name (completing-read
+                           "Buffer: " cands
+                           nil t "" 'buffer-name-history
+                           (buffer-name (other-buffer (current-buffer))) t)))
+      (switch-to-buffer buf-name)))
   (autoload 'projectile-project-root "projectile")
   (setq consult-project-root-function #'projectile-project-root))
 
