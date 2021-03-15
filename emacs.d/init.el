@@ -1850,7 +1850,7 @@
     (setq fill-column 70)))
 
 (use-package magit
-  :after evil
+  :after ( evil evil-collection )
   :init
   (setq magit-completing-read-function 'ivy-completing-read   ; use ivy
         magit-save-repository-buffers 'dontask                ; save repo modified buffers w/o asking
