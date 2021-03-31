@@ -773,7 +773,7 @@
 (use-package dired-sidebar
   :hook (dired-sidebar-mode . me:dired-sidebar-config)
   :custom
-  (dired-sidebar-subtree-line-prefix "__")
+  (dired-sidebar-subtree-line-prefix "  ")
   (dired-sidebar-theme 'nerd)
   (dired-sidebar-close-sidebar-on-file-open t)
   :general
