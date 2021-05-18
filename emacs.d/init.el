@@ -479,8 +479,7 @@
   :config
   (miniedit-mode t))
 
-(use-package modus-operandi-theme
-  :if window-system
+(use-package modus-themes
   :custom
   (modus-operandi-theme-slanted-constructs t)
   (modus-operandi-theme-bold-constructs t)
@@ -491,24 +490,19 @@
   (modus-operandi-theme-org-blocks 'rainbow)
   (modus-operandi-theme-scale-headings 't)
   (modus-operandi-theme-headings '((t . rainbow)))
+  (modus-vivendi-theme-slanted-constructs t)
+  (modus-vivendi-theme-bold-constructs t)
+  (modus-vivendi-theme-faint-syntax t)
+  (modus-vivendi-theme-mode-line 'moody)
+  (modus-vivendi-theme-completions 'moderate)
+  (modus-vivendi-theme-fringes 'subtle)
+  (modus-vivendi-theme-org-blocks 'rainbow)
+  (modus-vivendi-theme-scale-headings 't)
+  (modus-vivendi-theme-headings '((t . rainbow)))
   :config
-  (enable-theme 'modus-operandi)
-  :defer 0)
-
-(use-package modus-vivendi-theme
-  :if (null window-system)
-  :custom
-  (modus-operandi-theme-slanted-constructs t)
-  (modus-operandi-theme-bold-constructs t)
-  (modus-operandi-theme-faint-syntax t)
-  (modus-operandi-theme-mode-line 'moody)
-  (modus-operandi-theme-completions 'moderate)
-  (modus-operandi-theme-fringes 'subtle)
-  (modus-operandi-theme-org-blocks 'rainbow)
-  (modus-operandi-theme-scale-headings 't)
-  (modus-operandi-theme-headings '((t . rainbow)))
-  :config
-  (enable-theme 'modus-vivendi)
+  (if (window-system)
+	  (modus-themes-load-operandi)
+	(modus-themes-load-vivendi))
   :defer 0)
 
 (use-package smart-mode-line
