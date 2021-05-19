@@ -57,6 +57,12 @@
   (electric-indent-mode +1)                                   ; turn on electric mode globally (electric)
   (delete-selection-mode t)                                   ; pastes delete selection
   (blink-cursor-mode -1)                                      ; don't blink cursor
+  ;; add mingw64 paths under windows
+  (when (eq window-system 'w32)
+    (add-to-list 'exec-path "/mingw64/bin/")
+    (add-to-list 'exec-path "/bin/")
+    (add-to-list 'exec-path "/usr/bin/")
+    (add-to-list 'exec-path (expand-file-name "bin/" "~")))
   (unless (display-graphic-p)
     ;; use mouse in xterm mode
     (xterm-mouse-mode t)
@@ -105,6 +111,7 @@
       mouse-wheel-scroll-amount '(3 ((shift) . 9))          ; 3 lines, or 9 line when shift held (mwheel)
       mouse-wheel-follow-mouse 't                           ; scroll window under mouse (mwheel)
       mouse-wheel-progressive-speed nil                     ; don't speed up (mwheel)
+	  ring-bell-function 'ignore                            ; don't ring bell
       undo-limit 1000000                                    ; 1M (default is 80K)
       undo-strong-limit 1500000                             ; 1.5M (default is 120K)
       undo-outer-limit 150000000                            ; 150M (default is 12M)
@@ -783,6 +790,7 @@
 
 
 (use-package flyspell
+  :unless (eq window-system 'w32)
   :hook (prog-mode . flyspell-prog-mode)
   :hook (text-mode . flyspell-mode)
   :general
@@ -1356,6 +1364,7 @@
   :custom
   (c-electric-pound-behavior (quote (alignleft)))  ; cpp directives aligned to left
   (show-paren-mode 0)                              ; don't visualize matching parens
+  (indent-tabs-mode nil)                           ; no tabs
   :config
   (defun me:c-mode-config ()
     ;; ambihelical style - use ellemtel style but use c-basic-offset of 4
