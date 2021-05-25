@@ -59,9 +59,9 @@
   (blink-cursor-mode -1)                                      ; don't blink cursor
   ;; add mingw64 paths under windows
   (when (eq window-system 'w32)
-    (add-to-list 'exec-path "/mingw64/bin/")
-    (add-to-list 'exec-path "/bin/")
-    (add-to-list 'exec-path "/usr/bin/")
+    (add-to-list 'exec-path "c:/Program Files/Git/mingw64/bin/")
+    (add-to-list 'exec-path "c:/Program Files/Git/bin/")
+    (add-to-list 'exec-path "c:/Program Files/Git/usr/bin/")
     (add-to-list 'exec-path (expand-file-name "bin/" "~")))
   (unless (display-graphic-p)
     ;; use mouse in xterm mode
@@ -985,7 +985,6 @@
   ("<f6> m" #'counsel-imenu)
   :custom
   (counsel-search-engine 'google)
-  (counsel-rg-base-command "rg --max-columns 500 --with-filename --no-heading --line-number --color never %s")
   :init
   (setq counsel-yank-pop-separator "\n---\n")
   :config
