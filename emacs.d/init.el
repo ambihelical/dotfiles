@@ -1876,10 +1876,15 @@
   ("<f9> b"     #'magit-blame)
   ("<f9> B"     #'magit-run-git-gui-blame)
   ("<f9> c"     #'magit-commit)
-  ("<f9> f"     #'magit-log-buffer-file)
-  ("<f9> l"     #'magit-log-current)
+  ("<f9> f"     #'magit-fetch)
+  ("<f9> j"     #'magit-checkout)
+  ("<f9> j"     #'magit-checkout)
+  ("<f9> l"     #'magit-log-buffer-file)
+  ("<f9> L"     #'magit-log-current)
   ("<f9> o"     #'me:magit-open-revision)
-  ("<f9> r"     #'magit-list-repositories)
+  ("<f9> p"     #'magit-push)
+  ("<f9> r"     #'magit-rebase)
+  ("<f9> y"     #'magit-cherry-pick)
   ("<f9> <f9>"  #'magit-status)
   :config
   ;; I want these for buffer&window switching
