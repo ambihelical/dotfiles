@@ -449,14 +449,14 @@
 
 (use-package whitespace
   :hook ((prog-mode text-mode) . whitespace-mode )
-  :hook (whitespace-mode . me:set-extra-font-attributes)
+  :hook ((whitespace-mode modus-themes-after-load-theme ) . me:whitespace-after-theme-change)
   :config
   (setq whitespace-line-column nil                      ; highlight past fill-column
         whitespace-style '(face trailing tabs tab-mark space-before-tab)
         whitespace-display-mappings '((tab-mark 9 [9657 9] [92 9])))
   :config
   ;; set font attributes after theme loads
-  (defun me:set-extra-font-attributes ()
+  (defun me:whitespace-after-theme-change ()
     (let ((bg (face-attribute 'default :background))
           (fg (face-attribute 'default :foreground)))
       (set-face-attribute 'whitespace-tab nil :foreground "LightGrey" :background bg )
@@ -464,15 +464,22 @@
 
 (use-package display-fill-column-indicator
   :hook ((prog-mode text-mode with-editor-mode) . display-fill-column-indicator-mode )
+  :hook (modus-themes-after-load-theme . me:display-fill-column-indicator-after-theme-change)
   :general
   ("<f10> i"      #'display-fill-column-indicator-mode)
   :custom
   (display-fill-column-indicator-character ?\u2502)
   :config
-  ;; use large font to reduce gaps, need slightly darker for terminal use
-  (if (display-graphic-p)
-      (set-face-attribute 'fill-column-indicator nil :foreground "WhiteSmoke" :font "DejaVu Sans Mono-14")
-    (set-face-attribute 'fill-column-indicator nil :foreground "grey30"))
+  (defun me:display-fill-column-indicator-after-theme-change ()
+    ;; N.B. DejaVu Sans Mono has the extra long vertical bar which connects
+    (if (eq (modus-themes--current-theme) 'modus-operandi)  ;; light theme
+        ;; For console, WhiteSmoke is too light to show, so LightGrey is used
+        (if (display-graphic-p)
+            (set-face-attribute 'fill-column-indicator nil :foreground "WhiteSmoke" :font "DejaVu Sans Mono-14")
+          (set-face-attribute 'fill-column-indicator nil :foreground "LightGrey"))
+      (if (display-graphic-p)
+          (set-face-attribute 'fill-column-indicator nil :foreground "grey30" :font "DejaVu Sans Mono-14")
+        (set-face-attribute 'fill-column-indicator nil :foreground "grey30"))))
   :ensure nil)
 
 (use-package adaptive-wrap
@@ -1813,25 +1820,27 @@
         shell-pop-universal-key "<f4> t"))
 
 (use-package which-key
-  ;; :custom
-  ;; (which-key-allow-evil-operators t)
-  ;; (which-key-show-operator-state-maps t)
+  ;; TODO: find hook for any theme change
+  :hook (modus-themes-after-load-theme . me:which-key-after-theme-change)
+  :custom
+  (which-key-max-description-length 40)
+  (which-key-side-window-max-width 0.67)
+  (which-key-side-window-max-height 0.5)
+  (which-key-sort-order 'which-key-local-then-key-order)
   :general
   ("<f5>" '(:ignore t :which-key "Major Mode Specific→" ))
   ("<f5> <f5>"  #'which-key-show-major-mode)
   :config
-  (setq which-key-max-description-length 40
-        which-key-side-window-max-width 0.67
-        which-key-side-window-max-height 0.5
-        which-key-sort-order 'which-key-local-then-key-order)
-  (defconst me:which-key-scale 0.80)
-  (set-face-attribute 'which-key-key-face nil :height me:which-key-scale)
-  (set-face-attribute 'which-key-separator-face nil :height me:which-key-scale)
-  (set-face-attribute 'which-key-note-face nil :height me:which-key-scale)
-  (set-face-attribute 'which-key-special-key-face nil :height me:which-key-scale)
-  (set-face-attribute 'which-key-group-description-face nil :height me:which-key-scale)
-  (set-face-attribute 'which-key-command-description-face nil :height me:which-key-scale)
-  (set-face-attribute 'which-key-local-map-description-face nil :height me:which-key-scale)
+  ;; set face scaling after theme change, otherwise these get overridden.
+  (defun me:which-key-after-theme-change ()
+    (defconst me:which-key-scale 0.80)
+    (set-face-attribute 'which-key-key-face nil :height me:which-key-scale)
+    (set-face-attribute 'which-key-separator-face nil :height me:which-key-scale)
+    (set-face-attribute 'which-key-note-face nil :height me:which-key-scale)
+    (set-face-attribute 'which-key-special-key-face nil :height me:which-key-scale)
+    (set-face-attribute 'which-key-group-description-face nil :height me:which-key-scale)
+    (set-face-attribute 'which-key-command-description-face nil :height me:which-key-scale)
+    (set-face-attribute 'which-key-local-map-description-face nil :height me:which-key-scale))
   (which-key-mode)
   (which-key-setup-side-window-right-bottom)
   :defer 2)
