@@ -857,6 +857,7 @@
             "<M-right>" #'ivy-next-action
             "<C-SPC>" #'me:ivy-toggle-mark-and-next-line
             "<M-SPC>" #'ivy-toggle-marks
+            "<S-SPC>" nil        ;; default is ivy-restrict-to-matches which is annoying
             "M-y" #'ivy-next-line)                       ; for yank-pop flow
   ;; add some vim mappings in normal mode minibuffer
   (:keymaps 'ivy-minibuffer-map :states 'normal
