@@ -489,10 +489,9 @@
 
 (use-package modus-themes
   :custom
-  (modus-themes-slanted-constructs t)
+  (modus-themes-italic-constructs t)
   (modus-themes-bold-constructs t)
-  (modus-themes-faint-syntax t)
-  (modus-themes-mode-line 'moody)
+  (modus-themes-mode-line '(moody accented))
   (modus-themes-completions 'moderate)
   (modus-themes-fringes 'subtle)
   (modus-themes-org-blocks 'rainbow)
