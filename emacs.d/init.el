@@ -49,6 +49,18 @@
     (_ "DejaVu Sans Mono-12")))
 (add-to-list 'default-frame-alist `(font . ,me:default-font))
 
+;; Setup theme load hook
+(defvar me:after-load-theme-hook nil
+  "Hook run after a color theme is loaded using `load-theme'.")
+(defun me:run-after-load-theme-hook (&rest _)
+  "Run `me:after-load-theme-hook'."
+  (run-hooks 'me:after-load-theme-hook))
+(advice-add #'load-theme :after #'me:run-after-load-theme-hook)
+
+;; N.B. some init code depends on this being set correctly
+(defvar me:theme-is-dark-p nil
+  "true if theme is dark")
+
 (defun me:extra-setup ()
   (tool-bar-mode 0)                                           ; no tool bar (tool-bar)
   (scroll-bar-mode 0)                                         ; no scroll bar (scroll-bar)
@@ -449,7 +461,7 @@
 
 (use-package whitespace
   :hook ((prog-mode text-mode) . whitespace-mode )
-  :hook ((whitespace-mode modus-themes-after-load-theme ) . me:whitespace-after-theme-change)
+  :hook ((whitespace-mode me:after-load-theme ) . me:whitespace-after-theme-change)
   :config
   (setq whitespace-line-column nil                      ; highlight past fill-column
         whitespace-style '(face trailing tabs tab-mark space-before-tab)
@@ -459,12 +471,14 @@
   (defun me:whitespace-after-theme-change ()
     (let ((bg (face-attribute 'default :background))
           (fg (face-attribute 'default :foreground)))
-      (set-face-attribute 'whitespace-tab nil :foreground "LightGrey" :background bg )
+      (if me:theme-is-dark-p
+          (set-face-attribute 'whitespace-tab nil :foreground "grey30" :background bg )
+        (set-face-attribute 'whitespace-tab nil :foreground "LightGrey" :background bg ))
       (set-face-attribute 'whitespace-trailing nil :foreground fg :background "PaleVioletRed1" ))))
 
 (use-package display-fill-column-indicator
   :hook ((prog-mode text-mode with-editor-mode) . display-fill-column-indicator-mode )
-  :hook (modus-themes-after-load-theme . me:display-fill-column-indicator-after-theme-change)
+  :hook (me:after-load-theme . me:display-fill-column-indicator-after-theme-change)
   :general
   ("<f10> i"      #'display-fill-column-indicator-mode)
   :custom
@@ -472,14 +486,14 @@
   :config
   (defun me:display-fill-column-indicator-after-theme-change ()
     ;; N.B. DejaVu Sans Mono has the extra long vertical bar which connects
-    (if (eq (modus-themes--current-theme) 'modus-operandi)  ;; light theme
-        ;; For console, WhiteSmoke is too light to show, so LightGrey is used
+    (if me:theme-is-dark-p
         (if (display-graphic-p)
-            (set-face-attribute 'fill-column-indicator nil :foreground "WhiteSmoke" :font "DejaVu Sans Mono-14")
-          (set-face-attribute 'fill-column-indicator nil :foreground "LightGrey"))
+            (set-face-attribute 'fill-column-indicator nil :foreground "grey30" :font "DejaVu Sans Mono-14")
+          (set-face-attribute 'fill-column-indicator nil :foreground "grey30"))
+      ;; For console, WhiteSmoke is too light to show, so LightGrey is used
       (if (display-graphic-p)
-          (set-face-attribute 'fill-column-indicator nil :foreground "grey30" :font "DejaVu Sans Mono-14")
-        (set-face-attribute 'fill-column-indicator nil :foreground "grey30"))))
+          (set-face-attribute 'fill-column-indicator nil :foreground "WhiteSmoke" :font "DejaVu Sans Mono-14")
+        (set-face-attribute 'fill-column-indicator nil :foreground "LightGrey"))))
   :ensure nil)
 
 (use-package adaptive-wrap
@@ -495,6 +509,9 @@
   (miniedit-mode t))
 
 (use-package modus-themes
+  :init
+  ;; make sure this load theme hook runs first so it can setup variables
+  (add-hook 'me:after-load-theme-hook 'me:modus-themes-after-load-theme -100)
   :custom
   (modus-themes-italic-constructs t)
   (modus-themes-bold-constructs t)
@@ -505,10 +522,13 @@
   (modus-themes-scale-headings 't)
   (modus-themes-headings '((t . rainbow)))
   :config
+  (defun me:modus-themes-after-load-theme ()
+    (setq me:theme-is-dark-p (eq (modus-themes--current-theme) 'modus-vivendi)))
   (modus-themes-load-themes)
+  ;; initially use dark theme for console
   (if (window-system)
-	  (modus-themes-load-operandi)
-	(modus-themes-load-vivendi))
+      (modus-themes-load-operandi)
+    (modus-themes-load-vivendi))
   :defer 0)
 
 (use-package smart-mode-line
@@ -1824,8 +1844,7 @@
         shell-pop-universal-key "<f4> t"))
 
 (use-package which-key
-  ;; TODO: find hook for any theme change
-  :hook (modus-themes-after-load-theme . me:which-key-after-theme-change)
+  :hook (me:after-load-theme . me:which-key-after-theme-change)
   :custom
   (which-key-max-description-length 40)
   (which-key-side-window-max-width 0.67)
