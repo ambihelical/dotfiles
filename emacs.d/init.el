@@ -1542,7 +1542,7 @@
   :general
   (:keymaps 'eglot-mode-map
             "<f6> c"  #'eglot-code-actions)
-  :hook ((rust-mode . eglot-ensure))
+  :hook ((rust-mode c++-mode c-mode) . eglot-ensure)
   :init
   (setq eglot-ignored-server-capabilites '( :documentHighlightProvider)
         eglot-send-changes-idle-time 3    ;; be slower sending changes
