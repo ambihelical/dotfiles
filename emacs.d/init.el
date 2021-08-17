@@ -1286,6 +1286,14 @@
 (use-package sphinx-mode
   :hook (rst-mode . sphinx-mode))
 
+(use-package plantuml-mode
+  :custom
+  ;; TODO define the path to plantuml globally and use instead of repeating this code
+  (plantuml-jar-path (expand-file-name "java/plantuml.jar" me:data-directory))
+  (plantuml-default-exec-mode 'jar)
+  :mode
+  (("\\.plantuml\\'" . plantuml-mode)))
+
 (use-package python-mode
   :hook (python-mode . me:python-mode-config)
   :defines ( python-indent-offset python-indent-guess-indent-offset )
@@ -1912,6 +1920,7 @@
   (push '(Man-mode :stick t :height 20) popwin:special-display-config)
   (push '("*undo-tree*" :stick t :width 60 :position right) popwin:special-display-config)
   (push '("*eldoc*" :width 60 :position right :noselect t) popwin:special-display-config)
+  (push '("*PLANTUML Preview*" :position right :noselect t) popwin:special-display-config)
   (push '("*General Keybindings*" :width 120 :position right) popwin:special-display-config)
   (popwin-mode 1)
   :defer 2)
