@@ -138,6 +138,11 @@
       sentence-end-double-space nil                         ; sentences end with one space
       x-gtk-use-system-tooltips nil)                        ; allow tooltip theming
 
+(when (eq window-system 'w32)
+  ;; This is slower but allows dired-subtree to detect directories correctly
+  ;; ls-lisp seems to have a funky line format which dired-subtree doesn't understand
+  (setq ls-lisp-use-insert-directory-program t))
+
 (add-hook 'after-init-hook                                  ; report init time
           (lambda ()
             (message "Time to initialize: %s"
@@ -1549,6 +1554,7 @@
   :after no-littering
   :general
   (:keymaps 'eglot-mode-map
+            "<f6> x"  #'eglot-rename
             "<f6> c"  #'eglot-code-actions)
   :hook ((rust-mode c++-mode c-mode) . eglot-ensure)
   :init
@@ -1576,7 +1582,6 @@
         (let ((root (projectile-project-root dir)))
           (and root (cons 'transient root)))))
   (add-to-list 'project-find-functions #'me:project-finder))
-
 
 ;; N.B. Completion when candidate is already typed out is broken in company.
 ;; See issues #451, #205, #150
