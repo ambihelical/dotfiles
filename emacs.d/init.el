@@ -1945,6 +1945,8 @@
         (magit-find-file-other-window rev (buffer-file-name))
       (magit-find-file rev (buffer-file-name)))))
 
+(use-package git-modes)
+
 (use-package git-timemachine
   :commands ( hydra-timemachine/body )
   :init
