@@ -12,20 +12,9 @@ ${HOME}/bin/i3wm-keyboard-setup
 
 # setup displays
 if [ "$host" == "hum" ]; then
-	 xrandr --output DVI-I-1 --primary --pos 0x0 --output HDMI-1 --rotate left --pos 1920x-600
+	 xrandr --output HDMI-1 --primary --pos 0x0 --mode 1920x1080 --dpi 78 --output DVI-I-1 --rotate left --pos 1920x-420
 	 dropbox start -i
 	 lockminutes=0
-elif [ "$host" == "thud" ]; then
-	lockminutes=30
-	xset s off   # turn off screensaver
-	xrandr --output HDMI-1 --dpi 103 --left-of eDP-1
-elif [ "$host" == "jh-rvueb" ]; then
-	xrandr --output HDMI-0 --primary --dpi 103
-	xrandr --output DVI-D-0 --right-of HDMI-0 --rotate left
-	lockminutes=60
-elif [ "$host" == "twt21022" ]; then
-	xrandr --output eDP-1 --primary --pos 0x0 --output HDMI-1 --pos 1920x-1080
-	lockminutes=30
 else
 	echo "Unknown host |$host|"
 fi
