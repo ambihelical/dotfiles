@@ -1,10 +1,6 @@
 #!/bin/sh -e
 
-png=~/.config/i3/background.png
-
-scrot ${png}
-convert ${png} -blur 0x6 ${png}
-i3lock --ignore-empty-password --tiling --image=${png}
+i3lock --ignore-empty-password --color=87ceeb
 sleep 1
 
 # Turn the screen off after a delay.

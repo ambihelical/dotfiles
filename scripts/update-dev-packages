@@ -22,6 +22,7 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	. ${script_path}/../bin/common/linux.sh
 	linux=$(linux_distribution_name)
 	version=$(linux_distribution_version)
+ 	echo "Linux: $linux Version: $version"
 
 	if [ "$linux" == 'Ubuntu' ]; then
 
@@ -29,11 +30,9 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	q="$q doxygen"
 	p="$p manpages-dev manpages-posix-dev ncurses-doc"
 	p="$p librsvg2-bin"
-	# sphinx
-	p="$p texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra latexmk"
 
   # languages, compilers and building
-	p="$p cmake-qt-gui build-essential ccache"
+	p="$p cmake build-essential ccache"
 	p="$p gcc-doc glibc-doc"
 	p="$p autoconf automake libtool gettext intltool"
 	p="$p ruby clangd"
@@ -52,9 +51,6 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	apt-get --quiet --ignore-missing --yes install $p
 	apt-get --quiet --ignore-missing --no-install-recommends --yes install $q
 	echo "NOTE: Install global via source, debian is out of date"
-
-	# get latest sphinx
-	pip3 install --upgrade sphinx
 
  elif [ "$linux" == 'Fedora' ]; then
 	# building

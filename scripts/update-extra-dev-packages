@@ -11,15 +11,16 @@ p=""
 if [ "${OSTYPE:0:10}" == 'linux-gnue' ]; then
 	apt-get --quiet --yes --no-install-recommends install $p
 elif [ "${OSTYPE:0:5}" == 'linux' ]; then
-  # gcc cross compiler support
-	p="$p gcc-multilib libgmp-dev libmpc-dev libmpfr-dev ppl-dev libcloog-ppl-dev"
   # i3 building
-	p="$p libzmq-dev libpng-dev libfreetype6-dev"
+	p="$p libzmq3-dev libpng-dev libfreetype6-dev"
 	p="$p libxcb1-dev libxcb-util0-dev libxkbcommon-dev libxkbcommon-x11-dev libxcb-keysyms1-dev libxcb-cursor-dev"
 	p="$p libxcb-randr0-dev libxcb-icccm4-dev libxcb-xinerama0-dev"
 	p="$p libev-dev libyajl-dev libpcre3-dev libstartup-notification0-dev libpango1.0-dev libcairo-dev"
+  # rust work
+	p="$p libxcb-shape0-dev libxcb-xfixes0-dev libxcb-render0-dev"
+	p="$p libssl-dev libspeechd-dev"
 	apt-get --quiet --ignore-missing --yes install $p
-	apt-get --quiet --ignore-missing --no-install-recommends --yes install $q
+
   # python notebook
 	pip3 install --upgrade pyserial ipython[notebook] pyzmq jinja2 tornado jsonschema matplotlib
 elif [ "${OSTYPE:0:6}" == 'darwin' ]; then
