@@ -15,8 +15,8 @@
 
 [ -d ~/extern/gccarm-dev/bin ] && PATH=~/extern/gccarm-dev/bin:"${PATH}"    # arm gcc cross compiler
 [ -d /usr/lib/ccache ] && PATH=/usr/lib/ccache:"${PATH}"                    # compile cache
-[ -d ~/.local/bin ] && PATH=~/.local/bin:"${PATH}"                            # locally installed execs
-[ -d ~/.cargo/bin/ ] && PATH=~/.cargo/bin:"${PATH}"                         # rust cargo, until XDG'd
+[ -d ~/.local/bin ] && PATH=~/.local/bin:"${PATH}"                           # locally installed execs
+[ -d ~/.local/opt/cargo/bin/ ] && PATH=~/.local/opt/cargo/bin:"${PATH}"     # rust cargo, until XDG'd
 [ -d ~/bin ] && PATH=~/bin:"${PATH}"                                        # my utilities
 [ -d ~/bin/${OSTYPE} ] && PATH=~/bin/${OSTYPE}:"${PATH}"                    # my utilities, os specific
 [ -d ~/Android/Sdk/platform-tools ] && PATH=~/Android/Sdk/platform-tools:"${PATH}"         # adb, fastboot, etc
@@ -369,7 +369,9 @@ linux-gnuea*)  # raspbian
 	alias ap='aptitude'
 	;;
 linux*)
-	export DISPLAY=:0.0   # set display for X
+
+	# if DISPLAY isn't set common value
+	[ "$DISPLAY" ] || export DISPLAY=:0.0
 
 	# Use openjdk 8 by default
 	export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
@@ -385,7 +387,7 @@ linux*)
 	alias pbpaste='xclip -selection clipboard -o'
 
 	# run commands in new window
-	gterm() { urxvt -geometry 80x200-0-0 -title "$1 : $2 $3 $4" -e sh -c "$1 $2 $3 $4"; }
+	gterm() { xterm -geometry 80x200-0-0 -title "$1 : $2 $3 $4" -e sh -c "$1 $2 $3 $4"; }
 	gman() { gterm man $* & }
 	ginfo() { gterm info $* & }
 	gtail() { gterm less $* & }

@@ -251,9 +251,9 @@ bindsym $mod+minus scratchpad show
 # first run host-specific setup, then invariants
 exec --no-startup-id ~/bin/i3wm-extra-startup
 exec --no-startup-id nm-applet &
-exec --no-startup-id clipit &
+exec --no-startup-id diodon &
 exec --no-startup-id xterm -title "i3-scratch" &
-exec --no-startup-id udiskie --tray --no-notify --use-udisks2 &
+exec --no-startup-id udiskie --tray --no-notify &
 exec --no-startup-id ~/bin/i3wm-private-startup || true
 
 # special window handling

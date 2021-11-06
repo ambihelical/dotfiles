@@ -7,50 +7,35 @@ host=$(uname -n)
 lockminutes=30
 offminutes=60
 
+# This seems to be needed in order for the keyboard settings to have effect. 
+sleep 1
+
 # setup keyboard
 ${HOME}/bin/i3wm-keyboard-setup
 
 # setup displays
 if [ "$host" == "hum" ]; then
-	 xrandr --output DVI-I-1 --primary --pos 0x0 --output HDMI-1 --rotate left --pos 1920x-600
-	 dropbox start -i
 	 lockminutes=0
-elif [ "$host" == "thud" ]; then
-	lockminutes=30
-	xset s off   # turn off screensaver
-	xrandr --output HDMI-1 --dpi 103 --left-of eDP-1
-elif [ "$host" == "jh-rvueb" ]; then
-	xrandr --output HDMI-0 --primary --dpi 103
-	xrandr --output DVI-D-0 --right-of HDMI-0 --rotate left
-	lockminutes=60
-elif [ "$host" == "twt21022" ]; then
-	xrandr --output eDP-1 --primary --pos 0x0 --output HDMI-1 --pos 1920x-1080
-	lockminutes=30
+	 offminutes=0
+	 xrandr --output HDMI-0 --primary --pos 0x0 --mode 1920x1080 --dpi 78 --output DVI-I-1 --rotate left --pos 1920x-420
 else
 	echo "Unknown host |$host|"
 fi
 
 # desktop integration
-if [ "$host" == "twt21022" ]; then
-/usr/libexec/gsd-xsettings &
-/usr/libexec/gsd-a11y-settings &
-elif [ "$host" == "thud" ]; then
-echo "No extra integration for thud"
-else
 xsettingsd -c ~/.config/xsettingsd &
-/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &  # gui authentication
-fi
 
 # screen locking
-killall xautolock
+killall -q xautolock
 if [ ${lockminutes} -gt 0 ]; then
 	xautolock -detectsleep -time ${lockminutes} -locker '~/bin/i3wm-screen-lock' -notify 15 -notifier 'notify-send "Screen lock will occur in 15 seconds"' &
 else
 	 echo "Auto screen lock disabled"
 fi
-if [ ${offminutes} -gt 0 ]; then
-	 xset dpms 0 0 $((offminutes * 60))
-fi
+xset -display ${DISPLAY} dpms 0 0 $((offminutes * 60))
+xset -display ${DISPLAY} s noblank
+xset -display ${DISPLAY} s off
+
 
 # increase number of file descriptors per process
 ulimit -n 4096

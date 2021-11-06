@@ -9,18 +9,26 @@ Gtk/FontName "Ubuntu 10"
 Xft/Hinting 1
 Xft/HintStyle "hintfull"
 Xft/RGBA "rgb"
+Net/FallbackIconTheme "gnome"
+Net/CursorBlink 1
+Net/CursorBlinkTime 1200
+Net/DndDragThreshold 8
+Net/DoubleClickTime 400
+Net/EnableEventSounds 1
+Net/EnableInputFeedbackSounds 0
+Net/IconThemeName "Yaru"
+Net/SoundThemeName "Yaru"
+Net/ThemeName "Yaru"
 Gtk/Modules "canberra-gtk-module"
 Gtk/TimeoutInitial 200
 Gtk/TimeoutRepeat 20
-Net/FallbackIconTheme "gnome"
-Net/IconThemeName "ubuntu-mono-dark"
-Net/SoundThemeName "ubuntu"
-Net/ThemeName "Ambiance"
-Net/CursorBlink 1
-Net/CursorBlinkTime 1200
+Gtk/ShellShowsMenubar 0
+Gtk/ShellShowsDesktop 0
+Gdk/WindowScalingFactor 1
+Gdk/UnscaledDPI 98304
 
-# These remaining are from dump_xsettings while unity-settings-daemon was running
-# Maybe some of them are useful in the future.
+# These remaining are from dump_xsettings while running gnome
+# they may not be needed
 
 #Gdk/UnscaledDPI 98304
 #Gdk/WindowScalingFactor 1
@@ -30,25 +38,29 @@ Net/CursorBlinkTime 1200
 #Gtk/ColorPalette "black:white:gray50:red:purple:blue:light blue:green:yellow:orange:lavender:brown:goldenrod4:dodger blue:pink:light green:gray10:gray30:gray75:gray90"
 #Gtk/ColorScheme ""
 #Gtk/CursorBlinkTimeout 10
-#Gtk/CursorThemeName "DMZ-White"
+#Gtk/CursorThemeName "Yaru"
 #Gtk/CursorThemeSize 24
-#Gtk/DecorationLayout "close,minimize,maximize:"
+#Gtk/DecorationLayout ":minimize,maximize,close"
+#Gtk/DialogsUseHeader 1
 #Gtk/EnableAnimations 1
+#Gtk/EnablePrimaryPaste 1
 #Gtk/IMModule "gtk-im-context-simple"
 #Gtk/IMPreeditStyle "callback"
 #Gtk/IMStatusStyle "callback"
+#Gtk/KeynavUseCaret 0
 #Gtk/KeyThemeName "Default"
 #Gtk/MenuBarAccel "F10"
 #Gtk/MenuImages 0
+#Gtk/OverlayScrolling 1
 #Gtk/RecentFilesEnabled 1
 #Gtk/RecentFilesMaxAge -1
+#Gtk/SessionBusId "c9e4361d08ef98ea6154ec59626f2fa7"
 #Gtk/ShellShowsAppMenu 0
-#Gtk/ShellShowsMenubar 0
-#Gtk/ShowInputMethodMenu 1
-#Gtk/ShowUnicodeMenu 1
+#Gtk/ShellShowsDesktop 1
+#Gtk/ShowInputMethodMenu 0
+#Gtk/ShowUnicodeMenu 0
+#Gtk/TitlebarDoubleClick "toggle-maximize"
+#Gtk/TitlebarMiddleClick "lower"
+#Gtk/TitlebarRightClick "menu"
 #Gtk/ToolbarIconSize "large"
 #Gtk/ToolbarStyle "both-horiz"
-#Net/DndDragThreshold 8
-#Net/DoubleClickTime 394
-#Net/EnableEventSounds 1
-#Net/EnableInputFeedbackSounds 0

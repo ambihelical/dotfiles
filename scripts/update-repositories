@@ -19,9 +19,9 @@ if hash lsb_release 2> /dev/null; then
 		add-apt-repository --yes ppa:pithos/ppa
 		add-apt-repository --yes ppa:lvillani/silversearcher
 	fi
-
-	# Any Ubuntu
-	if [[ "$release" =~ "Ubuntu" ]]; then
+	
+	# Ubuntu 16
+	if [[ "$release" =~ "Ubuntu 16.04" ]]; then
 		# git
 		if [ "$(find /etc/apt/sources.list.d/ -name git-core-*.list)" != "" ]; then
 			echo "Skipping git ppa setup, seems to be preset"
