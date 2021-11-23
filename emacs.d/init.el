@@ -37,9 +37,9 @@
          use-package-verbose nil))                                 ; don't be verbose
 
 ;; xdg directories
-(defconst me:data-directory (or (getenv "XDG_DATA_HOME") "~/.local/share"))
-(defconst me:cache-directory (or (getenv "XDG_CACHE_HOME")  "~/.cache"))
-(defconst me:config-directory (or (getenv "XDG_CONFIG_HOME")  "~/.config"))
+(defconst me:data-directory (or (getenv "XDG_DATA_HOME") (expand-file-name ".local/share" "~")))
+(defconst me:cache-directory (or (getenv "XDG_CACHE_HOME") (expand-file-name ".cache" "~")))
+(defconst me:config-directory (or (getenv "XDG_CONFIG_HOME")  (expand-file-name ".config" "~")))
 
 (defconst me:default-font
   (pcase (system-name)
@@ -294,8 +294,6 @@
     (interactive "P")
     (me:window-nth-buffer 3 prefix))
 
-  (push '("/home-local/" . "/home/") directory-abbrev-alist)
-  (push '("/home-remote/" . "/home/") directory-abbrev-alist)
   :demand)
 
 ;; built-in winner package
@@ -1909,7 +1907,7 @@
         magit-status-margin '(t "%Y-%m-%d %H:%M " magit-log-margin-width nil 18)
         magit-section-initial-visibility-alist '(( stashes . hide ))
         magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1
-        magit-repository-directories '(( "~/dev" . 1)))
+        magit-repository-directories `((,(expand-file-name "dev" "~") . 1)))
   ;; fullscreen magit and restore configuration when done. This and other
   ;; things stolen from:
   ;; https://jakemccrary.com/blog/2020/11/14/speeding-up-magit/
