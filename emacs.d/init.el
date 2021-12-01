@@ -1560,6 +1560,7 @@
   :init
   (setq eglot-ignored-server-capabilites '( :documentHighlightProvider)
         eglot-send-changes-idle-time 3    ;; be slower sending changes
+        eglot-extend-to-xref t            ;; external files ok
         eglot-events-buffer-size 100000)  ;; smaller events buffer
   :config
   ;; use clangd if present, otherwise assume ccls
