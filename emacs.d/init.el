@@ -1786,6 +1786,11 @@
              cquery-tree-mode
              paradox-menu-mode))
     (add-to-list 'evil-emacs-state-modes mode))
+  ;; remove these from evil-motion-state-modes
+  ;; using evil-collection we don't need them
+  (dolist (mode
+           '(compilation-mode))
+    (delete mode evil-motion-state-modes))
 
   (evil-mode 1))
 
