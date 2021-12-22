@@ -1819,6 +1819,7 @@
      eshell
      help
      helpful
+     ivy
      js2-mode
      log-view
      lua-mode
@@ -1829,6 +1830,7 @@
      (pdf pdf-view)
      python
      ruby-mode
+     xref
      woman))
   :after evil
   :config
