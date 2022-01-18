@@ -1004,6 +1004,7 @@
   ("M-<f2>" #'me:find-window-buffer)
   ("<f3>"   #'me:find-some-files)
   ("<f10> t" #'counsel-load-theme)
+  ("<f7> c" #'counsel-compile)
   ("<f10> c" #'counsel-colors-emacs)
   ("<f10> w" #'counsel-colors-web)
   ("<f6> m" #'counsel-imenu)
@@ -1104,7 +1105,9 @@
   ;; <f7> <f7> for persp-projectile, but only in "emacs -nw" mode!
   ;; So getting rid of it here.
   (:prefix "<f7>" :keymaps 'projectile-mode-map
-           "ESC" nil)
+           "ESC" nil
+           "c" nil)
+;;  (:prefix "<f7>" "c" #'counsel-compile)
 
   :init
   (setq
