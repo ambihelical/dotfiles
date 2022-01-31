@@ -1559,7 +1559,7 @@
             "<f6> c"  #'eglot-code-actions)
   :hook ((rust-mode c++-mode c-mode) . eglot-ensure)
   :init
-  (setq eglot-ignored-server-capabilites '( :documentHighlightProvider)
+  (setq eglot-ignored-server-capabilities '( :documentHighlightProvider)
         eglot-send-changes-idle-time 3    ;; be slower sending changes
         eglot-extend-to-xref t            ;; external files ok
         eglot-events-buffer-size 100000)  ;; smaller events buffer
@@ -1601,7 +1601,7 @@
         company-tooltip-align-annotations t        ; needed for racer??
         company-dabbrev-downcase nil)              ; never downcase
   :config
-  (company-tng-configure-default)
+  (company-tng-mode)
   :hook ( (prog-mode text-mode) . company-mode))
 
 (use-package company-quickhelp
