@@ -4,23 +4,6 @@
 ;; the package gcmh sets it to a reasonable value later
 (setq gc-cons-threshold most-positive-fixnum)
 
-;; call early-init.el and then package-initialize when emacs version < 27.x
-(when (eval-when-compile (version< emacs-version "27"))
-  (load (expand-file-name "early-init.el" user-emacs-directory))
-  (package-initialize))
-
-;; package management
-(setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                         ("org"   . "http://orgmode.org/elpa/")
-                         ("gnu"   . "https://elpa.gnu.org/packages/"))
-      package-check-signature nil)
-
-(require 'package)
-
-(package-initialize)
-(unless package-archive-contents
-  (package-refresh-contents))
-
 ;; use-package
 (unless (package-installed-p 'use-package )
   (package-install 'use-package))
@@ -69,6 +52,7 @@
   (electric-indent-mode +1)                                   ; turn on electric mode globally (electric)
   (delete-selection-mode t)                                   ; pastes delete selection
   (blink-cursor-mode -1)                                      ; don't blink cursor
+  (global-so-long-mode +1)                                    ; handle long lines better
   ;; add mingw64 paths under windows
   (when (eq window-system 'w32)
     (add-to-list 'exec-path "c:/Program Files/Git/mingw64/bin/")
@@ -103,14 +87,17 @@
 
 (setq-default fill-column 120                              ; auto-wrap only very long lines
               tab-width 4                                   ; default tab width
+              minibuffer-follows-selected-frame nil         ; minibuffer stays in frame
               indicate-empty-lines t)                       ; show empty lines at end of buffer
 (setq ad-redefinition-action 'accept                        ; turn off 'xyz' got redefined warnings
       confirm-kill-processes nil                            ; don't ask about killing processes at exit
       create-lockfiles nil                                  ; no lockfiles (.#file)
       custom-file null-device                               ; disable customizations
       debugger-stack-frame-as-list t                        ; show fns as (fn args) instead of fn(args)
+      describe-bindings-outline t                           ; use outlines for describe bindings C-h b
       fast-but-imprecise-scrolling t                        ; quick and dirty scrolling
       find-file-visit-truename t                            ; resolve symlinks finding files
+      help-enable-symbol-autoload t                         ; autoload symbol for showing help
       history-length 1000                                   ; length of history
       history-delete-duplicates t                           ; don't allow repeated history
       imenu-max-item-length 200                             ; default of 60 too short for some c++ methods
@@ -123,12 +110,14 @@
       mouse-wheel-scroll-amount '(3 ((shift) . 9))          ; 3 lines, or 9 line when shift held (mwheel)
       mouse-wheel-follow-mouse 't                           ; scroll window under mouse (mwheel)
       mouse-wheel-progressive-speed nil                     ; don't speed up (mwheel)
+      next-error-message-highlight 'keep                    ; highlight visited errors
 	  ring-bell-function 'ignore                            ; don't ring bell
       undo-limit 1000000                                    ; 1M (default is 80K)
       undo-strong-limit 1500000                             ; 1.5M (default is 120K)
       undo-outer-limit 150000000                            ; 150M (default is 12M)
       use-file-dialog nil                                   ; never want gui file dialog
       use-dialog-box nil                                    ; never want dialog box for questions
+      save-some-buffers-default-predicate 'save-some-buffers-root  ; same only project files
       scroll-margin 5                                       ; show some lines around cursor when possible
       scroll-conservatively 101                             ; only scroll enough to bring cursor to view
       scroll-down-aggressively 0.01                         ; don't jump when scrolling down
@@ -146,7 +135,10 @@
 (add-hook 'after-init-hook                                  ; report init time
           (lambda ()
             (message "Time to initialize: %s"
-                     (emacs-init-time))))
+                     (emacs-init-time))
+            ;; remove extraneous quickstart files found after clean install
+            (delete-file (expand-file-name "package-quickstart.el" user-emacs-directory))
+            (delete-file (expand-file-name "package-quickstart.elc" user-emacs-directory))))
 
 (run-with-idle-timer 0.1 nil #'me:extra-setup)
 
@@ -194,7 +186,6 @@
   :commands (hydra-paste/body x-urgency-hint)
   :ensure nil
   :general
-  ("M-1"     #'me:find-other-file)
   ("<f10> s"  #'me:read-fill-column)
   ("<f4> 1"  #'me:ps-one-per-page)
   ("<f4> 2"  #'me:ps-two-per-page)
@@ -330,15 +321,10 @@
 ;; built-in minibuffer package
 (use-package minibuffer
   :ensure nil
-  :hook (mouse-leave-buffer . me:minibuffer-kill)
   :custom
   (enable-recursive-minibuffers t)                        ; allow recursive edit
   :config
   (minibuffer-depth-indicate-mode t)       ; show recursive edit depth (mb-depth)
-  (defun me:minibuffer-kill ()
-    "kill the minibuffer"
-    (when (and (>= (recursion-depth) 1) (active-minibuffer-window))
-      (abort-recursive-edit)))
   :demand)
 
 ;; built-in autorevert package
@@ -512,7 +498,6 @@
   (modus-themes-italic-constructs t)
   (modus-themes-bold-constructs t)
   (modus-themes-mode-line '(moody accented))
-  (modus-themes-completions 'moderate)
   (modus-themes-fringes 'subtle)
   (modus-themes-org-blocks 'tinted-background)
   (modus-themes-scale-headings 't)
@@ -632,6 +617,7 @@
 
 ;; keep .emacs.d clean
 ;; N.B. Doesn't migrate, start with clean directory
+;; N.B. May need to remove {,var}/package-quickstart.el* after clean install
 (use-package no-littering
   :demand
   :config
@@ -684,6 +670,19 @@
             "j" #'windresize-down
             "k" #'windresize-up)
   :config)
+
+(use-package find-file
+  :ensure nil
+  :general
+  ("M-1"     #'me:find-other-file)
+  :config
+  (defun me:find-other-file (&optional prefix)
+    "Find other file e.g. .h <-> .cpp. Use prefix to put in other window."
+    (interactive "P")
+    (let ((ff-case-fold-search nil)
+          (ff-always-try-to-create nil)
+          (ff-search-directories '("." "../include" "../inc")))
+      (ff-find-other-file prefix t))))
 
 ;; remote file editting
 (use-package tramp
@@ -966,7 +965,7 @@
 
 (use-package counsel
   :defines counsel-yank-pop-preselect-last
-  :commands (  counsel-file-jump counsel-find-file)
+  :commands (  counsel-file-jump counsel-find-file counsel-M-x)
   :general
   (:keymaps 'global :prefix "<f4>"
             "a" #'counsel-apropos
@@ -1554,7 +1553,7 @@
             "<f6> c"  #'eglot-code-actions)
   :hook ((rust-mode c++-mode c-mode) . eglot-ensure)
   :init
-  (setq eglot-ignored-server-capabilites '( :documentHighlightProvider)
+  (setq eglot-ignored-server-capabilities '( :documentHighlightProvider)
         eglot-send-changes-idle-time 3    ;; be slower sending changes
         eglot-extend-to-xref t            ;; external files ok
         eglot-events-buffer-size 100000)  ;; smaller events buffer
@@ -1596,7 +1595,7 @@
         company-tooltip-align-annotations t        ; needed for racer??
         company-dabbrev-downcase nil)              ; never downcase
   :config
-  (company-tng-configure-default)
+  (company-tng-mode)
   :hook ( (prog-mode text-mode) . company-mode))
 
 (use-package company-quickhelp
@@ -1882,7 +1881,7 @@
     (set-face-attribute 'which-key-local-map-description-face nil :height me:which-key-scale))
   (which-key-mode)
   (which-key-setup-side-window-right-bottom)
-  :defer 2)
+  :defer 0)
 
 (use-package with-editor
   :hook (with-editor-mode . me:with-editor-mode-config)
