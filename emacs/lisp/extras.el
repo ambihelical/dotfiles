@@ -6,16 +6,6 @@
 ;;; Code:
 
 ;;;###autoload
-(defun me:find-other-file (&optional prefix)
-  "Find other file e.g. .h <-> .cpp. Use prefix to put in other window."
-  (interactive "P")
-  (let ((ff-case-fold-search nil)
-        (ff-always-try-to-create nil)
-        (ff-search-directories '("." "../include" "../inc"))
-        (ff-always-in-other-window prefix))
-    (ff-find-other-file)))
-
-;;;###autoload
 (defun me:set-fill-column (&optional arg)
   (setq fill-column arg)
   (message "fill-column is %s" fill-column)

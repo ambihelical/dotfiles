@@ -35,11 +35,11 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	p="$p cmake build-essential ccache"
 	p="$p gcc-doc glibc-doc"
 	p="$p autoconf automake libtool gettext intltool"
-	p="$p ruby clangd"
+	p="$p ruby clangd lld"
   # version control
 	p="$p meld git-gui mercurial subversion gitk tig"
   # libraries sometimes needed to build from source, especially emacs
-	p="$p libncurses5-dev libjansson-dev libotf-dev libgpm-dev"
+	p="$p libncurses5-dev libjansson-dev libotf-dev libgpm-dev libgccjit-11-dev"
 	if [ $version -lt 1804 ]; then
 		p="$p libgnutls-dev"
 	else

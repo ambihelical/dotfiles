@@ -14,3 +14,14 @@
             (setq file-name-handler-alist me:file-name-handler-alist)
             (makunbound 'me:file-name-handler-alist)))
 
+;; package management
+(setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                         ("org"   . "http://orgmode.org/elpa/")
+                         ("gnu"   . "https://elpa.gnu.org/packages/"))
+      package-check-signature nil)
+(require 'package)
+
+(package-initialize)
+(unless package-archive-contents
+  (package-refresh-contents))
+
