@@ -815,8 +815,8 @@
   :hook (prog-mode . flyspell-prog-mode)
   :hook (text-mode . flyspell-mode)
   :general
-  ;; N.B. C-; is flyspell-correct-previous-word
-  ("C-M-;"      #'flyspell-correct-previous-word-generic)
+  ;; N.B. C-; is flyspell-auto-correct-previous-word
+  ("C-M-;"      #'flyspell-correct-word-before-point)
   :init
   (setq ispell-personal-dictionary (expand-file-name "hunspell/words" me:config-directory))
   ;; setup spell check, prefer hunspell
