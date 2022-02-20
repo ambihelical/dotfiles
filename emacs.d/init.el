@@ -521,9 +521,9 @@
   (modus-themes-mode-line '(moody accented))
   (modus-themes-completions 'moderate)
   (modus-themes-fringes 'subtle)
-  (modus-themes-org-blocks 'rainbow)
+  (modus-themes-org-blocks 'tinted-background)
   (modus-themes-scale-headings 't)
-  (modus-themes-headings '((t . rainbow)))
+  (modus-themes-headings '((t . (rainbow))))
   :config
   (defun me:modus-themes-after-load-theme ()
     (setq me:theme-is-dark-p (eq (modus-themes--current-theme) 'modus-vivendi)))
