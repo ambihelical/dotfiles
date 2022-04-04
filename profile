@@ -98,3 +98,8 @@ export GEM_SPEC_CACHE=${XDG_CACHE_HOME}/gem
 
 # avoids ~/.screenrc
 export SCREENRC=${XDG_CONFIG_HOME}/screen
+
+# avoid ~/.cargo and ~/.rustup
+export RUSTUP_HOME=${HOME}/.local/opt/rustup
+export CARGO_HOME=${HOME}/.local/opt/cargo
+
