@@ -4,23 +4,6 @@
 ;; the package gcmh sets it to a reasonable value later
 (setq gc-cons-threshold most-positive-fixnum)
 
-;; call early-init.el and then package-initialize when emacs version < 27.x
-(when (eval-when-compile (version< emacs-version "27"))
-  (load (expand-file-name "early-init.el" user-emacs-directory))
-  (package-initialize))
-
-;; package management
-(setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                         ("org"   . "http://orgmode.org/elpa/")
-                         ("gnu"   . "https://elpa.gnu.org/packages/"))
-      package-check-signature nil)
-
-(require 'package)
-
-(package-initialize)
-(unless package-archive-contents
-  (package-refresh-contents))
-
 ;; use-package
 (unless (package-installed-p 'use-package )
   (package-install 'use-package))
@@ -146,7 +129,10 @@
 (add-hook 'after-init-hook                                  ; report init time
           (lambda ()
             (message "Time to initialize: %s"
-                     (emacs-init-time))))
+                     (emacs-init-time))
+            ;; remove extraneous quickstart files found after clean install
+            (delete-file (expand-file-name "package-quickstart.el" user-emacs-directory))
+            (delete-file (expand-file-name "package-quickstart.elc" user-emacs-directory))))
 
 (run-with-idle-timer 0.1 nil #'me:extra-setup)
 
@@ -519,7 +505,6 @@
   (modus-themes-italic-constructs t)
   (modus-themes-bold-constructs t)
   (modus-themes-mode-line '(moody accented))
-  (modus-themes-completions 'moderate)
   (modus-themes-fringes 'subtle)
   (modus-themes-org-blocks 'tinted-background)
   (modus-themes-scale-headings 't)
@@ -639,6 +624,7 @@
 
 ;; keep .emacs.d clean
 ;; N.B. Doesn't migrate, start with clean directory
+;; N.B. May need to remove {,var}/package-quickstart.el* after clean install
 (use-package no-littering
   :demand
   :config
@@ -974,7 +960,7 @@
 
 (use-package counsel
   :defines counsel-yank-pop-preselect-last
-  :commands (  counsel-file-jump counsel-find-file)
+  :commands (  counsel-file-jump counsel-find-file counsel-M-x)
   :general
   (:keymaps 'global :prefix "<f4>"
             "a" #'counsel-apropos
@@ -1866,6 +1852,7 @@
         shell-pop-universal-key "<f4> t"))
 
 (use-package which-key
+  :after modus-themes
   :hook (me:after-load-theme . me:which-key-after-theme-change)
   :custom
   (which-key-max-description-length 40)
