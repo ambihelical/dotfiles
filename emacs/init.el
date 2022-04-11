@@ -1865,7 +1865,6 @@
         shell-pop-universal-key "<f4> t"))
 
 (use-package which-key
-  :after modus-themes
   :hook (me:after-load-theme . me:which-key-after-theme-change)
   :custom
   (which-key-max-description-length 40)
@@ -1888,7 +1887,7 @@
     (set-face-attribute 'which-key-local-map-description-face nil :height me:which-key-scale))
   (which-key-mode)
   (which-key-setup-side-window-right-bottom)
-  :defer 2)
+  :defer 0)
 
 (use-package with-editor
   :hook (with-editor-mode . me:with-editor-mode-config)
