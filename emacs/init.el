@@ -481,7 +481,7 @@
           (set-face-attribute 'fill-column-indicator nil :foreground "grey30"))
       ;; For console, WhiteSmoke is too light to show, so LightGrey is used
       (if (display-graphic-p)
-          (set-face-attribute 'fill-column-indicator nil :foreground "WhiteSmoke" :font "DejaVu Sans Mono-14")
+          (set-face-attribute 'fill-column-indicator nil :background "white" :foreground "WhiteSmoke" :font "DejaVu Sans Mono-14")
         (set-face-attribute 'fill-column-indicator nil :foreground "LightGrey"))))
   :ensure nil)
 
