@@ -52,6 +52,7 @@
   (electric-indent-mode +1)                                   ; turn on electric mode globally (electric)
   (delete-selection-mode t)                                   ; pastes delete selection
   (blink-cursor-mode -1)                                      ; don't blink cursor
+  (global-so-long-mode +1)                                    ; handle long lines better
   ;; add mingw64 paths under windows
   (when (eq window-system 'w32)
     (add-to-list 'exec-path "c:/Program Files/Git/mingw64/bin/")
@@ -86,14 +87,17 @@
 
 (setq-default fill-column 120                              ; auto-wrap only very long lines
               tab-width 4                                   ; default tab width
+              minibuffer-follows-selected-frame nil         ; minibuffer stays in frame
               indicate-empty-lines t)                       ; show empty lines at end of buffer
 (setq ad-redefinition-action 'accept                        ; turn off 'xyz' got redefined warnings
       confirm-kill-processes nil                            ; don't ask about killing processes at exit
       create-lockfiles nil                                  ; no lockfiles (.#file)
       custom-file null-device                               ; disable customizations
       debugger-stack-frame-as-list t                        ; show fns as (fn args) instead of fn(args)
+      describe-bindings-outline t                           ; use outlines for describe bindings C-h b
       fast-but-imprecise-scrolling t                        ; quick and dirty scrolling
       find-file-visit-truename t                            ; resolve symlinks finding files
+      help-enable-symbol-autoload t                         ; autoload symbol for showing help
       history-length 1000                                   ; length of history
       history-delete-duplicates t                           ; don't allow repeated history
       imenu-max-item-length 200                             ; default of 60 too short for some c++ methods
@@ -106,12 +110,14 @@
       mouse-wheel-scroll-amount '(3 ((shift) . 9))          ; 3 lines, or 9 line when shift held (mwheel)
       mouse-wheel-follow-mouse 't                           ; scroll window under mouse (mwheel)
       mouse-wheel-progressive-speed nil                     ; don't speed up (mwheel)
+      next-error-message-highlight 'keep                    ; highlight visited errors
 	  ring-bell-function 'ignore                            ; don't ring bell
       undo-limit 1000000                                    ; 1M (default is 80K)
       undo-strong-limit 1500000                             ; 1.5M (default is 120K)
       undo-outer-limit 150000000                            ; 150M (default is 12M)
       use-file-dialog nil                                   ; never want gui file dialog
       use-dialog-box nil                                    ; never want dialog box for questions
+      save-some-buffers-default-predicate 'save-some-buffers-root  ; same only project files
       scroll-margin 5                                       ; show some lines around cursor when possible
       scroll-conservatively 101                             ; only scroll enough to bring cursor to view
       scroll-down-aggressively 0.01                         ; don't jump when scrolling down
@@ -316,15 +322,10 @@
 ;; built-in minibuffer package
 (use-package minibuffer
   :ensure nil
-  :hook (mouse-leave-buffer . me:minibuffer-kill)
   :custom
   (enable-recursive-minibuffers t)                        ; allow recursive edit
   :config
   (minibuffer-depth-indicate-mode t)       ; show recursive edit depth (mb-depth)
-  (defun me:minibuffer-kill ()
-    "kill the minibuffer"
-    (when (and (>= (recursion-depth) 1) (active-minibuffer-window))
-      (abort-recursive-edit)))
   :demand)
 
 ;; built-in autorevert package
