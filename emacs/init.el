@@ -186,7 +186,6 @@
   :commands (hydra-paste/body x-urgency-hint)
   :ensure nil
   :general
-  ("M-1"     #'me:find-other-file)
   ("<f10> s"  #'me:read-fill-column)
   ("<f4> 1"  #'me:ps-one-per-page)
   ("<f4> 2"  #'me:ps-two-per-page)
@@ -678,6 +677,19 @@
             "j" #'windresize-down
             "k" #'windresize-up)
   :config)
+
+(use-package find-file
+  :ensure nil
+  :general
+  ("M-1"     #'me:find-other-file)
+  :config
+  (defun me:find-other-file (&optional prefix)
+    "Find other file e.g. .h <-> .cpp. Use prefix to put in other window."
+    (interactive "P")
+    (let ((ff-case-fold-search nil)
+          (ff-always-try-to-create nil)
+          (ff-search-directories '("." "../include" "../inc")))
+      (ff-find-other-file prefix t))))
 
 ;; remote file editting
 (use-package tramp
