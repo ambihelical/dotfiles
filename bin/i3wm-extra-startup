@@ -15,6 +15,7 @@ if [ "$host" == "hum" ]; then
 	 xrandr --output HDMI-0 --primary --pos 0x0 --mode 1920x1080 --dpi 78 --output DVI-I-1 --rotate left --pos 1920x-420
 	 dropbox start -i
 	 lockminutes=0
+     offminutes=0
 else
 	echo "Unknown host |$host|"
 fi
