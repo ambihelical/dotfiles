@@ -1853,16 +1853,6 @@
 (use-package ws-butler
   :hook (( prog-mode text-mode ) . ws-butler-mode ))
 
-(use-package shell-pop
-  :general
-  ("<f4> t"     #'shell-pop)
-  :config
-  (setq shell-pop-internal-mode "eshell"
-        shell-pop-term-shell "/bin/bash"
-        shell-pop-window-size 40
-        shell-pop-window-position "bottom"
-        shell-pop-universal-key "<f4> t"))
-
 (use-package which-key
   :hook (me:after-load-theme . me:which-key-after-theme-change)
   :custom
@@ -1903,15 +1893,6 @@
         magit-section-initial-visibility-alist '(( stashes . hide ))
         magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1
         magit-repository-directories `((,(expand-file-name "dev" "~") . 1)))
-  ;; fullscreen magit and restore configuration when done. This and other
-  ;; things stolen from:
-  ;; https://jakemccrary.com/blog/2020/11/14/speeding-up-magit/
-  (defadvice magit-status (around magit-fullscreen activate)
-    (window-configuration-to-register :magit-fullscreen)
-    ad-do-it
-    (delete-other-windows))
-  (defadvice magit-quit-window (after magit-restore-screen activate)
-    (jump-to-register :magit-fullscreen))
   :general
   ("<f9> a"     #'magit-commit-amend)
   ("<f9> b"     #'magit-blame)
@@ -1949,6 +1930,7 @@
         (magit-find-file-other-window rev (buffer-file-name))
       (magit-find-file rev (buffer-file-name)))))
 
+;; git configuration file editting
 (use-package git-modes)
 
 (use-package git-timemachine
@@ -1979,14 +1961,44 @@
   :general
   (:keymaps 'global :prefix "<f9>"  "t" #'hydra-timemachine/body))
 
-(use-package popwin
+(use-package popper
+  :after projectile
+  :ensure t
+  :general
+  ("<f4> t"     #'eshell)
+  ("M-\""      #'popper-toggle-latest)
+  ("M-'"        #'popper-cycle)
+  ("<f4> '"     #'popper-toggle-type)
+  :init
+  (setq popper-group-function #'popper-group-by-projectile
+        popper-display-control nil)
+  (setq popper-reference-buffers
+        '("\\*Messages\\*"
+          "Output\\*$"
+          "\\*Async Shell Command\\*"
+          "\\*ielm\\*"
+          "^\\*eshell.*\\*$" eshell-mode ;eshell as a popup
+          "^\\*shell.*\\*$"  shell-mode  ;shell as a popup
+          "^\\*term.*\\*$"   term-mode   ;term as a popup
+          "^\\*vterm.*\\*$"  vterm-mode
+          woman-mode
+          magit-status-mode
+          help-mode
+          occur-mode
+          grep-mode
+          "^\\*ivy-occur.*\\*" ivy-occur-mode
+          "^\\*helpful.*\\*$" helpful-mode
+          rustic-compilation-mode
+          compilation-mode))
+  (popper-mode +1)
+  (popper-echo-mode +1))                ; For echo area hints
+
+(use-package shackle
+  :demand
   :config
-  (push '("*Async Shell Command*" :noselect t) popwin:special-display-config)
-  (push '("*Completions*" :stick t :noselect t) popwin:special-display-config)
-  (push '(Man-mode :stick t :height 20) popwin:special-display-config)
-  (push '("*undo-tree*" :stick t :width 60 :position right) popwin:special-display-config)
-  (push '("*eldoc*" :width 60 :position right :noselect t) popwin:special-display-config)
-  (push '("*PLANTUML Preview*" :position right :noselect t) popwin:special-display-config)
-  (push '("*General Keybindings*" :width 120 :position right) popwin:special-display-config)
-  (popwin-mode 1)
+  (shackle-mode)
+  :custom
+  (shackle-rules
+   '((compilation-mode :noselect t)))
+  (shackle-default-rule '(:select t))
   :defer 2)
