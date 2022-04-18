@@ -709,10 +709,9 @@
   :general
   ("<f4> d"   #'dired-jump)
   (:keymaps 'dired-mode-map
-            "<f5> h" #'hydra-dired/body
             "j" #'dired-next-line
             "k" #'dired-previous-line
-            "<f5> d" #'dired-hide-details-mode)
+            "C-c d" #'dired-hide-details-mode)
   ("*" '(:ignore t :which-key "Marking→" ))
   ("%" '(:ignore t :which-key "Regular Expressions→" ))
   (";" '(:ignore t :which-key "Cryptography→" ))
@@ -754,7 +753,7 @@
   (setq wdired-allow-to-change-permissions t)
   :general
   (:keymaps 'dired-mode-map
-            "<f5> w" #'wdired-change-to-wdired-mode)
+            "C-c w" #'wdired-change-to-wdired-mode)
   :ensure nil)
 
 (use-package peep-dired
@@ -774,7 +773,7 @@
     (evil-normalize-keymaps 'normal))
   :general
   (:keymaps 'dired-mode-map
-            "<f5> p" #'peep-dired))
+            "C-c p" #'peep-dired))
 
 (use-package dired-sidebar
   :hook (dired-sidebar-mode . me:dired-sidebar-config)
@@ -1050,7 +1049,7 @@
 ;; allow grep buffers to be editted
 (use-package wgrep
   :general
-  (:keymaps 'grep-mode-map "<f5> w" #'wgrep-change-to-wgrep-mode))
+  (:keymaps 'grep-mode-map "C-c w" #'wgrep-change-to-wgrep-mode))
 
 (use-package projectile
   :after evil
@@ -1416,7 +1415,7 @@
 
 (use-package logview
   :general
-  ("<f5> c" #'me:colorize-ansi-escapes)
+  ("C-c c" #'me:colorize-ansi-escapes)
   :config
   (defun me:colorize-ansi-escapes ()
     (interactive)
@@ -1856,9 +1855,6 @@
   (which-key-side-window-max-width 0.67)
   (which-key-side-window-max-height 0.5)
   (which-key-sort-order 'which-key-local-then-key-order)
-  :general
-  ("<f5>" '(:ignore t :which-key "Major Mode Specific→" ))
-  ("<f5> <f5>"  #'which-key-show-major-mode)
   :config
   ;; set face scaling after theme change, otherwise these get overridden.
   (defun me:which-key-after-theme-change ()
