@@ -463,7 +463,7 @@
   (fic-highlighted-words `( "TODO" "HACK" "KLUDGE" "FIXME" "TRICKY" "BUG" )))
 
 (use-package whitespace
-  :hook ((prog-mode text-mode) . whitespace-mode )
+  :hook ((prog-mode text-mode c-mode-common) . whitespace-mode )
   :hook ((whitespace-mode me:after-load-theme ) . me:whitespace-after-theme-change)
   :config
   (setq whitespace-line-column nil                      ; highlight past fill-column
@@ -994,6 +994,7 @@
   ("M-<f2>" #'me:find-window-buffer)
   ("<f3>"   #'me:find-some-files)
   ("<f10> t" #'counsel-load-theme)
+  ("<f7> c" #'counsel-compile)
   ("<f10> c" #'counsel-colors-emacs)
   ("<f10> w" #'counsel-colors-web)
   ("<f6> m" #'counsel-imenu)
@@ -1094,7 +1095,9 @@
   ;; <f7> <f7> for persp-projectile, but only in "emacs -nw" mode!
   ;; So getting rid of it here.
   (:prefix "<f7>" :keymaps 'projectile-mode-map
-           "ESC" nil)
+           "ESC" nil
+           "c" nil)
+;;  (:prefix "<f7>" "c" #'counsel-compile)
 
   :init
   (setq
@@ -1601,7 +1604,6 @@
 
 ;; built-in package for cross-references
 (use-package xref
-  :demand
   :config
   (add-to-list 'xref-prompt-for-identifier #'xref-find-references t)
   :general
@@ -1779,6 +1781,11 @@
              cquery-tree-mode
              paradox-menu-mode))
     (add-to-list 'evil-emacs-state-modes mode))
+  ;; remove these from evil-motion-state-modes
+  ;; using evil-collection we don't need them
+  (dolist (mode
+           '(compilation-mode))
+    (delete mode evil-motion-state-modes))
 
   (evil-mode 1))
 
@@ -1807,6 +1814,7 @@
      eshell
      help
      helpful
+     ivy
      js2-mode
      log-view
      lua-mode
@@ -1817,6 +1825,7 @@
      (pdf pdf-view)
      python
      ruby-mode
+     xref
      woman))
   :after evil
   :config
@@ -1838,7 +1847,7 @@
   (define-key evil-visual-state-map [escape] 'evil-visual-char))
 
 (use-package ws-butler
-  :hook (( prog-mode text-mode ) . ws-butler-mode ))
+  :hook (( prog-mode text-mode c-mode-common) . ws-butler-mode ))
 
 (use-package shell-pop
   :general
