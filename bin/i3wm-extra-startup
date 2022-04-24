@@ -26,14 +26,14 @@ fi
 xsettingsd -c ~/.config/xsettingsd &
 
 # screen locking
-killall xautolock
+killall -q xautolock
 if [ ${lockminutes} -gt 0 ]; then
 	xautolock -detectsleep -time ${lockminutes} -locker '~/bin/i3wm-screen-lock' -notify 15 -notifier 'notify-send "Screen lock will occur in 15 seconds"' &
 else
 	 echo "Auto screen lock disabled"
 fi
 if [ ${offminutes} -gt 0 ]; then
-	 xset dpms 0 0 $((offminutes * 60))
+	 xset -display ${DISPLAY} dpms 0 0 $((offminutes * 60))
 fi
 
 # increase number of file descriptors per process
