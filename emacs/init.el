@@ -521,7 +521,7 @@
 
 (use-package smart-mode-line
   :demand
-  :after (:any modus-operandi-theme modus-vivendi-theme)
+  :after (:all (:any modus-operandi-theme modus-vivendi-theme) project )
   :init
   (setq sml/theme 'respectful
         size-indication-mode t
@@ -554,7 +554,7 @@
 
 ;; modeline tabs
 (use-package moody
-  :after (:all (:any modus-operandi-theme modus-vivendi-theme) perspective )
+  :after (:all (:any modus-operandi-theme modus-vivendi-theme) project )
   :demand
   :custom
   (x-underline-at-descent-line t)
@@ -713,11 +713,9 @@
   :hook (counsel-tramp-post-command . me:counsel-tramp-post-command)
   :config
   (defun me:counsel-tramp-pre-command ()
-    (global-aggressive-indent-mode 0)
-    (projectile-mode 0))
+    (global-aggressive-indent-mode 0))
   (defun me:counsel-tramp-post-command ()
-    (global-aggressive-indent-mode 1)
-    (projectile-mode 1))
+    (global-aggressive-indent-mode 1))
   :general
   ("<f4> f"  #'counsel-tramp))
 
@@ -1026,12 +1024,13 @@
   (defun me:find-some-files ()
     "Find files in project or fallback to current directory"
     (interactive)
-    (if (and (fboundp 'projectile-project-p) (projectile-project-p))
-        (let* ((project-root (projectile-ensure-project (projectile-project-root)))
-               (action (lambda (f) (with-ivy-window (find-file (expand-file-name f project-root)))))
-               (files (projectile-project-files project-root)))
-          (me:find-file "Find file: " files action 'me:find-some-files))
+    (if-let* ((project (project-current))
+              (root-path (cdr project))
+              (action (lambda (f) (with-ivy-window (find-file (expand-file-name f root-path)))))
+              (files (project-files project)))
+        (me:find-file "Find file: " files action 'me:find-some-files)
       (counsel-find-file)))
+
   (defun me:find-window-buffer()
     (interactive)
     "Find buffer from buffers previously used in window"
@@ -1068,93 +1067,54 @@
   :general
   (:keymaps 'grep-mode-map "C-c w" #'wgrep-change-to-wgrep-mode))
 
-(use-package projectile
-  :after evil
-  :demand t     ; required because use-package-always-defer is t
-  :custom
-  (projectile-completion-system 'ivy)
-  (projectile-globally-ignored-files #'( "TAGS" "GTAGS" "GRTAGS" "GPATH" ))
-  (projectile-globally-ignored-file-suffixes #'( ".o" ".so" ".a" ".ko" ".jar" ".bc" ".class"))
-  ;; we mainly want projects defined by a few markers and we always want to take the top-most marker.
-  ;; Reorder so other cases are secondary
-  (projectile-project-root-files-functions #'(projectile-root-top-down
-                                              projectile-root-bottom-up
-                                              projectile-root-local))
-  (projectile-project-root-files #'( ".projectile" ))
-  (projectile-use-git-grep t)
-  (projectile-indexing-method 'hybrid)      ;; default indexing method is total crap
-  (projectile-enable-caching t)
+;; built-in project.el
+(use-package project
+  :demand t
   :general
-  (:keymaps 'projectile-mode-map "<f7>" 'projectile-command-map )  ; all projectile built in bindings off f7
-  ("<f7> N"     #'projectile-clear-known-projects)
-  ("<f7> n"     #'projectile-add-known-project)
-  (:prefix "<f7>" "4"  '(:ignore t :which-key "Find→" ))
-  (:prefix "<f7>" "5"  '(:ignore t :which-key "Find→" ))
-  (:prefix "<f7>" "x"  '(:ignore t :which-key "Run→" ))
-  (:prefix "<f7>" "s"  '(:ignore t :which-key "Search→" ))
-  (:prefix "<f7> s" :keymaps 'projectile-mode-map
-           "a" #'me:counsel-ag-project
-           "r" nil  ;; unbind projectile-ripgrep
-           "s" #'me:counsel-rg-project)
-  ;; For reasons I don't understand, if projectile's map
-  ;; has ESC in its map, this prevents the binding
-  ;; <f7> <f7> for persp-projectile, but only in "emacs -nw" mode!
-  ;; So getting rid of it here.
-  (:prefix "<f7>" :keymaps 'projectile-mode-map
-           "ESC" nil
-           "c" nil)
-;;  (:prefix "<f7>" "c" #'counsel-compile)
-
-  :init
-  (setq
-   projectile-project-root-files #'( ".projectile" )
-   projectile-project-compilation-cmd "")     ;; workaround for stupid projectile bug
+  ;; TODO: This duplicates project-prefix-map; should find a way to use that
+  (:prefix "<f7>"
+           "<f7>" 'me:counsel-rg-project
+           "!" 'project-shell-command
+           "&" 'project-async-shell-command
+           "f" 'project-find-file
+           "F" 'project-or-external-find-file
+           "b" 'project-switch-to-buffer
+           "s" 'project-shell
+           "d" 'project-find-dir
+           "D" 'project-dired
+           "v" 'project-vc-dir
+           "c" 'project-compile
+           "e" 'project-eshell
+           "k" 'project-kill-buffers
+           "p" 'project-switch-project
+           "g" 'project-find-regexp
+           "G" 'project-or-external-find-regexp
+           "r" 'project-query-replace-regexp
+           "x" 'project-execute-extended-command)
   :config
-  ;; We really only want to top-down recognize projects that are marked
-  ;; with .projectile. Anything else is brain-damage.
-  ;; Projectile has a nifty "feature" where it sets up projectile-project-root-files
-  ;; to be umpteen different project marker files which goes against having
-  ;; a super-project, which of course many people have. Fuck projectile.
-  (setq projectile-project-root-files #'( ".projectile" ))
-  (defun me:counsel-ag-project ()
-    "Search using ag in project"
-    (interactive)
-    (if (and (fboundp 'projectile-project-p) (projectile-project-p))
-        (counsel-ag (thing-at-point 'symbol) (projectile-project-root))
-      (message "Not in a project")))
   (defun me:counsel-rg-project ()
     "Search using ripgrep in project"
     (interactive)
-    (if (and (fboundp 'projectile-project-p) (projectile-project-p))
-        (counsel-rg (thing-at-point 'symbol) (projectile-project-root))
+    (if-let ((root (me:project-path)))
+        (counsel-rg (thing-at-point 'symbol) root)
       (message "Not in a project")))
-
+  ;; Add project relative org templates
   (defun me:add-project-templates ()
-    (add-to-list 'org-capture-templates `("pn" "Project Notes" entry (file+headline ,(me:project-path "Notes/notes.org") "Notes")))
-    (add-to-list 'org-capture-templates `("pd" "Project Tasks" entry (file+headline ,(me:project-path "Notes/notes.org") "TODOs")
-                                          "* TODO %?\n  %i\n  %a")))
+    (when (project-current)
+      (add-to-list 'org-capture-templates
+                   `("pn" "Project Notes" entry (file+headline ,(me:project-path "Notes/notes.org") "Notes")))
+      (add-to-list 'org-capture-templates
+                   `("pd" "Project Tasks" entry (file+headline ,(me:project-path "Notes/notes.org") "TODOs")
+                     "* TODO %?\n  %i\n  %a"))))
+  ;; Return path relative to project or nil if no project
   (defun me:project-path ( &optional path)
-    (if path
-        (expand-file-name path (projectile-project-root))
-      (projectile-project-root)))
-  (projectile-mode 1))
+    (if-let* ((proj (project-current))
+              (root (project-root proj)))
+        (if path
+            (expand-file-name path root)
+          root)))
 
-(use-package persp-projectile
-  :after projectile
-  :general
-  (:prefix "<f7>" "<f7>"  #'projectile-persp-switch-project)
-  :demand)
-
-(use-package perspective
-  :after persp-projectile
-  :general
-  ("<f7> r"     #'persp-rename)
-  ("M-<right>"  #'persp-next)
-  ("M-<left>"   #'persp-prev)
-  (:prefix "C-x"
-           "x"  '(:ignore t :which-key "Perspective→" ))
-  :config
-  (persp-mode))
+  :ensure nil)
 
 ;; Highlight delimiters by depth
 (use-package rainbow-delimiters
@@ -1555,7 +1515,6 @@
   (:keymaps 'eglot-mode-map
             "<f6> x"  #'eglot-rename
             "<f6> c"  #'eglot-code-actions)
-  :hook ((rust-mode c++-mode c-mode) . eglot-ensure)
   :init
   (setq eglot-ignored-server-capabilities '( :documentHighlightProvider)
         eglot-send-changes-idle-time 3    ;; be slower sending changes
@@ -1572,16 +1531,7 @@
            (init-str (concat "--init={\"cache\":{\"directory\":\"" cache-dir "\"}}")))
       (add-to-list 'eglot-server-programs
                    `((c++-mode c-mode) "ccls" ,init-str))))
-
-  ;; project-find-function which uses projectile methods to find
-  ;; the projectile project associated with a directory.
-  ;; If projectile not loaded, or directory is not in a project,
-  ;; hopefully returns nil.
-  (defun me:project-finder (dir)
-    (if (boundp 'projectile-project-root-cache)
-        (let ((root (projectile-project-root dir)))
-          (and root (cons 'transient root)))))
-  (add-to-list 'project-find-functions #'me:project-finder))
+  :hook ((rust-mode c++-mode c-mode) . eglot-ensure))
 
 ;; N.B. Completion when candidate is already typed out is broken in company.
 ;; See issues #451, #205, #150
@@ -1961,7 +1911,7 @@
   (:keymaps 'global :prefix "<f9>"  "t" #'hydra-timemachine/body))
 
 (use-package popper
-  :after projectile
+  :after project
   :ensure t
   :general
   ("<f4> t"     #'eshell)
@@ -1969,7 +1919,7 @@
   ("M-'"        #'popper-cycle)
   ("<f4> '"     #'popper-toggle-type)
   :init
-  (setq popper-group-function #'popper-group-by-projectile
+  (setq popper-group-function #'popper-group-by-project
         popper-display-control nil)
   (setq popper-reference-buffers
         '("\\*Messages\\*"
