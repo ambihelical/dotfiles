@@ -1607,7 +1607,6 @@
 
 ;; built-in package for cross-references
 (use-package xref
-  :demand
   :config
   (add-to-list 'xref-prompt-for-identifier #'xref-find-references t)
   :general
