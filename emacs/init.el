@@ -1921,10 +1921,11 @@
   ("<f4> t"     #'eshell)
   ("M-\""      #'popper-toggle-latest)
   ("M-'"        #'popper-cycle)
+  ("<f4> <deletechar>" #'popper-kill-latest-popup)
   ("<f4> '"     #'popper-toggle-type)
   :init
   (setq popper-group-function #'popper-group-by-project
-        popper-display-control nil)
+        popper-display-control 'user)
   (setq popper-reference-buffers
         '("\\*Messages\\*"
           "Output\\*$"
