@@ -490,13 +490,6 @@
   :custom
   (adaptive-wrap-extra-indent 3))
 
-(use-package miniedit
-  :general
-  (:keymap minibuffer-local-map
-           "C-c e" #'miniedit)
-  :config
-  (miniedit-mode t))
-
 (use-package modus-themes
   :init
   ;; make sure this load theme hook runs first so it can setup variables
