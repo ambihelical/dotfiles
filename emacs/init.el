@@ -1946,12 +1946,3 @@
   (popper-mode +1)
   (popper-echo-mode +1))                ; For echo area hints
 
-(use-package shackle
-  :demand
-  :config
-  (shackle-mode)
-  :custom
-  (shackle-rules
-   '((compilation-mode :noselect t)))
-  (shackle-default-rule '(:select t))
-  :defer 2)
