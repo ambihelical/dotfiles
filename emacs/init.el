@@ -1113,7 +1113,11 @@
         (if path
             (expand-file-name path root)
           root)))
-
+  (defun me:project-mode-line-info()
+    (if-let* ((path (me:project-path))
+              (name (file-name-nondirectory (directory-file-name path))))
+        (concat " [" name "] ")))
+  (add-to-list 'mode-line-misc-info `(:eval (me:project-mode-line-info)))
   :ensure nil)
 
 ;; Highlight delimiters by depth
