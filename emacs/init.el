@@ -449,7 +449,7 @@
   (fic-highlighted-words `( "TODO" "HACK" "KLUDGE" "FIXME" "TRICKY" "BUG" )))
 
 (use-package whitespace
-  :hook ((prog-mode text-mode) . whitespace-mode )
+  :hook ((prog-mode text-mode c-mode-common) . whitespace-mode )
   :hook ((whitespace-mode me:after-load-theme ) . me:whitespace-after-theme-change)
   :config
   (setq whitespace-line-column nil                      ; highlight past fill-column
@@ -1800,7 +1800,7 @@
   (define-key evil-visual-state-map [escape] 'evil-visual-char))
 
 (use-package ws-butler
-  :hook (( prog-mode text-mode ) . ws-butler-mode ))
+  :hook (( prog-mode text-mode c-mode-common) . ws-butler-mode ))
 
 (use-package which-key
   :hook (me:after-load-theme . me:which-key-after-theme-change)
