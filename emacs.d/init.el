@@ -1244,14 +1244,20 @@
   :hook (org-mode . org-bullets-mode))
 
 (use-package rustic
+  :hook ( rustic-mode . me:rustic-mode-config )
   :init
   ;; recommended by rustic install docs
   (add-hook 'eglot--managed-mode-hook (lambda() (flymake-mode -1)))
+  :config
+  (defun me:rustic-mode-config ()
+    (flyspell-mode -1) ; really slows down scrolling not useful enough to keep
+    (setq-local buffer-save-without-query t))
   :custom
   (rustic-lsp-client 'eglot)
-  (rustic-lsp-server 'rls)
-  (rustic-compile-display-method (lambda (buf) (display-buffer-pop-up-window buf nil)))
-  (rustic-match-angle-brackets nil))   ;; t slows down scrolling a lot
+  (rustic-lsp-server 'rust-analyzer)
+  (rustic-compile-backtrace 1)      ; sets RUST_BACKTRACE=1
+  (rustic-match-angle-brackets nil)   ; t slows down scrolling a lot
+  (rustic-compile-display-method (lambda (buf) (display-buffer-pop-up-window buf nil))))
 
 (use-package toml-mode)
 (use-package protobuf-mode
