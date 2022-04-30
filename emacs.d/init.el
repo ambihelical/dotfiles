@@ -37,14 +37,16 @@
          use-package-verbose nil))                                 ; don't be verbose
 
 ;; xdg directories
-(defconst me:data-directory (or (getenv "XDG_DATA_HOME") "~/.local/share"))
-(defconst me:cache-directory (or (getenv "XDG_CACHE_HOME")  "~/.cache"))
-(defconst me:config-directory (or (getenv "XDG_CONFIG_HOME")  "~/.config"))
+(defconst me:data-directory (or (getenv "XDG_DATA_HOME") (expand-file-name ".local/share" "~")))
+(defconst me:cache-directory (or (getenv "XDG_CACHE_HOME") (expand-file-name ".cache" "~")))
+(defconst me:config-directory (or (getenv "XDG_CONFIG_HOME")  (expand-file-name ".config" "~")))
 
 (defconst me:default-font
   (pcase (system-name)
     ("hum" "Roboto Mono-11:autohint=true")
     ("thud" "Roboto Mono-12:autohint=true")
+    ("SG267" "Roboto Mono-12:autohint=true")
+    ("SG296" "Roboto Mono-12:autohint=true")
     (_ "DejaVu Sans Mono-12")))
 (add-to-list 'default-frame-alist `(font . ,me:default-font))
 
@@ -68,6 +70,12 @@
   (electric-indent-mode +1)                                   ; turn on electric mode globally (electric)
   (delete-selection-mode t)                                   ; pastes delete selection
   (blink-cursor-mode -1)                                      ; don't blink cursor
+  ;; add mingw64 paths under windows
+  (when (eq window-system 'w32)
+    (add-to-list 'exec-path "c:/Program Files/Git/mingw64/bin/")
+    (add-to-list 'exec-path "c:/Program Files/Git/bin/")
+    (add-to-list 'exec-path "c:/Program Files/Git/usr/bin/")
+    (add-to-list 'exec-path (expand-file-name "bin/" "~")))
   (unless (display-graphic-p)
     ;; use mouse in xterm mode
     (xterm-mouse-mode t)
@@ -100,7 +108,7 @@
 (setq ad-redefinition-action 'accept                        ; turn off 'xyz' got redefined warnings
       confirm-kill-processes nil                            ; don't ask about killing processes at exit
       create-lockfiles nil                                  ; no lockfiles (.#file)
-      custom-file "/dev/null"                               ; disable customizations
+      custom-file null-device                               ; disable customizations
       debugger-stack-frame-as-list t                        ; show fns as (fn args) instead of fn(args)
       fast-but-imprecise-scrolling t                        ; quick and dirty scrolling
       find-file-visit-truename t                            ; resolve symlinks finding files
@@ -116,6 +124,7 @@
       mouse-wheel-scroll-amount '(3 ((shift) . 9))          ; 3 lines, or 9 line when shift held (mwheel)
       mouse-wheel-follow-mouse 't                           ; scroll window under mouse (mwheel)
       mouse-wheel-progressive-speed nil                     ; don't speed up (mwheel)
+	  ring-bell-function 'ignore                            ; don't ring bell
       undo-limit 1000000                                    ; 1M (default is 80K)
       undo-strong-limit 1500000                             ; 1.5M (default is 120K)
       undo-outer-limit 150000000                            ; 150M (default is 12M)
@@ -129,6 +138,11 @@
       select-enable-clipboard nil                           ; make cut/paste function correctly (select)
       sentence-end-double-space nil                         ; sentences end with one space
       x-gtk-use-system-tooltips nil)                        ; allow tooltip theming
+
+(when (eq window-system 'w32)
+  ;; This is slower but allows dired-subtree to detect directories correctly
+  ;; ls-lisp seems to have a funky line format which dired-subtree doesn't understand
+  (setq ls-lisp-use-insert-directory-program t))
 
 (add-hook 'after-init-hook                                  ; report init time
           (lambda ()
@@ -282,8 +296,6 @@
     (interactive "P")
     (me:window-nth-buffer 3 prefix))
 
-  (push '("/home-local/" . "/home/") directory-abbrev-alist)
-  (push '("/home-remote/" . "/home/") directory-abbrev-alist)
   :demand)
 
 ;; built-in winner package
@@ -793,6 +805,7 @@
 
 
 (use-package flyspell
+  :unless (eq window-system 'w32)
   :hook (prog-mode . flyspell-prog-mode)
   :hook (text-mode . flyspell-mode)
   :general
@@ -988,7 +1001,6 @@
   ("<f6> m" #'counsel-imenu)
   :custom
   (counsel-search-engine 'google)
-  (counsel-rg-base-command "rg --max-columns 500 --with-filename --no-heading --line-number --color never %s")
   :init
   (setq counsel-yank-pop-separator "\n---\n")
   :config
@@ -1384,6 +1396,7 @@
   :custom
   (c-electric-pound-behavior (quote (alignleft)))  ; cpp directives aligned to left
   (show-paren-mode 0)                              ; don't visualize matching parens
+  (indent-tabs-mode nil)                           ; no tabs
   :config
   (defun me:c-mode-config ()
     ;; ambihelical style - use ellemtel style but use c-basic-offset of 4
@@ -1895,7 +1908,7 @@
         magit-status-margin '(t "%Y-%m-%d %H:%M " magit-log-margin-width nil 18)
         magit-section-initial-visibility-alist '(( stashes . hide ))
         magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1
-        magit-repository-directories '(( "~/dev" . 1)))
+        magit-repository-directories `((,(expand-file-name "dev" "~") . 1)))
   ;; fullscreen magit and restore configuration when done. This and other
   ;; things stolen from:
   ;; https://jakemccrary.com/blog/2020/11/14/speeding-up-magit/

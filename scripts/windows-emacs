@@ -1,0 +1,8 @@
+;; Place this file in C:\Users\Username\AppData\Roaming\.emacs and point to the appropriate files
+(setq user-init-file "C:/Users/ericb/dev/dotfiles/emacs/init.el")
+(setq early-init-file "C:/Users/ericb/dev/dotfiles/emacs/early-init.el")
+(setq user-emacs-directory "C:/Users/ericb/dev/dotfiles/emacs/")
+(setq default-directory "C:/Users/ericb/dev/")
+(setenv "HOME" "C:/Users/ericb")
+(load early-init-file)
+(load user-init-file)
