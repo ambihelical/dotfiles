@@ -1221,6 +1221,9 @@
   (rustic-match-angle-brackets nil))   ;; t slows down scrolling a lot
 
 (use-package toml-mode)
+(use-package protobuf-mode
+  :custom
+  (indent-tabs-mode t))
 
 (use-package cmake-mode
   :init
