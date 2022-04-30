@@ -1075,7 +1075,8 @@
            "d" 'project-find-dir
            "D" 'project-dired
            "v" 'project-vc-dir
-           "c" 'project-compile
+           ;; N.B. f7-c runs counsel-compile
+           "C" 'project-compile
            "e" 'project-eshell
            "k" 'project-kill-buffers
            "p" 'project-switch-project
