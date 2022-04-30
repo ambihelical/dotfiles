@@ -1236,6 +1236,9 @@
   (rustic-compile-display-method (lambda (buf) (display-buffer-pop-up-window buf nil))))
 
 (use-package toml-mode)
+(use-package protobuf-mode
+  :custom
+  (indent-tabs-mode t))
 
 (use-package cmake-mode
   :init
