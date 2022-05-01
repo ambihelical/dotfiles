@@ -1936,6 +1936,7 @@
           help-mode
           occur-mode
           grep-mode
+          org-mode
           "^\\*ivy-occur.*\\*" ivy-occur-mode
           "^\\*helpful.*\\*$" helpful-mode
           rustic-compilation-mode
