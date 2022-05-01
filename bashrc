@@ -387,7 +387,7 @@ linux*)
 	alias pbpaste='xclip -selection clipboard -o'
 
 	# run commands in new window
-	gterm() { urxvt -geometry 80x200-0-0 -title "$1 : $2 $3 $4" -e sh -c "$1 $2 $3 $4"; }
+	gterm() { xterm -geometry 80x200-0-0 -title "$1 : $2 $3 $4" -e sh -c "$1 $2 $3 $4"; }
 	gman() { gterm man $* & }
 	ginfo() { gterm info $* & }
 	gtail() { gterm less $* & }
