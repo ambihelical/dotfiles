@@ -25,7 +25,7 @@ APP_FILES = ${CFG}/screen ${CFG}/ack $(CFG)/globalrc $(CFG)/pythonrc ${CFG}/rtag
 				$(CFG)/gconf ${CFG}/ripgrep/config ~/.editorconfig
 GIT_FILES = ${CFG}/git/config  ${CFG}/git/ignore ${CFG}/tig/config ${DATA}/tig
 I3_FILES = ${CFG}/i3/config ${CFG}/i3/i3status.config ${CFG}/dunst/dunstrc \
-           ${CFG}/gsimplecal/config ${CFG}/i3/three-pane.json
+           ${CFG}/gsimplecal/config ${CFG}/i3/three-pane.json ${CFG}/udiskie/config.yml
 VIM_FILES = ~/.vimrc ${CACHE}/vim
 BAREX_FILES = ~/.xsession ~/.Xmodmap
 EMACS_FILES = ${CFG}/emacs/init.el ${CFG}/emacs/early-init.el ${CFG}/emacs/lisp/extras.el $(CACHE)/emacs ${CFG}/hunspell
