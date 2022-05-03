@@ -937,6 +937,7 @@
 
 ;; add some ivy buffer information
 (use-package ivy-rich
+  :disabled
   :after ivy
   :config
   ;; recommended by ivy-rich docs
