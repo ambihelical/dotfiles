@@ -65,7 +65,8 @@ root: ${ETC_FILES}
 # extra rust installation work, do this after installing rust
 # eventually the cargo bit should be done by rustup
 rust:
-	${LN} ${PWD}/cargo ~/.cargo
+	${LN} ${PWD}/cargo/config.toml ${CARGO_HOME}/config.toml
+	mkdir -p ${DATA}/bash-completion/completions
 	rustup completions bash > ${DATA}/bash-completion/completions/rustup
 	${LN} `rustc --print sysroot`/etc/bash_completion.d/cargo  ${DATA}/bash-completion/completions/cargo
 
