@@ -32,9 +32,7 @@ if [ ${lockminutes} -gt 0 ]; then
 else
 	 echo "Auto screen lock disabled"
 fi
-if [ ${offminutes} -gt 0 ]; then
-	 xset -display ${DISPLAY} dpms 0 0 $((offminutes * 60))
-fi
+xset -display ${DISPLAY} dpms 0 0 $((offminutes * 60))
 
 # increase number of file descriptors per process
 ulimit -n 4096
