@@ -16,9 +16,9 @@
 
 ;; package management
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                         ("org"   . "http://orgmode.org/elpa/")
-                         ("gnu"   . "https://elpa.gnu.org/packages/"))
-      package-check-signature nil)
+                         ("org"   . "https://orgmode.org/elpa/")
+                         ("gnu"   . "https://elpa.gnu.org/packages/")
+                         ("nongnu"   . "https://elpa.nongnu.org/nongnu")))
 (require 'package)
 
 (package-initialize)
