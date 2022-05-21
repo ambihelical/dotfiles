@@ -236,10 +236,6 @@
   ("M-`"        #'previous-buffer)           ; window
   ("M-~"        #'next-buffer)               ; window
   ("M-w"        #'other-window)              ; window
-  ("M-2"        #'me:window-2nd-buffer)
-  ("M-3"        #'me:window-3rd-buffer)
-  ("M-4"        #'me:window-4th-buffer)
-  ("M-5"        #'me:window-5th-buffer)
   :init
   (add-function :after after-focus-change-function
                 (lambda () (unless (frame-focus-state)
@@ -265,25 +261,13 @@
           (switch-to-buffer-other-window buffer)
         (switch-to-buffer buffer))))
 
-  (defun me:window-2nd-buffer (&optional prefix)
-    "Select 1st other buffer"
-    (interactive "P")
-    (me:window-nth-buffer 0 prefix))
-
-  (defun me:window-3rd-buffer (&optional prefix)
-    "Select 2nd other buffer"
-    (interactive "P")
-    (me:window-nth-buffer 1 prefix))
-
-  (defun me:window-4th-buffer (&optional prefix)
-    "Select 3rd other buffer"
-    (interactive "P")
-    (me:window-nth-buffer 2 prefix))
-
-  (defun me:window-5th-buffer (&optional prefix)
-    "Select 4th other buffer"
-    (interactive "P")
-    (me:window-nth-buffer 3 prefix))
+  ;; Define M-2 to M-9 as selecting the nth buffer
+  (dotimes (ind 8) ;; 0 to 7
+    (let ((key (+ 2 ind)))
+      (global-set-key (kbd (concat "M-" (format "%d" key)))
+                      (lambda (&optional prefix)
+                        (interactive "P")
+                        (me:window-nth-buffer ind prefix)))))
 
   :demand)
 
@@ -431,16 +415,34 @@
 
 ;; built-in eldoc mode
 (use-package eldoc
-  :ensure nil
   :general
   ("<f6> h"  #'eldoc-doc-buffer)
+  ("<f10> e" #'eldoc-mode)
   :custom
   (eldoc-echo-area-prefer-doc-buffer t)             ; show in *eldoc* buffer if showing & fits
   (eldoc-echo-area-use-multiline-p 1)               ; one line at most in minibuffer
   :config
   (global-eldoc-mode t)
+  :ensure nil)
+
+;; built-in tab-line mode
+(use-package tab-line
+  :ensure nil
   :general
-  ("<f10> e" #'eldoc-mode))
+  ("<f10> a" #'tab-line-mode)
+  :config
+  (defun me:tab-name(tab tabs)
+    (let ((ind (seq-position tabs tab)))
+      (if (window-system)
+          (format "%c %s" (+ ind ?\u2460) (buffer-name tab))
+        (format "%d) %s" (1+ ind) (buffer-name tab)))))
+  ;; show first 9 buffers only, and show most recent first
+  (defun me:filter-tab-line-buffers ( bufs )
+    (seq-take (seq-reverse bufs) 9))
+  (advice-add #'tab-line-tabs-window-buffers :filter-return #'me:filter-tab-line-buffers)
+  (setq tab-line-tab-name-function #'me:tab-name)
+  (global-tab-line-mode t)
+  :demand)
 
 ;; highlight keywords
 (use-package fic-mode
@@ -1865,6 +1867,10 @@
   (define-key magit-section-mode-map (kbd "M-3") nil)
   (define-key magit-section-mode-map (kbd "M-4") nil)
   (define-key magit-section-mode-map (kbd "M-5") nil)
+  (define-key magit-section-mode-map (kbd "M-6") nil)
+  (define-key magit-section-mode-map (kbd "M-7") nil)
+  (define-key magit-section-mode-map (kbd "M-8") nil)
+  (define-key magit-section-mode-map (kbd "M-9") nil)
   (define-key magit-mode-map (kbd "M-w") nil)
   (define-key magit-mode-map (kbd "C-w") nil)
   (define-key magit-mode-map (kbd "C-c C-m") #'magit-toggle-margin)
