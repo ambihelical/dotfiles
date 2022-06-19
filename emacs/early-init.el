@@ -7,6 +7,7 @@
 (setq gc-cons-threshold most-positive-fixnum    ; disable gc, fixed by gcmh
       package-quickstart t                      ; 10% faster, I'll take it
       file-name-handler-alist nil               ; faster startup without this
+      frame-resize-pixelwise t                  ; disable rounding of frame size
       package-enable-at-startup nil)            ; ?
 
 (add-hook 'emacs-startup-hook
