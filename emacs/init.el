@@ -194,23 +194,13 @@
 
 ;; infrequently used functions
 (use-package extras
-  :commands (hydra-paste/body x-urgency-hint)
+  :commands (x-urgency-hint)
   :ensure nil
   :general
   ("<f10> s"  #'me:read-fill-column)
   ("<f4> 1"  #'me:ps-one-per-page)
   ("<f4> 2"  #'me:ps-two-per-page)
   :config
-  ;; Define paste hydra.
-  ;; eval to avoid pulling in hydra via macro expansion
-  ;; Note would like to also redefine C-n, C-p, but these require
-  ;; last-command to be a paste, and using a hydra messes with that,
-  ;; last-command will be hydra-paste/body
-  (eval '(defhydra hydra-paste (:hint nil)
-           "Pasting (see also C-n, C-p)"
-           ("b" me:paste-then-earlier "Paste above, earlier kill" :column "")
-           ("a" me:paste-then-later "Paste below, later kill" )
-           ("y" me:counsel-yank-pop-preselect-last "Select from kill ring")))
   :load-path "lisp/")
 
 ;; built-in emacs-lisp-mode package
@@ -716,19 +706,6 @@
                      "remote-shell" "/bin/dash"))
   :ensure nil)
 
-(use-package counsel-tramp
-  :custom
-  (counsel-tramp-control-master t)
-  :hook (counsel-tramp-pre-command . me:counsel-tramp-pre-command)
-  :hook (counsel-tramp-post-command . me:counsel-tramp-post-command)
-  :config
-  (defun me:counsel-tramp-pre-command ()
-    (global-aggressive-indent-mode 0))
-  (defun me:counsel-tramp-post-command ()
-    (global-aggressive-indent-mode 1))
-  :general
-  ("<f4> f"  #'counsel-tramp))
-
 (use-package dired
   :general
   ("<f4> d"   #'dired-jump)
@@ -839,8 +816,7 @@
     (setq ispell-program-name "aspell")
     ;; Please note ispell-extra-args contains ACTUAL parameters passed to aspell
     (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))))
-  :config
-  (use-package flyspell-correct-ivy :demand))
+  )
 
 ;; look up words
 (use-package define-word
@@ -854,223 +830,104 @@
     (setq define-word-limit (/ (+ 2 (frame-height)) 3)))
   (advice-add #'define-word :before #'me:advise-define-word))
 
-(use-package ivy
+;; vertical completion
+(use-package vertico
   :general
-  ("<f4> <f4>"  #'ivy-resume)
-  ("<f2>"       #'ivy-switch-buffer)
-  ("C-x b"      #'ivy-switch-buffer)
-  (:keymaps 'ivy-minibuffer-map
-            "<return>"  #'ivy-done
-            "<C-return>" #'me:ivy-call-and-next-line
-            "<C-S-return>" #'ivy-previous-line-and-call
-            "<M-return>" #'ivy-dispatching-done
-            "<C-right>" #'ivy-next-history-element
-            "<C-left>" #'ivy-previous-history-element
-            "<M-left>"  #'ivy-prev-action
-            "<M-right>" #'ivy-next-action
-            "<C-SPC>" #'me:ivy-toggle-mark-and-next-line
-            "<M-SPC>" #'ivy-toggle-marks
-            "<S-SPC>" nil        ;; default is ivy-restrict-to-matches which is annoying
-            "M-y" #'ivy-next-line)                       ; for yank-pop flow
-  ;; add some vim mappings in normal mode minibuffer
-  (:keymaps 'ivy-minibuffer-map :states 'normal
-            "C-b" #'ivy-scroll-down-command
-            "C-f" #'ivy-scroll-up-command
-            "G" #'ivy-end-of-buffer
-            "gg" #'ivy-beginning-of-buffer
-            "<up>" #'ivy-previous-line
-            "<down>" #'ivy-next-line)
-  ;;Bindings under C-c. These are for bindings which are less frequently
-  ;;used and/or hard to remember.  Frequent use bindings are duplicated for discovery.
-  (:keymaps 'ivy-minibuffer-map :prefix "C-c"
-            ;; These are the same as ivy
-            "C-o"   '(ivy-occur                         :which-key "Open occur buffer")
-            "C-s"  '(ivy-rotate-sort                    :which-key "Rotate sorting method")
-            ;; These have been moved so remove ivy's binding
-            "C-a"   nil
-            ;; Duplicates of ivy minibuffer bindings (old and new) for discoverability
-            "C-r"     '(ivy-reverse-i-search            :which-key "Search history ⧉")
-            "<C-left>"  '(ivy-previous-history-element  :which-key "Previous input history ⧉")
-            "<C-right>" '(ivy-next-history-element      :which-key "Next input history ⧉")
-            "<M-left>"  '(ivy-prev-action               :which-key "Previous action ⧉")
-            "<M-right>" '(ivy-next-action               :which-key "Next action ⧉")
-            "<return>" '(ivy-done                       :which-key "Call, exit ⧉")
-            "<C-return>" '(me:ivy-call-and-next-line    :which-key "Call, Next line ⧉")
-            "<C-S-return>" '(ivy-previous-line-and-call :which-key "Previous line, call ⧉")
-            "<M-return>" '(ivy-dispatching-done         :which-key "Get action, call, exit ⧉")
-            "<C-SPC>" '(me:ivy-toggle-mark-and-next-line  :which-key "Toggle mark, next line ⧉")
-            "M-SPC" '(ivy-toggle-marks                  :which-key "Toggle marks ⧉" :override t)
-            "M-j"     '(ivy-yank-word                   :which-key "Yank from buffer ⧉" :override t)
-            ;; New bindings for this prefix only
-            "t"  '(:ignore t :which-key "Toggles→" )
-            "C-c"     '(ivy-avy                         :which-key "Avy search")
-            "a"       '(ivy-read-action                 :which-key "Select default action")
-            "n"       '(ivy-immediate-done              :which-key "Exit with input instead of candidate")
-            "i"       '(ivy-insert-current              :which-key "Copy candidate to input")
-            "r"       '(ivy-restrict-to-matches         :which-key "Rematch matched candidates")
-            "w"       '(ivy-kill-ring-save              :which-key "Copy current candidates to kill ring")
-            "?"       '(ivy-help                        :which-key "Ivy Help"))
-  (:keymaps 'ivy-minibuffer-map :prefix "C-c t"
-            "i"  '(ivy-toggle-ignore :which-key "Toggle ignore")
-            "q"  '(ivy-toggle-regexp-quote :which-key "Toggle regex quoting")
-            "c"  '(ivy-toggle-calling :which-key "Toggle calling")
-            "f"  '(ivy-toggle-fuzzy :which-key "Toggle fuzzy")
-            "u"  '(ivy-toggle-case-fold :which-key "Toggle case folding"))
+  ("<f4> <f4>" #'vertico-repeat)
+  :hook ( minibuffer-setup . vertico-repeat-save )
+  :defer 1
+  :config
+  (vertico-mode)
+  (vertico-indexed-mode)
+  (setq vertico-count 20
+        vertico-resize nil))
+
+;; easier directory navigation
+(use-package vertico-directory
+  :after vertico
+  ;; part of vertico, so don't try to download
+  :ensure nil
+  ;; More convenient directory navigation commands
+  :bind (:map vertico-map
+              ("RET" . vertico-directory-enter)
+              ("DEL" . vertico-directory-delete-char)
+              ("M-DEL" . vertico-directory-delete-word))
+  ;; Tidy shadowed file names
+  :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
+
+;; match multiple regexps in any order
+(use-package orderless
+  :after vertico
   :init
-  (setq ivy-use-virtual-buffers t                           ; add ‘recentf-mode’ and bookmarks to ‘ivy-switch-buffer’.
-        ivy-virtual-abbreviate 'full                        ; use full path for abbreviation
-        ivy-count-format " (%-d) "                          ; show # candidates
-        ivy-pre-prompt-function #'ivy-action-name           ; show action before # candidates
-        ivy-initial-inputs-alist nil                        ; no regexp by default
-        ivy-action-wrap t                                   ; wrap-around for actions
-        ivy-on-del-error-function nil                       ; too many backspaces doesn't exit
-        ivy-re-builders-alist
-        '((t . ivy--regex-ignore-order)))                   ; allow input not in order
-  :config
+  ;; Configure a custom style dispatcher (see the Consult wiki)
+  ;; (setq orderless-style-dispatchers '(+orderless-dispatch)
+  ;;       orderless-component-separator #'orderless-escapable-split-on-space)
+  (setq completion-styles '(orderless basic)
+	    completion-category-defaults nil
+	    completion-category-overrides '((file (styles partial-completion)))))
 
-  ;; Make the default height be 1/3 of frame
-  (defun me:ivy-height-from-frame (caller)
-    (/ (+ 2 (frame-height)) 3))
-  (add-to-list  'ivy-height-alist '( t . me:ivy-height-from-frame) t)
-
-
-  (defun me:ivy-toggle-mark-and-next-line ()
-    (interactive)
-    (if (ivy--marked-p)
-        (ivy-unmark)
-      (ivy-mark)))
-
-  (defun me:ivy-call-and-next-line ()
-    (interactive)
-    (ivy-call)
-    (ivy-next-line))
-
-  (defun me:ivy-dispatch-call-and-next-line ()
-    (interactive)
-    (ivy-dispatching-call)
-    (ivy-next-line))
-
-  (ivy-mode 1))
-
-;; add some ivy buffer information
-(use-package ivy-rich
-  :disabled
-  :after ivy
-  :config
-  ;; recommended by ivy-rich docs
-  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
-  ;; make candidate column and mode bigger, rearrange columns from default
-  (setq ivy-rich-display-transformers-list
-        (plist-put ivy-rich-display-transformers-list
-                   'ivy-switch-buffer
-                   '(:columns
-                     (
-                      (ivy-rich-switch-buffer-indicators (:width 4 :face error :align right))
-                      (ivy-rich-candidate (:width 64))
-                      (ivy-rich-switch-buffer-major-mode (:width 20 :face warning))
-                      (ivy-rich-switch-buffer-project (:width 15 :face success))
-                      (ivy-rich-switch-buffer-size (:width 7))
-                      (ivy-rich-switch-buffer-path (:width (lambda (x) (ivy-rich-switch-buffer-shorten-path x (ivy-rich-minibuffer-width 0.3)))))
-                      )
-                     :predicate
-                     (lambda (cand) (get-buffer cand)))))
-
-  (ivy-rich-mode)
-  :demand t)
-
-(use-package counsel
-  :defines counsel-yank-pop-preselect-last
-  :commands (  counsel-file-jump counsel-find-file counsel-M-x)
+;; completion-read functions
+(use-package consult
+  :after vertico
   :general
+  ("<f2>"  #'consult-buffer)
+  ("<f4> f"  #'consult-find)
+  ("<f4> /"  #'consult-focus-lines)
+  ("M-<f2>"  #'me:find-window-buffer)
+  ("M-y"    #'consult-yank-pop)
+  ("<f10> t" #'consult-theme)
+  ("<f10> c" #'read-color)
+  ("<help> a"    #'consult-apropos)
+  ("<f6> m" #'consult-imenu)
+  ("<f6> M" #'consult-imenu-multi)
   (:keymaps 'global :prefix "<f4>"
-            "a" #'counsel-apropos
-            "b" #'counsel-mark-ring
-            "D" #'counsel-dired-jump
-            "g" #'counsel-search
-            "i" #'counsel-info-lookup-symbol
-            "j" #'counsel-bookmark
-            "k" #'counsel-descbinds
-            "l" #'counsel-linux-app
-            "p" #'counsel-package
-            "r" #'counsel-recentf
-            "s"  '(:ignore t :which-key "Search→" )
-            "u" #'counsel-unicode-char)
-  (:keymaps 'global :prefix "<f4> s"
-            "a" #'me:counsel-ag-here
-            "l" #'counsel-locate
-            "g" #'counsel-git-grep
-            "s" #'me:counsel-rg-here
-            "w" #'swiper
-            "W" #'swiper-all)
-  ("C-h b"  #'counsel-descbinds)
-  ("M-x"    #'counsel-M-x)
-  ("M-y"    #'counsel-yank-pop)
-  ("M-<f2>" #'me:find-window-buffer)
-  ("<f3>"   #'me:find-some-files)
-  ("<f10> t" #'counsel-load-theme)
-  ("<f7> c" #'counsel-compile)
-  ("<f10> c" #'counsel-colors-emacs)
-  ("<f10> w" #'counsel-colors-web)
-  ("<f6> m" #'counsel-imenu)
-  :custom
-  (counsel-search-engine 'google)
-  :init
-  (setq counsel-yank-pop-separator "\n---\n")
-  :config
-  (defun me:counsel-yank-pop-preselect-last ()
-    (interactive)
-    (let ((counsel-yank-pop-preselect-last t))
-      (call-interactively (counsel-yank-pop))))
-  (defun me:find-file (prompt candidates action caller)
-    "Find a file from a list of files"
-    (ivy-read prompt candidates
-              :matcher #'counsel--find-file-matcher
-              :action action
-              :preselect (counsel--preselect-file)
-              :require-match t
-              :history 'file-name-history
-              :keymap counsel-find-file-map
-              :caller caller))
-  (defun me:find-some-files ()
-    "Find files in project or fallback to current directory"
-    (interactive)
-    (if-let* ((project (project-current))
-              (root-path (cdr project))
-              (action (lambda (f) (with-ivy-window (find-file (expand-file-name f root-path)))))
-              (files (project-files project)))
-        (me:find-file "Find file: " files action 'me:find-some-files)
-      (counsel-find-file)))
+            "a" #'consult-apropos
+            "m" #'consult-mark
+            "j" #'consult-bookmark
+            "l" #'consult-line
+            "s" #'me:consult-ripgrep-here
+            "u" #'insert-char
+            "o" #'consult-locate)
 
+  :config
+  (setq xref-show-xrefs-function #'consult-xref)
+
+  ;; find file using fd
+  (defun me:consult-find-fd (&optional dir)
+    (interactive "P")
+    (let ((consult-find-command '("fd" "--color=never" "--full-path")))
+      (consult-find dir)))
+  ;; search using ripgrep
+  (defun me:consult-ripgrep-here ()
+    "Search using ripgrep in default directory"
+    (interactive)
+    (consult-ripgrep default-directory (thing-at-point 'symbol)))
   (defun me:find-window-buffer()
     (interactive)
     "Find buffer from buffers previously used in window"
     (when-let* ((allbufs (mapcar 'car (window-prev-buffers)))
                 (bufs (remove (current-buffer) allbufs))
-                (cands (mapcar #'buffer-name bufs)))
-      (ivy-read "Buffer: " cands
-                :matcher #'ivy--switch-buffer-matcher
-                :action #'ivy--switch-buffer-action
-                :caller 'ivy-switch-buffer
-                :history 'buffer-name-history
-                :preselect (buffer-name (other-buffer (current-buffer)))
-                :keymap ivy-switch-buffer-map)))
-  (defun me:counsel-ag-here ()
-    "Search using ag in default directory"
-    (interactive)
-    (counsel-ag (thing-at-point 'symbol) default-directory))
-  (defun me:counsel-rg-here ()
-    "Search using ripgrep in default directory"
-    (interactive)
-    (counsel-rg (thing-at-point 'symbol) default-directory))
+                (cands (mapcar #'buffer-name bufs))
+                (buf-name (completing-read
+                           "Buffer: " cands
+                           nil t "" 'buffer-name-history
+                           (buffer-name (other-buffer (current-buffer))) t)))
+      (switch-to-buffer buf-name))))
 
-  (counsel-mode 1))
+(use-package embark
+  :demand t
+  :after vertico
+  ;; TODO convert to general
+  :bind (:map minibuffer-local-map
+              ("C-o" . embark-act)
+              ("C-c C-o" . embark-act)
+              ("C-c C-c" . embark-dwim)
+              :map embark-file-map
+              ("j" . dired-jump)))
 
-;; Need this for counsel-search
-(use-package request)
-
-;; better M-x
-(use-package amx
-  :hook (ivy-mode . amx-mode))
+(use-package embark-consult
+  :demand t
+  :after ( embark consult ))
 
 ;; allow grep buffers to be editted
 (use-package wgrep
@@ -1081,9 +938,10 @@
 (use-package project
   :demand t
   :general
+  ("<f3>"  #'project-find-file)
   ;; TODO: This duplicates project-prefix-map; should find a way to use that
   (:prefix "<f7>"
-           "<f7>" 'me:counsel-rg-project
+           "<f7>" 'me:rg-project
            "!" 'project-shell-command
            "&" 'project-async-shell-command
            "f" 'project-find-file
@@ -1093,8 +951,7 @@
            "d" 'project-find-dir
            "D" 'project-dired
            "v" 'project-vc-dir
-           ;; N.B. f7-c runs counsel-compile
-           "C" 'project-compile
+           "c" 'project-compile
            "e" 'project-eshell
            "k" 'project-kill-buffers
            "p" 'project-switch-project
@@ -1103,11 +960,11 @@
            "r" 'project-query-replace-regexp
            "x" 'project-execute-extended-command)
   :config
-  (defun me:counsel-rg-project ()
+  (defun me:rg-project ()
     "Search using ripgrep in project"
     (interactive)
     (if-let ((root (me:project-path)))
-        (counsel-rg (thing-at-point 'symbol) root)
+        (consult-ripgrep root (thing-at-point 'symbol))
       (message "Not in a project")))
   ;; Add project relative org templates
   (defun me:add-project-templates ()
@@ -1207,14 +1064,15 @@
     (setq org-capture-templates me:org-capture-templates)
     (me:add-project-templates)
     (counsel-org-capture))
-  (defun me:search-notes ()
+  (defun me:search-notes()
     (interactive)
     (let* ((dot-notes (expand-file-name "Notes" me:data-directory))
            (proj-notes (me:project-path "Notes"))
            (home-notes (expand-file-name "Notes" "~"))
            (proj-notes-path (if (file-exists-p proj-notes) proj-notes ""))
-           (home-notes-path (if (file-exists-p home-notes) home-notes "")))
-      (counsel-rg (thing-at-point 'symbol) dot-notes (concat " -- " home-notes-path " " proj-notes-path " " dot-notes) nil))))
+           (home-notes-path (if (file-exists-p home-notes) home-notes ""))
+           (consult-ripgrep-args (concat "rg --null --line-buffered --color=never --max-columns=1000 --path-separator / --smart-case --no-heading --line-number" home-notes-path " " proj-notes-path " " dot-notes " ")))
+      (consult-ripgrep))))
 
 (use-package valign
   :hook ((org-mode markdown-mode) . valign-mode)
@@ -1354,10 +1212,6 @@
    ("\\(?:Brewfile\\|Capfile\\|Gemfile\\(?:\\.[a-zA-Z0-9._-]+\\)?\\|[rR]akefile\\)\\'" . ruby-mode)))
 
 (use-package js2-mode
-  :general
-  ("<f4> q" #'counsel-jq)
-  :config
-  (use-package counsel-jq)
   :mode
   (("\\.js\\'" . js2-mode)
    ("\\.json\\'" . js2-mode)))
@@ -1573,14 +1427,6 @@
   ("<f6> a"   #'xref-find-apropos)
   :ensure nil)
 
-;; ivy interface to xref
-(use-package ivy-xref
-  :commands (ivy-xref-show-xrefs)
-  :after xref
-  :init
-  (setq xref-show-xrefs-function #'ivy-xref-show-xrefs
-        ivy-xref-use-file-path t))
-
 (use-package yasnippet
   :commands ( yas-expand-snippet )
   :hook ((prog-mode text-mode) . yas-minor-mode)
@@ -1756,7 +1602,7 @@
 
 (use-package evil-collection
   :custom
-  (evil-collection-setup-minibuffer t)
+  (evil-collection-setup-minibuffer nil)
   ;; allow evilification for these modes:
   (evil-collection-mode-list
    `(
@@ -1769,11 +1615,9 @@
      eshell
      help
      helpful
-     ivy
      js2-mode
      log-view
      lua-mode
-     minibuffer
      magit
      magit-todos
      (package-menu package)
@@ -1837,8 +1681,7 @@
 (use-package magit
   :after ( evil evil-collection )
   :init
-  (setq magit-completing-read-function 'ivy-completing-read   ; use ivy
-        magit-save-repository-buffers 'dontask                ; save repo modified buffers w/o asking
+  (setq magit-save-repository-buffers 'dontask                ; save repo modified buffers w/o asking
         magit-log-margin '(t "%Y-%m-%d %H:%M " magit-log-margin-width t 18)
         magit-status-margin '(t "%Y-%m-%d %H:%M " magit-log-margin-width nil 18)
         magit-section-initial-visibility-alist '(( stashes . hide ))
@@ -1949,4 +1792,3 @@
           compilation-mode))
   (popper-mode +1)
   (popper-echo-mode +1))                ; For echo area hints
-
