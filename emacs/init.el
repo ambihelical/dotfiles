@@ -200,7 +200,6 @@
 
 ;; infrequently used functions
 (use-package extras
-  :commands (hydra-paste/body x-urgency-hint)
   :ensure nil
   :general
   ("<f10> s"  #'me:read-fill-column)
@@ -1444,7 +1443,7 @@
             "<down>" #'compilation-next-error
             "<prior>" #'compilation-previous-file
             "<next>" #'compilation-next-file
-            "<f5> r" #'me:rotate-skip-threshold
+            "C-c C-r" #'me:rotate-skip-threshold
             "<SPC>" nil
             "g" nil
             "j" nil
@@ -1461,27 +1460,19 @@
      (cond ((= compilation-skip-threshold 1) 2)
            ((= compilation-skip-threshold 2) 0)
            (t 1))))
+  (defun me:compile-finish (buf str)
+    (compilation-set-skip-threshold 1)
+    (when (and (display-graphic-p) (not (eq window-system 'w32)))
+      (x-urgency-hint (selected-frame))))
+
   :init
   (setq compilation-scroll-output t
         compilation-ask-about-save nil                 ; save all modified
         compilation-always-kill t                      ; always kill existing process
         compilation-auto-jump-to-first-error t
-        compilation-finish-functions (lambda (buf str)
-                                       (compilation-set-skip-threshold 1)
-                                       (x-urgency-hint (selected-frame))
-                                       (if (null (string-match ".*exited abnormally.*" str))
-                                           ;;if no errors, make the compilation window go away in a few seconds
-                                           (progn
-                                             (run-at-time "2 sec" nil 'delete-windows-on buf)
-                                             (message "No Compilation Errors!"))
-                                         compilation-skip-threshold 2)))
+        compilation-finish-functions #'me:compile-finish)
   (add-hook 'compilation-start-hook
-            (lambda (_proc) (compilation-set-skip-threshold 2)))
-
-  (add-hook 'compilation-mode-hook (lambda ()
-                                     (when (fboundp 'evil-make-intercept-map)
-                                       (evil-make-intercept-map compilation-mode-map 'normal)
-                                       (evil-normalize-keymaps)))))
+            (lambda (_proc) (compilation-set-skip-threshold 2))))
 
 ;; view symbols of libraries
 (use-package elf-mode
@@ -1766,11 +1757,6 @@
              shortdoc-mode
              paradox-menu-mode))
     (add-to-list 'evil-emacs-state-modes mode))
-  ;; remove these from evil-motion-state-modes
-  ;; using evil-collection we don't need them
-  (dolist (mode
-           '(compilation-mode))
-    (delete mode evil-motion-state-modes))
 
   (evil-mode 1))
 
