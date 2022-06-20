@@ -320,11 +320,15 @@
 ;; built-in minibuffer package
 (use-package minibuffer
   :ensure nil
+  :init
+  (setq minibuffer-prompt-properties
+        '(read-only t cursor-intangible t face minibuffer-prompt))
+  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
   :custom
   (enable-recursive-minibuffers t)                        ; allow recursive edit
   :config
   (minibuffer-depth-indicate-mode t)       ; show recursive edit depth (mb-depth)
-  :demand)
+  :defer 0.5)
 
 ;; built-in autorevert package
 (use-package autorevert
