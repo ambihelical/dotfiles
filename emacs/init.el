@@ -92,7 +92,7 @@
 (setq ad-redefinition-action 'accept                        ; turn off 'xyz' got redefined warnings
       confirm-kill-processes nil                            ; don't ask about killing processes at exit
       create-lockfiles nil                                  ; no lockfiles (.#file)
-      custom-file null-device                               ; disable customizations
+      custom-file (expand-file-name "custom.el" user-emacs-directory)  ; customize file
       debugger-stack-frame-as-list t                        ; show fns as (fn args) instead of fn(args)
       describe-bindings-outline t                           ; use outlines for describe bindings C-h b
       fast-but-imprecise-scrolling t                        ; quick and dirty scrolling
@@ -126,6 +126,17 @@
       select-enable-clipboard nil                           ; make cut/paste function correctly (select)
       sentence-end-double-space nil                         ; sentences end with one space
       x-gtk-use-system-tooltips nil)                        ; allow tooltip theming
+
+;; Disable customize, borrowed from doom emacs
+(dolist (sym '(customize-option customize-browse customize-group customize-face
+                                customize-rogue customize-saved customize-apropos
+                                customize-changed customize-unsaved customize-variable
+                                customize-set-value customize-customized customize-set-variable
+                                customize-apropos-faces customize-save-variable
+                                customize-apropos-groups customize-apropos-options
+                                customize-changed-options customize-save-customized))
+  (put sym 'disabled "`customize' unsupported, configure Emacs from init.el instead"))
+(put 'customize-themes 'disabled "Use `load-theme' in init.el instead")
 
 (when (eq window-system 'w32)
   ;; This is slower but allows dired-subtree to detect directories correctly
