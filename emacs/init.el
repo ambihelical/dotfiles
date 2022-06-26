@@ -869,6 +869,13 @@
 ;; completion-read functions
 (use-package consult
   :after vertico
+  :init
+  ;; for some reason it looks like shell expansion is going on with consult-find
+  ;; and putting single quotes around the -wholename argument this fixes it
+  ;; without special-casing windows but the developer is kind of a butthead and
+  ;; won't do this. On the other hand, it's not clear where the expansion is
+  ;; happening, so he may have a point.
+  (setq consult-find-args "find . -not ( -wholename '*/.*' -prune )")
   :general
   ("<f2>"  #'consult-buffer)
   ("<f4> f"  #'consult-find)
