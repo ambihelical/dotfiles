@@ -333,16 +333,14 @@
 (use-package simple
   :hook (( prog-mode text-mode ) . visual-line-mode )
   :ensure nil
+  :custom
+  (kill-do-not-save-duplicates t)          ; No duplicates in kill ring
+  (kill-ring-max 200)                      ; more killed items
+  (visual-line-fringe-indicators '(left-curly-arrow nil))  ; use left curly error for wrapped lines
   :general
   ("M-n"        #'next-error)
   ("M-p"        #'previous-error)
   ("C-M-<backspace>"    #'kill-current-buffer)
-  :init
-  (setq kill-ring-max 200                      ; More killed items
-        kill-do-not-save-duplicates t          ; No duplicates in kill ring
-        save-interprogram-paste-before-kill t  ; save clipboard before killing
-        visual-line-fringe-indicators
-        '(left-curly-arrow nil))            ; use left curly error for wrapped lines
   :config
   (column-number-mode t)                       ; display column/row of cursor in mode-line
   :demand)
