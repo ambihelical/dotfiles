@@ -1878,9 +1878,18 @@
   :hook (with-editor-mode . me:with-editor-mode-config)
   :config
   (defun me:with-editor-mode-config ()
-    (when (and (eq 0 (current-column)) (bolp) (eolp))    ; insert if line is empty
-      (evil-insert-state))
-    (setq fill-column 70)))
+    (let* ((empty (and (eq 0 (current-column)) (bolp) (eolp)))
+           (branch (magit-get-current-branch)))
+      (setq fill-column 70)
+      (when empty
+        (when branch
+          ;; match board-####- branch names and auto insert bracket tag
+          (save-match-data
+            (if-let* ((match (string-match "^\\([A-Za-z]+\\)-\\([0-9]+\\)-" branch))
+                      (board (match-string 1 branch))
+                      (ticket (match-string 2 branch)))
+                (insert (concat "[" (upcase board) "-" ticket "] ")))))
+        (evil-insert-state)))))
 
 (use-package magit
   :after ( evil evil-collection )
