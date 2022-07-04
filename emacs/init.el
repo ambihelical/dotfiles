@@ -1411,6 +1411,12 @@
   :init
   (global-corfu-mode))
 
+(use-package corfu-doc
+  :hook (corfu-mode . corfu-doc-mode)
+  :config
+  (define-key corfu-map (kbd "M-p") #'corfu-doc-scroll-down) ;; corfu-next
+  (define-key corfu-map (kbd "M-n") #'corfu-doc-scroll-up))  ;; corfu-previous
+
 ;; built-in package for cross-references
 (use-package xref
   :config
