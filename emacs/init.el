@@ -1215,18 +1215,6 @@
   (("\\.py\\'" . python-mode)
    ("\\.py3\\'" . python-mode)))
 
-;; N.B. will need to run jedi:setup-server once
-(use-package company-jedi
-  :hook (python-mode . me:setup-jedi)
-  :init
-  (setq jedi:complete-on-dot t)
-  :config
-  (defun me:setup-jedi()
-    (jedi:setup)
-    (make-local-variable 'company-backends)
-    (delete 'company-capf company-backends)
-    (add-to-list 'company-backends 'company-jedi)))
-
 (use-package ruby-mode
   :mode
   (("\\.\\(?:cap\\|gemspec\\|irbrc\\|gemrc\\|rake\\|rb\\|ru\\|thor\\)\\'" . ruby-mode)
@@ -1418,27 +1406,27 @@
                    `((c++-mode c-mode) "ccls" ,init-str))))
   :hook ((rust-mode c++-mode c-mode) . eglot-ensure))
 
-;; N.B. Completion when candidate is already typed out is broken in company.
-;; See issues #451, #205, #150
-(use-package company
-  :general
-  ("C-("     #'company-complete)  ; force completion
-  ;; N.B. Workaround company disabling backend expansion of parameters in tng mode
-  ;; Use this after tabbing to selection.  Normally any non-command key
-  ;; will trigger the completion but suppress parameter expansion, this avoids
-  ;; the suppression.
-  (:keymaps 'company-active-map "(" #'company-complete-selection)
-  :init
-  (setq company-minimum-prefix-length 2            ; # chars needed for completion
-        company-idle-delay 1
-        company-tooltip-align-annotations t        ; needed for racer??
-        company-dabbrev-downcase nil)              ; never downcase
+(use-package corfu
+  :demand t
+  :after vertico
+  :custom
+  (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+  (corfu-auto t)                 ;; Enable auto completion
+  (corfu-separator ?\s)          ;; Orderless field separator
   :config
-  (company-tng-mode)
-  :hook ( (prog-mode text-mode) . company-mode))
+  (defun me:corfu-enable-in-minibuffer ()
+    "Enable Corfu in the minibuffer if Vertico/Mct are not active."
+    (unless (or (bound-and-true-p mct--active)
+                (bound-and-true-p vertico--input))
+      ;; (setq-local corfu-auto nil) Enable/disable auto completion
+      (corfu-mode 1)))
+  (add-hook 'minibuffer-setup-hook #'me:corfu-enable-in-minibuffer 1)
 
-(use-package company-quickhelp
-  :hook (company-mode . company-quickhelp-mode))
+  ;; Recommended: Enable Corfu globally.
+  ;; This is recommended since Dabbrev can be used globally (M-/).
+  ;; See also `corfu-excluded-modes'.
+  :init
+  (global-corfu-mode))
 
 ;; built-in package for cross-references
 (use-package xref
