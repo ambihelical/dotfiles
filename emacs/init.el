@@ -29,6 +29,7 @@
     ("hum" "Roboto Mono-11:autohint=true")
     ("thud" "Roboto Mono-12:autohint=true")
     ("SG267" "Roboto Mono-12:autohint=true")
+    ("SG296" "Roboto Mono-12:autohint=true")
     (_ "DejaVu Sans Mono-12")))
 (add-to-list 'default-frame-alist `(font . ,me:default-font))
 
