@@ -49,7 +49,6 @@
   (tool-bar-mode 0)                                           ; no tool bar (tool-bar)
   (scroll-bar-mode 0)                                         ; no scroll bar (scroll-bar)
   (mouse-avoidance-mode 'animate)                             ; move mouse pointer out of way (avoid)
-  (fset 'yes-or-no-p 'y-or-n-p)                               ; change stupid default y/n? y
   (electric-indent-mode +1)                                   ; turn on electric mode globally (electric)
   (delete-selection-mode t)                                   ; pastes delete selection
   (blink-cursor-mode -1)                                      ; don't blink cursor
@@ -118,6 +117,7 @@
       undo-outer-limit 150000000                            ; 150M (default is 12M)
       use-file-dialog nil                                   ; never want gui file dialog
       use-dialog-box nil                                    ; never want dialog box for questions
+      use-short-answers t                                   ; use y/n
       save-some-buffers-default-predicate 'save-some-buffers-root  ; same only project files
       scroll-margin 5                                       ; show some lines around cursor when possible
       scroll-conservatively 101                             ; only scroll enough to bring cursor to view
