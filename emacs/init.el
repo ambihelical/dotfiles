@@ -45,88 +45,10 @@
 (defvar me:theme-is-dark-p nil
   "true if theme is dark")
 
-(defun me:extra-setup ()
-  (tool-bar-mode 0)                                           ; no tool bar (tool-bar)
-  (scroll-bar-mode 0)                                         ; no scroll bar (scroll-bar)
-  (mouse-avoidance-mode 'animate)                             ; move mouse pointer out of way (avoid)
-  (electric-indent-mode +1)                                   ; turn on electric mode globally (electric)
-  (delete-selection-mode t)                                   ; pastes delete selection
-  (blink-cursor-mode -1)                                      ; don't blink cursor
-  (global-so-long-mode +1)                                    ; handle long lines better
-  ;; add mingw64 paths under windows
-  (when (eq window-system 'w32)
-    (add-to-list 'exec-path "c:/Program Files/Git/mingw64/bin/")
-    (add-to-list 'exec-path "c:/Program Files/Git/bin/")
-    (add-to-list 'exec-path "c:/Program Files/Git/usr/bin/")
-    (add-to-list 'exec-path (expand-file-name "bin/" "~")))
-  (unless (display-graphic-p)
-    ;; use mouse in xterm mode
-    (xterm-mouse-mode t)
-    ;; handle xterm special sequences
-    (define-key input-decode-map "\e[46;5u" (kbd "C-."))
-    (define-key input-decode-map "\e[44;5u" (kbd "C-,"))
-    (define-key input-decode-map "\e[60;6u" (kbd "C-<"))
-    (define-key input-decode-map "\e[62;6u" (kbd "C->"))
-    (define-key input-decode-map "\e[59;5u" (kbd "C-;"))
-    (define-key input-decode-map "\e[40;6u" (kbd "C-("))
-    (define-key input-decode-map "\e[41;6u" (kbd "C-)"))
-    (define-key input-decode-map "\e[49;5u" (kbd "C-1"))
-    (define-key input-decode-map "\e[39;5u" (kbd "C-'"))
-    (define-key input-decode-map "\e[45;5u" (kbd "C--"))
-    (define-key input-decode-map "\e[43;6u" (kbd "C-+"))
-    (define-key input-decode-map "\e[61;5u" (kbd "C-="))
-    (define-key input-decode-map "\e[63;6u" (kbd "C-?"))))
-
-
 ;; Run programming mode hooks
 ;; This is used for modes which should trigger programming mode hooks
-(defun me:run-prog-mode-hooks () (run-hooks 'prog-mode-hook))
-
-;; configuration I haven't figured out how to wedge into
-;; use-package
-
-(setq-default fill-column 120                              ; auto-wrap only very long lines
-              tab-width 4                                   ; default tab width
-              minibuffer-follows-selected-frame nil         ; minibuffer stays in frame
-              indicate-empty-lines t)                       ; show empty lines at end of buffer
-(setq ad-redefinition-action 'accept                        ; turn off 'xyz' got redefined warnings
-      confirm-kill-processes nil                            ; don't ask about killing processes at exit
-      create-lockfiles nil                                  ; no lockfiles (.#file)
-      custom-file (expand-file-name "custom.el" user-emacs-directory)  ; customize file
-      debugger-stack-frame-as-list t                        ; show fns as (fn args) instead of fn(args)
-      describe-bindings-outline t                           ; use outlines for describe bindings C-h b
-      fast-but-imprecise-scrolling t                        ; quick and dirty scrolling
-      find-file-visit-truename t                            ; resolve symlinks finding files
-      help-enable-symbol-autoload t                         ; autoload symbol for showing help
-      history-length 1000                                   ; length of history
-      history-delete-duplicates t                           ; don't allow repeated history
-      imenu-max-item-length 200                             ; default of 60 too short for some c++ methods
-      inhibit-splash-screen t                               ; no splash
-      inhibit-startup-echo-area-message t                   ; no startup message
-      inhibit-startup-message t                             ; no startup message
-      initial-major-mode 'text-mode                         ; no prog-mode at startup
-      initial-scratch-message nil                           ; no scratch message
-      load-prefer-newer t                                   ; load source if newer than bytecode
-      mouse-wheel-scroll-amount '(3 ((shift) . 9))          ; 3 lines, or 9 line when shift held (mwheel)
-      mouse-wheel-follow-mouse 't                           ; scroll window under mouse (mwheel)
-      mouse-wheel-progressive-speed nil                     ; don't speed up (mwheel)
-      next-error-message-highlight 'keep                    ; highlight visited errors
-	  ring-bell-function 'ignore                            ; don't ring bell
-      undo-limit 1000000                                    ; 1M (default is 80K)
-      undo-strong-limit 1500000                             ; 1.5M (default is 120K)
-      undo-outer-limit 150000000                            ; 150M (default is 12M)
-      use-file-dialog nil                                   ; never want gui file dialog
-      use-dialog-box nil                                    ; never want dialog box for questions
-      use-short-answers t                                   ; use y/n
-      save-some-buffers-default-predicate 'save-some-buffers-root  ; same only project files
-      scroll-margin 5                                       ; show some lines around cursor when possible
-      scroll-conservatively 101                             ; only scroll enough to bring cursor to view
-      scroll-down-aggressively 0.01                         ; don't jump when scrolling down
-      scroll-up-aggressively 0.01                           ; don't jump when scrolling up
-      scalable-fonts-allowed t                              ; allow any scalable font
-      select-enable-clipboard nil                           ; make cut/paste function correctly (select)
-      sentence-end-double-space nil                         ; sentences end with one space
-      x-gtk-use-system-tooltips nil)                        ; allow tooltip theming
+(defun me:run-prog-mode-hooks ()
+  (run-hooks 'prog-mode-hook))
 
 ;; Disable customize, borrowed from doom emacs
 (dolist (sym '(customize-option customize-browse customize-group customize-face
@@ -139,20 +61,99 @@
   (put sym 'disabled "`customize' unsupported, configure Emacs from init.el instead"))
 (put 'customize-themes 'disabled "Use `load-theme' in init.el instead")
 
-(when (eq window-system 'w32)
-  ;; This is slower but allows dired-subtree to detect directories correctly
-  ;; ls-lisp seems to have a funky line format which dired-subtree doesn't understand
-  (setq ls-lisp-use-insert-directory-program t))
+;; Emacs configuration
+(use-package emacs
+  :custom
+  (help-enable-symbol-autoload t)                         ; autoload symbol for showing help
+  (imenu-max-item-length 200)                             ; default of 60 too short for some c++ methods
+  (ad-redefinition-action 'accept)                        ; turn off 'xyz' got redefined warnings
+  (confirm-kill-processes nil)                            ; don't ask about killing processes at exit
+  (create-lockfiles nil)                                  ; no lockfiles (.#file)
+  (debugger-stack-frame-as-list t)                        ; show fns as (fn args) instead of fn(args)
+  (describe-bindings-outline t)                           ; use outlines for describe bindings C-h b
+  (fast-but-imprecise-scrolling t)                        ; quick and dirty scrolling
+  (find-file-visit-truename t)                            ; resolve symlinks finding files
+  (history-length 1000)                                   ; length of history
+  (history-delete-duplicates t)                           ; don't allow repeated history
+  (inhibit-splash-screen t)                               ; no splash
+  (inhibit-startup-echo-area-message t)                   ; no startup message
+  (inhibit-startup-message t)                             ; no startup message
+  (initial-major-mode 'text-mode)                         ; no prog-mode at startup
+  (initial-scratch-message nil)                           ; no scratch message
+  (mouse-wheel-scroll-amount '(3 ((shift) . 9)))          ; 3 lines, or 9 line when shift held (mwheel)
+  (mouse-wheel-follow-mouse 't)                          ; scroll window under mouse (mwheel)
+  (mouse-wheel-progressive-speed nil)                     ; don't speed up (mwheel)
+  (next-error-message-highlight 'keep)                    ; highlight visited errors
+  (ring-bell-function 'ignore)                            ; don't ring bell
+  (undo-limit 1000000)                                    ; 1M (default is 80K)
+  (undo-strong-limit 1500000)                             ; 1.5M (default is 120K)
+  (undo-outer-limit 150000000)                            ; 150M (default is 12M)
+  (use-file-dialog nil)                                   ; never want gui file dialog
+  (use-dialog-box nil)                                    ; never want dialog box for questions
+  (use-short-answers t)                                   ; use y/n
+  (save-some-buffers-default-predicate 'save-some-buffers-root)  ; same only project files
+  (scroll-margin 5)                                       ; show some lines around cursor when possible
+  (scroll-conservatively 101)                             ; only scroll enough to bring cursor to view
+  (scroll-down-aggressively 0.01)                         ; don't jump when scrolling down
+  (scroll-up-aggressively 0.01)                           ; don't jump when scrolling up
+  (scalable-fonts-allowed t)                              ; allow any scalable font
+  (select-enable-clipboard nil)                           ; make cut/paste function correctly (select)
+  (sentence-end-double-space nil)                         ; sentences end with one space
+  (x-gtk-use-system-tooltips nil)                        ; allow tooltip theming
 
-(add-hook 'after-init-hook                                  ; report init time
-          (lambda ()
-            (message "Time to initialize: %s"
-                     (emacs-init-time))
-            ;; remove extraneous quickstart files found after clean install
-            (delete-file (expand-file-name "package-quickstart.el" user-emacs-directory))
-            (delete-file (expand-file-name "package-quickstart.elc" user-emacs-directory))))
+  :init
+  (setq-default fill-column 120                              ; auto-wrap only very long lines
+                tab-width 4                                   ; default tab width
+                minibuffer-follows-selected-frame nil         ; minibuffer stays in frame
+                indicate-empty-lines t)                       ; show empty lines at end of buffer
+  (setq custom-file (expand-file-name "custom.el" user-emacs-directory)  ; customize file
+        load-prefer-newer t)                                   ; load source if newer than bytecode
+  (when (eq window-system 'w32)
+    ;; This is slower but allows dired-subtree to detect directories correctly
+    ;; ls-lisp seems to have a funky line format which dired-subtree doesn't understand
+    (setq ls-lisp-use-insert-directory-program t))
+  (run-with-idle-timer 0.1 nil #'me:deferred-setup)
 
-(run-with-idle-timer 0.1 nil #'me:extra-setup)
+  :hook (after-init . me:after-init)
+
+  :config
+  (defun me:after-init ()
+    (message "Time to initialize: %s"
+             (emacs-init-time))
+    ;; remove extraneous quickstart files found after clean install
+    (delete-file (expand-file-name "package-quickstart.el" user-emacs-directory))
+    (delete-file (expand-file-name "package-quickstart.elc" user-emacs-directory)))
+  (defun me:deferred-setup ()
+    (tool-bar-mode 0)                                           ; no tool bar (tool-bar)
+    (scroll-bar-mode 0)                                         ; no scroll bar (scroll-bar)
+    (mouse-avoidance-mode 'animate)                             ; move mouse pointer out of way (avoid)
+    (electric-indent-mode +1)                                   ; turn on electric mode globally (electric)
+    (delete-selection-mode t)                                   ; pastes delete selection
+    (blink-cursor-mode -1)                                      ; don't blink cursor
+    (global-so-long-mode +1)                                    ; handle long lines better
+    ;; add mingw64 paths under windows
+    (when (eq window-system 'w32)
+      (add-to-list 'exec-path "c:/Program Files/Git/mingw64/bin/")
+      (add-to-list 'exec-path "c:/Program Files/Git/bin/")
+      (add-to-list 'exec-path "c:/Program Files/Git/usr/bin/")
+      (add-to-list 'exec-path (expand-file-name "bin/" "~")))
+    (unless (display-graphic-p)
+      ;; use mouse in xterm mode
+      (xterm-mouse-mode t)
+      ;; handle xterm special sequences
+      (define-key input-decode-map "\e[46;5u" (kbd "C-."))
+      (define-key input-decode-map "\e[44;5u" (kbd "C-,"))
+      (define-key input-decode-map "\e[60;6u" (kbd "C-<"))
+      (define-key input-decode-map "\e[62;6u" (kbd "C->"))
+      (define-key input-decode-map "\e[59;5u" (kbd "C-;"))
+      (define-key input-decode-map "\e[40;6u" (kbd "C-("))
+      (define-key input-decode-map "\e[41;6u" (kbd "C-)"))
+      (define-key input-decode-map "\e[49;5u" (kbd "C-1"))
+      (define-key input-decode-map "\e[39;5u" (kbd "C-'"))
+      (define-key input-decode-map "\e[45;5u" (kbd "C--"))
+      (define-key input-decode-map "\e[43;6u" (kbd "C-+"))
+      (define-key input-decode-map "\e[61;5u" (kbd "C-="))
+      (define-key input-decode-map "\e[63;6u" (kbd "C-?")))))
 
 ;; garbage collection magic hack
 (use-package gcmh
