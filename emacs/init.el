@@ -429,6 +429,16 @@
   (global-eldoc-mode t)
   :ensure nil)
 
+;; built-in shortdoc mode
+(use-package shortdoc
+  :general
+  ("<f4> q" #'shortdoc-display-group)
+  (:keymaps 'shortdoc-mode-map
+            "j" #'shortdoc-next
+            "k" #'shortdoc-previous)
+  :ensure nil
+  :demand)
+
 ;; built-in tab-line mode
 (use-package tab-line
   :ensure nil
@@ -1587,6 +1597,7 @@
              image-mode
              image-dired-thumbnail-mode
              cquery-tree-mode
+             shortdoc-mode
              paradox-menu-mode))
     (add-to-list 'evil-emacs-state-modes mode))
 
@@ -1797,6 +1808,7 @@
           occur-mode
           grep-mode
           org-mode
+          shortdoc-mode
           "^\\*ivy-occur.*\\*" ivy-occur-mode
           "^\\*helpful.*\\*$" helpful-mode
           rustic-compilation-mode
