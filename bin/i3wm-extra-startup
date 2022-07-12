@@ -33,6 +33,9 @@ else
 	 echo "Auto screen lock disabled"
 fi
 xset -display ${DISPLAY} dpms 0 0 $((offminutes * 60))
+xset -display ${DISPLAY} s noblank
+xset -display ${DISPLAY} s off
+
 
 # increase number of file descriptors per process
 ulimit -n 4096
