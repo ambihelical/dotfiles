@@ -72,19 +72,12 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	if [ $version -ge 2110 ]; then
 		p="$p qalculate-gtk vim-gtk nemo"
 		p="$p python3-pip"
-		pp="py3status colour psutil basiciw i3-py pygments"
 	else
 		p="$p qalculate"
 		p="$p vim-gnome"
 		p="$p python-dev python-pip"
-		pp="py3status netifaces colour psutil basiciw i3-py pygments"
 	fi
 	apt-get --ignore-missing --quiet --yes install $p
-	pip3 install --upgrade $pp
-	if [ $version -lt 2110 ]; then
-		pip install --upgrade pygments
-	fi
-
  elif [ "$linux" == 'Fedora' ]; then
  # version is currently 28
 

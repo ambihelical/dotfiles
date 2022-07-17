@@ -1,0 +1,21 @@
+#!/bin/bash
+#
+# Make sure some system packages are present. These are only the
+# most basic packages needed to set up a basic system, plus a few
+# nice-to-haves.
+#
+# Currently requires the following to already be installed:
+# pip, pip3, curl
+
+if [ $EUID -ne 0 ]; then
+	echo "This script must be run with root privileges" 1>&2
+	exit 1
+fi
+script_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+pp="py3status colour psutil basiciw i3-py pygments"
+pip3 install --upgrade $pp
+
+rg="asciidoctor asciidoctor-diagram asciidoctor-pdf"
+rg="$rg rouge"
+gem install $rg
