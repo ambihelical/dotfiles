@@ -34,8 +34,8 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
   # languages, compilers and building
 	p="$p cmake build-essential ccache"
 	p="$p gcc-doc glibc-doc"
-	p="$p autoconf automake libtool gettext intltool"
-	p="$p ruby clangd lld"
+	p="$p autoconf automake libtool gettext intltool bison flex"
+	p="$p ruby ruby-dev clangd lld"
   # version control
 	p="$p meld git-gui mercurial subversion gitk tig"
   # libraries sometimes needed to build from source, especially emacs
@@ -45,6 +45,9 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	else
 		p="$p libgnutls28-dev"
 	fi
+  # needed to build asciidoctor-mathematical
+    p="$p libffi-dev libxml2-dev libgdk-pixbuf2.0-dev libcairo2-dev libpango1.0-dev fonts-lyx"
+    p="$p libwebp-dev libzstd-dev"
   # image file dev libs
 	p="$p libgtk-3-dev libtiff5-dev libjpeg-dev libgif-dev libxpm-dev libpng-dev libmagick++-dev librsvg2-dev"
 	p="$p zlib1g-dev libpoppler-glib-dev libpoppler-private-dev"

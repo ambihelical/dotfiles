@@ -103,3 +103,6 @@ export SCREENRC=${XDG_CONFIG_HOME}/screen
 export RUSTUP_HOME=${HOME}/.local/opt/rustup
 export CARGO_HOME=${HOME}/.local/opt/cargo
 
+# put go dir in ~/dev/go
+export GOPATH=${HOME}/dev/go
+

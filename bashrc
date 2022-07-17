@@ -17,6 +17,7 @@
 [ -d /usr/lib/ccache ] && PATH=/usr/lib/ccache:"${PATH}"                    # compile cache
 [ -d ~/.local/bin ] && PATH=~/.local/bin:"${PATH}"                           # locally installed execs
 [ -d ~/.local/opt/cargo/bin/ ] && PATH=~/.local/opt/cargo/bin:"${PATH}"     # rust cargo, until XDG'd
+[ -d ~/dev/go/bin ] && PATH=~/dev/go/bin:"${PATH}"                          # go stuff
 [ -d ~/bin ] && PATH=~/bin:"${PATH}"                                        # my utilities
 [ -d ~/bin/${OSTYPE} ] && PATH=~/bin/${OSTYPE}:"${PATH}"                    # my utilities, os specific
 [ -d ~/Android/Sdk/platform-tools ] && PATH=~/Android/Sdk/platform-tools:"${PATH}"         # adb, fastboot, etc
