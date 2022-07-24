@@ -316,7 +316,7 @@
   (enable-recursive-minibuffers t)                        ; allow recursive edit
   :config
   (minibuffer-depth-indicate-mode t)       ; show recursive edit depth (mb-depth)
-  :demand)
+  :defer 0.5)
 
 ;; built-in autorevert package
 (use-package autorevert
@@ -345,7 +345,7 @@
   ("C-M-<backspace>"    #'kill-current-buffer)
   :config
   (column-number-mode t)                       ; display column/row of cursor in mode-line
-  :demand)
+  :defer 1)
 
 ;; built-in "abbrev" package
 (use-package abbrev
@@ -353,7 +353,7 @@
   :general
   (:prefix "C-x"
            "a"  '(:ignore t :which-key "Abbrev→" ))
-  :demand)
+  :defer 1)
 
 ;; built-in "artist-mode" package
 ;; No binding because this one will be rare
@@ -410,13 +410,13 @@
     '("#") '("type" "allow" "neverallow" ) nil
     '("\\.te\\'")
     '( me:run-prog-mode-hooks ))
-  :demand)
+  :defer 1)
 
 ;; build-in configure file mode
 (use-package conf-mode
   :ensure nil
   :hook (conf-mode . me:run-prog-mode-hooks)
-  :demand)
+  :defer 1)
 
 ;; built-in eldoc mode
 (use-package eldoc
@@ -438,7 +438,7 @@
             "j" #'shortdoc-next
             "k" #'shortdoc-previous)
   :ensure nil
-  :demand)
+  :defer 1)
 
 ;; built-in tab-line mode
 (use-package tab-line
@@ -867,6 +867,7 @@
 
 ;; match multiple regexps in any order
 (use-package orderless
+  :demand t
   :after vertico
   :init
   ;; Configure a custom style dispatcher (see the Consult wiki)
@@ -1003,6 +1004,7 @@
               (name (file-name-nondirectory (directory-file-name path))))
         (concat " [" name "] ")))
   (add-to-list 'mode-line-misc-info `(:eval (me:project-mode-line-info)))
+  :defer 0.5
   :ensure nil)
 
 ;; Highlight delimiters by depth
@@ -1400,14 +1402,12 @@
   :hook ((rust-mode c++-mode c-mode) . eglot-ensure))
 
 (use-package corfu
+  :demand t
+  :after vertico
   :custom
   (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
   (corfu-auto t)                 ;; Enable auto completion
   (corfu-separator ?\s)          ;; Orderless field separator
-  ;; Enable Corfu only for certain modes.
-  :hook ((prog-mode . corfu-mode)
-         (shell-mode . corfu-mode)
-         (eshell-mode . corfu-mode))
   :config
   (defun me:corfu-enable-in-minibuffer ()
     "Enable Corfu in the minibuffer if Vertico/Mct are not active."
