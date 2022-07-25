@@ -1419,6 +1419,8 @@
                    `((c++-mode c-mode) "ccls" ,init-str))))
   :hook ((rust-mode c++-mode c-mode) . eglot-ensure))
 
+(use-package company :demand t)
+
 (use-package corfu
   :demand t
   :after vertico
