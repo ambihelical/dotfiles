@@ -1139,9 +1139,8 @@
   :config
   (persp-mode))
 
-;; Highlight delimiters by depth
 (use-package rainbow-delimiters
-  :hook (prog-mode . rainbow-delimiters-mode ))
+  :hook ((emacs-lisp-mode) . rainbow-delimiters-mode ))
 
 ;; color color strings
 (use-package rainbow-mode
