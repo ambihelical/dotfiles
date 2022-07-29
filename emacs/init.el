@@ -103,12 +103,14 @@
   (x-gtk-use-system-tooltips nil)                        ; allow tooltip theming
 
   :init
-  (setq-default fill-column 120                              ; auto-wrap only very long lines
+  (setq-default fill-column 120                               ; auto-wrap only very long lines
+                bidi-paragraph-direction 'left-to-right       ; onedi for me
                 tab-width 4                                   ; default tab width
                 minibuffer-follows-selected-frame nil         ; minibuffer stays in frame
                 indicate-empty-lines t)                       ; show empty lines at end of buffer
   (setq custom-file (expand-file-name "custom.el" user-emacs-directory)  ; customize file
-        load-prefer-newer t)                                   ; load source if newer than bytecode
+        bidi-inhibit-bpa t                                    ; disable bpa
+        load-prefer-newer t)                                  ; load source if newer than bytecode
   (when (eq window-system 'w32)
     ;; This is slower but allows dired-subtree to detect directories correctly
     ;; ls-lisp seems to have a funky line format which dired-subtree doesn't understand
