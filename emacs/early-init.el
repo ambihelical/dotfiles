@@ -8,7 +8,8 @@
       package-quickstart t                      ; 10% faster, I'll take it
       file-name-handler-alist nil               ; faster startup without this
       frame-resize-pixelwise t                  ; disable rounding of frame size
-      package-enable-at-startup nil)            ; ?
+      package--init-file-ensured t              ;
+      package-enable-at-startup nil)            ; don't make packages available at start
 
 (add-hook 'emacs-startup-hook
           (lambda ()
@@ -19,7 +20,7 @@
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ("org"   . "https://orgmode.org/elpa/")
                          ("gnu"   . "https://elpa.gnu.org/packages/")
-                         ("nongnu"   . "https://elpa.nongnu.org/nongnu")))
+                         ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
 (require 'package)
 
 (package-initialize)
