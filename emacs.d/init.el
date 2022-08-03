@@ -161,11 +161,12 @@
 
 ;; make describe-xxx more useful
 (use-package helpful
-  :commands ( helpful-callable helpful-key helpful-function helpful-variable helpful-symbol )
+  :commands ( helpful-callable helpful-key helpful-function helpful-callable helpful-variable helpful-symbol )
+  :config
+  (setq elisp-refs-verbose nil)
   :general
-  ("C-h x" #'helpful-callable)
   ([remap describe-key] #'helpful-key)
-  ([remap describe-function] #'helpful-function)
+  ([remap describe-function] #'helpful-callable)
   ([remap describe-variable] #'helpful-variable)
   ([remap describe-symbol] #'helpful-symbol)
   :config)
