@@ -1,8 +1,8 @@
 
 xterm*background: #2B2B2B
 xterm*foreground: #DEDEDE
-xterm*faceName: xft:DejaVu Sans Mono:size=10
-xterm*boldFont: xft:DejaVu Sans Mono:bold:size=10
+xterm*faceName: xft:DejaVu Sans Mono NF:size=10
+xterm*boldFont: xft:DejaVu Sans Mono NF:bold:size=10
 xterm*faceSize: 10
 xterm*saveLines: 12000
 xterm*scrollBar: false
