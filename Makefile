@@ -15,7 +15,7 @@ OS := $(shell uname -o)
 KERNEL := $(shell uname -s)
 GPP := gpp -DOS=${OS} -DHOST=${HOST} -DKERNEL=${KERNEL} -n -U '@[' ']@' '(' ',' ')' '(' ')' '\#' '' -M '@@' '\n' ' ' ' ' '\n' '(' ')'
 
-SHELL_FILES = ~/.bashrc ~/.bash_profile ${CFG}/readline ~/.profile
+SHELL_FILES = ~/.bashrc ~/.bash_profile ${CFG}/readline ~/.profile ${CFG}/starship.toml
 DIR_FILES = ~/bin ${DATA}/Notes 
 BIN_FILES=$(foreach bin,$(notdir $(wildcard ${PWD}/bin/*)),~/bin/${bin})
 GIT_SCRIPTS_CMDS = forest wtf whoami fire undo tarball

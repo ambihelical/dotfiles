@@ -165,6 +165,10 @@ simple_ps1() {
 	 PS1="$(truncm $(tilde ${PWD}) 20)> "
 }
 
+xtitle() {
+    echo -e "\033]1;$@\007\033]2;$@\007\c"
+}
+
 set_title() {
 	local pwd=$(tilde $PWD)
 	local wat=$(history|tail -1|awk '{s=""; for (i=3;i<=NF;i++) s = s $i " "; print s}')
@@ -261,14 +265,16 @@ if [  "$SSH_CONNECTION" != "" ]; then
 fi
 alias emacs="\emacs ${EMACS_FLAGS} "
 
-if type emacsclient > /dev/null 2>&1;  then
-export ALTERNATE_EDITOR=""
-export EDITOR="emacsclient -t --alternate-editor="
-export VISUAL="emacsclient -c ${EMACS_CLIENT_FLAGS} --alternate-editor="
-else
 export EDITOR=vim
-export VISUAL=gvim
+if type emacsclient > /dev/null 2>&1;  then
+    export ALTERNATE_EDITOR=""
+    export EDITOR="emacsclient -t --alternate-editor="
+    export VISUAL="emacsclient -c ${EMACS_CLIENT_FLAGS} --alternate-editor="
+elif type gvim > /dev/null 2>&1 ; then
+     export VISUAL=gvim
 fi
+
+# use vi keybinding for readline
 set -o vi
 
 # use less for paging
@@ -342,16 +348,21 @@ fi
 STAY_OFF_MY_LAWN=1   # tell aosp not to mess with PROMPT_COMMAND
 
 if [[ "$TERM" != "dumb" ]]; then
-# set prompt command. First see if it has already been set in case
-# we have sourced ~/.bashrc again, in which case it is better to
-# leave it alone.  medium_ps1 is first so it can pick up the last
-# command's status.
-if [[ $PROMPT_COMMAND =~ ";urgency" ]]; then
-	echo "PROMPT_COMMAND appears to already be set up"
-else
-	PROMPT_COMMAND="medium_ps1;${PROMPT_COMMAND:+$PROMPT_COMMAND ;}urgency"
-fi
-PS0='$(set_title)'
+    if type starship > /dev/null 2>&1;  then
+        eval "$(starship init bash)"
+        starship_precmd_user_func="set_title"
+    else
+        # set prompt command. First see if it has already been set in case
+        # we have sourced ~/.bashrc again, in which case it is better to
+        # leave it alone.  medium_ps1 is first so it can pick up the last
+        # command's status.
+        if [[ $PROMPT_COMMAND =~ ";urgency" ]]; then
+            echo "PROMPT_COMMAND appears to already be set up"
+        else
+            PROMPT_COMMAND="medium_ps1;${PROMPT_COMMAND:+$PROMPT_COMMAND ;}urgency"
+        fi
+        PS0='$(set_title)'
+    fi
 fi
 
 
@@ -359,9 +370,12 @@ fi
 
 alias cd..="cd .."
 alias ls-x="ls -x"
-alias ag='mark && \ag'
-alias rg='mark && \rg'
-alias gg='mark && git grep'
+
+if type mark > /dev/null 2>&1; then
+    alias ag='mark && \ag'
+    alias rg='mark && \rg'
+    alias gg='mark && git grep'
+fi
 
 ##### OS Specific aliases #####
 
