@@ -1037,8 +1037,6 @@
   ("<f8> a" #'org-agenda)
   ("<f8> <f8>" #'me:search-notes)
   ("<f8> c" #'me:org-capture)
-  (:keymaps 'normal :prefix "SPC"
-            "e" '(org-latex-preview :which-key "Toggle latex fragment display"))
   (:prefix "C-c"
            "C-x"  '(:ignore t :which-key "Org→" ))
   :init
@@ -1182,6 +1180,21 @@
   (("\\.ad\\'" . adoc-mode)
    ("\\.adoc\\'" . adoc-mode)
    ("\\.asciidoc\\'" . adoc-mode)))
+
+(use-package math-preview
+  :custom
+  (math-preview-scale 1.2)
+  :general
+  ("C-c C-m" #'math-preview-all)
+  (:keymaps 'normal :prefix "SPC"
+            "m" '(math-preview-at-point :which-key "Math preview at point"))
+  :config
+  (add-to-list 'math-preview-tex-marks-inline `("stem:[" "]"))
+  ;; workaround for duplicate label, see issue #21
+  (add-to-list
+   'math-preview-tex-preprocess-functions
+   `(lambda (x) (puthash 'string (s-replace-regexp "\\label{.+?}" "" (gethash 'string x)) x)) t)
+  :demand t)
 
 ;; built-in restructured text mode
 (use-package rst-mode
