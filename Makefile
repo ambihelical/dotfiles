@@ -22,11 +22,11 @@ GIT_SCRIPTS_CMDS = forest wtf whoami fire undo tarball
 GIT_SCRIPTS = $(foreach cmd,${GIT_SCRIPTS_CMDS},~/bin/git-${cmd})
 XORG_FILES = ${CFG}/xsettingsd ~/.Xresources ${CFG}/xkb/symbols/local
 APP_FILES = ${CFG}/screen ${CFG}/ack $(CFG)/globalrc $(CFG)/pythonrc ${CFG}/rtags/rdmrc \
-				$(CFG)/gconf ${CFG}/ripgrep/config
+				$(CFG)/gconf ${CFG}/ripgrep/config ${CFG}/npm/npmrc
 GIT_FILES = ${CFG}/git/config  ${CFG}/git/ignore ${CFG}/tig/config ${DATA}/tig
 I3_FILES = ${CFG}/i3/config ${CFG}/i3/i3status.config ${CFG}/dunst/dunstrc \
            ${CFG}/gsimplecal/config ${CFG}/i3/three-pane.json ${CFG}/udiskie/config.yml
-VIM_FILES = ~/.vimrc ${CACHE}/vim
+VIM_FILES = ${CACHE}/vim ${CFG}/vim/vimrc
 BAREX_FILES = ~/.xsession ~/.Xmodmap
 EMACS_FILES = ${CFG}/emacs/init.el ${CFG}/emacs/early-init.el ${CFG}/emacs/lisp/extras.el $(CACHE)/emacs ${CFG}/hunspell
 ETC_FILES = ${ETC}/sysctl.d/99-edb-sysctl.conf

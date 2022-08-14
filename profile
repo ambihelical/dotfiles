@@ -7,14 +7,16 @@
 # Generally this will some kind of fast drive at /data
 [ -d /data/cache ] && export XDG_CACHE_HOME=/data/cache
 
-# set XDG dirs to their defaults.  Not strictly necessary for cache, config and data, but
+# set XDG dirs to their defaults.  Not strictly necessary for cache, config, state and data, but
 # set in case apps are poorly written.
 [ "$XDG_CACHE_HOME" ] || export XDG_CACHE_HOME=${HOME}/.cache
 [ "$XDG_CONFIG_HOME" ] || export XDG_CONFIG_HOME=${HOME}/.config
 [ "$XDG_DATA_HOME" ] || export XDG_DATA_HOME=${HOME}/.local/share
+[ "$XDG_STATE_HOME" ] || export XDG_STATE_HOME=${HOME}/.local/state
 [ -d $XDG_DATA_HOME ] || mkdir -p $XDG_DATA_HOME
 [ -d $XDG_CACHE_HOME ] || mkdir -p $XDG_CACHE_HOME
 [ -d $XDG_CONFIG_HOME ] || mkdir -p $XDG_CONFIG_HOME
+[ -d $XDG_STATE_HOME ] || mkdir -p $XDG_STATE_HOME
 
 
 # load site settings
@@ -41,7 +43,7 @@ export GTAGSCONF=${XDG_CONFIG_HOME}/globalrc
 export GTAGS_OPTIONS=--skip-unreadable
 
 # avoid ~/.gnupg
-export GNUPGHOME=${XDG_CONFIG_HOME}/gnupg
+export GNUPGHOME=${XDG_DATA_HOME}/gnupg
 
 # avoid ~/.nv
 export __GL_SHADER_DISK_CACHE_PATH=${XDG_CACHE_HOME}/nv
@@ -106,3 +108,16 @@ export CARGO_HOME=${HOME}/.local/opt/cargo
 # put go dir in ~/dev/go
 export GOPATH=${HOME}/dev/go
 
+# bash history
+export HISTFILE=${XDG_STATE_HOME}/bash/history
+[ -d ${XDG_CACHE_HOME}/bash ] || mkdir -p ${XDG_CACHE_HOME}/bash
+[ -d ${XDG_STATE_HOME}/bash ] || mkdir -p ${XDG_STATE_HOME}/bash
+
+# vimrcs
+export GVIMINIT='let $MYGVIMRC="${XDG_CONFIG_HOME}/vim/gvimrc" | source $MYGVIMRC'
+export VIMINIT='let $MYVIMRC="${XDG_CONFIG_HOME}/vim/vimrc" | source $MYVIMRC'
+
+# npm
+export NPM_CONFIG_USERCONFIG=${XDG_CONFIG_HOME}/npm/npmrc
+[ -d ${XDG_CACHE_HOME}/npm ] || mkdir -p ${XDG_CACHE_HOME}/npm
+[ -d ${XDG_DATA_HOME}/npm ] || mkdir -p ${XDG_DATA_HOME}/npm
