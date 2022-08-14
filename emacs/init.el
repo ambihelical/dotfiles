@@ -1770,6 +1770,12 @@
            :prefix "g"
            "-"          #'evil-operator-string-inflection))
 
+;; change surrounding text
+(use-package evil-surround
+  :after evil
+  :config
+  (global-evil-surround-mode 1))
+
 (use-package evil-collection
   :custom
   (evil-collection-setup-minibuffer t)
