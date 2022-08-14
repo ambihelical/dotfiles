@@ -17,6 +17,7 @@
 [ -d /usr/lib/ccache ] && PATH=/usr/lib/ccache:"${PATH}"                    # compile cache
 [ -d ~/.local/bin ] && PATH=~/.local/bin:"${PATH}"                           # locally installed execs
 [ -d ~/.local/opt/cargo/bin/ ] && PATH=~/.local/opt/cargo/bin:"${PATH}"     # rust cargo, until XDG'd
+[ -d ${XDG_DATA_HOME}/npm/bin ] && PATH=${XDG_DATA_HOME}/npm/bin:"${PATH}"  # npm stuff
 [ -d ~/dev/go/bin ] && PATH=~/dev/go/bin:"${PATH}"                          # go stuff
 [ -d ~/bin ] && PATH=~/bin:"${PATH}"                                        # my utilities
 [ -d ~/bin/${OSTYPE} ] && PATH=~/bin/${OSTYPE}:"${PATH}"                    # my utilities, os specific
@@ -290,9 +291,6 @@ shopt -s histappend
 #### Store various files in XDG directories
 # Anything that might be run from dash is exported in ~/.profile
 
-# avoids ~/.bash_history
-export HISTFILE=${XDG_CACHE_HOME}/bash/history
-[ -d ${XDG_CACHE_HOME}/bash ] || mkdir -p ${XDG_CACHE_HOME}/bash
 # avoids ~/.lesshst
 export LESSHISTFILE=${XDG_CACHE_HOME}/less/history
 [ -d ${XDG_CACHE_HOME}/less ] || mkdir -p ${XDG_CACHE_HOME}/less
