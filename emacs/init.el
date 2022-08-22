@@ -1160,32 +1160,17 @@
 ;; may be fixed in 25.1 or so
 (use-package adoc-mode
   :defines (company-dabbrev-downcase company-dabbrev-ignore-case)
-  :hook (adoc-mode . me:adoc-mode-config)
   :config
+  (add-to-list 'ispell-skip-region-alist '( "\n\\[latexmath\\]\n\\+\\+\\+\\+\n" . "^\\+\\+\\+\\+\n"))
+  (add-to-list 'ispell-skip-region-alist '( "\n:" . "\n"))
   (defun me:adoc-mode-config ()
     (setq company-dabbrev-downcase nil     ; don't downcase completions
           company-dabbrev-ignore-case nil))  ; don't keep prefix
-  (defun me:adoc-mode-flyspell-verify ()
-    "flyspell function to ignore certain asciidoc markup"
-    (and
-     (not (save-excursion
-            (let ((this (point)))
-              (and
-               (re-search-backward "^\\([\\.\\+-]\\{4,\\}\\|`\\{3,\\}\\)" nil t)
-               (> this (point))
-               (progn
-                 (forward-line 1)
-                 (re-search-forward (concat "^" (regexp-quote (match-string 1))) nil t))))))
-     (not (save-excursion
-            (let ((count 0))
-              (eq 1 (progn (while (re-search-backward "`" (line-beginning-position) t)
-                             (setq count (1+ count)))
-                           (- count (* 2 (/ count 2))))))))))
-  (put 'adoc-mode 'flyspell-mode-predicate #'me:adoc-mode-flyspell-verify)
   :mode
   (("\\.ad\\'" . adoc-mode)
    ("\\.adoc\\'" . adoc-mode)
-   ("\\.asciidoc\\'" . adoc-mode)))
+   ("\\.asciidoc\\'" . adoc-mode))
+  :hook (adoc-mode . me:adoc-mode-config))
 
 ;; math preview mode for adoc mode
 (use-package math-preview
