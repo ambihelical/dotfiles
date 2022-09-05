@@ -32,6 +32,7 @@
     ("SG296" "Roboto Mono-12:autohint=true")
     (_ "DejaVu Sans Mono-12")))
 (add-to-list 'default-frame-alist `(font . ,me:default-font))
+(add-to-list 'default-frame-alist `(fullscreen . maximized))
 
 ;; Setup theme load hook
 (defvar me:after-load-theme-hook nil
