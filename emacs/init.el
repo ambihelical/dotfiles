@@ -1391,6 +1391,9 @@
         eglot-send-changes-idle-time 3    ;; be slower sending changes
         eglot-extend-to-xref t            ;; external files ok
         eglot-events-buffer-size 100000)  ;; smaller events buffer
+  ;; windows eglot has a bug with eglot-extend-to-xref. See issue 715
+  (when (eq window-system 'w32)
+    (setq eglot-extend-to-xref nil))
   :config
   ;; use clangd if present, otherwise assume ccls
   (if-let ((clangd (seq-find #'executable-find '("clangd" "clangd-6.0"))))
