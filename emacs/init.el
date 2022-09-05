@@ -426,9 +426,6 @@
   :general
   ("<f6> h"  #'eldoc-doc-buffer)
   ("<f10> e" #'eldoc-mode)
-  :custom
-  (eldoc-echo-area-prefer-doc-buffer t)             ; show in *eldoc* buffer if showing & fits
-  (eldoc-echo-area-use-multiline-p 1)               ; one line at most in minibuffer
   :config
   (global-eldoc-mode t)
   :ensure nil)
@@ -1391,24 +1388,54 @@
   :general
   (:keymaps 'eglot-mode-map
             "<f6> x"  #'eglot-rename
+            "C-<tab>" #'complete-symbol
             "<f6> c"  #'eglot-code-actions)
   :init
   (setq eglot-ignored-server-capabilities '( :documentHighlightProvider)
         eglot-send-changes-idle-time 3    ;; be slower sending changes
         eglot-extend-to-xref t            ;; external files ok
         eglot-events-buffer-size 100000)  ;; smaller events buffer
+  ;; windows eglot has a bug with eglot-extend-to-xref. See issue 715
+  (when (eq window-system 'w32)
+    (setq eglot-extend-to-xref nil))
   :config
-  ;; use clangd if present, otherwise assume ccls
-  (if-let ((clangd (seq-find #'executable-find '("clangd" "clangd-6.0"))))
-      (add-to-list 'eglot-server-programs
-                   `((c++-mode c-mode) ,clangd))
-    ;; use an absolute path for ccls cache
-    ;; ccls uses unique cache directory name for each project so there are no collisions
-    (let* ((cache-dir (expand-file-name "ccls-cache" me:cache-directory))
-           (init-str (concat "--init={\"cache\":{\"directory\":\"" cache-dir "\"}}")))
-      (add-to-list 'eglot-server-programs
-                   `((c++-mode c-mode) "ccls" ,init-str))))
+  ;; configure clangd for c++ and c
+  (when-let* ((clangd (seq-find #'executable-find '("clangd" "clangd-6.0")))
+              ;; this has to match the tool string in compile-commands.json
+              ;; clangd will then use these tools to get system header paths
+              (init-args "--query-driver=/**/*"))
+    (when (eq window-system 'w32)
+      (setq init-args "--query-driver=*:\\**\\*"))
+    (add-to-list 'eglot-server-programs
+                 `((c++-mode c-mode) ,clangd ,init-args)))
   :hook ((rust-mode c++-mode c-mode) . eglot-ensure))
+
+(use-package eldoc-box
+  :after eglot
+  :demand t
+  :custom
+  (eldoc-box-max-pixel-width 1200)
+  :config
+  ;; remove problematic markdown text
+  ;; 1. Trailing spaces, triggers whitespace mode
+  ;; 2. Horizontal rulers, not render well
+  (defun me:eglot-sanitize-markdown(str)
+    (replace-regexp-in-string
+     "\s+\n" "\n"
+     (string-replace "\n---\n" "" str)))
+  ;; fix horizontal ruler in markdown rendering
+  (defun me:eglot--format-markup (args)
+    (mapcar (lambda (markup)
+		      (if-let* ((value (plist-get markup :value))
+			            (kind (plist-get markup :kind))
+			            (_ (string= kind "markdown"))
+			            (value (me:eglot-sanitize-markdown value)))
+		          (plist-put markup :value value))
+		      markup)
+	        args))
+  :init
+  (advice-add 'eglot--format-markup :filter-args 'me:eglot--format-markup)
+  (add-hook 'eglot-managed-mode-hook #'eldoc-box-hover-at-point-mode t))
 
 (use-package company :demand t)
 
