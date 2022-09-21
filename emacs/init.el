@@ -103,7 +103,7 @@
   (x-gtk-use-system-tooltips nil)                        ; allow tooltip theming
 
   :init
-  (setq-default fill-column 120                               ; auto-wrap only very long lines
+  (setq-default fill-column 80                                ; auto-wrap only very long lines
                 bidi-paragraph-direction 'left-to-right       ; onedi for me
                 tab-width 4                                   ; default tab width
                 minibuffer-follows-selected-frame nil         ; minibuffer stays in frame
