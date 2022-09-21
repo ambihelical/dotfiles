@@ -665,7 +665,6 @@
                      ))
   (recentf-max-saved-items 200)
   (recentf-max-menu-items 15)
-  (recentf-auto-cleanup 300) ; wait 5m before 1st cleanup
   :config
   (recentf-mode))
 
