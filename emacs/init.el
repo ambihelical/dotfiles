@@ -366,7 +366,7 @@
   :general
   (:prefix "C-x"
            "a"  '(:ignore t :which-key "Abbrev→" ))
-  :demand)
+  :defer 1)
 
 ;; built-in "artist-mode" package
 ;; No binding because this one will be rare
@@ -423,13 +423,13 @@
     '("#") '("type" "allow" "neverallow" ) nil
     '("\\.te\\'")
     '( me:run-prog-mode-hooks ))
-  :demand)
+  :defer 1)
 
 ;; build-in configure file mode
 (use-package conf-mode
   :ensure nil
   :hook (conf-mode . me:run-prog-mode-hooks)
-  :demand)
+  :defer 1)
 
 ;; built-in eldoc mode
 (use-package eldoc
@@ -1141,6 +1141,7 @@
               (name (file-name-nondirectory (directory-file-name path))))
         (concat " [" name "] ")))
   (add-to-list 'mode-line-misc-info `(:eval (me:project-mode-line-info)))
+  :defer 0.5
   :ensure nil)
 
 (use-package rainbow-delimiters
