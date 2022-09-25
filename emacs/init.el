@@ -1405,8 +1405,22 @@
   :hook ((rust-mode c++-mode c-mode) . eglot-ensure))
 
 (use-package eldoc-box
+  :after eglot
   :demand t
+  :config
+  ;; fix horizontal ruler in markdown rendering
+  (defun me:eglot--format-markup (args)
+    (mapcar (lambda (markup)
+		      (if-let* ((value (plist-get markup :value))
+			            (kind (plist-get markup :kind))
+			            (_ (string= kind "markdown"))
+			            (value (string-replace "\n---\n" "" value)))
+		          (plist-put markup :value value))
+		      markup)
+	        args))
+
   :init
+  (advice-add 'eglot--format-markup :filter-args 'me:eglot--format-markup)
   (setq eldoc-box-hover-mode t)
   (add-hook 'eglot-managed-mode-hook #'eldoc-box-hover-at-point-mode t))
 
