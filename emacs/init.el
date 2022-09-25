@@ -426,9 +426,6 @@
   :general
   ("<f6> h"  #'eldoc-doc-buffer)
   ("<f10> e" #'eldoc-mode)
-  :custom
-  (eldoc-echo-area-prefer-doc-buffer t)             ; show in *eldoc* buffer if showing & fits
-  (eldoc-echo-area-use-multiline-p 1)               ; one line at most in minibuffer
   :config
   (global-eldoc-mode t)
   :ensure nil)
@@ -1406,6 +1403,12 @@
       (add-to-list 'eglot-server-programs
                    `((c++-mode c-mode) "ccls" ,init-str))))
   :hook ((rust-mode c++-mode c-mode) . eglot-ensure))
+
+(use-package eldoc-box
+  :demand t
+  :init
+  (setq eldoc-box-hover-mode t)
+  (add-hook 'eglot-managed-mode-hook #'eldoc-box-hover-at-point-mode t))
 
 (use-package company :demand t)
 
