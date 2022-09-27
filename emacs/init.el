@@ -1408,17 +1408,23 @@
   :after eglot
   :demand t
   :config
+  ;; remove problematic markdown text
+  ;; 1. Trailing spaces, triggers whitespace mode
+  ;; 2. Horizontal rulers, not render well
+  (defun me:eglot-sanitize-markdown(str)
+    (replace-regexp-in-string
+     "\s+\n" "\n"
+     (string-replace "\n---\n" "" str)))
   ;; fix horizontal ruler in markdown rendering
   (defun me:eglot--format-markup (args)
     (mapcar (lambda (markup)
 		      (if-let* ((value (plist-get markup :value))
 			            (kind (plist-get markup :kind))
 			            (_ (string= kind "markdown"))
-			            (value (string-replace "\n---\n" "" value)))
+			            (value (me:eglot-sanitize-markdown value)))
 		          (plist-put markup :value value))
 		      markup)
 	        args))
-
   :init
   (advice-add 'eglot--format-markup :filter-args 'me:eglot--format-markup)
   (setq eldoc-box-hover-mode t)
