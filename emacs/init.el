@@ -1382,6 +1382,7 @@
   :general
   (:keymaps 'eglot-mode-map
             "<f6> x"  #'eglot-rename
+            "C-<tab>" #'complete-symbol
             "<f6> c"  #'eglot-code-actions)
   :init
   (setq eglot-ignored-server-capabilities '( :documentHighlightProvider)
@@ -1393,15 +1394,15 @@
     (setq eglot-extend-to-xref nil))
   :config
   ;; use clangd if present, otherwise assume ccls
-  (if-let ((clangd (seq-find #'executable-find '("clangd" "clangd-6.0"))))
-      (add-to-list 'eglot-server-programs
-                   `((c++-mode c-mode) ,clangd))
-    ;; use an absolute path for ccls cache
-    ;; ccls uses unique cache directory name for each project so there are no collisions
-    (let* ((cache-dir (expand-file-name "ccls-cache" me:cache-directory))
-           (init-str (concat "--init={\"cache\":{\"directory\":\"" cache-dir "\"}}")))
-      (add-to-list 'eglot-server-programs
-                   `((c++-mode c-mode) "ccls" ,init-str))))
+  (when-let* ((clangd (seq-find #'executable-find '("clangd" "clangd-6.0")))
+              (init-args "--enable-config"))  ;; this is default so can be overwritten
+    ;; this has to match the tool string in compile-commands.json
+    ;; clangd will then use these tools to get system header paths
+    ;; wish this was less brittle
+    (when (eq window-system 'w32)
+      (setq init-args "--query-driver=C:\\PROGRA~2\\GNUARM~1\\102020~1\\bin\\*.EXE"))
+    (add-to-list 'eglot-server-programs
+                 `((c++-mode c-mode) ,clangd ,init-args)))
   :hook ((rust-mode c++-mode c-mode) . eglot-ensure))
 
 (use-package eldoc-box
