@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: callout
+# key: co
+# --
+<$1> $0

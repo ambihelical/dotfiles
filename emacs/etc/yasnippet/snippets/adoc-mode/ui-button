@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: ui-button
+# key: btn
+# --
+btn:[$1] $0

@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: example-block
+# key: eb
+# --
+.${1:title}
+====
+${2}
+====
+$0

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: link-macro
+# key: link
+# --
+link:${1:url}[${2:label}] $0
