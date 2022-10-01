@@ -292,6 +292,7 @@
 
 ;; builtin midnight package
 (use-package midnight
+  :disabled
   :ensure nil
   :defer 1
   :custom
