@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: listing-block
+# key: lb
+# --
+----
+$1
+----
+$0

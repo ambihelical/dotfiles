@@ -1473,12 +1473,15 @@
   :ensure nil)
 
 (use-package yasnippet
-  :commands ( yas-expand-snippet )
   :hook ((prog-mode text-mode) . yas-minor-mode)
   :general
-  ("<s-return>" #'yas-expand)
+  ("s-<return>" #'yas-expand)
+  ("<f4> y" #'yas-insert-snippet)
+  ("<f4> Y" #'yas-describe-tables)
   (:prefix "C-c"
            "&" '(:ignore t :which-key "Yasnippet→" ))
+  :custom
+  (yas-prompt-functions '( yas-completing-prompt ))
   :init
   (add-hook 'yas-before-expand-snippet-hook         ; evil-insert at each slot
             (lambda()
@@ -1487,6 +1490,7 @@
                 (goto-char p)
                 (set-mark m))))
   :config
+  (use-package yasnippet-snippets)
   (define-key yas-minor-mode-map (kbd "<tab>") nil) ; don't use <tab>
   (define-key yas-minor-mode-map (kbd "TAB") nil))   ; don't use TAB
 

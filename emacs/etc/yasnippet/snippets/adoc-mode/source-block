@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: source-block
+# key: sb
+# --
+[source, ${1:Language}]
+----
+$2
+----
+$0

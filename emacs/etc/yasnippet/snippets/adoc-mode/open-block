@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: open-block
+# key: ob
+# --
+--
+$1
+--
+$0

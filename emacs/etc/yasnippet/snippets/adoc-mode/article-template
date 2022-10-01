@@ -1,0 +1,18 @@
+# -*- mode: snippet -*-
+# name: article-template
+# key: article
+# --
+= ${1:Title}
+:author $2
+:doctype: article
+:revnumber: 1.0
+:revdate: `(format-time-string "%Y-%m-%d")`
+:toc: left
+:toc-title: Table of Contents
+:stem: latexmath
+:eqnums:
+:imagesdir: images
+
+== Introduction
+
+$0

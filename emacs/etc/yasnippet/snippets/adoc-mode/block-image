@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: block-image
+# key: bi
+# --
+image::${1:target}[${2:alt}]
+
+$0

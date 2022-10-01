@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: inline-image
+# key: ii
+# --
+image:${1:target}[${2:alt}] $0

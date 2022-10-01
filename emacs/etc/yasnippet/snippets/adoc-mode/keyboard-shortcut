@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: keyboard-shortcut
+# key: key
+# --
+kbd:[$1] $0

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: stem
+# key: s
+# --
+stem:[${1:expr}] $0
