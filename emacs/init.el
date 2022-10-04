@@ -1444,7 +1444,8 @@
   (defun me:corfu-enable-in-minibuffer ()
     "Enable Corfu in the minibuffer if Vertico/Mct are not active."
     (unless (or (bound-and-true-p mct--active)
-                (bound-and-true-p vertico--input))
+                (bound-and-true-p vertico--input)
+                (evil-ex-p))
       ;; (setq-local corfu-auto nil) Enable/disable auto completion
       (corfu-mode 1)))
   (add-hook 'minibuffer-setup-hook #'me:corfu-enable-in-minibuffer 1)
