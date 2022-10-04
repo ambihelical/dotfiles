@@ -1394,14 +1394,11 @@
   (when (eq window-system 'w32)
     (setq eglot-extend-to-xref nil))
   :config
-  ;; use clangd if present, otherwise assume ccls
+  ;; configure clangd for c++ and c
   (when-let* ((clangd (seq-find #'executable-find '("clangd" "clangd-6.0")))
-              (init-args "--enable-config"))  ;; this is default so can be overwritten
     ;; this has to match the tool string in compile-commands.json
     ;; clangd will then use these tools to get system header paths
-    ;; wish this was less brittle
-    (when (eq window-system 'w32)
-      (setq init-args "--query-driver=C:\\PROGRA~2\\GNUARM~1\\102020~1\\bin\\*.EXE"))
+              (init-args "--query-driver=/**/*"))
     (add-to-list 'eglot-server-programs
                  `((c++-mode c-mode) ,clangd ,init-args)))
   :hook ((rust-mode c++-mode c-mode) . eglot-ensure))
