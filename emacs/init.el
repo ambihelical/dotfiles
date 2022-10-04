@@ -110,6 +110,7 @@
                 indicate-empty-lines t)                       ; show empty lines at end of buffer
   (setq custom-file (expand-file-name "custom.el" user-emacs-directory)  ; customize file
         bidi-inhibit-bpa t                                    ; disable bpa
+        read-process-output-max (* 1024 64)                   ; read more in one go from subprocesses
         load-prefer-newer t)                                  ; load source if newer than bytecode
   (when (eq window-system 'w32)
     ;; This is slower but allows dired-subtree to detect directories correctly
