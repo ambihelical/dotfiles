@@ -1429,7 +1429,6 @@
 	        args))
   :init
   (advice-add 'eglot--format-markup :filter-args 'me:eglot--format-markup)
-  (setq eldoc-box-hover-mode t)
   (add-hook 'eglot-managed-mode-hook #'eldoc-box-hover-at-point-mode t))
 
 (use-package company :demand t)
