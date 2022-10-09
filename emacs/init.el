@@ -201,6 +201,7 @@
 
 ;; infrequently used functions
 (use-package extras
+  :commands (x-urgency-hint)
   :ensure nil
   :general
   ("<f10> s"  #'me:read-fill-column)
