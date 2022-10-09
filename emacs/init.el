@@ -1721,9 +1721,26 @@
 
   (evil-mode 1))
 
+;; simple multi cursor mode
+(use-package evil-multiedit
+  :after evil
+  :init
+  (setq evil-multiedit-follow-matches t)
+  :general
+  ("M-d" #'evil-multiedit-match-and-next)
+  ("M-D" #'evil-multiedit-match-and-prev)
+  ("C-M-d" #'evil-multiedit-restore))
+
 (use-package undo-fu
   :after evil)
 
+;; Operator to switch between the following inflections:
+;;  1. kebab-case
+;;  2. Pascal_Snake
+;;  3. snake_case
+;;  4. SCREAMING_SNAKE_CASE
+;;  5. PascalCase
+;;  6. pascalCase
 (use-package evil-string-inflection
   :after evil
   :general
@@ -1732,8 +1749,12 @@
            "-"          #'evil-operator-string-inflection))
 
 ;; change surrounding text
+;; add:    ys<text-obj><delim>
+;; change: cs<old-delim><new-delim>
+;;
 (use-package evil-surround
   :after evil
+  :defer 2
   :config
   (global-evil-surround-mode 1))
 
