@@ -615,16 +615,17 @@
 ;; better package manager
 (use-package paradox
   :general
-  ("<f4> P"     #'me:paradox-list-packages)
+  ("<f4> P"     #'list-packages)
+  ("<f4> p"     #'me:paradox-upgrade-packages)
   (:keymaps 'paradox-menu-mode-map
             "j" #'paradox-next-entry
             "k" #'paradox-previous-entry)
   :config
   ;; make sure packages are up-to-date before updating
-  (defun me:paradox-list-packages ()
+  (defun me:paradox-upgrade-packages ()
     (interactive)
     (package-refresh-contents)
-    (paradox-list-packages nil))
+    (paradox-upgrade-packages))
   :init
   (setq paradox-spinner-type 'moon
         paradox-execute-asynchronously nil
@@ -1304,6 +1305,8 @@
             "k" nil
             "h" nil
             "l" nil)
+  :custom
+  (compilation-skip-threshold 2)  ;; skip below error
   :config
   (defun me:switch-to-compile-buffer ()
     (interactive)
