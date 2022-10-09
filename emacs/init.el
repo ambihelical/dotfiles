@@ -430,8 +430,7 @@
   ("<f6> h"  #'eldoc-doc-buffer)
   ("<f10> e" #'eldoc-mode)
   :config
-  (global-eldoc-mode t)
-  :ensure nil)
+  (global-eldoc-mode t))
 
 ;; built-in shortdoc mode
 (use-package shortdoc
@@ -1007,8 +1006,7 @@
               (name (file-name-nondirectory (directory-file-name path))))
         (concat " [" name "] ")))
   (add-to-list 'mode-line-misc-info `(:eval (me:project-mode-line-info)))
-  :defer 0.5
-  :ensure nil)
+  :defer 0.5)
 
 (use-package rainbow-delimiters
   :hook ((emacs-lisp-mode) . rainbow-delimiters-mode ))
@@ -1473,8 +1471,7 @@
   ("<f6> <f6>" #'xref-find-definitions)
   ("<f6> d"    #'xref-find-definitions-other-window)
   ("<f6> r"   #'xref-find-references)
-  ("<f6> a"   #'xref-find-apropos)
-  :ensure nil)
+  ("<f6> a"   #'xref-find-apropos))
 
 (use-package yasnippet
   :hook ((prog-mode text-mode) . yas-minor-mode)
