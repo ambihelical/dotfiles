@@ -1476,7 +1476,7 @@
 (use-package yasnippet
   :hook ((prog-mode text-mode) . yas-minor-mode)
   :general
-  ("s-<return>" #'yas-expand)
+  ("M-<SPC>" #'yas-expand)  ;; was just-one-space, a fairly useless binding
   ("<f4> y" #'yas-insert-snippet)
   ("<f4> Y" #'yas-describe-tables)
   (:prefix "C-c"
