@@ -1411,6 +1411,8 @@
 (use-package eldoc-box
   :after eglot
   :demand t
+  :custom
+  (eldoc-box-max-pixel-width 1200)
   :config
   ;; remove problematic markdown text
   ;; 1. Trailing spaces, triggers whitespace mode
