@@ -1121,9 +1121,6 @@
 
 (use-package rustic
   :hook ( rustic-mode . me:rustic-mode-config )
-  :init
-  ;; recommended by rustic install docs
-  (add-hook 'eglot--managed-mode-hook (lambda() (flymake-mode -1)))
   :config
   (defun me:rustic-mode-config ()
     (flyspell-mode -1) ; really slows down scrolling not useful enough to keep
