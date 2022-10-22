@@ -1165,6 +1165,7 @@
    ("\\.asciidoc\\'" . adoc-mode))
   :hook (adoc-mode . me:adoc-mode-config))
 
+;; math preview mode for adoc mode
 (use-package math-preview
   :custom
   (math-preview-scale 1.2)
@@ -1177,8 +1178,7 @@
   ;; workaround for duplicate label, see issue #21
   (add-to-list
    'math-preview-tex-preprocess-functions
-   `(lambda (x) (puthash 'string (s-replace-regexp "\\label{.+?}" "" (gethash 'string x)) x)) t)
-  :demand t)
+   `(lambda (x) (puthash 'string (s-replace-regexp "\\label{.+?}" "" (gethash 'string x)) x)) t))
 
 ;; built-in restructured text mode
 (use-package rst-mode
