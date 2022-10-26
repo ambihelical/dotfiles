@@ -102,8 +102,8 @@ export GEM_SPEC_CACHE=${XDG_CACHE_HOME}/gem
 export SCREENRC=${XDG_CONFIG_HOME}/screen
 
 # avoid ~/.cargo and ~/.rustup
-export RUSTUP_HOME=${HOME}/.local/opt/rustup
-export CARGO_HOME=${HOME}/.local/opt/cargo
+export RUSTUP_HOME=${XDG_DATA_HOME}/rustup
+export CARGO_HOME=${XDG_DATA_HOME}/cargo
 
 # put go dir in ~/dev/go
 export GOPATH=${HOME}/dev/go
