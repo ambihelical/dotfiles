@@ -47,8 +47,14 @@ help:
 	@echo "   rust       - post rust installation setup"
 	@echo "   barex      - install .xsession, .Xmodmap"
 
-base: ${SHELL_FILES} ${DIR_FILES} ${BIN_FILES} ${XORG_FILES}
+base: ${SHELL_FILES} ${DIR_FILES} ${BIN_FILES} ${XORG_FILES} font
 	@echo "base configured"
+
+font:
+	mkdir -p ${DATA}/fonts
+	cp fonts/* ${DATA}/fonts/
+	fc-cache -fr
+	@echo "Fonts configured"
 
 dev: ${VIM_FILES} ${APP_FILES} ${GIT_FILES} ${EMACS_FILES} ${GIT_SCRIPTS}
 	@echo "dev configured"
@@ -123,6 +129,10 @@ ${CFG}/git/config: ${PWD}/git/config
 
 ~/bin/git-% : ${PWD}/git/git-scripts/git-%
 	chmod a+x $<
+	${LN} $< $@
+
+# files in font directory
+${DATA}/fonts/% : ${PWD}/fonts/%
 	${LN} $< $@
 
 # files in bin directory
