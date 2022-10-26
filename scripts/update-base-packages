@@ -41,7 +41,7 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	p="$p pithos"
 	p="$p gparted"
 	p="$p xterm"
-	p="$p hunspell"
+	p="$p hunspell xkcdpass"
  # support for python stuff below
 	p="$p libiw-dev"
 
