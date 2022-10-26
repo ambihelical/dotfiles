@@ -16,7 +16,7 @@
 [ -d ~/extern/gccarm-dev/bin ] && PATH=~/extern/gccarm-dev/bin:"${PATH}"    # arm gcc cross compiler
 [ -d /usr/lib/ccache ] && PATH=/usr/lib/ccache:"${PATH}"                    # compile cache
 [ -d ~/.local/bin ] && PATH=~/.local/bin:"${PATH}"                           # locally installed execs
-[ -d ~/.local/opt/cargo/bin/ ] && PATH=~/.local/opt/cargo/bin:"${PATH}"     # rust cargo, until XDG'd
+[ -d ${XDG_DATA_HOME}/cargo/bin/ ] && PATH=${XDG_DATA_HOME}/cargo/bin:"${PATH}"     # rust cargo, until XDG'd
 [ -d ${XDG_DATA_HOME}/npm/bin ] && PATH=${XDG_DATA_HOME}/npm/bin:"${PATH}"  # npm stuff
 [ -d ~/dev/go/bin ] && PATH=~/dev/go/bin:"${PATH}"                          # go stuff
 [ -d ~/bin ] && PATH=~/bin:"${PATH}"                                        # my utilities

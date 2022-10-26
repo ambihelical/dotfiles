@@ -45,6 +45,8 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	else
 		p="$p libgnutls28-dev"
 	fi
+  # needed to build rust packages
+    p="$p libssl-dev"
   # needed to build asciidoctor-mathematical
     p="$p libffi-dev libxml2-dev libgdk-pixbuf2.0-dev libcairo2-dev libpango1.0-dev fonts-lyx"
     p="$p libwebp-dev libzstd-dev"

@@ -33,7 +33,7 @@ EMACS_FILES = ${CFG}/emacs/init.el ${CFG}/emacs/early-init.el ${CFG}/emacs/lisp/
 ETC_FILES = ${ETC}/sysctl.d/99-edb-sysctl.conf
 
 
-.PHONY: help base dev i3 all defaults rust
+.PHONY: help base dev i3 all defaults 
 
 help:
 	@echo "The following targets can be used"
@@ -45,7 +45,6 @@ help:
 	@echo "Special:"
 	@echo "   help       - what you are seeing now"
 	@echo "   root       - sudo needed for these"
-	@echo "   rust       - post rust installation setup"
 	@echo "   barex      - install .xsession, .Xmodmap"
 
 base: ${SHELL_FILES} ${DIR_FILES} ${EXTRA_FILES} ${BIN_FILES} ${XORG_FILES}
@@ -72,14 +71,6 @@ barex: ${BAREX_FILES}
 root: ${ETC_FILES}
 	udevadm control --reload-rules   # for udev rules
 	sysctl -w vm.swappiness=10    # we have adequate memory
-
-# extra rust installation work, do this after installing rust
-# eventually the cargo bit should be done by rustup
-rust:
-	${LN} ${PWD}/cargo/config.toml ${CARGO_HOME}/config.toml
-	mkdir -p ${DATA}/bash-completion/completions
-	rustup completions bash > ${DATA}/bash-completion/completions/rustup
-	${LN} `rustc --print sysroot`/etc/bash_completion.d/cargo  ${DATA}/bash-completion/completions/cargo
 
 # fix some annoying default settings
 defaults:

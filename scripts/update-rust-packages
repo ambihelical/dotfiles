@@ -1,0 +1,53 @@
+#!/bin/bash
+#
+# Make sure some local packages are present.
+
+if [ $EUID -eq 0 ]; then
+	echo "This script must NOT be run with root privileges" 1>&2
+	exit 1
+fi
+
+# strict mode
+set -euo pipefail
+
+if [ "$RUSTUP_HOME" == "" -o "$CARGO_HOME" == "" ]; then
+	echo "Make sure RUSTUP_HOME and CARGO_HOME are defined"
+	exit 1
+fi
+
+if [ ! -f ${RUSTUP_HOME}/settings.toml ]; then
+	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+else
+	rustup update
+fi
+
+ln -fs ${PWD}/../cargo/config.toml ${CARGO_HOME}/config.toml
+
+if [ ! -f ${XDG_DATA_HOME}/bash-completion/completions/cargo ]; then
+	echo "Setting up cargo and rustup completions"
+	mkdir -p ${XDG_DATA_HOME}/bash-completion/completions
+	rustup completions bash > ${XDG_DATA_HOME}/bash-completion/completions/rustup
+	ln -fs $(rustc --print sysroot)/etc/bash_completion.d/cargo  ${XDG_DATA_HOME}/bash-completion/completions/cargo
+fi
+
+p="starship cargo-audit cargo-geiger cargo-outdated"
+p="$p cargo-modules tokei sccache cargo-supply-chain cargo-update"
+p="$p du-dust "
+
+for pkg in $p; do
+	if type $pkg > /dev/null 2>&1; then
+        echo "$pkg is already installed"
+    else
+        echo "Installing $pkg"
+        cargo install --quiet $pkg
+    fi
+done
+
+echo "Installing rust-analyzer"
+rustup component add rust-analyzer
+# workaround see: https://github.com/rust-lang/rustup/issues/2411
+ln -fs $(rustup which --toolchain stable rust-analyzer) ${XDG_DATA_HOME}/cargo/bin
+
+echo "Updating all packages"
+cargo install-update --all
+
