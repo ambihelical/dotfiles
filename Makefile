@@ -27,6 +27,7 @@ GIT_FILES = ${CFG}/git/config  ${CFG}/git/ignore ${CFG}/tig/config ${DATA}/tig
 I3_FILES = ${CFG}/i3/config ${CFG}/i3/i3status.config ${CFG}/dunst/dunstrc \
            ${CFG}/gsimplecal/config ${CFG}/i3/three-pane.json ${CFG}/udiskie/config.yml
 VIM_FILES = ${CACHE}/vim ${CFG}/vim/vimrc
+EXTRA_FILES = ~/.ssh/id_ed25519.pub ${DATA}/fonts/.configured
 BAREX_FILES = ~/.xsession ~/.Xmodmap
 EMACS_FILES = ${CFG}/emacs/init.el ${CFG}/emacs/early-init.el ${CFG}/emacs/lisp/extras.el ${CFG}/emacs/etc $(CACHE)/emacs ${CFG}/hunspell
 ETC_FILES = ${ETC}/sysctl.d/99-edb-sysctl.conf
@@ -47,14 +48,18 @@ help:
 	@echo "   rust       - post rust installation setup"
 	@echo "   barex      - install .xsession, .Xmodmap"
 
-base: ${SHELL_FILES} ${DIR_FILES} ${BIN_FILES} ${XORG_FILES} font
+base: ${SHELL_FILES} ${DIR_FILES} ${EXTRA_FILES} ${BIN_FILES} ${XORG_FILES}
 	@echo "base configured"
 
-font:
+${DATA}/fonts/.configured:
 	mkdir -p ${DATA}/fonts
 	cp fonts/* ${DATA}/fonts/
 	fc-cache -fr
+	touch ${DATA}/fonts/.configured
 	@echo "Fonts configured"
+
+~/.ssh/id_ed25519.pub:
+	ssh-keygen -t ed25519 -a 100
 
 dev: ${VIM_FILES} ${APP_FILES} ${GIT_FILES} ${EMACS_FILES} ${GIT_SCRIPTS}
 	@echo "dev configured"
