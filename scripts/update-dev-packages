@@ -7,6 +7,8 @@ if [[ $EUID -ne 0 ]]; then
 	echo "This script must be run with root privilegs" 1>&2
 	exit 1
 fi
+# strict mode
+set -euo pipefail
 
 script_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
@@ -27,17 +29,21 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	if [ "$linux" == 'Ubuntu' ]; then
 
   # documentation tools
-	q="$q doxygen"
+	q="$q doxygen plantuml"
 	p="$p manpages-dev manpages-posix-dev ncurses-doc"
 	p="$p librsvg2-bin"
+    # probably don't need these...
+	# p="$p texlive texinfo texlive-extra-utils latex-xcolor texlive-latex-extra texlive-generic-recommended"
 
   # languages, compilers and building
 	p="$p cmake build-essential ccache"
 	p="$p gcc-doc glibc-doc"
 	p="$p autoconf automake libtool gettext intltool bison flex"
 	p="$p ruby ruby-dev clangd lld"
+
   # version control
 	p="$p meld git-gui mercurial subversion gitk tig"
+
   # libraries sometimes needed to build from source, especially emacs
 	p="$p libncurses5-dev libjansson-dev libotf-dev libgpm-dev libgccjit-11-dev"
 	if [ $version -lt 1804 ]; then
@@ -45,17 +51,20 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	else
 		p="$p libgnutls28-dev"
 	fi
+
   # needed to build rust packages
-    p="$p libssl-dev"
+	p="$p libssl-dev libspeechd-dev"
+	p="$p libxcb-shape0-dev libxcb-xfixes0-dev libxcb-render0-dev"
+
   # needed to build asciidoctor-mathematical
     p="$p libffi-dev libxml2-dev libgdk-pixbuf2.0-dev libcairo2-dev libpango1.0-dev fonts-lyx"
     p="$p libwebp-dev libzstd-dev"
-  # image file dev libs
-	p="$p libgtk-3-dev libtiff5-dev libjpeg-dev libgif-dev libxpm-dev libpng-dev libmagick++-dev librsvg2-dev"
+
+  # image file tools & dev libs
+	p="$p libgtk-3-dev libtiff5-dev libtiff-tools libjpeg-dev libgif-dev libxpm-dev libpng-dev libmagick++-dev librsvg2-dev"
 	p="$p zlib1g-dev libpoppler-glib-dev libpoppler-private-dev"
 	apt-get --quiet --ignore-missing --yes install $p
 	apt-get --quiet --ignore-missing --no-install-recommends --yes install $q
-	echo "NOTE: Install global via source, debian is out of date"
 
  elif [ "$linux" == 'Fedora' ]; then
 	# building

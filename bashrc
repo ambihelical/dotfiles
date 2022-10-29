@@ -12,17 +12,19 @@
 [ -e ${HOME}/.local/share/site-bashrc ] && source ${HOME}/.local/share/site-bashrc
 
 # setup path. These are in reverse order of how they appear in the PATH value.
-
 [ -d ~/extern/gccarm-dev/bin ] && PATH=~/extern/gccarm-dev/bin:"${PATH}"    # arm gcc cross compiler
 [ -d /usr/lib/ccache ] && PATH=/usr/lib/ccache:"${PATH}"                    # compile cache
-[ -d ~/.local/bin ] && PATH=~/.local/bin:"${PATH}"                           # locally installed execs
-[ -d ${XDG_DATA_HOME}/cargo/bin/ ] && PATH=${XDG_DATA_HOME}/cargo/bin:"${PATH}"     # rust cargo, until XDG'd
 [ -d ${XDG_DATA_HOME}/npm/bin ] && PATH=${XDG_DATA_HOME}/npm/bin:"${PATH}"  # npm stuff
 [ -d ~/dev/go/bin ] && PATH=~/dev/go/bin:"${PATH}"                          # go stuff
-[ -d ~/bin ] && PATH=~/bin:"${PATH}"                                        # my utilities
 [ -d ~/bin/${OSTYPE} ] && PATH=~/bin/${OSTYPE}:"${PATH}"                    # my utilities, os specific
 [ -d ~/Android/Sdk/platform-tools ] && PATH=~/Android/Sdk/platform-tools:"${PATH}"         # adb, fastboot, etc
 [ -d ~/extern/ChibiOS-RT ] && export CHIBIOS=~/extern/ChibiOS-RT            # chibios development
+# We will need the following paths eventually, so make them now
+[ -d ${GEM_HOME}/ruby/3.0.0/bin ] || mkdir -p ${GEM_HOME}/ruby/3.0.0/bin    # ruby gems
+[ -d ~/.local/bin ] || mkdir -p ~/.local/bin                                # locally installed execs
+[ -d ${XDG_DATA_HOME}/cargo/bin/ ] || mkdir -p ${XDG_DATA_HOME}/cargo/bin   # rust cargo
+[ -d ~/bin ] || mkdir -p ~/bin                                              # my utilities
+PATH=${XDG_DATA_HOME}/cargo/bin/:~/.local/bin:~/bin:${GEM_HOME}/ruby/3.0.0/bin:"${PATH}"
 
 export ACKRC=${XDG_CONFIG_HOME}/ack
 export RIPGREP_CONFIG_PATH=${XDG_CONFIG_HOME}/ripgrep/config
