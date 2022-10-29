@@ -266,7 +266,7 @@ for_window [class="Nm-connection-editor"] floating enable
 for_window [class="Gnome-calendar"] floating enable, border pixel 3
 for_window [class="Pavucontrol"] floating enable
 for_window [title="i3-scratch"] floating enable, move scratchpad, scratchpad show, \
-	resize set 1600 480, move position center, scratchpad show
+	resize set 1200 480, move position center, scratchpad show
 
 # title formatting
 for_window [class="Gcalctool"] title_format "<span font='Symbola Bold 12'>Σ</span> %title"
