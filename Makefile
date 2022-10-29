@@ -33,7 +33,7 @@ EMACS_FILES = ${CFG}/emacs/init.el ${CFG}/emacs/early-init.el ${CFG}/emacs/lisp/
 ETC_FILES = ${ETC}/sysctl.d/99-edb-sysctl.conf
 
 
-.PHONY: help base dev i3 all defaults rust
+.PHONY: help base dev i3 all defaults 
 
 help:
 	@echo "The following targets can be used"
@@ -45,7 +45,6 @@ help:
 	@echo "Special:"
 	@echo "   help       - what you are seeing now"
 	@echo "   root       - sudo needed for these"
-	@echo "   rust       - post rust installation setup"
 	@echo "   barex      - install .xsession, .Xmodmap"
 
 base: ${SHELL_FILES} ${DIR_FILES} ${EXTRA_FILES} ${BIN_FILES} ${XORG_FILES}

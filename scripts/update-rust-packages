@@ -20,8 +20,15 @@ fi
 
 ln -fs ${PWD}/../cargo/config.toml ${CARGO_HOME}/config.toml
 
+if [ ! -f ${XDG_DATA_HOME}/bash-completion/completions/cargo ]; then
+	echo "Setting up cargo and rustup completions"
+	mkdir -p ${XDG_DATA_HOME}/bash-completion/completions
+	rustup completions bash > ${XDG_DATA_HOME}/bash-completion/completions/rustup
+	ln -fs $(rustc --print sysroot)/etc/bash_completion.d/cargo  ${XDG_DATA_HOME}/bash-completion/completions/cargo
+fi
+
 p="starship cargo-audit cargo-geiger cargo-outdated"
-p="$p cargo-modules tokei sccache cargo-supply-chain"
+p="$p cargo-modules tokei sccache cargo-supply-chain cargo-update"
 
 for pkg in $p; do
 	if type $pkg > /dev/null 2>&1; then
@@ -34,10 +41,5 @@ done
 
 echo "Updating all packages"
 cargo install-update --all
-
-echo "Update completions"
-mkdir -p ${XDG_DATA_HOME}/bash-completion/completions
-rustup completions bash > ${XDG_DATA_HOME}/bash-completion/completions/rustup
-ln -fs $(rustc --print sysroot)/etc/bash_completion.d/cargo  ${XDG_DATA_HOME}/bash-completion/completions/cargo
 
 echo "Get rust-analyzer from https://github.com/rust-lang/rust-analyzer/releases"
