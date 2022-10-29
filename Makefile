@@ -33,7 +33,7 @@ EMACS_FILES = ${CFG}/emacs/init.el ${CFG}/emacs/early-init.el ${CFG}/emacs/lisp/
 ETC_FILES = ${ETC}/sysctl.d/99-edb-sysctl.conf
 
 
-.PHONY: help base dev i3 all defaults 
+.PHONY: help base dev i3 all defaults prep-bash barex root
 
 help:
 	@echo "The following targets can be used"
@@ -47,8 +47,16 @@ help:
 	@echo "   root       - sudo needed for these"
 	@echo "   barex      - install .xsession, .Xmodmap"
 
-base: ${SHELL_FILES} ${DIR_FILES} ${EXTRA_FILES} ${BIN_FILES} ${XORG_FILES}
+base: prep-bash ${SHELL_FILES} ${DIR_FILES} ${EXTRA_FILES} ${BIN_FILES} ${XORG_FILES}
 	@echo "base configured"
+
+prep-bash:
+	echo "Saving original bash files (see orig.xxx)"
+	rm -f ~/.bash_history
+	rm -f ~/.bash_logout
+	test -h ~/.profile || mv ~/.profile ~/orig.profile
+	test -h ~/.bashrc || mv ~/.bashrc ~/orig.bashrc
+	test -h ~/.bash_profile || mv ~/.bash_profile ~/orig.bash_profile
 
 ${DATA}/fonts/.configured:
 	mkdir -p ${DATA}/fonts
