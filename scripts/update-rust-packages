@@ -7,6 +7,9 @@ if [ $EUID -eq 0 ]; then
 	exit 1
 fi
 
+# strict mode
+set -euo pipefail
+
 if [ "$RUSTUP_HOME" == "" -o "$CARGO_HOME" == "" ]; then
 	echo "Make sure RUSTUP_HOME and CARGO_HOME are defined"
 	exit 1
@@ -39,7 +42,11 @@ for pkg in $p; do
     fi
 done
 
+echo "Installing rust-analyzer"
+rustup component add rust-analyzer
+# workaround see: https://github.com/rust-lang/rustup/issues/2411
+ln -fs $(rustup which --toolchain stable rust-analyzer) ${XDG_DATA_HOME}/cargo/bin
+
 echo "Updating all packages"
 cargo install-update --all
 
-echo "Get rust-analyzer from https://github.com/rust-lang/rust-analyzer/releases"
