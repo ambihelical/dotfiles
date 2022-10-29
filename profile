@@ -95,7 +95,7 @@ export PIP_LOG_FILE=${XDG_CACHE_HOME}/pip/log
 [ -d ${XDG_CACHE_HOME}/pip/http ] || mkdir -p ${XDG_CACHE_HOME}/pip/http
 
 # avoids ~/.gem
-export GEM_HOME=${XDG_CONFIG_HOME}/gem
+export GEM_HOME=${XDG_DATA_HOME}/gem
 export GEM_SPEC_CACHE=${XDG_CACHE_HOME}/gem
 
 # avoids ~/.screenrc
