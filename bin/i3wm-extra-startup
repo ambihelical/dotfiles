@@ -14,7 +14,7 @@ sleep 1
 ${HOME}/bin/i3wm-keyboard-setup
 
 # setup displays
-if [ "$host" == "hum" ]; then
+if [ "$host" == "hum" -o "$host" == "thumb" ]; then
 	 lockminutes=0
 	 offminutes=0
 	 xrandr --output HDMI-0 --primary --pos 0x0 --mode 1920x1080 --dpi 78 --output DVI-I-1 --rotate left --pos 1920x-420
