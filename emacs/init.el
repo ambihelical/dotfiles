@@ -1772,6 +1772,8 @@
   ("<f9> p"     #'magit-push)
   ("<f9> r"     #'magit-rebase)
   ("<f9> y"     #'magit-cherry-pick)
+  ("<f9> z"     #'magit-stash)
+  ("<f9> !"     #'magit-git-command)
   ("<f9> <f9>"  #'magit-status)
   :config
   ;; I want these for buffer&window switching
