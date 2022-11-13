@@ -618,6 +618,10 @@
   :general
   ("<f10> u" #'ruler-mode))
 
+;; display emoji :smile:
+(use-package emojify
+  :hook (after-init . global-emojify-mode))
+
 ;; better package manager
 (use-package paradox
   :general
