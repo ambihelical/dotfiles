@@ -17,7 +17,7 @@
   '(setq use-package-always-ensure t                              ; ensure by default
          use-package-always-defer t                               ; defer by default
          use-package-minimum-reported-time 0.03                   ; minimum time when verbose
-         use-package-verbose nil))                                 ; don't be verbose
+         use-package-verbose nil))                                ; don't be verbose
 
 ;; xdg directories
 (defconst me:data-directory (or (getenv "XDG_DATA_HOME") (expand-file-name ".local/share" "~")))
@@ -192,6 +192,12 @@
   ([remap describe-variable] #'helpful-variable)
   ([remap describe-symbol] #'helpful-symbol)
   :config)
+
+(use-package elisp-demos
+  :after helpful
+  :demand
+  :config
+  (advice-add 'helpful-update :after #'elisp-demos-advice-helpful-update))
 
 (use-package hydra
   :commands (defhydra)
