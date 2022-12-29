@@ -10,7 +10,7 @@
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
 set $mod Mod4
-set $dmenufn 'Ubuntu Mono Bold-14'
+set $dmenufn 'Ubuntu Mono Bold NF-14'
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below. ISO 10646 = Unicode
@@ -20,7 +20,7 @@ set $dmenufn 'Ubuntu Mono Bold-14'
 # right-to-left text rendering, you should instead use pango for rendering and
 # chose a FreeType font, such as:
 #font pango:DejaVu Sans Mono Bold 12 
-font pango:Ubuntu Mono Bold 12
+font pango:Ubuntu Mono Bold 11
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -252,6 +252,7 @@ bindsym $mod+minus scratchpad show
 exec --no-startup-id ~/bin/i3wm-extra-startup
 exec --no-startup-id nm-applet &
 exec --no-startup-id diodon &
+exec --no-startup-id clipit &
 exec --no-startup-id xterm -title "i3-scratch" &
 exec --no-startup-id udiskie --tray --no-notify &
 exec --no-startup-id ~/bin/i3wm-private-startup || true
@@ -263,6 +264,7 @@ for_window [class="Qalculate"] floating enable
 for_window [class="Update-manager"] floating enable
 for_window [class="MintUpdate.py"] floating enable
 for_window [class="Nm-connection-editor"] floating enable
+for_window [class="gnome-calendar"] floating enable, border pixel 3
 for_window [class="Gnome-calendar"] floating enable, border pixel 3
 for_window [class="Pavucontrol"] floating enable
 for_window [title="i3-scratch"] floating enable, move scratchpad, scratchpad show, \

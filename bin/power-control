@@ -3,7 +3,7 @@
 linux=$(linux_distribution_name)
 version=$(linux_distribution_version)
 
-if [ "$linux" != "Ubuntu" -a "$linux" != "Fedora" ]; then
+if [ "$linux" != "ubuntu" -a "$linux" != "fedora" ]; then
 	echo "Don't know how to handle ${linux}/${version}"
 	exit 1
 fi
@@ -17,8 +17,8 @@ suspend=0
 hibernate=1
 
 #echo "linux $linux version $version host $host"
-[ "$linux" == "Ubuntu" -a "$version" -gt "1510" ] && suspend=1
-[ "$linux" == "Fedora" -a "$version" -ge "28" ] && suspend=1
+[ "$linux" == "ubuntu" -a "$version" -gt "1510" ] && suspend=1
+[ "$linux" == "fedora" -a "$version" -ge "28" ] && suspend=1
 [ "$host" == "jh-rvueb" ] && suspend=0
 
 

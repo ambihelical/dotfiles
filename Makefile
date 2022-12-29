@@ -54,9 +54,9 @@ prep-bash:
 	echo "Saving original bash files (see orig.xxx)"
 	rm -f ~/.bash_history
 	rm -f ~/.bash_logout
-	test -h ~/.profile || mv ~/.profile ~/orig.profile
-	test -h ~/.bashrc || mv ~/.bashrc ~/orig.bashrc
-	test -h ~/.bash_profile || mv ~/.bash_profile ~/orig.bash_profile
+	if [ -f ~/.profile -a ! -h ~/.profile ]; then mv ~/.profile ~/orig.profile; fi
+	if [ -f ~/.bashrc -a ! -h ~/.bashrc ]; then mv ~/.bashrc ~/orig.bashrc; fi
+	if [ -f ~/.bash_profile -a ! -h ~/.bash_profile  ]; then mv ~/.bash_profile ~/orig.bash_profile; fi
 
 ${DATA}/fonts/.configured:
 	mkdir -p ${DATA}/fonts

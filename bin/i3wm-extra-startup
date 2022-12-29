@@ -1,9 +1,11 @@
 #!/bin/bash
 
 # local configuration for i3
+source /etc/os-release
 
 # host specific setup
 host=$(uname -n)
+linux=$ID
 lockminutes=30
 offminutes=60
 
@@ -14,10 +16,14 @@ sleep 1
 ${HOME}/bin/i3wm-keyboard-setup
 
 # setup displays
-if [ "$host" == "hum" -o "$host" == "thumb" ]; then
+if [ "$host" == "hum" -a "$linux" == "ubuntu" ]; then
 	 lockminutes=0
 	 offminutes=0
-	 xrandr --output HDMI-0 --primary --pos 0x0 --mode 1920x1080 --dpi 78 --output DVI-I-1 --rotate left --pos 1920x-420
+	 xrandr --output HDMI-0 --primary --pos 0x0 --mode 1920x1080 --dpi 80 --output DVI-I-1 --rotate left --pos 1920x-420
+elif [ "$host" == "hum" -a "$linux" == "fedora" ]; then
+	 lockminutes=0
+	 offminutes=0
+	 xrandr --output HDMI-1 --primary --pos 0x0 --mode 1920x1080 --dpi 80 --output DVI-I-1 --rotate left --pos 1920x-420
 else
 	echo "Unknown host |$host|"
 fi
@@ -44,4 +50,6 @@ ulimit -n 4096
 xsetroot -solid "#333333"
 
 # start emacs daemon
-emacs --daemon
+if type -P emacs; then
+	emacs --daemon
+fi

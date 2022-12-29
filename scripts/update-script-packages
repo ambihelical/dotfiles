@@ -14,6 +14,11 @@ fi
 # strict mode
 set -euo pipefail
 
+script_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+. ${script_path}/../bin/common/linux.sh
+linux=$(linux_distribution_name)
+version=$(linux_distribution_version)
+
 # prepend $USER to reduce privileges
 if [ $SUDO_USER ]; then
     real_user=$SUDO_USER
@@ -22,14 +27,19 @@ else
 fi
 USER="sudo -u $real_user"
 
-pp="colour psutil basiciw"
+pp="colour psutil "
+if [ "$linux" == 'ubuntu' ]; then
+	pp="$pp basiciw"
+fi
 $USER pip3 install --upgrade $pp
 
 # need this where i3 can find them, so install as root
-pr="py3status i3-py"
-pip3 install --upgrade $pr
+if [ "$linux" == 'ubuntu' ]; then
+	pr="i3-py py3status"
+	pip3 install --upgrade $pr
+fi
 
-rg="asciidoctor asciidoctor-diagram asciidoctor-pdf"
+rg="asciidoctor asciidoctor-diagram asciidoctor-pdf asciidoctor-mathematical"
 rg="$rg rouge"
 $USER gem install --user-install --conservative $rg
 
