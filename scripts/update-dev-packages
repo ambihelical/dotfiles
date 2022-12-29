@@ -26,7 +26,7 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	version=$(linux_distribution_version)
  	echo "Linux: $linux Version: $version"
 
-	if [ "$linux" == 'Ubuntu' ]; then
+	if [ "$linux" == 'ubuntu' ]; then
 
   # documentation tools
 	q="$q doxygen plantuml"
@@ -66,22 +66,34 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	apt-get --quiet --ignore-missing --yes install $p
 	apt-get --quiet --ignore-missing --no-install-recommends --yes install $q
 
- elif [ "$linux" == 'Fedora' ]; then
-	# building
+ elif [ "$linux" == 'fedora' ]; then
+
+  # documentation tools
+	q="$q doxygen plantuml"
+	p="$p librsvg2-tools"
+	p="$p python3-docutils plantuml "
+
+  # languages, compilers and building
+	p="$p cmake ccache"
+	p="$p autoconf automake libtool intltool bison flex"
+	p="$p ruby ruby-devel lld"
 	p="$p autoconf automake "
+	p="$p python3-virtualenv"
 
-	# version control
-	p="$p meld git-gui gitk tig"
+  # version control
+	p="$p git-gui gitk "
 
-	# editor support
+  # libraries sometimes needed to build from source, especially emacs
 	p="$p clang-tools-extra"  # clangd
 	p="$p poppler-devel poppler-glib-devel"
+	p="$p ncurses-devel jansson-devel libotf-devel gpm-devel libgccjit-devel"
+	p="$p gnutls-devel ImageMagick-devel libacl-devel lcms2-devel"
+	p="$p gtk3-devel libtiff-devel libtiff-tools libjpeg-turbo-devel libXpm-devel libpng-devel librsvg2-devel giflib-devel"
+	p="$p libdeflate-devel poppler-glib-devel "
 
-	# documentation tools
-	p="$p librsvg2-tools rst2pdf python3-docutils plantuml graphviz"
-
-	# language support
-	p="$p python2-virtualenv python3-virtualenv"
+  # needed to build rust packages
+	p="$p openssl-devel "
+	p="$p libxcb-devel "
 
 	 dnf install -y $p
  fi

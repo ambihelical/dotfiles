@@ -4,8 +4,8 @@
 # most basic packages needed to set up a basic system, plus a few
 # nice-to-haves.
 #
-# Currently requires the following to already be installed:
-# pip, pip3, curl
+# May require the following to already be installed:
+# curl
 
 if [ $EUID -ne 0 ]; then
 	echo "This script must be run with root privileges" 1>&2
@@ -27,7 +27,7 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	linux=$(linux_distribution_name)
 	version=$(linux_distribution_version)
  echo "Linux: $linux Version: $version"
- if [ "$linux" == 'Ubuntu' ]; then
+ if [ "$linux" == 'ubuntu' ]; then
 
  # fonts
 	p="$p ttf-mscorefonts-installer otf-stix unifont fonts-noto"
@@ -82,18 +82,22 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 		p="$p python-dev python-pip"
 	fi
 	apt-get --ignore-missing --quiet --yes install $p
- elif [ "$linux" == 'Fedora' ]; then
- # version is currently 28
+ elif [ "$linux" == 'fedora' ]; then
+ # version is currently 37 
 
  # fonts
 	p="$p mscore-fonts stix-fonts unifont-fonts google-noto-sans-fonts"
  
  # cli tools
-	p="$p autojump ripgrep general-purpose-preprocessor jq"
+	p="$p autojump ripgrep general-purpose-preprocessor"
+	p="$p htop xclip a2ps python3-pip"
 
  # desktop related
-	p="$p i3 i3-ipc i3lock i3status dmenu udiskie wmctrl py3status scrot"
-	p="$p rxvt-unicode-256color-ml scrot xautolock pavucontrol"
+	p="$p i3 i3lock i3status xsettingsd dmenu rofi udiskie wmctrl py3status "
+	p="$p clipit xautolock xset xsetroot pavucontrol ImageMagick"
+
+ # nice to have apps & related
+	p="$p gparted xterm qalculate nemo "
 
 	dnf install -y $p
  fi
@@ -102,4 +106,5 @@ elif [ "${OSTYPE:0:6}" == 'darwin' ]; then
 	brew update
 	p="$p coreutils git autojump the_silver_searcher lesspipe tree"
 	brew install $p
+	echo $distro
 fi

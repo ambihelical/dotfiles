@@ -1,5 +1,0 @@
-#!/bin/sh
-# Change title in an xterm window
-
-[ $(uname -s) = Linux ] && exec echo -e "\033]1;$@\007\033]2;$@\007\c"
-[ $(uname -s) = AIX ]   && exec echo    "\033]1;$@\007\033]2;$@\007\c"
