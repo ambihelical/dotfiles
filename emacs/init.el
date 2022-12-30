@@ -26,7 +26,7 @@
 
 (defconst me:default-font
   (pcase (system-name)
-    ("hum" "Roboto Mono-11:autohint=true")
+    ("hum" "Roboto Mono-10:autohint=true")
     ("thud" "Roboto Mono-12:autohint=true")
     ("SG267" "Roboto Mono-12:autohint=true")
     ("SG296" "Roboto Mono-12:autohint=true")
@@ -502,11 +502,11 @@
     ;; N.B. DejaVu Sans Mono has the extra long vertical bar which connects
     (if me:theme-is-dark-p
         (if (display-graphic-p)
-            (set-face-attribute 'fill-column-indicator nil :foreground "grey30" :font "DejaVu Sans Mono-14")
+            (set-face-attribute 'fill-column-indicator nil :foreground "grey30" :font "DejaVu Sans Mono NF-14")
           (set-face-attribute 'fill-column-indicator nil :foreground "grey30"))
       ;; For console, WhiteSmoke is too light to show, so LightGrey is used
       (if (display-graphic-p)
-          (set-face-attribute 'fill-column-indicator nil :background "white" :foreground "WhiteSmoke" :font "DejaVu Sans Mono-14")
+          (set-face-attribute 'fill-column-indicator nil :background "white" :foreground "WhiteSmoke" :font "DejaVu Sans Mono NF-14")
         (set-face-attribute 'fill-column-indicator nil :foreground "LightGrey"))))
   :ensure nil)
 
@@ -530,11 +530,10 @@
   :config
   (defun me:modus-themes-after-load-theme ()
     (setq me:theme-is-dark-p (eq (modus-themes--current-theme) 'modus-vivendi)))
-  (modus-themes-load-themes)
   ;; initially use dark theme for console
   (if (window-system)
-      (modus-themes-load-operandi)
-    (modus-themes-load-vivendi))
+      (load-theme 'modus-operandi :no-confirm)
+    (load-theme 'modus-vivendi :no-confirm))
   :defer 0)
 
 (use-package smart-mode-line
@@ -1474,6 +1473,8 @@
                 (bound-and-true-p vertico--input)
                 (evil-ex-p))
       ;; (setq-local corfu-auto nil) Enable/disable auto completion
+      ;; disable auto echo and popup
+      (setq-local corfu-echo-delay nil corfu-popupinfo-delay nil)
       (corfu-mode 1)))
   (add-hook 'minibuffer-setup-hook #'me:corfu-enable-in-minibuffer 1)
 
@@ -1481,13 +1482,8 @@
   ;; This is recommended since Dabbrev can be used globally (M-/).
   ;; See also `corfu-excluded-modes'.
   :init
-  (global-corfu-mode))
-
-(use-package corfu-doc
-  :hook (corfu-mode . corfu-doc-mode)
-  :config
-  (define-key corfu-map (kbd "M-p") #'corfu-doc-scroll-down) ;; corfu-next
-  (define-key corfu-map (kbd "M-n") #'corfu-doc-scroll-up))  ;; corfu-previous
+  (global-corfu-mode)
+  (corfu-popupinfo-mode))
 
 ;; built-in package for cross-references
 (use-package xref
