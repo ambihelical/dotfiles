@@ -97,7 +97,7 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	p="$p clipit xautolock xset xsetroot pavucontrol ImageMagick"
 
  # nice to have apps & related
-	p="$p gparted xterm qalculate nemo "
+	p="$p gparted xterm qalculate-gtk nemo "
 
 	dnf install -y $p
  fi
