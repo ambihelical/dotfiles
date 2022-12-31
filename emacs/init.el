@@ -1044,7 +1044,6 @@
   :general
   ("<f8> t" #'org-todo-list)
   ("<f8> a" #'org-agenda)
-  ("<f8> <f8>" #'me:search-notes)
   ("<f8> c" #'me:org-capture)
   (:prefix "C-c"
            "C-x"  '(:ignore t :which-key "Org→" ))
@@ -1090,16 +1089,23 @@
     (interactive)
     (setq org-capture-templates me:org-capture-templates)
     (me:add-project-templates)
-    (counsel-org-capture))
-  (defun me:search-notes()
+    (counsel-org-capture)))
+
+;; search multiple notes directories
+(use-package consult-notes
+  :general
+  ("<f8> <f8>" #'me:search-all-notes)
+  :config
+  (defun me:search-all-notes()
     (interactive)
-    (let* ((dot-notes (expand-file-name "Notes" me:data-directory))
-           (proj-notes (me:project-path "Notes"))
-           (home-notes (expand-file-name "Notes" "~"))
-           (proj-notes-path (if (file-exists-p proj-notes) proj-notes ""))
-           (home-notes-path (if (file-exists-p home-notes) home-notes ""))
-           (consult-ripgrep-args (concat "rg --null --line-buffered --color=never --max-columns=1000 --path-separator / --smart-case --no-heading --line-number" home-notes-path " " proj-notes-path " " dot-notes " ")))
-      (consult-ripgrep))))
+    (let* ((consult-notes-file-dir-sources
+            `(("dot" ?d ,(expand-file-name "Notes" me:data-directory))
+              ("proj" ?p ,(me:project-path "Notes"))
+              ("home" ?h ,(expand-file-name "Notes" "~")))))
+      (consult-notes-search-in-all-notes)))
+  (consult-notes-org-headings-mode)
+  (when (locate-library "denote")
+    (consult-notes-denote-mode)))
 
 (use-package valign
   :hook ((org-mode markdown-mode) . valign-mode)
