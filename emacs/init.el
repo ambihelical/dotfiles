@@ -999,11 +999,10 @@
   ;; Add project relative org templates
   (defun me:add-project-templates ()
     (when (project-current)
-      (add-to-list 'org-capture-templates
-                   `("pn" "Project Notes" entry (file+headline ,(me:project-path "Notes/notes.org") "Notes")))
-      (add-to-list 'org-capture-templates
-                   `("pd" "Project Tasks" entry (file+headline ,(me:project-path "Notes/notes.org") "TODOs")
-                     "* TODO %?\n  %i\n  %a"))))
+      (push '("p" "Project") org-capture-templates)
+      (push `("pn" "Notes" entry (file+headline ,(me:project-path "Notes/notes.org") "Notes")) org-capture-templates)
+      (push `("pt" "Tasks" entry (file+headline ,(me:project-path "Notes/notes.org") "TODOs")
+              "* TODO %?\n  %i\n  %a") org-capture-templates)))
   ;; Return path relative to project or nil if no project
   (defun me:project-path ( &optional path)
     (if-let* ((proj (project-current))
@@ -1040,7 +1039,6 @@
 (use-package org
   :hook (org-capture-mode . evil-insert-state)
   :hook (org-babel-after-execute . me:redisplay-inline-images)
-  :commands org-capture
   :custom
   (org-tags-column 0)
   (org-auto-align-tags nil)
@@ -1070,19 +1068,6 @@
         org-startup-indented t
         org-ascii-headline-spacing '(0 . 0))
   (setq org-capture-templates nil)
-  (setq me:org-capture-templates `(("to" "General Tasks" entry (file+headline ,me:home-notes "Tasks") "* TODO %?\n  %i\n  %a")
-                                   ("no" "General Notes" entry (file+headline ,me:home-notes "Notes"))
-                                   ("gi" "Using Git" entry (file+headline ,me:command "Git"))
-                                   ("li" "Using Linux" entry (file+headline ,me:command  "Linux" ))
-                                   ("ba" "Using Bash" entry (file+headline ,me:command  "Bash" ))
-                                   ("la" "Administrating Linux " entry (file+headline ,me:system "Linux"))
-                                   ("ma" "Administrating Mac" entry (file+headline ,me:system "Mac"))
-                                   ("el" "Elisp" entry (file+headline ,me:language  "Elisp" ))
-                                   ("py" "Python" entry (file+headline ,me:language  "Python" ))
-                                   ("c+" "C++" entry (file+headline ,me:language "C++" ))
-                                   ("ag" "Android General" entry (file+headline ,me:android  "General" ))
-                                   ("ab" "Android Build System" entry (file+headline ,me:android  "Build System" ))
-                                   ("aa" "Android Architecture" entry (file+headline ,me:android  "Architecture" ))))
 
   :mode
   (("\\.org\\'" . org-mode))
@@ -1096,9 +1081,26 @@
     (not (member lang '( "plantuml" "ditaa" ))))
   (defun me:org-capture ()
     (interactive)
-    (setq org-capture-templates me:org-capture-templates)
+    (setq org-capture-templates `(("g" "General")
+                                  ("gt" "Tasks" entry (file+headline ,me:home-notes "Tasks") "* TODO %?\n  %i\n  %a")
+                                  ("gn" "Notes" entry (file+headline ,me:home-notes "Notes"))
+                                  ("t"  "Command")
+                                  ("tg" "Git" entry (file+headline ,me:command "Git"))
+                                  ("tl" "Linux" entry (file+headline ,me:command  "Linux" ))
+                                  ("tb" "Bash" entry (file+headline ,me:command  "Bash" ))
+                                  ("l"  "Language")
+                                  ("le" "Elisp" entry (file+headline ,me:language  "Elisp" ))
+                                  ("lp" "Python" entry (file+headline ,me:language  "Python" ))
+                                  ("lc" "C++" entry (file+headline ,me:language "C++" ))
+                                  ("s"  "System")
+                                  ("sl" "Linux " entry (file+headline ,me:system "Linux"))
+                                  ("sm" "Mac" entry (file+headline ,me:system "Mac"))
+                                  ("a"  "Android")
+                                  ("ag" "General" entry (file+headline ,me:android  "General" ))
+                                  ("ab" "Build System" entry (file+headline ,me:android  "Build System" ))
+                                  ("aa" "Architecture" entry (file+headline ,me:android  "Architecture" ))))
     (me:add-project-templates)
-    (counsel-org-capture)))
+    (org-capture)))
 
 ;; search multiple notes directories
 (use-package consult-notes
