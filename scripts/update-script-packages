@@ -39,7 +39,7 @@ if [ "$linux" == 'ubuntu' ]; then
 	pip3 install --upgrade $pr
 fi
 
-rg="asciidoctor asciidoctor-diagram asciidoctor-pdf"
+rg="asciidoctor asciidoctor-diagram asciidoctor-pdf asciidoctor-mathematical"
 rg="$rg rouge"
 $USER gem install --user-install --conservative $rg
 

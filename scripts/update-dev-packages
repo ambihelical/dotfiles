@@ -70,11 +70,11 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 
   # documentation tools
 	q="$q doxygen plantuml"
-	p="$p librsvg2-tools"
+	p="$p librsvg2-tools lyx-fonts"
 	p="$p python3-docutils plantuml "
 
   # languages, compilers and building
-	p="$p cmake ccache"
+	p="$p cmake ccache gcc-g++"
 	p="$p autoconf automake libtool intltool bison flex"
 	p="$p ruby ruby-devel lld"
 	p="$p autoconf automake "
@@ -92,7 +92,7 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	p="$p libdeflate-devel poppler-glib-devel "
 
   # needed to build rust packages
-	p="$p openssl-devel "
+	p="$p openssl-devel libwebp-devel libzstd-devel jbigkit-devel"
 	p="$p libxcb-devel "
 
 	 dnf install -y $p
