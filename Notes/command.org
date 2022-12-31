@@ -1,51 +1,77 @@
 * Git
 ** Undo last commit (returns changes to modified):
-	=git reset --soft HEAD^=
+#+begin_src sh
+git reset --soft HEAD^
+#+end_src
 
 ** Undo reset
-	=git reset HEAD@{1}=
+#+begin_src sh
+git reset HEAD@{1}
+#+end_src
 
 ** Reset branch to remote (discard all changes locally)
-	=git reset --hard remote/remote-name=
-	- remote can be "origin" which is tracked remote branch
+#+begin_src sh
+git reset --hard remote/remote-name
+#+end_src
+- remote can be "origin" which is tracked remote branch
 
 ** Redo last commit.  Any additions to the index are added to the new commit:
-	=git commit --amend=
+#+begin_src sh
+git commit --amend
+#+end_src
 
 ** Discard modifications:
-	=git checkout -- file=
-	=git checkout -- .=       -> all in directory
+#+begin_src sh
+git checkout -- file
+git checkout -- .       -> all in directory
+#+end_src
 
 ** Remove files not under version control, including ignored files:
-	=git clean -nx=           # dry-run
-   =git clean -fx=           # do for real
+#+begin_src sh
+git clean -nx           # dry-run
+git clean -fx           # do for real
+#+end_src
 
 ** Really clean up repo
-   =git clean -fdx=
-   =git reset -hard=
+#+begin_src sh
+git clean -fdx
+git reset -hard
+#+end_src
 
 ** Set HEAD to another branch in bare repository
-	=git symbolic-ref HEAD refs/heads/<name>=
+#+begin_src sh
+git symbolic-ref HEAD refs/heads/<name>
+#+end_src
 
 ** Pull using ssh:  (see also notes on ssh)
-	=git pull user@host:~/git-repo-in-home=
+#+begin_src sh
+git pull user@host:~/git-repo-in-home
+#+end_src
 
 ** Push to branch
-	=git push remote-name branch-name=
-    =git push -u origin branch:remote-branch=  # create remote branch & set tracking branch
+#+begin_src sh
+git push remote-name branch-name
+git push -u origin branch:remote-branch  # create remote branch & set tracking branch
+#+end_src
 
 ** Checkout remote branch
-   git co -b local-name remote/branch       # checkout remote branch with local name
-   git co -t remote/branch                  # checkout remote track with same name
+#+begin_src sh
+git co -b local-name remote/branch       # checkout remote branch with local name
+git co -t remote/branch                  # checkout remote track with same name
+#+end_src
 
 ** Search commit contents
-	=git log --grep=string=        # commits where string exists
-	=git log -Sstring=             # commits where count of string changed
-	=git log -Gstring=             # commits where string was added or removed
+#+begin_src sh
+git log --grep=string        # commits where string exists
+git log -Sstring             # commits where count of string changed
+git log -Gstring             # commits where string was added or removed
+#+end_src
 
 ** Rebase branch to master
-	=git checkout mybranch=
-	=git rebase master=
+#+begin_src sh
+git checkout mybranch
+git rebase master
+#+end_src
 
 ** Revision syntax
 	^ first parent
@@ -53,17 +79,23 @@
 	~n nth ancestor
 
 ** Update submodules
-	=git submodule update --init=
+#+begin_src sh
+git submodule update --init
+#+end_src
 
 ** Rebase general form
-	=git rebase --onto <graft-point> <excluding> <including>=
-	- <graft-point> defaults to <including>
-	- <including> defaults to current branch HEAD
-	- <excluding> exclude this commit (and earlier) from graft
+#+begin_src sh
+git rebase --onto <graft-point> <excluding> <including>
+#+end_src
+- <graft-point> defaults to <including>
+- <including> defaults to current branch HEAD
+- <excluding> exclude this commit (and earlier) from graft
 
 ** Modify Commit author
-   git commit --amend --author="Adolf Hitler <derfuhrer@blitzkrieg.com>"
-   git commit --amend --reset-author    # reset to config value
+#+begin_src sh
+git commit --amend --author="Adolf Hitler <derfuhrer@blitzkrieg.com>"
+git commit --amend --reset-author    # reset to config value
+#+end_src
 
 ** Split up commit during interactive rebase
   - edit the commit
@@ -79,34 +111,44 @@
 ** Xargs with input not at end of command
 	=e.g. =cmd|xargs -I LINE cp LINE dest=
 ** High fidelity rsync copy
-  =rsync -HAXEglorth --progress old new=
+#+begin_src sh
+rsync -HAXEglorth --progress old new
+#+end_src
 ** Extended attributes
-	- Install package attr
-	- tools: getfattr, setfattr
-	- Note: cp needs --preserve=all to preserve attributes
+   - Install package attr
+   - tools: getfattr, setfattr
+   - Note: cp needs --preserve=all to preserve attributes
 ** Switch to root from account which can't sudo
-	=su -m -=
+#+begin_src sh
+su -m -
+#+end_src
 ** Run command as root (when not in sudoers)
-	=su -c '<command>' root=
+#+begin_src sh
+su -c '<command>' root
+#+end_src
 ** Search man pages
-	=apropos <keyword>=
+#+begin_src sh
+apropos <keyword>
+#+end_src
 ** Convert address in crash backtrace to file location
-   =addr2line -e executable dump-address=
-   - executable is program or shared object
-   - dump-address is hex address directly from backtrace
+#+begin_src sh
+addr2line -e executable dump-address
+#+end_src
+- executable is program or shared object
+- dump-address is hex address directly from backtrace
 * Bash
 ** Redirections
 
-|------------------+-------------------------------|
-| Redirection      | Description                   |
-|------------------+-------------------------------|
-| cmd 2> err.log   | stderr to err.log             |
-| cmd 2>&1         | stderr to stdout              |
-| cmd &> log       | stderr and out to file        |
-| cmd >> log 2>&1  | stderr and out append to file |
-| ...\vert tee file    | also save to file             |
-| ...\vert tee -a file | also append to file           |
-|------------------+-------------------------------|
+|-----------------+-------------------------------|
+| Redirection     | Description                   |
+|-----------------+-------------------------------|
+| cmd 2> err.log  | stderr to err.log             |
+| cmd 2>&1        | stderr to stdout              |
+| cmd &> log      | stderr and out to file        |
+| cmd >> log 2>&1 | stderr and out append to file |
+| ¦ tee file      | also save to file             |
+| ¦ tee -a file   | also append to file           |
+|-----------------+-------------------------------|
 
 ** Find type of command
 	=type CMD=
@@ -127,107 +169,141 @@
 |-----------+----------------------|
 
 ** Rename files
-	=for fn in *pattern*; do echo mv $fn ${fn/old-pat/new-pat}; done | /bin/bash=
+#+begin_src sh
+for fn in *pattern*; do echo mv $fn ${fn/old-pat/new-pat}; done | /bin/bash
+#+end_src
 
 ** Difference two directories
-    diff -rq dir1 dir2
-    meld dir1 dir2   # untested
+#+begin_src sh
+diff -rq dir1 dir2
+meld dir1 dir2   # untested
+#+end_src
 
 ** Terminal screen size
-	LINES=#
-	COLUMNS=#
+#+begin_src sh
+LINES=#
+COLUMNS=#
+#+end_src
 
 ** Send file to FTP server
-   curl -T $fn ftp://ftp3.realtek.com --user user:password
+#+begin_src sh
+curl -T $fn ftp://ftp3.realtek.com --user user:password
+#+end_src
 
 ** Port scan
-    # can trigger firewalls and get you blocked!
-    nmap [-Pn] [-p port[-port]] ipaddr
+#+begin_src sh
+# can trigger firewalls and get you blocked!
+nmap [-Pn] [-p port[-port]] ipaddr
+#+end_src
 
 ** Strict mode
-	=set -euo pipefail=
-	IFS=$'\n\t'
+#+begin_src sh
+set -euo pipefail
+IFS=$'\n\t'
+#+end_src
 
 ** Run function when script exits
-#+begin_src bash
-  function myexit {
-	  rm -rf "#tempfile#"
-  }
-  try myexit EXIT
+#+begin_src sh
+function myexit {
+    rm -rf "#tempfile#"
+}
+try myexit EXIT
 #+end_src
 ** Null Utility - colon expands arguments but does nothing
-#+begin_src bash
-  # expand args but do nothing
-  false || { : $foo ; }
+#+begin_src sh
+# expand args but do nothing
+false || { : $foo ; }
 
-  # poor man's unless
-  if false
-  then :
-  else
-	  echo "true"
-  fi
+# poor man's unless
+if false
+then :
+else
+  echo "true"
+fi
 #+end_src
 ** Create temporary directory, Linux or OSX
-	=tmpdir=$(mktemp -d 2>/dev/null || mktemp -d -t 'template-pattern')=
+#+begin_src sh
+tmpdir=$(mktemp -d 2>/dev/null || mktemp -d -t 'template-pattern')
+#+end_src
 
 ** Decrypt several PGP/GPG files
-   =gpg --decrypt-files <files>=   # prompts once
+#+begin_src sh
+gpg --decrypt-files <files>   # prompts once
+#+end_src
 
 ** Export pgp key
-   =gpg --export -a "user name" > gpg.key.asc=
+#+begin_src sh
+gpg --export -a "user name" > gpg.key.asc
+#+end_src
 
 ** Batch renames
-   =rename 's/sch/rep' file-glob=
+#+begin_src sh
+rename 's/sch/rep' file-glob
+#+end_src
 
 ** Batch search/replace
-   =perl -pi -w -e 's/sch/rep/g;' file-glob=
+#+begin_src sh
+perl -pi -w -e 's/sch/rep/g;' file-glob
+#+end_src
 
 * Imagemagick
 ** Composite three images into one (not very generic)
-	=convert -size 278x160 xc:black \( $1 -resize 93 \) -geometry +0+10  -composite \( $2 -resize 93 \) -geometry +93+10  -composite \( $3 -resize 93 \) -geometry +186+10  -composite $4=
+#+begin_src sh
+convert -size 278x160 xc:black \( $1 -resize 93 \) -geometry +0+10  -composite \( $2 -resize 93 \) -geometry +93+10  -composite \( $3 -resize 93 \) -geometry +186+10  -composite $4
+#+end_src
 * Gtags
 ** Create GTAGS files for a set of directories
-   Find ./dir1 ./dir2 ./dir3 |gtags --file=-
+#+begin_src sh
+find ./dir1 ./dir2 ./dir3 |gtags --file=-
+#+end_src
 * Ssh
 ** Ssh to screen session
-=ssh -t $host screen -r $session=
+#+begin_src sh
+ssh -t $host screen -r $session
+#+end_src
 ** Give public key to another host
-=ssh-copy-id -i ~/.ssh/id_rsa.pub user@host=
+#+begin_src sh
+ssh-copy-id -i ~/.ssh/id_rsa.pub user@host
+#+end_src
 ** Generate key
-=ssh-keygen=
+#+begin_src sh
+ssh-keygen
+#+end_src
 ** Remove password login (after ssh access set up)
-=passwd -l user=
+#+begin_src sh
+passwd -l user
+#+end_src
 
 * Cmake
-** Generate compile_commands.json
-	add -DCMAKE_EXPORT_COMPILE_COMMANDS=ON to cmake invocations
+** Generate ~compile_commands.json~
+add ~-DCMAKE_EXPORT_COMPILE_COMMANDS=ON~ to cmake invocations
 ** Create cmake external project
 
-    This is an example, something that didn't get used, but it worked:
+This is an example, something that didn't get used, but it worked:
 
-    Here CMAKE_COMMAND expands to the path of the current cmake executable,
-    this can be a different cmake if needed
+Here ~CMAKE_COMMAND~ expands to the path of the current cmake executable,
+this can be a different cmake if needed
 
-    Note there is no CONFIGURE_COMMAND, the CMAKE_COMMAND detects this is a
-    cmake configure (I think)
+Note there is no ~CONFIGURE_COMMAND~, the ~CMAKE_COMMAND~ detects this is a
+cmake configure (I think)
 
-    #+begin_src cmake
-	  ExternalProject_Add(ta-demux
-		  PREFIX "${CMAKE_CURRENT_BINARY_DIR}/libdemux/"
-		  DEPENDS ""
-		  SOURCE_DIR ${src_demux}
-		  BUILD_IN_SOURCE 0
-		  CMAKE_COMMAND ${CMAKE_COMMAND}
-		  CMAKE_ARGS
-			  -DCMAKE_C_COMPILER=${TRUSTZONE_TOOLCHAIN_PREFIX}gcc
-			  -DCMAKE_RANLIB=${TRUSTZONE_TOOLCHAIN_PREFIX}ranlib
-			  -DCMAKE_C_FLAGS=${cflags_demux}
-			  -DJUNE_DEMUX_COMPILE_OPTIONS=${cflags_demux}
-			  -DJUNE_TOPDIR=${JUNE_TOPDIR}
-		  BUILD_COMMAND
-			  COMMAND make -j${jlevel} VPATH=${src_demux} coredemux
-		  INSTALL_COMMAND
-			  COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/lib/
-			  COMMAND cp libcoredemux.a ${CMAKE_CURRENT_BINARY_DIR}/lib/
-	  )
-	#+end_src
+#+begin_src cmake
+    ExternalProject_Add(ta-demux
+        PREFIX "${CMAKE_CURRENT_BINARY_DIR}/libdemux/"
+        DEPENDS ""
+        SOURCE_DIR ${src_demux}
+        BUILD_IN_SOURCE 0
+        CMAKE_COMMAND ${CMAKE_COMMAND}
+        CMAKE_ARGS
+            -DCMAKE_C_COMPILER=${TRUSTZONE_TOOLCHAIN_PREFIX}gcc
+            -DCMAKE_RANLIB=${TRUSTZONE_TOOLCHAIN_PREFIX}ranlib
+            -DCMAKE_C_FLAGS=${cflags_demux}
+            -DJUNE_DEMUX_COMPILE_OPTIONS=${cflags_demux}
+            -DJUNE_TOPDIR=${JUNE_TOPDIR}
+        BUILD_COMMAND
+            COMMAND make -j${jlevel} VPATH=${src_demux} coredemux
+        INSTALL_COMMAND
+            COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/lib/
+            COMMAND cp libcoredemux.a ${CMAKE_CURRENT_BINARY_DIR}/lib/
+    )
+#+end_src
