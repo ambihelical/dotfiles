@@ -1037,6 +1037,15 @@
   :hook (org-capture-mode . evil-insert-state)
   :hook (org-babel-after-execute . me:redisplay-inline-images)
   :commands org-capture
+  :custom
+  (org-tags-column 0)
+  (org-auto-align-tags nil)
+  (org-hide-emphasis-markers t)
+  (org-pretty-entities t)
+  (org-ellipsis "…")
+  (org-insert-heading-respect-content t)
+  (org-catch-invisible-edits 'show-and-error)
+  (org-special-ctrl-a/e t)
   :general
   ("<f8> t" #'org-todo-list)
   ("<f8> a" #'org-agenda)
@@ -1104,7 +1113,7 @@
     (consult-notes-denote-mode)))
 
 (use-package valign
-  :hook ((org-mode markdown-mode) . valign-mode)
+  :hook (markdown-mode . valign-mode)
   :custom (valign-fancy-bar t))
 
 (use-package evil-org
@@ -1122,8 +1131,8 @@
   (require 'evil-org-agenda)
   (evil-org-agenda-set-keys))
 
-(use-package org-bullets
-  :hook (org-mode . org-bullets-mode))
+(use-package org-modern
+  :hook (org-mode . org-modern-mode))
 
 (use-package rustic
   :hook ( rustic-mode . me:rustic-mode-config )
