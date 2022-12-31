@@ -1,14 +1,18 @@
 * General
 
 ** Clean tree
-   repo sync -d --prune --force-sync -j4
+#+begin_src sh
+repo sync -d --prune --force-sync -j4
+#+end_src
 
 ** Build AOSP
-   source build/envsetup.sh
-   export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-   lunch c71kw200-userdebug (or whichever)
-   make -j8
-   make -j8 2>&1 | tee build.log   # also save log
+#+begin_src sh
+source build/envsetup.sh
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+lunch c71kw200-userdebug (or whichever)
+make -j8
+make -j8 2>&1 | tee build.log   # also save log
+#+end_src
 
 
 * Build System
@@ -18,43 +22,53 @@
 
 ** Copy files from elsewhere
 
-   # this is the variable defined below, can be any path
-   MY_OUT              := $(TARGET_OUT_VENDOR)/my/path
+#+begin_src make
+# this is the variable defined below, can be any path
+MY_OUT              := $(TARGET_OUT_VENDOR)/my/path
 
-   ...
+...
 
-   include $(CLEAR_VARS)
-   #  name of the destination file
-   LOCAL_MODULE := ota-verify-key
-   #  seems to make the default LOCAL_MODULE_PATH be the /etc directory
-   LOCAL_MODULE_CLASS := ETC
-   # here we copy a file built early in the process...
-   # but can be any path
-   LOCAL_PREBUILT_MODULE_FILE := $(OUT)/recovery/root/res/keys
-   # here's where it goes
-   LOCAL_MODULE_PATH := $(MY_OUT)
-   include $(BUILD_PREBUILT)
+include $(CLEAR_VARS)
+#  name of the destination file
+LOCAL_MODULE := ota-verify-key
+#  seems to make the default LOCAL_MODULE_PATH be the /etc directory
+LOCAL_MODULE_CLASS := ETC
+# here we copy a file built early in the process...
+# but can be any path
+LOCAL_PREBUILT_MODULE_FILE := $(OUT)/recovery/root/res/keys
+# here's where it goes
+LOCAL_MODULE_PATH := $(MY_OUT)
+include $(BUILD_PREBUILT)
+#+end_src
 
 ** Turn on SELinux permissive mode at boot
-   To device/<oem>/<device>/common.mk,
-   Add LOCAL_DEVICE_KERNEL_CMDLINE += androidboot.selinux=permissive
+To device/<oem>/<device>/common.mk, add
+#+begin_src make
+LOCAL_DEVICE_KERNEL_CMDLINE += androidboot.selinux=permissive
+#+end_src
 
 ** diagnosing avc: denied errors
 
    # select avc error and then:
-   xclip -o | audit2allow -e -p out/target/product/<device>/root/sepolicy
+#+begin_src sh
+xclip -o | audit2allow -e -p out/target/product/<device>/root/sepolicy
+#+end_src
 
 ** sepolicy intermediates (remove&rebuild when sepolicy changes--not sure this is correct)
 
-   out/.../<device>/obj/ETC/sepolicy_intermediates           # general
-   out/.../<device>/obj/ETC/sepolicy.recovery_intermediates  # recovery
-   out/.../<device>/obj/FAKE/selinux_policy_intermediates
+#+begin_src make
+out/.../<device>/obj/ETC/sepolicy_intermediates           # general
+out/.../<device>/obj/ETC/sepolicy.recovery_intermediates  # recovery
+out/.../<device>/obj/FAKE/selinux_policy_intermediates
+#+end_src
 
 ** create inheritance graph
-   apt install graphviz  # if not installed
-   make product-graph
+#+begin_src sh
+apt install graphviz  # if not installed
+make product-graph
+#+end_src
 
-   Note: doesn't seem to traverse include traversals
+Note: doesn't seem to traverse include traversals
 
 ** Help on commands
    hmm
@@ -69,21 +83,25 @@
 ** Turn off selinux enforcement
    =setenforce 0=
 ** Mount USB
-   =mount -tvfat -oro,umask=000 /dev/block/sda1 <mnt>=   # readonly
-   =mount -tvfat -oumask=000 /dev/block/sda1 <mnt>=   # writable
+#+begin_src sh
+mount -tvfat -oro,umask=000 /dev/block/sda1 <mnt>   # readonly
+mount -tvfat -oumask=000 /dev/block/sda1 <mnt>   # writable
+#+end_src
 ** Commands to analyze memory & processes
-    cat /proc/meminfo
-    free
-    top
-    ps
-    lsof or lsof -p <pid>
-    pmap -x <pid>
-    showmap <pid>
-    procrank
-    procmem <pid>
-    cat /proc/<pid>/smaps
-    dumpsys meminfo (when Android is running)
-    memtest
+#+begin_src sh
+cat /proc/meminfo
+free
+top
+ps
+lsof or lsof -p <pid>
+pmap -x <pid>
+showmap <pid>
+procrank
+procmem <pid>
+cat /proc/<pid>/smaps
+dumpsys meminfo (when Android is running)
+memtest
+#+end_src
 ** System properties
 *** getprop show system properties
 *** setprop set system property
