@@ -13,6 +13,5 @@ linux_distribution_name() {
 }
 
 linux_distribution_version() {
-	echo $VERSION_ID
+	echo ${VERSION_ID//.}
 }
-
