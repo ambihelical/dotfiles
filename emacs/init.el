@@ -467,6 +467,22 @@
   (global-tab-line-mode t)
   :demand)
 
+;; built-in tab-bar mode (for project-tab-groups)
+(use-package tab-bar
+  :ensure nil
+  :custom
+  (tab-bar-show nil)   ;; don't show tab bar
+  :general
+  ("M-<left>" #'tab-bar-switch-to-prev-tab)
+  ("M-<right>" #'tab-bar-switch-to-next-tab)
+  :demand)
+
+;; isolated project configs
+(use-package project-tab-groups
+  :defer 1
+  :config
+  (project-tab-groups-mode 1))
+
 ;; highlight keywords
 (use-package fic-mode
   :hook (prog-mode . fic-mode)
