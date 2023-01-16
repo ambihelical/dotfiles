@@ -367,6 +367,22 @@
            "a"  '(:ignore t :which-key "Abbrev→" ))
   :defer 1)
 
+;; built-in hi-lock package
+(use-package hi-lock
+  :ensure nil
+  :general
+  ("<f6> s"  '(:ignore t :which-key "Highlight→" ))
+  ("<f6> s ." #'highlight-symbol-at-point)
+  ("<f6> s l" #'highlight-lines-matching-regexp)
+  ("<f6> s r" #'highlight-regexp)
+  ("<f6> s x" #'me:unhighlight-all)
+  ("<f6> s u" #'unhighlight-regexp)
+  :config
+  ;; C-u M-x unhighlight-regexp will also do this
+  (defun me:unhighlight-all ()
+    (interactive)
+    (unhighlight-regexp t)))
+
 ;; built-in "artist-mode" package
 ;; No binding because this one will be rare
 (use-package artist-mode
