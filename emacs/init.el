@@ -493,12 +493,6 @@
   ("M-<right>" #'tab-bar-switch-to-next-tab)
   :demand)
 
-;; isolated project configs
-(use-package project-tab-groups
-  :defer 1
-  :config
-  (project-tab-groups-mode 1))
-
 ;; highlight keywords
 (use-package fic-mode
   :hook (prog-mode . fic-mode)
@@ -992,9 +986,16 @@
   :general
   (:keymaps 'grep-mode-map "C-c w" #'wgrep-change-to-wgrep-mode))
 
+;; isolated project configs
+;; N.B. Loading this before project so that it can define a group for the initial project if one
+(use-package project-tab-groups
+  :defer 0.25
+  :config
+  (project-tab-groups-mode 1))
+
 ;; built-in project.el
 (use-package project
-  :demand t
+  :after project-tab-groups
   :general
   ("<f3>"  #'project-find-file)
   ;; TODO: This duplicates project-prefix-map; should find a way to use that
