@@ -709,6 +709,17 @@
   (savehist-mode t)
   :defer 0.5)
 
+;; make kill ring behavior less annoying
+(use-package clean-kill-ring
+  :init
+  (setq clean-kill-ring-prevent-duplicates t)
+  :config
+  ;; don't put single characters into kill ring
+  (defun me:short-string (str)
+    (< (length str) 2))
+  (add-to-list 'clean-kill-ring-filters #'me:short-string)
+  (clean-kill-ring-mode)
+  :defer 1)
 
 ;; modal window resizing
 (use-package windresize
