@@ -935,6 +935,7 @@
   :general
   ("<f2>"  #'consult-buffer)
   ("<f4> f"  #'consult-find)
+  ("<f4> i"  #'consult-info)
   ("<f4> /"  #'consult-focus-lines)
   ("M-<f2>"  #'me:find-window-buffer)
   ("M-y"    #'consult-yank-from-kill-ring)
@@ -1275,6 +1276,9 @@
   :mode
   (("\\.py\\'" . python-mode)
    ("\\.py3\\'" . python-mode)))
+
+;; install python info documentation
+(use-package python-info)
 
 (use-package ruby-mode
   :mode
