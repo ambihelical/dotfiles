@@ -23,6 +23,11 @@
 (defconst me:data-directory (or (getenv "XDG_DATA_HOME") (expand-file-name ".local/share" "~")))
 (defconst me:cache-directory (or (getenv "XDG_CACHE_HOME") (expand-file-name ".cache" "~")))
 (defconst me:config-directory (or (getenv "XDG_CONFIG_HOME")  (expand-file-name ".config" "~")))
+;; directory which is backed up to cloud, for storage of important files
+(defconst me:cloud-directory (if (eq window-system 'w32)
+                                 (getenv "OneDrive")
+                               (expand-file-name "Dropbox" "~")))
+(defconst me:cloud-documents (expand-file-name "Documents" me:cloud-directory))
 
 (defconst me:default-font
   (pcase (system-name)
@@ -1120,6 +1125,13 @@
       (org-redisplay-inline-images)))
   (defun me:babel-should-confirm (lang body)
     (not (member lang '( "plantuml" "ditaa" ))))
+  ;; Add system org templates
+  (defun me:add-cloud-templates ()
+    (let* ((notes-path (expand-file-name "Notes/notes.org" me:cloud-documents)))
+      (push '("c" "Cloud") org-capture-templates)
+      (push `("cn" "Notes" entry (file+headline ,notes-path "Notes")) org-capture-templates)
+      (push `("ct" "Tasks" entry (file+headline ,notes-path "TODOs")
+              "* TODO %?\n  %i\n  %a") org-capture-templates)))
   (defun me:org-capture ()
     (interactive)
     (setq org-capture-templates `(("g" "General")
@@ -1140,6 +1152,7 @@
                                   ("ag" "General" entry (file+headline ,me:android  "General" ))
                                   ("ab" "Build System" entry (file+headline ,me:android  "Build System" ))
                                   ("aa" "Architecture" entry (file+headline ,me:android  "Architecture" ))))
+    (me:add-cloud-templates)
     (me:add-project-templates)
     (org-capture)))
 
@@ -1152,6 +1165,7 @@
     (interactive)
     (let* ((consult-notes-file-dir-sources
             `(("dot" ?d ,(expand-file-name "Notes" me:data-directory))
+              ("cloud" ?c ,(expand-file-name "Notes" me:cloud-documents))
               ("proj" ?p ,(me:project-path "Notes"))
               ("home" ?h ,(expand-file-name "Notes" "~")))))
       (consult-notes-search-in-all-notes)))
