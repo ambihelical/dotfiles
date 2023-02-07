@@ -1314,7 +1314,7 @@
 
 (use-package cc-mode
   :hook (c++-mode . me:c++-mode-config )
-  :hook (c-mode . me:c-mode-config )
+  :hook (c-mode-common . me:c-mode-config )
   :custom
   (c-electric-pound-behavior (quote (alignleft)))  ; cpp directives aligned to left
   (show-paren-mode 0)                              ; don't visualize matching parens
@@ -1327,7 +1327,6 @@
     (c-set-offset 'arglist-intro '+)               ; indent args extra
     (c-set-offset 'innamespace [0]))               ; no indentation in namespace
   (defun me:c++-mode-config ()
-    (me:c-mode-config)
     (define-key c++-mode-map ":" #'self-insert-command)
     (define-key c++-mode-map ")" #'self-insert-command)
     (define-key c++-mode-map ";" #'self-insert-command))
