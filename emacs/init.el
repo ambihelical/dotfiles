@@ -26,7 +26,7 @@
 ;; directory which is backed up to cloud, for storage of important files
 (defconst me:cloud-directory (if (eq window-system 'w32)
                                  (getenv "OneDrive")
-                               (expand-file-name "Dropbox" "~")))
+                               "~"))
 (defconst me:cloud-documents (expand-file-name "Documents" me:cloud-directory))
 
 (defconst me:default-font
