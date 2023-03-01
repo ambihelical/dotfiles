@@ -380,6 +380,7 @@ fi
 
 alias cd..="cd .."
 alias ls-x="ls -x"
+alias weather="curl -s wttr.in"
 
 if type mark > /dev/null 2>&1; then
     alias ag='mark && \ag'
