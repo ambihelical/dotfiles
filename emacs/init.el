@@ -1752,6 +1752,7 @@
      eshell
      help
      helpful
+     info
      js2-mode
      log-view
      lua-mode
