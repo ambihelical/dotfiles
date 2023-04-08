@@ -236,6 +236,31 @@
       (insert ";;; -*- lexical-binding: t; -*-\n\n")))
   :interpreter (("emacs" . emacs-lisp-mode)))
 
+;; built-in ielm-mode package
+;;
+;; Most of this is from
+;; https://www.n16f.net/blog/making-ielm-more-comfortable/
+;;
+(use-package ielm
+  :ensure nil
+  :hook
+  (ielm-mode . eldoc-mode)
+  (ielm-mode . me:ielm-init-history)
+  :config
+  ;; read persistent history
+  (defun me:ielm-init-history ()
+    (let ((path (expand-file-name "var/ielm/history" user-emacs-directory)))
+      (make-directory (file-name-directory path) t)
+      (setq-local comint-input-ring-file-name path))
+    (setq-local comint-input-ring-size 10000)
+    (setq-local comint-input-ignoredups t)
+    (comint-read-input-ring))
+  ;; update persistent history
+  (defun me:ielm-write-history (&rest _args)
+    (with-file-modes #o600
+      (comint-write-input-ring)))
+  (advice-add 'ielm-send-input :after 'me:ielm-write-history))
+
 (use-package highlight-function-calls
   :init
   :config
@@ -945,6 +970,7 @@
   ("<f2>"  #'consult-buffer)
   ("<f4> f"  #'consult-find)
   ("<f4> i"  #'consult-info)
+  ("<f4> r"  #'consult-history)
   ("<f4> /"  #'consult-focus-lines)
   ("M-<f2>"  #'me:find-window-buffer)
   ("M-y"    #'consult-yank-from-kill-ring)
