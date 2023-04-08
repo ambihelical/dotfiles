@@ -1393,8 +1393,7 @@
 (use-package compile
   :commands compile
   :general
-  (:states '(normal visual emacs)
-           :prefix "<SPC>"
+  (:prefix "C-c"
            "o"          #'me:switch-to-compile-buffer
            "r"          #'recompile)
   (:keymaps 'compilation-mode-map
