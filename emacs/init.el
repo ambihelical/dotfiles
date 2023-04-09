@@ -1040,6 +1040,12 @@
   (consult-git-log-grep-open-function #'magit-show-commit)
   :after consult)
 
+(use-package consult-yasnippet
+  :general
+  ;; override my binding yasnippet
+  ("<f4> y" #'consult-yasnippet)
+  :after (consult yasnippet))
+
 ;; allow grep buffers to be editted
 (use-package wgrep
   :general
