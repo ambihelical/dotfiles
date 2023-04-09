@@ -1028,6 +1028,18 @@
   :demand t
   :after ( embark consult ))
 
+(use-package consult-flycheck
+  :general
+  ("<f4> c" #'consult-flycheck)
+  :after consult)
+
+(use-package consult-git-log-grep
+  :general
+  ("<f9> g" #'consult-git-log-grep)
+  :custom
+  (consult-git-log-grep-open-function #'magit-show-commit)
+  :after consult)
+
 ;; allow grep buffers to be editted
 (use-package wgrep
   :general
