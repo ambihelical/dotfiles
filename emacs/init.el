@@ -1514,7 +1514,6 @@
   :general
   (:keymaps 'eglot-mode-map
             "<f6> x"  #'eglot-rename
-            "C-<tab>" #'complete-symbol
             "<f6> c"  #'eglot-code-actions)
   :init
   (setq eglot-ignored-server-capabilities '( :documentHighlightProvider)
@@ -1701,6 +1700,9 @@
 
   ;; N.B C-u replacement
   (:keymaps 'global "M-u" #'universal-argument)
+
+  ;; completion at point
+  (:keymaps 'global "C-<tab>" #'completion-at-point)
 
   ;; visual mode only mapping
   (:keymaps 'visual
