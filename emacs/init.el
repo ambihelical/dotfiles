@@ -976,11 +976,11 @@
   ("M-y"    #'consult-yank-from-kill-ring)
   ("<f10> t" #'consult-theme)
   ("<f10> c" #'read-color)
-  ("<help> a"    #'consult-apropos)
+  ("<help> a"    #'describe-symbol)
   ("<f6> m" #'consult-imenu)
   ("<f6> M" #'consult-imenu-multi)
   (:keymaps 'global :prefix "<f4>"
-            "a" #'consult-apropos
+            "a" #'describe-symbol
             "M" #'consult-mark
             "j" #'consult-bookmark
             "l" #'consult-line
