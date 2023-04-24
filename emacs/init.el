@@ -1031,6 +1031,22 @@
   :general
   (:keymaps 'grep-mode-map "C-c w" #'wgrep-change-to-wgrep-mode))
 
+;; built-in package winmove
+(use-package winmove
+  :general
+  (:prefix "s-w"
+           "=" 'balance-windows
+           "v" 'split-window-right
+           "s" 'split-window-below
+           "j" 'windmove-down
+           "k" 'windmove-up
+           "l" 'windmove-right
+           "h" 'windmove-left
+           "c" 'delete-window
+           "o" 'delete-other-windows
+           "s-w" 'other-window)
+  :ensure nil)
+
 ;; built-in project.el
 (use-package project
   :general
