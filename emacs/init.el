@@ -1245,10 +1245,15 @@
 
 (use-package rustic
   :hook ( rustic-mode . me:rustic-mode-config )
+  :init
+  (add-hook 'rustic-before-compilation-hook #'me:before-compilation-hook)
   :config
   (defun me:rustic-mode-config ()
     (flyspell-mode -1) ; really slows down scrolling not useful enough to keep
     (setq-local buffer-save-without-query t))
+  (defun me:before-compilation-hook (&optional junk)
+    (eldoc-box-quit-frame)
+    t)
   :custom
   (rustic-lsp-client 'eglot)
   (rustic-lsp-server 'rust-analyzer)
@@ -1513,6 +1518,7 @@
   :after no-littering
   :general
   (:keymaps 'eglot-mode-map
+            "<f6> i"  #'eglot-inlay-hints-mode
             "<f6> x"  #'eglot-rename
             "<f6> c"  #'eglot-code-actions)
   :init
@@ -1533,14 +1539,26 @@
       (setq init-args "--query-driver=*:\\**\\*"))
     (add-to-list 'eglot-server-programs
                  `((c++-mode c-mode) ,clangd ,init-args)))
+  ;; don't want inlay hints by default
+  (defun me:eglot-managed-mode ()
+    (eglot-inlay-hints-mode -1))
+  :hook (eglot-managed-mode . me:eglot-managed-mode)
   :hook ((rust-mode c++-mode c-mode) . eglot-ensure))
 
+;; Popup box for eldoc
 (use-package eldoc-box
-  :after eglot
-  :demand t
+  :after eldoc
+  :general
+  ("<f10> p"  #'eldoc-box-hover-mode)
   :custom
   (eldoc-box-max-pixel-width 1200)
+  :hook
+  (eldoc-mode . me:eldoc-hook)
   :config
+  ;; things to on eldoc start/stop
+  (defun me:eldoc-hook ()
+    (when (not eldoc-mode)
+      (eldoc-box-quit-frame)))
   ;; remove problematic markdown text
   ;; 1. Trailing spaces, triggers whitespace mode
   ;; 2. Horizontal rulers, not render well
@@ -1559,8 +1577,7 @@
 		      markup)
 	        args))
   :init
-  (advice-add 'eglot--format-markup :filter-args 'me:eglot--format-markup)
-  (add-hook 'eglot-managed-mode-hook #'eldoc-box-hover-at-point-mode t))
+  (advice-add 'eglot--format-markup :filter-args 'me:eglot--format-markup))
 
 (use-package company :demand t)
 
