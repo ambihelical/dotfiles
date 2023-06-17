@@ -375,7 +375,6 @@
 
 ;; built-in "simple" package
 (use-package simple
-  :hook (( prog-mode text-mode ) . visual-line-mode )
   :ensure nil
   :custom
   (kill-do-not-save-duplicates t)          ; No duplicates in kill ring
@@ -1245,7 +1244,6 @@
   (add-hook 'rustic-before-compilation-hook #'me:before-compilation-hook)
   :config
   (defun me:rustic-mode-config ()
-    (flyspell-mode -1) ; really slows down scrolling not useful enough to keep
     (setq-local buffer-save-without-query t))
   (defun me:before-compilation-hook (&optional junk)
     (eldoc-box-quit-frame)
@@ -1370,6 +1368,7 @@
   (indent-tabs-mode nil)                           ; no tabs
   :config
   (defun me:c-mode-config ()
+    (visual-line-mode)
     ;; ambihelical style - use ellemtel style but use c-basic-offset of 4
     (c-add-style "ambihelical" '("ellemtel" (c-basic-offset . 4)))
     (c-set-style "ambihelical" nil)
