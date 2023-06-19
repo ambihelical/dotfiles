@@ -509,6 +509,7 @@
     (seq-take (seq-reverse bufs) 9))
   (advice-add #'tab-line-tabs-window-buffers :filter-return #'me:filter-tab-line-buffers)
   (setq tab-line-tab-name-function #'me:tab-name)
+  (setq tab-line-exclude-modes `( ,@tab-line-exclude-modes evil-command-window-mode ))
   (global-tab-line-mode t)
   :demand)
 
