@@ -512,16 +512,6 @@
   (global-tab-line-mode t)
   :demand)
 
-;; built-in tab-bar mode (for project-tab-groups)
-(use-package tab-bar
-  :ensure nil
-  :custom
-  (tab-bar-show nil)   ;; don't show tab bar
-  :general
-  ("M-<left>" #'tab-bar-switch-to-prev-tab)
-  ("M-<right>" #'tab-bar-switch-to-next-tab)
-  :demand)
-
 ;; highlight keywords
 (use-package fic-mode
   :hook (prog-mode . fic-mode)
@@ -1046,16 +1036,8 @@
   :general
   (:keymaps 'grep-mode-map "C-c w" #'wgrep-change-to-wgrep-mode))
 
-;; isolated project configs
-;; N.B. Loading this before project so that it can define a group for the initial project if one
-(use-package project-tab-groups
-  :defer 0.25
-  :config
-  (project-tab-groups-mode 1))
-
 ;; built-in project.el
 (use-package project
-  :after project-tab-groups
   :general
   ("<f3>"  #'project-find-file)
   ;; TODO: This duplicates project-prefix-map; should find a way to use that
