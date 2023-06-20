@@ -1284,6 +1284,7 @@
             "m" '(math-preview-at-point :which-key "Math preview at point"))
   :config
   (add-to-list 'math-preview-tex-marks-inline `("stem:[" "]"))
+  (add-to-list 'math-preview-tex-marks `("\\[latexmath[^+]+\\+\\+\\+\\+" "++++" 0 t nil))
   ;; workaround for duplicate label, see issue #21
   (add-to-list
    'math-preview-tex-preprocess-functions
