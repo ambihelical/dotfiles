@@ -1262,12 +1262,20 @@
 ;; may be fixed in 25.1 or so
 (use-package adoc-mode
   :defines (company-dabbrev-downcase company-dabbrev-ignore-case)
+  :hook
+  (iimage-mode . me:configure-iimage)
   :config
   (add-to-list 'ispell-skip-region-alist '( "\n\\[latexmath\\]\n\\+\\+\\+\\+\n" . "^\\+\\+\\+\\+\n"))
   (add-to-list 'ispell-skip-region-alist '( "\n:" . "\n"))
   (defun me:adoc-mode-config ()
+    (iimage-mode)
     (setq company-dabbrev-downcase nil     ; don't downcase completions
           company-dabbrev-ignore-case nil))  ; don't keep prefix
+  (defun me:configure-iimage ()
+    (add-to-list 'iimage-mode-image-regex-alist `( ,(concat "\\(image::\\(" iimage-mode-image-filename-regex "\\)\\[\\]\\)") . 2))
+    (add-to-list 'iimage-mode-image-search-path "images" )
+    (iimage-recenter))
+
   :mode
   (("\\.ad\\'" . adoc-mode)
    ("\\.adoc\\'" . adoc-mode)
