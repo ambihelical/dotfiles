@@ -1262,24 +1262,21 @@
 ;; may be fixed in 25.1 or so
 (use-package adoc-mode
   :defines (company-dabbrev-downcase company-dabbrev-ignore-case)
-  :hook
-  (iimage-mode . me:configure-iimage)
   :config
   (add-to-list 'ispell-skip-region-alist '( "\n\\[latexmath\\]\n\\+\\+\\+\\+\n" . "^\\+\\+\\+\\+\n"))
   (add-to-list 'ispell-skip-region-alist '( "\n:" . "\n"))
   (defun me:adoc-mode-config ()
-    (iimage-mode)
     (setq company-dabbrev-downcase nil     ; don't downcase completions
           company-dabbrev-ignore-case nil))  ; don't keep prefix
   (defun me:configure-iimage ()
     (add-to-list 'iimage-mode-image-regex-alist `( ,(concat "\\(image::\\(" iimage-mode-image-filename-regex "\\)\\[\\]\\)") . 2))
-    (add-to-list 'iimage-mode-image-search-path "images" )
-    (iimage-recenter))
-
+    (add-to-list 'iimage-mode-image-search-path "images" ))
   :mode
   (("\\.ad\\'" . adoc-mode)
    ("\\.adoc\\'" . adoc-mode)
    ("\\.asciidoc\\'" . adoc-mode))
+  :hook (iimage-mode . me:configure-iimage)
+  :hook (adoc-mode . iimage-mode)
   :hook (adoc-mode . me:adoc-mode-config))
 
 ;; math preview mode for adoc mode
@@ -1297,6 +1294,17 @@
   (add-to-list
    'math-preview-tex-preprocess-functions
    `(lambda (x) (puthash 'string (s-replace-regexp "\\label{.+?}" "" (gethash 'string x)) x)) t))
+
+(use-package iimage
+  :ensure nil
+  :general
+  (:keymaps 'iimage-mode-map
+            "C-c C-k" #'iimage-recenter
+            "C-c C-l" #'me:iimage-display-off)
+  :config
+  (defun me:iimage-display-off ()
+    (interactive)
+    (iimage-mode-buffer nil)))
 
 ;; built-in restructured text mode
 (use-package rst-mode
