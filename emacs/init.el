@@ -1338,9 +1338,6 @@
   (("\\.py\\'" . python-mode)
    ("\\.py3\\'" . python-mode)))
 
-;; install python info documentation
-(use-package python-info)
-
 (use-package ruby-mode
   :mode
   (("\\.\\(?:cap\\|gemspec\\|irbrc\\|gemrc\\|rake\\|rb\\|ru\\|thor\\)\\'" . ruby-mode)
