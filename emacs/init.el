@@ -355,6 +355,9 @@
   (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
   :custom
   (enable-recursive-minibuffers t)                        ; allow recursive edit
+
+  :general
+  (:keymaps 'global "C-<tab>" #'completion-at-point)
   :config
   (minibuffer-depth-indicate-mode t)       ; show recursive edit depth (mb-depth)
   :defer 0.5)
@@ -1654,6 +1657,11 @@
 
 (use-package avy
   :commands ( avy-goto-word-1 avy-goto-char-2 avy-goto-char-in-line )
+  :general
+  ;; M-g M-g is normally goto line, but there are easier ways
+  (:prefix "M-g" "M-g" #'avy-goto-char-timer)
+  :config
+  (avy-setup-default)
   :init
   (setq avy-all-windows 'all-frames))
 
@@ -1691,11 +1699,7 @@
            ";"          #'evil-jump-forward
            ","          #'evil-jump-backward
            "a"          #'align
-           "f"          #'avy-goto-word-1
-           "g"          #'avy-goto-char-2
-           "<SPC>"      #'avy-goto-char-timer
            "h"          #'hydra-diff-hl/body
-           "l"          #'avy-goto-char-in-line
            "p"          #'hydra-paste/body
            "x"          #'exchange-point-and-mark)
   (:states '(normal visual) :prefix "<SPC>" :keymaps 'override
@@ -1709,9 +1713,6 @@
 
   ;; N.B C-u replacement
   (:keymaps 'global "M-u" #'universal-argument)
-
-  ;; completion at point
-  (:keymaps 'global "C-<tab>" #'completion-at-point)
 
   ;; visual mode only mapping
   (:keymaps 'visual
