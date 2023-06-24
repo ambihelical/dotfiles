@@ -103,7 +103,6 @@
   (scroll-down-aggressively 0.01)                         ; don't jump when scrolling down
   (scroll-up-aggressively 0.01)                           ; don't jump when scrolling up
   (scalable-fonts-allowed t)                              ; allow any scalable font
-  (select-enable-clipboard nil)                           ; make cut/paste function correctly (select)
   (sentence-end-double-space nil)                         ; sentences end with one space
   (x-gtk-use-system-tooltips nil)                        ; allow tooltip theming
 
@@ -1731,8 +1730,7 @@
     ;; mainly keep emacs cut/paste separate from system clipboard
     ;; in the default case (must use "+ or "* to override)
     ;; This assumes select-enable-clipboard is set to nil as well
-    (setq-default interprogram-paste-function nil
-                  interprogram-cut-function nil))
+    (setq-default interprogram-cut-function nil))
   (defun me:evil-shift-left-visual ()
     (interactive)
     (evil-shift-left (region-beginning) (region-end))
