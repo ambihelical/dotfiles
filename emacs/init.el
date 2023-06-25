@@ -183,6 +183,10 @@
 ;; N.B. Other keybindings defined in apropriate use-package
 (use-package general
   :init
+  ;; f3/f4 used for macro definitions, but want fn keys for other things
+  (global-set-key (kbd "C-<f4>") #'kmacro-end-macro)
+  (global-set-key (kbd "C-<f3>") #'kmacro-start-macro)
+  (global-unset-key (kbd "<f3>"))
   (global-unset-key (kbd "<f4>"))
   (global-unset-key (kbd "<f10>"))
   :config
