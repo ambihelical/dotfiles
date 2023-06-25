@@ -333,25 +333,6 @@
   :config
   (winner-mode t))
 
-;; builtin midnight package
-(use-package midnight
-  :disabled
-  :ensure nil
-  :defer 1
-  :custom
-  (clean-buffer-list-delay-general 2)
-  :config
-  (setq clean-buffer-list-kill-never-regexps
-        (nconc clean-buffer-list-kill-never-regexps
-               '("\\`\\*tramp/.*\\*\\`"
-                 "\\`\\magit.*\\`"
-                 "\\`\\*ftp .*\\*\\`")))
-  (setq clean-buffer-list-kill-never-buffer-names
-        (nconc clean-buffer-list-kill-never-buffer-names
-               '( "*git-credential-cache--daemon*" )))
-  (run-at-time "1 hour" 3600 #'clean-buffer-list)             ; clear out old buffers every hour (midnight)
-  (midnight-mode t))
-
 ;; built-in minibuffer package
 (use-package minibuffer
   :ensure nil
