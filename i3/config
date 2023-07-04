@@ -9,6 +9,7 @@
 #
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
+# use hyper key as the i3 modifier
 set $mod Mod4
 set $dmenufn 'Ubuntu Mono Bold NF-14'
 

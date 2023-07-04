@@ -2,26 +2,12 @@
 
 # local configuration for i3
 
-# host specific setup
-host=$(uname -n)
-if [ "$host" == "hum" ]; then
-	# Realforce 87U
-	# - caps is hyper
-	# - swap alt/win so window keys next to spacebar
-	# - and make compose key be the old windows key
-	setxkbmap -option '' -option 'caps:hyper' -option 'compose:rwin'
-elif [ "$host" == "jh-rvueb" -o "$host" == "thud" ]; then
-	# Filco Majestouch Ninja
-	# - caps is hyper
-	# - swap alt/win so window keys next to spacebar
-	# - and make compose key be the old windows key
-	setxkbmap -option '' -option 'caps:hyper' -option 'compose:rwin'
-else
-	# Unknown keyboard
-	# - caps is hyper
-	# - make compose key be the right alt key
-	setxkbmap -option '' -option 'caps:hyper' -option 'compose:ralt'
-fi
+# Generic keyboard setup
+# - caps is hyper
+# - make compose key be right control
+setxkbmap -option '' -option 'caps:hyper' -option 'compose:rctrl'
+
+# Put hyper key on mod4 as the Unix gods intended
 xkb=${HOME}/.config/xkb
 if [ -r "${xkb}" ]; then
 	 setxkbmap -print | sed -e '/xkb_symbols/s/"[[:space:]]/+local&/' | xkbcomp -I${xkb} - ${DISPLAY} &> /dev/null
