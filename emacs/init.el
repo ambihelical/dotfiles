@@ -117,6 +117,12 @@
         read-process-output-max (* 1024 64)                   ; read more in one go from subprocesses
         load-prefer-newer t)                                  ; load source if newer than bytecode
   (when (eq window-system 'w32)
+    ;; Take over the windows key as super (except for win-l, and win-g apparently)
+    ;; For this to work, use powertoy to disable win key and map capslock to win key
+    ;; caps lock then becomes the windows key for the most part
+    ;; For my linux config, capslock is hyper and used as the i3 modifier, so it's analogous
+    (setq w32-pass-lwindow-to-system nil
+          w32-lwindow-modifier 'super)
     ;; This is slower but allows dired-subtree to detect directories correctly
     ;; ls-lisp seems to have a funky line format which dired-subtree doesn't understand
     (setq ls-lisp-use-insert-directory-program t))
