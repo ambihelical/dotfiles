@@ -270,6 +270,12 @@
       (comint-write-input-ring)))
   (advice-add 'ielm-send-input :after 'me:ielm-write-history))
 
+;; built-in eshell package
+(use-package eshell
+  :custom
+  (eshell-scroll-to-bottom-on-input 'this)
+  :ensure nil)
+
 (use-package highlight-function-calls
   :init
   :config
@@ -722,6 +728,12 @@
   :config
   (savehist-mode t)
   :defer 0.5)
+
+;; built-in bookmark package
+(use-package bookmark
+  :custom
+  (bookmark-save-flag 1) ;; save after each bookmark
+  :ensure nil)
 
 ;; make kill ring behavior less annoying
 (use-package clean-kill-ring
