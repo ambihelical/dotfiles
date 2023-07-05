@@ -294,7 +294,6 @@
   ("<f10> f"     #'toggle-frame-fullscreen)   ; frame
   ("M-`"        #'previous-buffer)           ; window
   ("M-~"        #'next-buffer)               ; window
-  ("M-w"        #'other-window)              ; window
   :init
   (add-function :after after-focus-change-function
                 (lambda () (unless (frame-focus-state)
@@ -1960,7 +1959,6 @@
   (define-key magit-section-mode-map (kbd "M-7") nil)
   (define-key magit-section-mode-map (kbd "M-8") nil)
   (define-key magit-section-mode-map (kbd "M-9") nil)
-  (define-key magit-mode-map (kbd "M-w") nil)
   (define-key magit-mode-map (kbd "C-w") nil)
   (define-key magit-mode-map (kbd "C-c C-m") #'magit-toggle-margin)
   ;; remove time consuming sections, most to least here, for worst repo I use
