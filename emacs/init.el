@@ -28,6 +28,8 @@
                                  (getenv "OneDrive")
                                "~/GDrive"))
 (defconst me:cloud-documents (expand-file-name "Documents" me:cloud-directory))
+;; emacs data that can be discarded or rebuilt easily
+(defconst me:emacs-cache-dir (expand-file-name "emacs" me:cache-directory))
 
 (defconst me:default-font
   (pcase (system-name)
@@ -690,6 +692,8 @@
 ;; N.B. May need to remove {,var}/package-quickstart.el* after clean install
 (use-package no-littering
   :demand
+  :init
+  (setq no-littering-var-directory (expand-file-name "var/" me:emacs-cache-dir))
   :config
   (require 'recentf)
   (add-to-list 'recentf-exclude (recentf-expand-file-name no-littering-var-directory))
