@@ -81,6 +81,10 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 		p="$p vim-gnome"
 		p="$p python-dev python-pip"
 	fi
+    if [ $version -ge 2204 ]; then
+        add-apt-repository --yes ppa:alessandro-strada/ppa
+        p="$p google-drive-ocamlfuse"   # alessandro-strada/ppa
+    fi
 	apt-get --ignore-missing --quiet --yes install $p
  elif [ "$linux" == 'fedora' ]; then
  # version is currently 37 

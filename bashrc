@@ -35,6 +35,9 @@ export RIPGREP_CONFIG_PATH=${XDG_CONFIG_HOME}/ripgrep/config
 ################ Interactive Portion ###############
 
 if [ ${OSTYPE:0:5} == 'linux' ]; then
+    # create google drive mount point if it doesn't exist
+    [ -d ~/GDrive ] || mkdir -p ~/GDrive      # google drive
+    [ -e ~/GDrive ] && chmod go-rwx ~/GDrive
     # this should exist for all distros
 	. /etc/os-release
 	if [ "$ID" == "ubuntu" ]; then
@@ -381,6 +384,12 @@ fi
 alias cd..="cd .."
 alias ls-x="ls -x"
 alias weather="curl -s wttr.in"
+
+# TODO: set this up with proper credentials to automount, see
+# https://github.com/astrada/google-drive-ocamlfuse/wiki/Headless-Usage-&-Authorization
+if type google-drive-ocamlfuse > /dev/null 2>&1;  then
+alias gdfuse="google-drive-ocamlfuse -xdgbd ~/GDrive"
+fi
 
 if type mark > /dev/null 2>&1; then
     alias ag='mark && \ag'
