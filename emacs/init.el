@@ -968,7 +968,7 @@
   ("<f4> r"  #'consult-history)
   ("<f4> /"  #'consult-focus-lines)
   ("M-<f2>"  #'me:find-window-buffer)
-  ("M-y"    #'consult-yank-from-kill-ring)
+  ("M-y"    #'consult-yank-pop)
   ("<f10> t" #'consult-theme)
   ("<f10> c" #'read-color)
   ("<help> a"    #'describe-symbol)
