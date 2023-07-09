@@ -105,6 +105,9 @@
   (sentence-end-double-space nil)                         ; sentences end with one space
   (x-gtk-use-system-tooltips nil)                        ; allow tooltip theming
 
+  :general
+  ("s-u" #'scroll-down)
+  ("s-d" #'scroll-up)
   :init
   (setq-default fill-column 80                                ; auto-wrap only very long lines
                 bidi-paragraph-direction 'left-to-right       ; onedi for me
@@ -1692,7 +1695,6 @@
   (evil-want-keybinding nil)  ; use evil-collection instead (needs to be done early)
   (evil-respect-visual-line-mode t)   ; movements respect visual line mode
   (evil-want-C-u-delete t)              ; use vim C-u binding (M-u replaces)
-  (evil-want-C-u-scroll t)             ; use vim C-u binding (M-u replaces)
   ;; N.B. This needs to be after evil-want-C-u-delete to work
   (evil-disable-insert-state-bindings t) ; allow emacs bindings in insert mode
   (evil-undo-system 'undo-fu)
@@ -1700,9 +1702,7 @@
   :init
   (setq-default evil-symbol-word-search t   ; misnamed: t is search for symbols, not words
                 evil-shift-width tab-width)         ; shift by ideal width :)
-  (setq evil-want-C-w-delete nil            ; want C-w for windows commands
-        evil-want-C-w-in-emacs-state t      ; ditto
-        evil-mode-line-format '( before . mode-line-front-space)
+  (setq evil-mode-line-format '( before . mode-line-front-space)
         evil-search-module #'evil-search)
 
   (setq evil-normal-state-tag   (propertize " N " 'face '((:background "DarkGoldenrod2" :foreground "black")))
