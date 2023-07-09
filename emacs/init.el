@@ -19,17 +19,14 @@
          use-package-minimum-reported-time 0.03                   ; minimum time when verbose
          use-package-verbose nil))                                ; don't be verbose
 
-;; xdg directories
+;; xdg directories (early-init.el defines me:cache-directory  and me:emacs-cache-dir)
 (defconst me:data-directory (or (getenv "XDG_DATA_HOME") (expand-file-name ".local/share" "~")))
-(defconst me:cache-directory (or (getenv "XDG_CACHE_HOME") (expand-file-name ".cache" "~")))
 (defconst me:config-directory (or (getenv "XDG_CONFIG_HOME")  (expand-file-name ".config" "~")))
 ;; directory which is backed up to cloud, for storage of important files
 (defconst me:cloud-directory (if (eq window-system 'w32)
                                  (getenv "OneDrive")
                                "~/GDrive"))
 (defconst me:cloud-documents (expand-file-name "Documents" me:cloud-directory))
-;; emacs data that can be discarded or rebuilt easily
-(defconst me:emacs-cache-dir (expand-file-name "emacs" me:cache-directory))
 
 (defconst me:default-font
   (pcase (system-name)
