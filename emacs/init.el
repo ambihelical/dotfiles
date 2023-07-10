@@ -105,9 +105,6 @@
   (sentence-end-double-space nil)                         ; sentences end with one space
   (x-gtk-use-system-tooltips nil)                        ; allow tooltip theming
 
-  :general
-  ("s-u" #'scroll-down)
-  ("s-d" #'scroll-up)
   :init
   (setq-default fill-column 80                                ; auto-wrap only very long lines
                 bidi-paragraph-direction 'left-to-right       ; onedi for me
@@ -1060,6 +1057,9 @@
            "c" 'delete-window
            "o" 'delete-other-windows
            "s-w" 'other-window)
+  ;; other vim-ish comfort bindings
+  ("s-u"        #'scroll-down)
+  ("s-d"        #'scroll-up)
   :ensure nil)
 
 ;; built-in project.el
