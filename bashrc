@@ -35,9 +35,6 @@ export RIPGREP_CONFIG_PATH=${XDG_CONFIG_HOME}/ripgrep/config
 ################ Interactive Portion ###############
 
 if [ ${OSTYPE:0:5} == 'linux' ]; then
-    # create google drive mount point if it doesn't exist
-    [ -d ~/GDrive ] || mkdir -p ~/GDrive      # google drive
-    [ -e ~/GDrive ] && chmod go-rwx ~/GDrive
     # this should exist for all distros
 	. /etc/os-release
 	if [ "$ID" == "ubuntu" ]; then

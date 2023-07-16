@@ -50,6 +50,24 @@ ulimit -n 4096
 xsetroot -solid "#333333"
 
 # start emacs daemon
-if type -P emacs; then
-	emacs --daemon
+# if type -P emacs; then
+# 	emacs --daemon
+# fi
+
+# try to mount google drive if gdfuse config exists and there's a user space driver
+if type google-drive-ocamlfuse > /dev/null 2>&1;  then
+    gdrive=~/GDrive
+    if [ -e ~/.config/gdfuse/default/config ]; then
+        if mountpoint -q $gdrive ; then
+            echo "$gdrive already mounted, no action"
+        else
+            [ -d $gdrive ] || mkdir -p $gdrive
+            google-drive-ocamlfuse -xdgbd $gdrive
+            echo "Google drive $gdrive ready"
+        fi
+    else
+        echo "gdfuse must be configured for google drive"
+    fi
+else
+    echo "No driver for google drive, no GDrive for you"
 fi
