@@ -376,6 +376,7 @@
   :custom
   (kill-do-not-save-duplicates t)          ; No duplicates in kill ring
   (kill-ring-max 200)                      ; more killed items
+  (save-interprogram-paste-before-kill t)    ; save clipboard text into kill ring
   (visual-line-fringe-indicators '(left-curly-arrow nil))  ; use left curly error for wrapped lines
   :general
   ("M-n"        #'next-error)
