@@ -294,8 +294,11 @@
   ("M-`"        #'previous-buffer)           ; window
   ("M-~"        #'next-buffer)               ; window
   :init
+  ;; On focus in, update vc state so mode line branch updated
+  ;; On focus out, save modified buffers
   (add-function :after after-focus-change-function
-                (lambda () (unless (frame-focus-state)
+                (lambda () (if (frame-focus-state)
+                               (vc-refresh-state)
                              (save-some-buffers t))))
 
   (setq frame-title-format
