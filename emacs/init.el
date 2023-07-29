@@ -1783,6 +1783,8 @@
 
   ;; want to start deft in insert mode
   (evil-set-initial-state 'deft-mode 'insert)
+  ;; use avy for f motion
+  (evil-global-set-key 'motion "f" #'evil-avy-goto-char)
 
   ;; these modes are better in emacs state
   (dolist (mode
