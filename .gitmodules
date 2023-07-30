@@ -1,3 +1,0 @@
-[submodule "git/git-scripts"]
-	path = git/git-scripts
-	url = https://github.com/jwiegley/git-scripts.git

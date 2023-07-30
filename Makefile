@@ -18,8 +18,6 @@ GPP := gpp -DOS=${OS} -DHOST=${HOST} -DKERNEL=${KERNEL} -n -U '@[' ']@' '(' ',' 
 SHELL_FILES = ~/.bashrc ~/.bash_profile ${CFG}/readline ~/.profile ${CFG}/starship.toml
 DIR_FILES = ~/bin ${DATA}/Notes 
 BIN_FILES=$(foreach bin,$(notdir $(wildcard ${PWD}/bin/*)),~/bin/${bin})
-GIT_SCRIPTS_CMDS = forest wtf whoami fire undo tarball
-GIT_SCRIPTS = $(foreach cmd,${GIT_SCRIPTS_CMDS},~/bin/git-${cmd})
 XORG_FILES = ${CFG}/xsettingsd ~/.Xresources ${CFG}/xkb/symbols/local
 APP_FILES = ${CFG}/screen ${CFG}/ack $(CFG)/globalrc $(CFG)/pythonrc ${CFG}/rtags/rdmrc \
 				$(CFG)/gconf ${CFG}/ripgrep/config ${CFG}/npm/npmrc
@@ -132,12 +130,10 @@ ${CFG}/vim: ${PWD}/vim
 ${CFG}/xsettingsd: ${PWD}/xsettingsd
 	${GPP} $< > $@
 
-# copy git config and then run private startup
-# to customize
+# copy git config
 ${CFG}/git/config: ${PWD}/git/config
 	mkdir -p $(dir $@)
 	cp -f $< $@
-	i3wm-private-startup || true
 
 ~/bin/git-% : ${PWD}/git/git-scripts/git-%
 	chmod a+x $<
