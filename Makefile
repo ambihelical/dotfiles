@@ -88,20 +88,6 @@ defaults:
 	-xdg-mime default firefox.desktop text/html
 	-gsettings set org.freedesktop.ibus.panel.emoji hotkey "[]"
 	-gsettings set org.freedesktop.ibus.panel.emoji unicode-hotkey "[]"
-	-gsettings set org.nemo.desktop show-desktop-icons false
-	-gsettings set org.nemo.preferences show-full-path-titles true
-	-gsettings set org.nemo.preferences start-with-dual-pane true
-	-gsettings set org.nemo.preferences enable-delete true
-	-gsettings set org.nemo.preferences default-folder-viewer list-view
-	-gsettings set org.nemo.preferences show-hidden-files false
-	-gsettings set org.nemo.preferences confirm-trash false
-	-gsettings set org.nemo.preferences default-sort-order mtime
-	-gsettings set org.nemo.preferences default-sort-in-reverse-order true
-	-gsettings set org.nemo.preferences ignore-view-metadata true
-	-gsettings set org.nemo.preferences desktop-is-home-dir true
-	-gsettings set org.nemo.preferences show-image-thumbnails 'never'
-	-gsettings set org.nemo.preferences show-advanced-permissions true
-	-gsettings set org.nemo.preferences size-prefixes base-2
 	-gsettings set org.gnome.desktop.media-handling autorun-never true
 	-gsettings set org.gnome.desktop.wm.preferences audible-bell false
 	-gsettings set org.gnome.desktop.interface text-scaling-factor '1.0'
@@ -110,6 +96,37 @@ defaults:
 	-gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type suspend
 	-gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-timeout 1800
 	-gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type suspend
+	-gsettings set org.gnome.nautilus.compression default-compression-format 'zip'
+	#-gsettings set org.gnome.nautilus.icon-view captions ['none', 'none', 'none']
+	-gsettings set org.gnome.nautilus.icon-view default-zoom-level 'medium'
+	#-gsettings set org.gnome.nautilus.list-view default-column-order ['name', 'size', 'type', 'owner', 'group', 'permissions', 'mime_type', 'where', 'date_modified', 'date_modified_with_time', 'date_accessed', 'date_created', 'recency', 'starred']
+	#-gsettings set org.gnome.nautilus.list-view default-visible-columns ['name', 'size', 'date_modified']
+	-gsettings set org.gnome.nautilus.list-view default-zoom-level 'small'
+	-gsettings set org.gnome.nautilus.list-view use-tree-view true
+	-gsettings set org.gnome.nautilus.preferences always-use-location-entry false
+	-gsettings set org.gnome.nautilus.preferences click-policy 'double'
+	-gsettings set org.gnome.nautilus.preferences default-folder-viewer 'list-view'
+	-gsettings set org.gnome.nautilus.preferences default-sort-in-reverse-order false
+	-gsettings set org.gnome.nautilus.preferences default-sort-order 'name'
+	-gsettings set org.gnome.nautilus.preferences fts-enabled true
+	-gsettings set org.gnome.nautilus.preferences install-mime-activation true
+	-gsettings set org.gnome.nautilus.preferences migrated-gtk-settings true
+	-gsettings set org.gnome.nautilus.preferences mouse-back-button 8
+	-gsettings set org.gnome.nautilus.preferences mouse-forward-button 9
+	-gsettings set org.gnome.nautilus.preferences mouse-use-extra-buttons true
+	-gsettings set org.gnome.nautilus.preferences open-folder-on-dnd-hover true
+	-gsettings set org.gnome.nautilus.preferences recursive-search 'local-only'
+	-gsettings set org.gnome.nautilus.preferences search-filter-time-type 'last_modified'
+	-gsettings set org.gnome.nautilus.preferences search-view 'list-view'
+	-gsettings set org.gnome.nautilus.preferences show-create-link true
+	-gsettings set org.gnome.nautilus.preferences show-delete-permanently true
+	-gsettings set org.gnome.nautilus.preferences show-directory-item-counts 'local-only'
+	-gsettings set org.gnome.nautilus.preferences show-hidden-files false
+	-gsettings set org.gnome.nautilus.preferences show-image-thumbnails 'local-only'
+	#-gsettings set org.gnome.nautilus.preferences thumbnail-limit uint64 50
+	#-gsettings set org.gnome.nautilus.window-state initial-size (1920, 923)
+	-gsettings set org.gnome.nautilus.window-state maximized false
+
 
 all: base dev i3 defaults
 
