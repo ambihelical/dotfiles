@@ -31,6 +31,7 @@
 (defconst me:default-font
   (pcase (system-name)
     ("hum" "Roboto Mono-10:autohint=true")
+    ("thumb" "Roboto Mono-10:autohint=true")
     ("thud" "Roboto Mono-12:autohint=true")
     ("SG267" "Roboto Mono-12:autohint=true")
     ("SG296" "Roboto Mono-12:autohint=true")
