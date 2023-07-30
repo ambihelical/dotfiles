@@ -1,6 +1,6 @@
 
 [build]
-rustflags = ["-C", "target-cpu=native", "-C", "link-arg=-fuse-ld=lld"]
+rustflags = ["-C", "link-arg=-fuse-ld=lld"]
 
 [registries.crates-io]
 protocol = "sparse"
