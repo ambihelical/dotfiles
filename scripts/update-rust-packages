@@ -24,10 +24,15 @@ fi
 ln -fs ${PWD}/../cargo/config.toml ${CARGO_HOME}/config.toml
 
 if [ ! -f ${XDG_DATA_HOME}/bash-completion/completions/cargo ]; then
-	echo "Setting up cargo and rustup completions"
+	echo "Setting up cargo completions"
 	mkdir -p ${XDG_DATA_HOME}/bash-completion/completions
-	rustup completions bash > ${XDG_DATA_HOME}/bash-completion/completions/rustup
-	ln -fs $(rustc --print sysroot)/etc/bash_completion.d/cargo  ${XDG_DATA_HOME}/bash-completion/completions/cargo
+	rustup completions bash cargo > ${XDG_DATA_HOME}/bash-completion/completions/cargo
+fi
+if [ ! -f ${XDG_DATA_HOME}/bash-completion/completions/rustup ]; then
+	echo "Setting up rustup completions"
+	mkdir -p ${XDG_DATA_HOME}/bash-completion/completions
+	rustup completions bash rustup > ${XDG_DATA_HOME}/bash-completion/completions/rustup
+
 fi
 
 p="starship cargo-audit cargo-geiger cargo-outdated"
@@ -42,11 +47,6 @@ for pkg in $p; do
         cargo install --quiet $pkg
     fi
 done
-
-echo "Installing rust-analyzer"
-rustup component add rust-analyzer
-# workaround see: https://github.com/rust-lang/rustup/issues/2411
-ln -fs $(rustup which --toolchain stable rust-analyzer) ${XDG_DATA_HOME}/cargo/bin
 
 echo "Updating all packages"
 cargo install-update --all

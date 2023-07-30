@@ -87,7 +87,7 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
     fi
 	apt-get --ignore-missing --quiet --yes install $p
  elif [ "$linux" == 'fedora' ]; then
- # version is currently 37 
+ # version is currently 38 
 
  # fonts
 	p="$p mscore-fonts stix-fonts unifont-fonts google-noto-sans-fonts"
@@ -97,11 +97,11 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	p="$p htop xclip a2ps python3-pip"
 
  # desktop related
-	p="$p i3 i3lock i3status xsettingsd dmenu rofi udiskie wmctrl py3status "
+	p="$p i3 i3lock i3status xsettingsd dmenu rofi udiskie wmctrl py3status xrandr"
 	p="$p clipit xautolock xset xsetroot pavucontrol ImageMagick"
 
  # nice to have apps & related
-	p="$p gparted xterm qalculate-gtk nemo "
+	p="$p gparted xterm qalculate-gtk "
 
 	dnf install -y $p
  fi
