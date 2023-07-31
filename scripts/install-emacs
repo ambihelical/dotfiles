@@ -16,7 +16,7 @@ else
 fi
 USER="sudo -u $real_user"
 
-version=28.2
+version=29.1
 tarfile=emacs.tar.xz
 srcfile="https://ftp.gnu.org/gnu/emacs/emacs-${version}.tar.xz"
 
@@ -35,7 +35,7 @@ if [ ! -e emacs-${version} ]; then
     fi
 fi
 cd emacs-${version}
-$USER ./configure --quiet --with-native-compilation --with-mailutils --with-imagemagick
+$USER ./configure --quiet --with-native-compilation=aot --with-mailutils --with-imagemagick --enable-link-time-optimization
 $USER make --silent
 make --silent install
 cd ..

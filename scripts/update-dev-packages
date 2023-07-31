@@ -46,6 +46,7 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 
   # libraries sometimes needed to build from source, especially emacs
 	p="$p libncurses5-dev libjansson-dev libotf-dev libgpm-dev libgccjit-11-dev"
+	p="$p libacl1-dev libsqlite3-dev libtree-sitter-dev"
 	if [ $version -lt 1804 ]; then
 		p="$p libgnutls-dev"
 	else
