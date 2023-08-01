@@ -87,6 +87,7 @@
   (inhibit-startup-message t)                             ; no startup message
   (initial-major-mode 'text-mode)                         ; no prog-mode at startup
   (initial-scratch-message nil)                           ; no scratch message
+  (mode-line-compact t)                                   ; use compact mode line
   (mouse-wheel-scroll-amount '(3 ((shift) . 9)))          ; 3 lines, or 9 line when shift held (mwheel)
   (mouse-wheel-follow-mouse 't)                          ; scroll window under mouse (mwheel)
   (mouse-wheel-progressive-speed nil)                     ; don't speed up (mwheel)
@@ -627,7 +628,7 @@
   :custom
   (x-underline-at-descent-line t)
   :config
-  (moody-replace-mode-line-buffer-identification)
+  (moody-replace-sml/mode-line-buffer-identification)
   (moody-replace-vc-mode))
 
 ;; 26.1 built-in line numbers mode
