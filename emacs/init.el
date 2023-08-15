@@ -1693,9 +1693,9 @@
 (use-package evil
   :hook (( prog-mode text-mode ) . evil-local-mode)
   :hook ( evil-local-mode . me:evil-local-mode-config)
-
+  :preface
+  (setq evil-want-keybinding nil)     ; needs to done very early
   :custom
-  (evil-want-keybinding nil)  ; use evil-collection instead (needs to be done early)
   (evil-respect-visual-line-mode t)   ; movements respect visual line mode
   (evil-want-C-u-delete t)              ; use vim C-u binding (M-u replaces)
   ;; N.B. This needs to be after evil-want-C-u-delete to work
