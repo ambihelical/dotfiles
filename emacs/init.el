@@ -694,8 +694,6 @@
 ;; N.B. May need to remove {,var}/package-quickstart.el* after clean install
 (use-package no-littering
   :demand
-  :init
-  (setq no-littering-var-directory (expand-file-name "var/" me:emacs-cache-dir))
   :config
   (require 'recentf)
   (add-to-list 'recentf-exclude (recentf-expand-file-name no-littering-var-directory))
@@ -1503,6 +1501,8 @@
   :ensure nil)
 
 (use-package pdf-tools
+  ;; doesn't work well for windows, so enable only mac and x
+  :if (memq window-system '(ns x mac))
   :magic ("%PDF" . pdf-view-mode)
   :config
   (pdf-tools-install :no-query))
