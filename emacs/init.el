@@ -16,6 +16,7 @@
 (eval-after-load "use-package"
   '(setq use-package-always-ensure t                              ; ensure by default
          use-package-always-defer t                               ; defer by default
+         use-package-compute-statistics nil                       ; get load statistics if true
          use-package-minimum-reported-time 0.03                   ; minimum time when verbose
          use-package-verbose nil))                                ; don't be verbose
 
@@ -132,8 +133,9 @@
 
   :config
   (defun me:after-init ()
-    (message "Time to initialize: %s"
-             (emacs-init-time))
+    (message "Time to initialize: %s" (emacs-init-time))
+    (when use-package-compute-statistics
+      (use-package-report))
     ;; remove extraneous quickstart files found after clean install
     (delete-file (expand-file-name "package-quickstart.el" user-emacs-directory))
     (delete-file (expand-file-name "package-quickstart.elc" user-emacs-directory)))
