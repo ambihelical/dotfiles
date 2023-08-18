@@ -1969,6 +1969,12 @@
   (remove-hook 'magit-status-sections-hook 'magit-insert-stashes)
   (remove-hook 'magit-status-sections-hook 'magit-insert-tags-header)
   (remove-hook 'magit-status-sections-hook 'magit-insert-unpulled-from-upstream)
+  ;; attempt to speed up git status under windows
+  (when (eq window-system 'w32)
+    (setq magit-log-section-commit-count 3)
+    (remove-hook 'server-switch-hook 'magit-commit-diff)
+    (remove-hook 'with-editor-filter-visit-hook 'magit-commit-diff))
+
   (defun me:magit-open-revision (rev arg)
     "Select and open revision of current file, with prefix opens in other window"
     (interactive (list (magit-read-branch-or-commit "Open revision") current-prefix-arg))
