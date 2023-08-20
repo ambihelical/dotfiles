@@ -1748,12 +1748,8 @@
   (defun me:evil-local-mode-config ()
     ;; Make evil words the same as symbol, so word motion
     ;; works more like vi, especially for snake_case
-    (defalias 'forward-evil-word 'forward-evil-symbol)
-    ;; make cut/paste more vim-like
-    ;; mainly keep emacs cut/paste separate from system clipboard
-    ;; in the default case (must use "+ or "* to override)
-    ;; This assumes select-enable-clipboard is set to nil as well
-    (setq-default interprogram-cut-function nil))
+    (defalias 'forward-evil-word 'forward-evil-symbol))
+
   (defun me:evil-shift-left-visual ()
     (interactive)
     (evil-shift-left (region-beginning) (region-end))
