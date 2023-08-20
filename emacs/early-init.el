@@ -20,7 +20,7 @@
       frame-resize-pixelwise t                  ; disable rounding of frame size
       no-littering-var-directory (expand-file-name "var/" me:emacs-cache-dir)
       package-quickstart-file (expand-file-name "var/package-quickstart.el" me:emacs-cache-dir)
-      package-user-dir (expand-file-name "elpa/" me:emacs-cache-dir)
+      package-user-dir (expand-file-name (concat "var/elpa-" emacs-version) me:emacs-cache-dir)
       package--init-file-ensured t              ;
       package-enable-at-startup nil)            ; don't make packages available at start
 

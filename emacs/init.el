@@ -114,7 +114,7 @@
                 tab-width 4                                   ; default tab width
                 minibuffer-follows-selected-frame nil         ; minibuffer stays in frame
                 indicate-empty-lines t)                       ; show empty lines at end of buffer
-  (setq custom-file (expand-file-name "custom.el" user-emacs-directory)  ; customize file
+  (setq custom-file (expand-file-name "var/custom.el" me:emacs-cache-dir)  ; customize file
         bidi-inhibit-bpa t                                    ; disable bpa
         read-process-output-max (* 1024 64)                   ; read more in one go from subprocesses
         load-prefer-newer t)                                  ; load source if newer than bytecode
@@ -261,7 +261,7 @@
   :config
   ;; read persistent history
   (defun me:ielm-init-history ()
-    (let ((path (expand-file-name "var/ielm/history" user-emacs-directory)))
+    (let ((path (expand-file-name "var/ielm/history" me:emacs-cache-dir)))
       (make-directory (file-name-directory path) t)
       (setq-local comint-input-ring-file-name path))
     (setq-local comint-input-ring-size 10000)
