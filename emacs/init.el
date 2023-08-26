@@ -685,7 +685,7 @@
     (paradox-upgrade-packages))
   :init
   (setq paradox-spinner-type 'moon
-        paradox-execute-asynchronously nil
+        paradox-execute-asynchronously t      ; always async
         paradox-display-download-count t
         paradox-display-star-count t
         paradox-github-token t                ; Dont't ask, don't integrate
