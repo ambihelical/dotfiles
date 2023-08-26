@@ -581,7 +581,15 @@
   (modus-themes-headings '((t . (rainbow))))
   :config
   (defun me:modus-themes-after-load-theme ()
-    (setq me:theme-is-dark-p (eq (modus-themes--current-theme) 'modus-vivendi)))
+    (setq me:theme-is-dark-p (eq (modus-themes--current-theme) 'modus-vivendi))
+    ;; fix attributes for moody (per moody readme)
+    (let ((line (face-attribute 'mode-line-active :underline)))
+      (set-face-attribute 'mode-line-active          nil :overline   line)
+      (set-face-attribute 'mode-line-active          nil :box        nil)
+      (set-face-attribute 'mode-line-inactive nil :overline   line)
+      (set-face-attribute 'mode-line-inactive nil :underline  line)
+      (set-face-attribute 'mode-line-inactive nil :box        nil)
+      (set-face-attribute 'mode-line-inactive nil :background "#f9f2d9")))
   ;; initially use dark theme for console
   (if (window-system)
       (load-theme 'modus-operandi :no-confirm)
@@ -594,6 +602,8 @@
   :init
   (setq sml/theme 'respectful
         size-indication-mode t
+        sml/shorten-directory t
+        sml/name-width 25
         sml/line-number-format "%4l"
         sml/size-indication-format " %I "
         sml/col-number-format "%3C"
