@@ -417,6 +417,7 @@ linux*)
 
 	alias pbcopy='xclip -selection clipboard'
 	alias pbpaste='xclip -selection clipboard -o'
+    alias realmnt='findmnt --real'
 
 	# run commands in new window
 	gterm() { xterm -geometry 80x200-0-0 -title "$1 : $2 $3 $4" -e sh -c "$1 $2 $3 $4"; }
