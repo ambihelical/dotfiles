@@ -687,28 +687,11 @@
   :general
   ("<f10> u" #'ruler-mode))
 
-;; better package manager
-(use-package paradox
+(use-package package
+  :ensure nil
   :general
   ("<f4> P"     #'list-packages)
-  ("<f4> p"     #'me:paradox-upgrade-packages)
-  (:keymaps 'paradox-menu-mode-map
-            "j" #'paradox-next-entry
-            "k" #'paradox-previous-entry)
-  :config
-  ;; make sure packages are up-to-date before updating
-  (defun me:paradox-upgrade-packages ()
-    (interactive)
-    (package-refresh-contents)
-    (paradox-upgrade-packages))
-  :init
-  (setq paradox-spinner-type 'moon
-        paradox-execute-asynchronously t      ; always async
-        paradox-display-download-count t
-        paradox-display-star-count t
-        paradox-github-token t                ; Dont't ask, don't integrate
-        paradox-automatically-star nil        ; Don't star automatically
-        paradox-hide-wiki-packages t))
+  ("<f4> p"     #'package-upgrade-all))
 
 ;; keep .emacs.d clean
 ;; N.B. Doesn't migrate, start with clean directory
