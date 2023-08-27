@@ -454,8 +454,12 @@
 (use-package face-remap
   :ensure nil
   :general
-  ("<f10> -" #'text-scale-adjust)
-  ("<f10> =" #'text-scale-adjust)
+  (:prefix "<f10>" "t" '(:ignore t :which-key "Local Size" ))
+  (:prefix "<f10>" "T" '(:ignore t :which-key "Global Size" ))
+  ("<f10> t -" #'text-scale-adjust)
+  ("<f10> t =" #'text-scale-adjust)
+  ("<f10> T -" #'global-text-scale-adjust)
+  ("<f10> T =" #'global-text-scale-adjust)
   :init
   (setq text-scale-mode-step 1.05)              ; text size increases by 5% (normally 20%)
   :defer 3)
@@ -982,7 +986,7 @@
   ("<f4> /"  #'consult-focus-lines)
   ("M-<f2>"  #'me:find-window-buffer)
   ("M-y"    #'consult-yank-pop)
-  ("<f10> t" #'consult-theme)
+  ("<f10> g" #'consult-theme)
   ("<f10> c" #'read-color)
   ("<help> a"    #'describe-symbol)
   ("<f6> m" #'consult-imenu)
