@@ -1473,8 +1473,9 @@
   (setq compilation-scroll-output t
         compilation-ask-about-save nil                 ; save all modified
         compilation-always-kill t                      ; always kill existing process
-        compilation-auto-jump-to-first-error t
-        compilation-finish-functions #'me:compile-finish)
+        compilation-auto-jump-to-first-error 'first-known
+        compilation-finish-functions #'me:compile-finish
+        )
   (add-hook 'compilation-start-hook
             (lambda (_proc) (compilation-set-skip-threshold 2))))
 
