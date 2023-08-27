@@ -78,6 +78,8 @@
   (create-lockfiles nil)                                  ; no lockfiles (.#file)
   (debugger-stack-frame-as-list t)                        ; show fns as (fn args) instead of fn(args)
   (describe-bindings-outline t)                           ; use outlines for describe bindings C-h b
+  (dnd-indicate-insertion-point t)                        ; show dnd insertion point
+  (dnd-scroll-margin 5)                                   ; how many lines scroll margin to autoscroll
   (fast-but-imprecise-scrolling t)                        ; quick and dirty scrolling
   (find-file-visit-truename t)                            ; resolve symlinks finding files
   (history-length 1000)                                   ; length of history
