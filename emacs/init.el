@@ -1632,6 +1632,8 @@
 
 ;; built-in package for cross-references
 (use-package xref
+  ;; use outliner for xrefs
+  :hook (xref-after-update . outline-minor-mode)
   :config
   (add-to-list 'xref-prompt-for-identifier #'xref-find-references t)
   :general
