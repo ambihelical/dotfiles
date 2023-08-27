@@ -359,6 +359,8 @@
   (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
   :custom
   (enable-recursive-minibuffers t)                        ; allow recursive edit
+  (set-message-functions '( set-multi-message ))
+  (multi-message-timeout 2)
 
   :general
   (:keymaps 'global "C-<tab>" #'completion-at-point)
