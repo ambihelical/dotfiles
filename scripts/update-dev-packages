@@ -92,7 +92,7 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	p="$p libdeflate-devel poppler-glib-devel "
 
   # needed to build asciidoctor-mathematical
-    p="$p cairo-devel gdk-pixbuf2-devel libffi-devel libxml2-devel pango-devel redhat-rpm-config"
+    p="$p cairo-devel gdk-pixbuf2-devel libffi-devel libxml2-devel pango-devel redhat-rpm-config lasem-devel"
 
   # needed to build rust packages
 	p="$p openssl-devel libwebp-devel libzstd-devel jbigkit-devel"
