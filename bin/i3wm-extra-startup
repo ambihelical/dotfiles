@@ -27,7 +27,8 @@ elif [ "$host" == "hum" -a "$linux" == "fedora" ]; then
 elif [ "$host" == "thumb" ]; then
 	 lockminutes=0
 	 offminutes=0
-	 xrandr --output HDMI-1 --primary --pos 0x0 --mode 1920x1080 --dpi 80 --output DVI-I-1 --rotate left --pos 1920x-420
+     # Thumb drive on laptop
+     xrandr --output eDP-1 --primary --pos 0x0 --mode 1920x1200 --dpi 144 --output DP-2-3 --mode 3840x2160 --pos 1920x-969
 else
 	echo "Unknown host |$host|"
 fi
