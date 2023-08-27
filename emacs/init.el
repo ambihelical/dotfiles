@@ -996,6 +996,8 @@
   ("<f6> m" #'consult-imenu)
   ("<f6> M" #'consult-imenu-multi)
   (:keymaps 'global :prefix "<f4>"
+            ;; reuse the emoji keymap
+            "e" `(,(keymap-lookup ctl-x-map "8 e") :which-key "Emoji→")
             "a" #'describe-symbol
             "M" #'consult-mark
             "j" #'consult-bookmark
