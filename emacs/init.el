@@ -1514,29 +1514,6 @@
   :config
   (pdf-tools-install :no-query))
 
-(use-package deft
-  :config
-  (if (file-readable-p "~/Dropbox/Notes")
-      (setq deft-directory "~/Dropbox/Notes"))
-  :general
-  ("<f4> n"     #'deft)
-  :init
-  (setq deft-directory "~/Notes"   ; can be overridden in config
-        deft-recursive t
-        deft-use-filter-string-for-filename t
-        deft-file-naming-rules '((nospace . "_")
-                                 (noslash . "_")
-                                 (case-fn . downcase))
-                                        ; first extension in list is used for new files.
-        deft-extensions '("md" "txt" "text" "markdown" "mmd" "org")
-                                        ; deft auto-save interferes with whitespace-butler, so disable
-        deft-auto-save-interval 0)
-  (add-hook 'deft-mode-hook
-            (lambda ()
-              (define-key deft-mode-map (kbd "<f4> n") #'quit-window)
-              (define-key deft-mode-map (kbd "<C-return>") #'deft-new-file)
-              (define-key deft-mode-map (kbd "<C-backspace>") #'deft-filter-clear))))
-
 ;; polyglot language server interface
 (use-package eglot
   :after no-littering
@@ -1787,8 +1764,6 @@
     :config
     (evil-commentary-mode))
 
-  ;; want to start deft in insert mode
-  (evil-set-initial-state 'deft-mode 'insert)
   ;; use avy for f motion
   (evil-global-set-key 'motion "f" #'evil-avy-goto-char)
 
