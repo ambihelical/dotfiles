@@ -90,6 +90,7 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	p="$p ncurses-devel jansson-devel libotf-devel gpm-devel libgccjit-devel"
 	p="$p gnutls-devel ImageMagick-devel libacl-devel lcms2-devel"
 	p="$p gtk3-devel libtiff-devel libtiff-tools libjpeg-turbo-devel libXpm-devel libpng-devel librsvg2-devel giflib-devel"
+	p="$p libtree-sitter-devel libsq3-devel libXft-devel libXft"
 	p="$p libdeflate-devel poppler-glib-devel "
 
   # needed to build asciidoctor-mathematical
