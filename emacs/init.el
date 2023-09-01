@@ -1134,7 +1134,12 @@
 (use-package highlight-parentheses
   :hook ( prog-mode . highlight-parentheses-mode ))
 
+;; aggressively indent
 (use-package aggressive-indent
+  :config
+  ;; Fix issue with excessive indent progress reports
+  ;; see #146 for this workaround in aggressive-indent-mode github repo
+  (setq aggressive-indent-region-function #'(lambda (x y) (let ((inhibit-message t)) (indent-region x y))))
   :hook ( emacs-lisp-mode . aggressive-indent-mode))
 
 (use-package markdown-mode
