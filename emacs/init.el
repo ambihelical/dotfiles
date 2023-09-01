@@ -1526,6 +1526,7 @@
   (setq eglot-ignored-server-capabilities '( :documentHighlightProvider)
         eglot-send-changes-idle-time 3    ;; be slower sending changes
         eglot-extend-to-xref t            ;; external files ok
+        eglot-report-progress nil         ;; don't report progress
         eglot-events-buffer-size 100000)  ;; smaller events buffer
   ;; windows eglot has a bug with eglot-extend-to-xref. See issue 715
   (when (eq window-system 'w32)
