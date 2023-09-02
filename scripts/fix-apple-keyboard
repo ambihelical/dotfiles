@@ -1,0 +1,23 @@
+#!/bin/bash
+#
+# Download and install emacs
+
+if [ $EUID -ne 0 ]; then
+	echo "This script must be run with root privileges" 1>&2
+	exit 1
+fi
+# strict mode
+set -euo pipefail
+
+if [ $SUDO_USER ]; then
+    real_user=$SUDO_USER
+else
+    real_user=$(whoami)
+fi
+# use before commands to be run as user
+USER="sudo -u $real_user"
+
+# use Fn keys as god intended
+echo 2 >> /sys/module/hid_apple/parameters/fnmode
+# put alt where god intended
+echo 1 >> /sys/module/hid_apple/parameters/swap_opt_cmd
