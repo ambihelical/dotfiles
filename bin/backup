@@ -1,12 +1,25 @@
 #!/bin/bash
 
-if [ $# != 1 ]; then
-	echo "Usage backup dest"
+if [ $# != 0 ]; then
+	echo "No arguments needed"
 	exit 1
 fi
-DEST=$1
-FLAGS="--stats --update --recursive --compress --backup --relative --perms --times --group --owner --cvs-exclude "
-zdate=$(/bin/date)
-echo "------------------------- ${zdate} -------------------------------" 
-rsync ${FLAGS} --files-from="${HOME}/bin/backup-root-include.txt" --backup-dir="${DEST}-older" / "${DEST}"
-rsync ${FLAGS} --exclude-from="${HOME}/bin/backup-home-exclude.txt" --backup-dir="${DEST}-older" "${HOME}" "${DEST}" | grep -v 'non-regular'
+
+# more error checking
+set -euo pipefail
+
+# exclude rust target directories
+# delete is needed for git repos
+FLAGS="--archive --verbose --delete --exclude target/ --exclude doc/out/ --exclude archive/ --exclude dotfiles/"
+OTHER=/run/media/eric/fedora_localhost-live/${HOME}
+
+if [ ! -d ${OTHER} ]; then
+    echo "Can't find Backup parent ${OTHER}, is drive mounted?"
+    exit -1
+fi
+
+DEST=${OTHER}/Backup/
+mkdir -p ${DEST}
+
+SRC=${HOME}/dev/
+rsync ${FLAGS} ${SRC} ${DEST}
