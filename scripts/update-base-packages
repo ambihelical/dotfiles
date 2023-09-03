@@ -94,14 +94,14 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
  
  # cli tools
 	p="$p autojump ripgrep general-purpose-preprocessor"
-	p="$p htop xclip a2ps python3-pip"
+	p="$p htop xclip a2ps python3-pip make vim"
 
  # desktop related
 	p="$p i3 i3lock i3status xsettingsd dmenu rofi udiskie wmctrl py3status xrandr"
 	p="$p clipit xautolock xset xsetroot pavucontrol ImageMagick"
 
  # nice to have apps & related
-	p="$p gparted xterm qalculate-gtk "
+	p="$p gparted xterm qalculate-gtk"
 
 	dnf install -y $p
  fi

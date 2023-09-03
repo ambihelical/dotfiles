@@ -78,7 +78,7 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	p="$p cmake ccache gcc-g++ gcc-c++"
 	p="$p autoconf automake libtool intltool bison flex"
 	p="$p ruby ruby-devel lld"
-	p="$p autoconf automake make "
+	p="$p autoconf automake "
 	p="$p python3-virtualenv"
 
   # version control
@@ -94,13 +94,13 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	p="$p libdeflate-devel poppler-glib-devel "
 
   # needed to build asciidoctor-mathematical
-    p="$p cairo-devel gdk-pixbuf2-devel libffi-devel libxml2-devel pango-devel redhat-rpm-config lasem-devel"
+    p="$p cairo-devel gdk-pixbuf2-devel libffi-devel libxml2-devel pango-devel redhat-rpm-config lasem-devel liblerc-devel"
 
   # needed to build rust packages
 	p="$p openssl-devel libwebp-devel libzstd-devel jbigkit-devel"
 	p="$p libxcb-devel "
 
-    dnf --setopt=install_weak_deps=False install -y $p
+    dnf install -y $p
  fi
 elif [ "${OSTYPE:0:6}" == 'darwin' ]; then
 	brew update

@@ -35,8 +35,10 @@ if [ ! -f ${XDG_DATA_HOME}/bash-completion/completions/rustup ]; then
 
 fi
 
+#p="$p cargo-modules"
+
 p="starship cargo-audit cargo-geiger cargo-outdated"
-p="$p cargo-modules tokei sccache cargo-supply-chain cargo-update"
+p="$p tokei sccache cargo-supply-chain cargo-update"
 p="$p du-dust "
 
 for pkg in $p; do

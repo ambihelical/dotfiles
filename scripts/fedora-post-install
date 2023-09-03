@@ -1,0 +1,23 @@
+#!/bin/bash
+#
+# Download and install emacs
+
+if [ $EUID -ne 0 ]; then
+	echo "This script must be run with root privileges" 1>&2
+	exit 1
+fi
+# strict mode
+set -euo pipefail
+
+if [ $SUDO_USER ]; then
+    real_user=$SUDO_USER
+else
+    real_user=$(whoami)
+fi
+USER="sudo -u $real_user"
+
+systemctl disable ModemManager.service
+systemctl disable bluetooth.service
+systemctl disable cups.service
+systemctl disable wpa_supplicant.service
+

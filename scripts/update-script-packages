@@ -39,6 +39,9 @@ if [ "$linux" == 'ubuntu' ]; then
 	pip3 install --upgrade $pr
 fi
 
+# workaround for mathematical latest not building
+$USER gem install --user-install --conservative --version 1.6.14 mathematical
+
 rg="asciidoctor asciidoctor-diagram asciidoctor-pdf asciidoctor-mathematical"
 rg="$rg rouge"
 $USER gem install --user-install --conservative $rg
