@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# local configuration for i3
+source /etc/os-release
+linux=$ID
+
+# by default disable screen locking
+lockminutes=0
+offminutes=0
+
+# Janky detection of current machine by using its graphics adapter device
+adapter=$(lspci -mm|grep VGA|head -1)
+eval "fields=($adapter)"
+device=${fields[7]}
+
+echo "Graphics device is [$device]"
+if [ "$device" == "Device 838a" ]; then
+    # the crappy old nvidia in hum.
+    # for some reason ubuntu identifies first monitor differently from fedora
+    if [ "$linux" == "ubuntu" ]; then
+        xrandr --output HDMI-0 --primary --pos 0x0 --mode 1920x1080 --dpi 80 --output DVI-I-1 --rotate left --pos 1920x-420
+    elif [ "$linux" == "fedora" ]; then
+        xrandr --output HDMI-1 --primary --pos 0x0 --mode 1920x1080 --dpi 80 --output DVI-I-1 --rotate left --pos 1920x-420
+    fi
+elif [ "$device" == "Device 097e" ]; then
+    # dell laptop
+    xrandr --output eDP-1 --primary --pos 0x0 --mode 1920x1200 --dpi 144 --output DP-1-3 --mode 3840x2160 --pos 1920x-969
+else
+	echo "Unknown graphics device [$device]"
+fi
+
+# screen locking
+killall -q xautolock
+if [ ${lockminutes} -gt 0 ]; then
+	xautolock -detectsleep -time ${lockminutes} -locker '~/bin/i3wm-screen-lock' -notify 15 -notifier 'notify-send "Screen lock will occur in 15 seconds"' &
+else
+	 echo "Auto screen lock disabled"
+fi
+xset -display ${DISPLAY} dpms 0 0 $((offminutes * 60))
+xset -display ${DISPLAY} s noblank
+xset -display ${DISPLAY} s off
+
+

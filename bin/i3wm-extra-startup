@@ -1,63 +1,22 @@
 #!/bin/bash
 
-# local configuration for i3
-source /etc/os-release
-
-# host specific setup
-host=$(uname -n)
-linux=$ID
-lockminutes=30
-offminutes=60
-
-# This seems to be needed in order for the keyboard settings to have effect. 
+# This seems to be needed in order for the keyboard settings to have effect.
 sleep 1
 
 # setup keyboard
 ${HOME}/bin/i3wm-keyboard-setup
 
 # setup displays
-if [ "$host" == "hum" -a "$linux" == "ubuntu" ]; then
-	 lockminutes=0
-	 offminutes=0
-	 xrandr --output HDMI-0 --primary --pos 0x0 --mode 1920x1080 --dpi 80 --output DVI-I-1 --rotate left --pos 1920x-420
-elif [ "$host" == "hum" -a "$linux" == "fedora" ]; then
-	 lockminutes=0
-	 offminutes=0
-	 xrandr --output HDMI-1 --primary --pos 0x0 --mode 1920x1080 --dpi 80 --output DVI-I-1 --rotate left --pos 1920x-420
-elif [ "$host" == "thumb" ]; then
-	 lockminutes=0
-	 offminutes=0
-     # Thumb drive on laptop
-     xrandr --output eDP-1 --primary --pos 0x0 --mode 1920x1200 --dpi 144 --output DP-2-3 --mode 3840x2160 --pos 1920x-969
-else
-	echo "Unknown host |$host|"
-fi
+${HOME}/bin/i3wm-monitor-setup
 
 # desktop integration
 xsettingsd -c ~/.config/xsettingsd &
-
-# screen locking
-killall -q xautolock
-if [ ${lockminutes} -gt 0 ]; then
-	xautolock -detectsleep -time ${lockminutes} -locker '~/bin/i3wm-screen-lock' -notify 15 -notifier 'notify-send "Screen lock will occur in 15 seconds"' &
-else
-	 echo "Auto screen lock disabled"
-fi
-xset -display ${DISPLAY} dpms 0 0 $((offminutes * 60))
-xset -display ${DISPLAY} s noblank
-xset -display ${DISPLAY} s off
-
 
 # increase number of file descriptors per process
 ulimit -n 4096
 
 # root gets garbled sometimes, so set solid color
 xsetroot -solid "#333333"
-
-# start emacs daemon
-# if type -P emacs; then
-# 	emacs --daemon
-# fi
 
 # try to mount google drive if gdfuse config exists and there's a user space driver
 if type google-drive-ocamlfuse > /dev/null 2>&1;  then
