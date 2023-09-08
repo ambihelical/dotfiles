@@ -149,6 +149,7 @@
     (electric-indent-mode +1)                                   ; turn on electric mode globally (electric)
     (delete-selection-mode t)                                   ; pastes delete selection
     (blink-cursor-mode -1)                                      ; don't blink cursor
+    (pixel-scroll-precision-mode +1)                            ; use precision scrolling
     (global-so-long-mode +1)                                    ; handle long lines better
     ;; add mingw64 paths under windows
     (when (eq window-system 'w32)
