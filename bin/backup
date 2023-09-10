@@ -23,3 +23,6 @@ mkdir -p ${DEST}
 
 SRC=${HOME}/dev/
 rsync ${FLAGS} ${SRC} ${DEST}
+
+SRC=${HOME}/.config
+rsync ${FLAGS} ${SRC} ${DEST}
