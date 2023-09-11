@@ -1171,12 +1171,14 @@
   (defconst me:language (expand-file-name "Notes/language.org" me:data-directory))
   (defconst me:system (expand-file-name "Notes/system.org" me:data-directory))
   (defconst me:android (expand-file-name "Notes/android.org" me:data-directory))
+  (defconst me:notes-path (expand-file-name "Notes/notes.org" me:cloud-documents))
   (setq org-confirm-babel-evaluate #'me:babel-should-confirm
         org-plantuml-jar-path (expand-file-name "java/plantuml.jar" me:data-directory)
         org-ascii-bullets '((ascii 42) (latin1 167) (utf-8 8226))
         org-return-follows-link t
         org-src-window-setup 'current-window
         org-startup-indented t
+        org-agenda-files `( ,me:notes-path )
         org-ascii-headline-spacing '(0 . 0))
   (setq org-capture-templates nil)
 
@@ -1192,11 +1194,9 @@
     (not (member lang '( "plantuml" "ditaa" ))))
   ;; Add system org templates
   (defun me:add-cloud-templates ()
-    (let* ((notes-path (expand-file-name "Notes/notes.org" me:cloud-documents)))
-      (push '("c" "Cloud") org-capture-templates)
-      (push `("cn" "Notes" entry (file+headline ,notes-path "Notes")) org-capture-templates)
-      (push `("ct" "Tasks" entry (file+headline ,notes-path "TODOs")
-              "* TODO %?\n  %i\n  %a") org-capture-templates)))
+    (push '("c" "Cloud") org-capture-templates)
+    (push `("cn" "Notes" entry (file+headline ,me:notes-path "Notes")) org-capture-templates)
+    (push `("ct" "Tasks" entry (file+headline ,me:notes-path "TODOs") "* TODO %?\n  %i\n  %a") org-capture-templates))
   (defun me:org-capture ()
     (interactive)
     (setq org-capture-templates `(("t"  "Command")
