@@ -39,7 +39,7 @@ fi
 
 p="starship cargo-audit cargo-geiger cargo-outdated"
 p="$p tokei sccache cargo-supply-chain cargo-update"
-p="$p du-dust "
+p="$p du-dust rust-script"
 
 for pkg in $p; do
 	if type $pkg > /dev/null 2>&1; then
