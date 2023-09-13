@@ -178,7 +178,8 @@
 ;; garbage collection magic hack
 (use-package gcmh
   :custom
-  (gcmh-verbose t)
+  ;; set to t to make verbose
+  (gcmh-verbose nil)
   ;; otherwise get GC times in 10s of seconds
   (gcmh-high-cons-threshold #x10000000)
   :config
