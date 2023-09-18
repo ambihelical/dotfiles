@@ -1281,7 +1281,7 @@
 
 (use-package cmake-mode
   :init
-  (setq cmake-tab-width 3)
+  (setq cmake-tab-width 4)
   :mode
   (("CMakeLists\\.txt\\'" . cmake-mode)
    ("\\.cmake\\'" . cmake-mode)))
