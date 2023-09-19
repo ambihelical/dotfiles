@@ -1772,9 +1772,6 @@
     :config
     (evil-commentary-mode))
 
-  ;; use avy for f motion
-  (evil-global-set-key 'motion "f" #'evil-avy-goto-char)
-
   ;; these modes are better in emacs state
   (dolist (mode
            '(dired-mode
