@@ -13,6 +13,11 @@
   (setq use-package-enable-imenu-support t)                       ; support for packages in imenu
   (require 'use-package))
 
+;; add :vc keyword to use package (will not be needed in emacs 30)
+;; example :vc (indent-bars :url "https://github.com/jdtsmith/indent-bars" :branch "main")
+(unless (package-installed-p 'vc-use-package)
+  (package-vc-install "https://github.com/slotThe/vc-use-package"))
+
 (eval-after-load "use-package"
   '(setq use-package-always-ensure t                              ; ensure by default
          use-package-always-defer t                               ; defer by default
