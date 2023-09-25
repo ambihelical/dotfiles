@@ -284,6 +284,8 @@
 
 ;; built-in eshell package
 (use-package eshell
+  :general
+  ("<f4> t"     #'eshell)
   :custom
   (eshell-scroll-to-bottom-on-input 'this)
   :ensure nil)
@@ -2007,7 +2009,6 @@
   :after project
   :ensure t
   :general
-  ("<f4> t"     #'eshell)
   ("M-\""      #'popper-toggle-latest)
   ("M-'"        #'popper-cycle)
   ("<f4> <deletechar>" #'popper-kill-latest-popup)
