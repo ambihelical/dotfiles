@@ -1413,6 +1413,7 @@
     (c-add-style "ambihelical" '("ellemtel" (c-basic-offset . 4)))
     (c-set-style "ambihelical" nil)
     (c-set-offset 'arglist-intro '+)               ; indent args extra
+    (c-set-offset 'inextern-lang [0])              ; no indentation in extern blocks
     (c-set-offset 'innamespace [0]))               ; no indentation in namespace
   (defun me:c++-mode-config ()
     (define-key c++-mode-map ":" #'self-insert-command)
