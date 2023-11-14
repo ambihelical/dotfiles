@@ -49,6 +49,9 @@ for pkg in $p; do
         cargo install --quiet $pkg
     fi
 done
+# special installs
+cargo install --git https://github.com/typst/typst
+
 
 echo "Updating all packages"
 cargo install-update --all
