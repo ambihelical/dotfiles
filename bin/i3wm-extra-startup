@@ -3,17 +3,14 @@
 # This seems to be needed in order for the keyboard settings to have effect.
 sleep 1
 
-# setup keyboard
-${HOME}/bin/i3wm-keyboard-setup
-
 # setup displays
 ${HOME}/bin/i3wm-monitor-setup
 
 # desktop integration
 xsettingsd -c ~/.config/xsettingsd &
 
-# increase number of file descriptors per process
-ulimit -n 4096
+# setup keyboard, mouse, bluetooth
+${HOME}/bin/i3wm-keyboard-setup
 
 # root gets garbled sometimes, so set solid color
 xsetroot -solid "#333333"
