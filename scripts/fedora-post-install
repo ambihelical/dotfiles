@@ -17,7 +17,6 @@ fi
 USER="sudo -u $real_user"
 
 systemctl disable ModemManager.service
-systemctl disable bluetooth.service
 systemctl disable cups.service
 systemctl disable wpa_supplicant.service
-
+systemctl enable bluetooth.service
