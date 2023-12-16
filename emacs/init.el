@@ -1599,6 +1599,7 @@
 (use-package company :demand t)
 
 (use-package corfu
+  :disabled t   ;; disabled because eglot
   :demand t
   :after vertico
   :custom
