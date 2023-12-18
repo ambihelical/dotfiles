@@ -8,6 +8,7 @@
 	smu = submodule update --init --recursive
 	list = log --pretty=format:'%h %s' -50
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+	last = log -1 HEAD
 	di = diff --color
 	dc = diff --color --cached
 	ds = diff --stat
@@ -16,11 +17,12 @@
 	rbc = rebase --continue
 	rba = rebase --abort
 	fap = fetch --all --prune
+	ftp = fetch --all --prune
 	pick = cherry-pick
-	picks = cherry -v
-	last = log -1 HEAD
+	picka = cherry-pick --abort
 	where = name-rev --name-only
-
+	wt = worktree
+	sw = switch
 [color]
 	status = true
 	ui = auto
