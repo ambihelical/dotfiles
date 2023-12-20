@@ -2040,3 +2040,14 @@
           compilation-mode))
   (popper-mode +1)
   (popper-echo-mode +1))                ; For echo area hints
+
+(use-package gptel
+  :general
+  ("<f4> g" #'gptel-send)
+  :custom
+  (gptel-api-key #'me:get-gpt-key)
+  :config
+  (defun me:get-gpt-key ()
+    (with-temp-buffer
+      (insert-file-contents (expand-file-name "emacs/etc/gpt" me:config-directory))
+      (buffer-string))))
