@@ -1548,14 +1548,13 @@
     (setq eglot-extend-to-xref nil))
   :config
   ;; configure clangd for c++ and c
-  (when-let* ((clangd (seq-find #'executable-find '("clangd" "clangd-6.0")))
-              ;; query-driver has to match the tool string in compile-commands.json
-              ;; clangd will then use these tools to get system header paths
-              (init-args "--query-driver=/**/* --header-insertion=never --clang-tidy --background-index --completion-style=detailed -j=4"))
-    (when (eq window-system 'w32)
-      (setq init-args "--query-driver=*:\\**\\* --header-insertion=never --clang-tidy --background-index --completion-style=detailed -j=4"))
-    (add-to-list 'eglot-server-programs
-                 `((c++-mode c-mode) ,clangd ,init-args)))
+  (when-let* ((clangd (seq-find #'executable-find '("clangd" "clangd-6.0"))))
+    (let* ((query (if (eq window-system 'w32)
+                      "--query-driver=*:\\**\\*"
+                    "--query-driver=/**/*"))
+           (args `((c++-mode c-mode) ,clangd ,query "--header-insertion=never" "--clang-tidy" "--background-index" "--completion-style=detailed" "-j=4")))
+      (add-to-list 'eglot-server-programs args)))
+
   ;; don't want inlay hints by default
   (defun me:eglot-managed-mode ()
     (eglot-inlay-hints-mode -1))
