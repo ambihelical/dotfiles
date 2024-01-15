@@ -999,6 +999,8 @@
             "o" #'consult-locate)
 
   :config
+
+  ;; use consult for xrefs
   (setq xref-show-xrefs-function #'consult-xref)
 
   ;; find file using fd
@@ -1021,7 +1023,12 @@
                            "Buffer: " cands
                            nil t "" 'buffer-name-history
                            (buffer-name (other-buffer (current-buffer))) t)))
-      (switch-to-buffer buf-name))))
+      (switch-to-buffer buf-name)))
+  ;; slower preview for file previewing commands
+  (consult-customize
+   me:consult-ripgrep-here me:rg-project me:search-all-notes
+   consult-ripgrep consult-locate consult-bookmark consult-buffer consult-theme
+   :preview-key '(:debounce 0.2 any)))
 
 (use-package embark
   :demand t
