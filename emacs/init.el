@@ -975,7 +975,8 @@
   ;; happening, so he may have a point.
   (setq consult-find-args "find . -not ( -wholename '*/.*' -prune )")
   :general
-  ("<f2>"  #'consult-buffer)
+  ("<f2>"  #'consult-project-buffer)
+  ("S-<f2>"  #'consult-buffer)
   ("<f4> f"  #'consult-find)
   ("<f4> i"  #'consult-info)
   ("<f4> r"  #'consult-history)
