@@ -975,7 +975,7 @@
   ;; happening, so he may have a point.
   (setq consult-find-args "find . -not ( -wholename '*/.*' -prune )")
   :general
-  ("<f2>"  #'consult-project-buffer)
+  ("<f2>"  #'me:consult-project-buffer)
   ("S-<f2>"  #'consult-buffer)
   ("<f4> f"  #'consult-find)
   ("<f4> i"  #'consult-info)
@@ -1003,6 +1003,12 @@
 
   ;; use consult for xrefs
   (setq xref-show-xrefs-function #'consult-xref)
+  ;; smarter consult-project-buffer
+  (defun  me:consult-project-buffer ()
+    (interactive)
+    (if (project-current)
+        (consult-project-buffer)
+      (consult-buffer)))
 
   ;; find file using fd
   (defun me:consult-find-fd (&optional dir)
@@ -1041,6 +1047,14 @@
               ("C-c C-c" . embark-dwim)
               :map embark-file-map
               ("j" . dired-jump)))
+
+(use-package marginalia
+  :demand t
+  ;; TODO convert to general
+  :bind (:map minibuffer-local-map
+              ("M-a" . marginalia-cycle))
+  :init
+  (marginalia-mode))
 
 (use-package embark-consult
   :demand t
@@ -1111,6 +1125,7 @@
            "g" 'project-find-regexp
            "G" 'project-or-external-find-regexp
            "r" 'project-query-replace-regexp
+           "Z" 'project-forget-zombie-projects
            "x" 'project-execute-extended-command)
   :config
   (defun me:rg-project ()
