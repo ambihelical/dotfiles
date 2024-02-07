@@ -65,6 +65,7 @@
 	fontdiff = -family \"DejaVu Sans Mono\" -size 10 -weight normal -slant roman -underline 0 -overstrike 0
 [push]
 	default = simple
+	autosetupremote = true
 [pull]
 	ff = only
 [diff]
