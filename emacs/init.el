@@ -803,6 +803,7 @@
                      "remote-shell" "/bin/dash"))
   :ensure nil)
 
+;; built-in dired mode
 (use-package dired
   :general
   ("<f4> d"   #'dired-jump)
@@ -825,6 +826,9 @@
         dired-auto-revert-buffer t       ; revert buffer on revisit
         dired-dwim-target t)             ; use existing dired buffer, if exists
   :ensure nil)
+
+(use-package diredfl
+  :hook ( dired-mode . diredfl-mode))
 
 ;; implement empty subdir collapsing
 (use-package dired-collapse
