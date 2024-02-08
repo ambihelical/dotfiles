@@ -1088,10 +1088,16 @@
   (:keymaps 'grep-mode-map "C-c w" #'wgrep-change-to-wgrep-mode))
 
 ;; built-in package winmove
+;;
+;; Mirror vim C-w commands on s-w, since we may want C-w back someday
 (use-package winmove
   :general
   (:prefix "s-w"
            "=" 'balance-windows
+           "J" 'windmove-swap-states-down
+           "K" 'windmove-swap-states-up
+           "L" 'windmove-swap-states-right
+           "H" 'windmove-swap-states-left
            "v" 'split-window-right
            "s" 'split-window-below
            "j" 'windmove-down
@@ -1100,6 +1106,15 @@
            "h" 'windmove-left
            "c" 'delete-window
            "o" 'delete-other-windows
+           "w" 'other-window
+           "s-v" 'split-window-right
+           "s-s" 'split-window-below
+           "s-j" 'windmove-down
+           "s-k" 'windmove-up
+           "s-l" 'windmove-right
+           "s-h" 'windmove-left
+           "s-c" 'delete-window
+           "s-o" 'delete-other-windows
            "s-w" 'other-window)
   ;; other vim-ish comfort bindings
   ("s-u"        #'scroll-down)
