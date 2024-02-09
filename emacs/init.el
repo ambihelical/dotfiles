@@ -1637,33 +1637,9 @@
   :init
   (advice-add 'eglot--format-markup :filter-args 'me:eglot--format-markup))
 
-(use-package company :demand t)
-
-(use-package corfu
-  :disabled t   ;; disabled because eglot
-  :demand t
-  :after vertico
-  :custom
-  (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
-  (corfu-separator ?\s)          ;; Orderless field separator
-  :config
-  (defun me:corfu-enable-in-minibuffer ()
-    "Enable Corfu in the minibuffer if Vertico/Mct are not active."
-    (unless (or (bound-and-true-p mct--active)
-                (bound-and-true-p vertico--input)
-                (evil-ex-p))
-      ;; (setq-local corfu-auto nil) Enable/disable auto completion
-      ;; disable auto echo and popup
-      (setq-local corfu-echo-delay nil corfu-popupinfo-delay nil)
-      (corfu-mode 1)))
-  (add-hook 'minibuffer-setup-hook #'me:corfu-enable-in-minibuffer 1)
-
-  ;; Recommended: Enable Corfu globally.
-  ;; This is recommended since Dabbrev can be used globally (M-/).
-  ;; See also `corfu-excluded-modes'.
-  :init
-  (global-corfu-mode)
-  (corfu-popupinfo-mode))
+;; COMPletion ANYwhere
+(use-package company
+  :hook ( after-init . global-company-mode))
 
 ;; built-in package for cross-references
 (use-package xref
