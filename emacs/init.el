@@ -282,13 +282,12 @@
       (comint-write-input-ring)))
   (advice-add 'ielm-send-input :after 'me:ielm-write-history))
 
-;; built-in eshell package
-(use-package eshell
+(use-package eat
+  :hook (eat-exit . quit-window)
+  :config
+  (evil-set-initial-state 'eat-mode 'emacs)
   :general
-  ("<f4> t"     #'eshell)
-  :custom
-  (eshell-scroll-to-bottom-on-input 'this)
-  :ensure nil)
+  ("<f4> t"     #'eat))
 
 (use-package highlight-function-calls
   :init
