@@ -361,18 +361,22 @@
 ;; built-in minibuffer package
 (use-package minibuffer
   :ensure nil
-  :init
-  (setq minibuffer-prompt-properties
-        '(read-only t cursor-intangible t face minibuffer-prompt))
-  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+  :hook
+  (minibuffer-setup . cursor-intangible-mode)
+  (mouse-leave-buffer . me:stop-using-minibuffer)
   :custom
+  (minibuffer-prompt-properties '(read-only t cursor-intangible t face minibuffer-prompt))
   (enable-recursive-minibuffers t)                        ; allow recursive edit
   (set-message-functions '( set-multi-message ))
   (multi-message-timeout 2)
-
   :general
   (:keymaps 'global "C-<tab>" #'completion-at-point)
   :config
+  ;; kill the minibuffer
+  (defun me:stop-using-minibuffer ()
+    "kill the minibuffer"
+    (when (and (>= (recursion-depth) 1) (active-minibuffer-window))
+      (abort-recursive-edit)))
   (minibuffer-depth-indicate-mode t)       ; show recursive edit depth (mb-depth)
   :defer 0.5)
 
