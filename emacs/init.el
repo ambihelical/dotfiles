@@ -1638,6 +1638,13 @@
 
 ;; COMPletion ANYwhere
 (use-package company
+  :custom
+  (company-idle-delay 0.8)
+  :general
+  ;; use tab and S-tab to select completions
+  (:keymaps 'company-active-map
+            "<tab>" #'company-complete-common-or-cycle
+            "<backtab>" #'company-select-previous)
   :hook ( after-init . global-company-mode))
 
 ;; built-in package for cross-references
