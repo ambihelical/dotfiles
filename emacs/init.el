@@ -1497,9 +1497,6 @@
 (use-package compile
   :commands compile
   :general
-  (:prefix "C-c"
-           "o"          #'me:switch-to-compile-buffer
-           "r"          #'recompile)
   (:keymaps 'compilation-mode-map
             "<up>" #'compilation-previous-error
             "<down>" #'compilation-next-error
@@ -1515,9 +1512,6 @@
   :custom
   (compilation-skip-threshold 2)  ;; skip below error
   :config
-  (defun me:switch-to-compile-buffer ()
-    (interactive)
-    (switch-to-buffer compilation-last-buffer))
   (defun me:rotate-skip-threshold ()
     (interactive)
     (compilation-set-skip-threshold
@@ -1525,10 +1519,17 @@
            ((= compilation-skip-threshold 2) 0)
            (t 1))))
   (defun me:compile-finish (buf str)
+    ;; skip anything less than a warning
     (compilation-set-skip-threshold 1)
     (when (and (display-graphic-p) (not (eq window-system 'w32)))
-      (x-urgency-hint (selected-frame))))
-
+      (x-urgency-hint (selected-frame)))
+    ;;if no errors, make the compilation buffer go away in a few seconds
+    ;;if errors, switch to the compile buffer
+    (if (null (string-match ".*exited abnormally.*" str))
+        (progn
+          (run-at-time "2 sec" nil 'quit-windows-on buf)
+          (message "No Compilation Errors!"))
+      (switch-to-buffer-other-window next-error-last-buffer)))
   :init
   (setq compilation-scroll-output t
         compilation-ask-about-save nil                 ; save all modified
