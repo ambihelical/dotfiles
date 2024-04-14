@@ -324,25 +324,6 @@
           (:eval (abbreviate-file-name default-directory))
           "]")                                               ; fancy title
         icon-title-format frame-title-format)                  ; use same title for unselected frame
-  :config
-
-  (defun me:window-nth-buffer (arg &optional prefix)
-    "Select the nth other buffer. Use prefix to put in other window"
-    (interactive "P")
-    (when-let* ((bufs (mapcar 'car (window-prev-buffers)))
-                (buffer (nth arg (remove (current-buffer) bufs))))
-      (if prefix
-          (switch-to-buffer-other-window buffer)
-        (switch-to-buffer buffer))))
-
-  ;; Define M-2 to M-9 as selecting the nth buffer
-  (dotimes (ind 8) ;; 0 to 7
-    (let ((key (+ 2 ind)))
-      (global-set-key (kbd (concat "M-" (format "%d" key)))
-                      (lambda (&optional prefix)
-                        (interactive "P")
-                        (me:window-nth-buffer ind prefix)))))
-
   :demand)
 
 ;; built-in winner package
@@ -524,6 +505,22 @@
   :general
   ("<f10> a" #'tab-line-mode)
   :config
+
+  (defun me:window-nth-buffer (arg &optional prefix)
+    "Select the nth other buffer. Use prefix to put in other window"
+    (interactive "P")
+    (when-let* ((bufs (mapcar 'car (window-prev-buffers)))
+                (buffer (nth arg (remove (current-buffer) bufs))))
+      (if prefix
+          (switch-to-buffer-other-window buffer)
+        (switch-to-buffer buffer))))
+  ;; Define M-2 to M-9 as selecting the nth buffer
+  (dotimes (ind 8) ;; 0 to 7
+    (let ((key (+ 2 ind)))
+      (global-set-key (kbd (concat "M-" (format "%d" key)))
+                      (lambda (&optional prefix)
+                        (interactive "P")
+                        (me:window-nth-buffer ind prefix)))))
   (defun me:tab-name(tab tabs)
     (let ((ind (seq-position tabs tab)))
       (if (window-system)
