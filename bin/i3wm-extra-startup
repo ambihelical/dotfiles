@@ -9,8 +9,9 @@ ${HOME}/bin/i3wm-monitor-setup
 # desktop integration
 xsettingsd -c ~/.config/xsettingsd &
 
-# setup keyboard, mouse, bluetooth
-${HOME}/bin/i3wm-keyboard-setup
+# this is run on keyboard changes, but it needs X up to actually function
+# at this point we know we have X.
+${HOME}/bin/udev-setup-keyboard.sh
 
 # root gets garbled sometimes, so set solid color
 xsetroot -solid "#333333"

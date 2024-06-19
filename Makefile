@@ -28,7 +28,7 @@ VIM_FILES = ${CACHE}/vim ${CFG}/vim/vimrc
 EXTRA_FILES = ~/.ssh/id_ed25519.pub ${DATA}/fonts/.configured
 BAREX_FILES = ~/.xsession ~/.Xmodmap
 EMACS_FILES = ${CFG}/emacs/init.el ${CFG}/emacs/early-init.el ${CFG}/emacs/lisp/extras.el ${CFG}/emacs/etc $(CACHE)/emacs ${CFG}/hunspell
-ETC_FILES = ${ETC}/sysctl.d/99-edb-sysctl.conf
+ETC_FILES = ${ETC}/sysctl.d/99-edb-sysctl.conf ${ETC}/udev/rules.d/99-edb-setup-keyboard.rules
 
 
 .PHONY: help base dev i3 all defaults prep-bash barex root
@@ -75,7 +75,7 @@ i3: ${I3_FILES}
 barex: ${BAREX_FILES}
 
 root: ${ETC_FILES}
-	udevadm control --reload-rules   # for udev rules
+	udevadm control --reload   # for udev rules
 	sysctl -w vm.swappiness=10    # we have adequate memory
 
 # fix some annoying default settings
