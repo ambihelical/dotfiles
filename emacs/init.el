@@ -1938,7 +1938,7 @@
         (when branch
           ;; match board-####- branch names and auto insert bracket tag
           (save-match-data
-            (if-let* ((match (string-match "^\\([A-Za-z]+\\)-\\([0-9]+\\)-" branch))
+            (if-let* ((match (string-match "^\\([A-Za-z0-9]+\\)-\\([0-9]+\\)-" branch))
                       (board (match-string 1 branch))
                       (ticket (match-string 2 branch)))
                 (insert (concat "[" (upcase board) "-" ticket "] ")))))
