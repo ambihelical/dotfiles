@@ -1507,7 +1507,7 @@
             "h" nil
             "l" nil)
   :custom
-  (compilation-skip-threshold 2)  ;; skip below error
+  (compilation-skip-threshold 1)  ;; skip below warning
   :config
   (defun me:rotate-skip-threshold ()
     (interactive)
@@ -1519,23 +1519,15 @@
     ;; skip anything less than a warning
     (compilation-set-skip-threshold 1)
     (when (and (display-graphic-p) (not (eq window-system 'w32)))
-      (x-urgency-hint (selected-frame)))
-    ;;if no errors, make the compilation buffer go away in a few seconds
-    ;;if errors, switch to the compile buffer
-    (if (null (string-match ".*exited abnormally.*" str))
-        (progn
-          (run-at-time "2 sec" nil 'quit-windows-on buf)
-          (message "No Compilation Errors!"))
-      (switch-to-buffer-other-window next-error-last-buffer)))
+      (x-urgency-hint (selected-frame))))
   :init
   (setq compilation-scroll-output t
         compilation-ask-about-save nil                 ; save all modified
         compilation-always-kill t                      ; always kill existing process
         compilation-auto-jump-to-first-error 'first-known
-        compilation-finish-functions #'me:compile-finish
-        )
+        compilation-finish-functions #'me:compile-finish)
   (add-hook 'compilation-start-hook
-            (lambda (_proc) (compilation-set-skip-threshold 2))))
+            (lambda (_proc) (compilation-set-skip-threshold 1))))
 
 ;; view symbols of libraries
 (use-package elf-mode
