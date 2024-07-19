@@ -1708,8 +1708,7 @@
 (use-package avy
   :commands ( avy-goto-word-1 avy-goto-char-2 avy-goto-char-in-line )
   :general
-  ;; M-g M-g is normally goto line, but there are easier ways
-  (:prefix "M-g" "M-g" #'avy-goto-char-timer)
+  ("s-<SPC>" #'avy-goto-char-timer)
   :config
   (avy-setup-default)
   :init
