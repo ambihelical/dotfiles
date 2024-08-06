@@ -29,10 +29,9 @@
 (defconst me:data-directory (or (getenv "XDG_DATA_HOME") (expand-file-name ".local/share" "~")))
 (defconst me:config-directory (or (getenv "XDG_CONFIG_HOME")  (expand-file-name ".config" "~")))
 ;; directory which is backed up to cloud, for storage of important files
-(defconst me:cloud-directory (if (eq window-system 'w32)
+(defconst me:cloud-documents (if (eq window-system 'w32)
                                  (getenv "OneDrive")
-                               "~/GDrive"))
-(defconst me:cloud-documents (expand-file-name "Documents" me:cloud-directory))
+                               (expand-file-name "Documents" "~/GDrive")))
 
 (defconst me:default-font
   (pcase (system-name)
