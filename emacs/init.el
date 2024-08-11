@@ -1653,6 +1653,8 @@
   ("<f6> a"   #'xref-find-apropos))
 
 (use-package yasnippet
+  ;; disabled because it fails to load and I'm not really using it
+  :disabled
   :hook ((prog-mode text-mode) . yas-minor-mode)
   :general
   ("M-<SPC>" #'yas-expand)  ;; was just-one-space, a fairly useless binding
