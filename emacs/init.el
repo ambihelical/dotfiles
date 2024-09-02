@@ -826,12 +826,18 @@
         dired-dwim-target t)             ; use existing dired buffer, if exists
   :ensure nil)
 
+;; dired colors
 (use-package diredfl
   :hook ( dired-mode . diredfl-mode))
 
 ;; implement empty subdir collapsing
 (use-package dired-collapse
   :hook (dired-mode  . dired-collapse-mode))
+
+;; dired git details
+(use-package dired-git-info
+  :general
+  (:keymaps 'dired-mode-map ")" #'dired-git-info-mode))
 
 ;; implement dired-narrow function
 (use-package dired-narrow
