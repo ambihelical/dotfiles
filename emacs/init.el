@@ -1651,6 +1651,8 @@
 (use-package company
   :custom
   (company-idle-delay 0.8)
+  :config
+  (setq company-backends (remove 'company-clang company-backends))
   :general
   ;; use tab and S-tab to select completions
   (:keymaps 'company-active-map
