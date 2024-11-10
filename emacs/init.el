@@ -155,6 +155,8 @@
     (blink-cursor-mode -1)                                      ; don't blink cursor
     (pixel-scroll-precision-mode +1)                            ; use precision scrolling
     (global-so-long-mode +1)                                    ; handle long lines better
+    (when (< (length command-line-args) 2)
+      (me:project-switch-project-find-file))
     ;; add mingw64 paths under windows
     (when (eq window-system 'w32)
       (add-to-list 'exec-path "c:/Program Files/Git/mingw64/bin/")
@@ -953,12 +955,13 @@
   :general
   ("<f4> <f4>" #'vertico-repeat)
   :hook ( minibuffer-setup . vertico-repeat-save )
-  :defer 1
+  :hook ( after-init . vertico-mode)
   :config
   (vertico-mode)
   (vertico-indexed-mode)
   (setq vertico-count 20
-        vertico-resize nil))
+        vertico-resize nil)
+  )
 
 ;; easier directory navigation
 (use-package vertico-directory
@@ -988,6 +991,7 @@
 ;; completion-read functions
 (use-package consult
   :after vertico
+  :defer
   :init
   ;; for some reason it looks like shell expansion is going on with consult-find
   ;; and putting single quotes around the -wholename argument this fixes it
@@ -1140,6 +1144,8 @@
 
 ;; built-in project.el
 (use-package project
+  :after vertico
+  :commands (me:project-switch-project-find-file)
   :general
   ("<f3>"  #'project-find-file)
   ;; TODO: This duplicates project-prefix-map; should find a way to use that
@@ -1157,13 +1163,24 @@
            "c" 'project-compile
            "e" 'project-eshell
            "k" 'project-kill-buffers
-           "p" 'project-switch-project
+           "p" 'me:project-switch-project-find-file
+           "P" 'project-switch-project
            "g" 'project-find-regexp
            "G" 'project-or-external-find-regexp
            "r" 'project-query-replace-regexp
            "Z" 'project-forget-zombie-projects
            "x" 'project-execute-extended-command)
+  :custom
+  (project-switch-commands
+   '((consult-project-buffer "Find Buffer" "<RET>" )
+     (project-find-file "Find file")
+     (project-dired "Dired")
+     (project-eshell "Eshell")))
   :config
+  (defun me:project-switch-project-find-file ()
+    (interactive)
+    (let ((project-switch-commands #'project-find-file))
+      (call-interactively #'project-switch-project)))
   (defun me:rg-project ()
     "Search using ripgrep in project"
     (interactive)
@@ -1189,7 +1206,7 @@
               (name (file-name-nondirectory (directory-file-name path))))
         (concat " [" name "] ")))
   (add-to-list 'mode-line-misc-info `(:eval (me:project-mode-line-info)))
-  :defer 0.5)
+  )
 
 (use-package rainbow-delimiters
   :hook ((emacs-lisp-mode) . rainbow-delimiters-mode ))
