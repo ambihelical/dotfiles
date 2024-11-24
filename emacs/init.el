@@ -991,7 +991,7 @@
 ;; completion-read functions
 (use-package consult
   :after vertico
-  :defer
+  :commands (me:project-switch-project-find-file)
   :init
   ;; for some reason it looks like shell expansion is going on with consult-find
   ;; and putting single quotes around the -wholename argument this fixes it
@@ -1025,6 +1025,10 @@
             "o" #'consult-locate)
 
   :config
+  (defun me:project-switch-project-find-file ()
+    (interactive)
+    (let ((project-switch-commands #'project-find-file))
+      (call-interactively #'project-switch-project)))
 
   ;; use consult for xrefs
   (setq xref-show-xrefs-function #'consult-xref)
@@ -1145,7 +1149,6 @@
 ;; built-in project.el
 (use-package project
   :after vertico
-  :commands (me:project-switch-project-find-file)
   :general
   ("<f3>"  #'project-find-file)
   ;; TODO: This duplicates project-prefix-map; should find a way to use that
@@ -1177,10 +1180,6 @@
      (project-dired "Dired")
      (project-eshell "Eshell")))
   :config
-  (defun me:project-switch-project-find-file ()
-    (interactive)
-    (let ((project-switch-commands #'project-find-file))
-      (call-interactively #'project-switch-project)))
   (defun me:rg-project ()
     "Search using ripgrep in project"
     (interactive)
