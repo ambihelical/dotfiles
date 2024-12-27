@@ -17,10 +17,9 @@ Personal notes on setting up a new machine or VM.
 * run `sudo scripts/update-dev-packages`
 * run `make dev`
 * run `sudo scripts/update-script-packages`
-* if i3 wanted,
-    * run `make i3`
-    * run `i3wm-keyboard-setup` and verify works
-    * logout and login as i3
+* if sway wanted,
+    * run `make sway`
+    * logout and login as swap
 * if any rust packages wanted (especially starship prompt),
     * run `scripts/update-rust-packages`
     * answer rustup question

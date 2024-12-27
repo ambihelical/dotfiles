@@ -1,0 +1,90 @@
+{
+    "layer": "bottom",
+    "position": "bottom",
+    "height": 32,
+
+    "modules-left": ["sway/workspaces", "sway/mode"],
+    "modules-center": ["sway/window"],
+    "modules-right": [
+        "custom/storage",
+        "network",
+        "cpu",
+        "pulseaudio",
+        "clock",
+        "custom/weather",
+        "idle_inhibitor",
+        "tray"
+    ],
+    "sway/mode": {
+        "format": " {}"
+    },
+    "sway/workspaces": {
+        "format": "{name}",
+        "disable-scroll": true
+    },
+    "sway/window": {
+        "max-length": 80,
+        "tooltip": false,
+        "on-click": "pkill rofi || ~/.config/sway/sway-select-window.sh"
+    },
+    "clock": {
+        "format": "📅 {:%a %d %b %I:%M %p}",
+        "on-click": "wlrctl window close app_id:org.gnome.Calendar || gnome-calendar",
+        "tooltip": false
+    },
+    "network": {
+        "format": "{icon} {ipaddr}",
+        "format-icons": {
+            "wifi": [""],
+            "ethernet": ["🖧"]
+        },
+        "on-click": "wlrctl window close app_id:nm-connection-editor || exec nm-connection-editor",
+        "tooltip": false
+    },
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-icons": {
+            "phone": [" 🔊"],
+            "default": ["🔊"]
+        },
+        "scroll-step": 5,
+        "on-click": "wlrctl window close app_id:org.pulseaudio.pavucontrol || pavucontrol",
+        "tooltip": false
+    },
+    "cpu": {
+        "interval": 10,
+	    "format": "🔥 {usage}% {load}",
+        "on-click": "wlrctl window close app_id:org.gnome.SystemMonitor || gnome-system-monitor"
+    },
+    "custom/storage": {
+        "format": " {}",
+        "format-alt": " {percentage}%",
+        "format-alt-click": "click-right",
+        "return-type": "json",
+        "interval": 60,
+        "on-click": "wlrctl window close app_id:org.gnome.Nautilus || exec xdg-open /",
+        "exec": "~/.config/waybar/modules/storage.sh"
+    },
+    "custom/weather": {
+        "format": "{}",
+        "format-alt": "{alt}: {}",
+        "format-alt-click": "click-right",
+        "interval": 1800,
+        "return-type": "json",
+        "exec": "~/.config/waybar/modules/weather.sh Vista+Ca",
+        "on-click": "exec xdg-open https://wttr.in/Vista+Ca",
+        "exec-if": "ping wttr.in -c1"
+    },
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "🔒",
+            "deactivated": "🔓"
+        },
+        "tooltip-format": "Idle lock",
+        "tooltip": true
+    },
+    "tray": {
+        "icon-size": 18
+    }
+}

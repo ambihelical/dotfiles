@@ -18,17 +18,20 @@ GPP := gpp -DOS=${OS} -DHOST=${HOST} -DKERNEL=${KERNEL} -n -U '@[' ']@' '(' ',' 
 SHELL_FILES = ~/.bashrc ~/.bash_profile ${CFG}/readline ~/.profile ${CFG}/starship.toml
 DIR_FILES = ~/bin ${DATA}/Notes 
 BIN_FILES=$(foreach bin,$(notdir $(wildcard ${PWD}/bin/*)),~/bin/${bin})
-XORG_FILES = ${CFG}/xsettingsd ~/.Xresources ${CFG}/xkb/symbols/local
+XORG_FILES = ${CFG}/xsettingsd/xsettingsd.conf ~/.Xresources  ~/.Xdefaults
 APP_FILES = ${CFG}/screen ${CFG}/ack $(CFG)/globalrc $(CFG)/pythonrc ${CFG}/rtags/rdmrc \
 				$(CFG)/gconf ${CFG}/ripgrep/config ${CFG}/npm/npmrc
 GIT_FILES = ${CFG}/git/config  ${CFG}/git/ignore ${CFG}/tig/config ${DATA}/tig
 I3_FILES = ${CFG}/i3/config ${CFG}/i3/i3status.config ${CFG}/dunst/dunstrc \
            ${CFG}/gsimplecal/config ${CFG}/i3/three-pane.json ${CFG}/udiskie/config.yml
+SWAY_FILES = ${CFG}/sway ${CFG}/dunst/dunstrc \
+           ${CFG}/gsimplecal/config ${CFG}/udiskie/config.yml ${CFG}/foot/foot.ini \
+           ${CFG}/waybar
 VIM_FILES = ${CACHE}/vim ${CFG}/vim/vimrc
 EXTRA_FILES = ~/.ssh/id_ed25519.pub ${DATA}/fonts/.configured
 BAREX_FILES = ~/.xsession ~/.Xmodmap
 EMACS_FILES = ${CFG}/emacs/init.el ${CFG}/emacs/early-init.el ${CFG}/emacs/lisp/extras.el ${CFG}/emacs/etc $(CACHE)/emacs ${CFG}/hunspell
-ETC_FILES = ${ETC}/sysctl.d/99-edb-sysctl.conf ${ETC}/udev/rules.d/99-edb-setup-keyboard.rules
+ETC_FILES = ${ETC}/sysctl.d/99-edb-sysctl.conf
 
 
 .PHONY: help base dev i3 all defaults prep-bash barex root
@@ -38,6 +41,7 @@ help:
 	@echo "   base       - bash, directories, utils, etc"
 	@echo "   dev        - git, vim, screen, ack"
 	@echo "   defaults   - override system defaults"
+	@echo "   sway       - Sway (wayland i3) configuration"
 	@echo "   i3         - i3 configuration"
 	@echo "   all        - all of the above"
 	@echo "Special:"
@@ -71,6 +75,9 @@ dev: ${VIM_FILES} ${APP_FILES} ${GIT_FILES} ${EMACS_FILES} ${GIT_SCRIPTS}
 
 i3: ${I3_FILES}
 	@echo "i3 configured"
+
+sway: ${SWAY_FILES}
+	@echo "Sway configured"
 
 barex: ${BAREX_FILES}
 
@@ -144,13 +151,17 @@ ${CFG}/vim: ${PWD}/vim
 	${LN} $< $@
 
 # preprocess xsettingsd
-${CFG}/xsettingsd: ${PWD}/xsettingsd
+${CFG}/xsettingsd/xsettingsd.conf: ${PWD}/xsettingsd
+	mkdir -p $(dir $@)
 	${GPP} $< > $@
 
 # copy git config
 ${CFG}/git/config: ${PWD}/git/config
 	mkdir -p $(dir $@)
 	cp -f $< $@
+
+~/.Xdefaults : ${PWD}/Xresources
+	${LN} $< $@
 
 ~/bin/git-% : ${PWD}/git/git-scripts/git-%
 	chmod a+x $<

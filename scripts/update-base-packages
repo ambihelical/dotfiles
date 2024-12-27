@@ -87,18 +87,19 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
     fi
 	apt-get --ignore-missing --quiet --yes install $p
  elif [ "$linux" == 'fedora' ]; then
- # version is currently 38 
+ # version is currently 41 
 
  # fonts
 	p="$p mscore-fonts stix-fonts unifont-fonts google-noto-sans-fonts"
  
  # cli tools
 	p="$p autojump ripgrep general-purpose-preprocessor"
-	p="$p htop xclip a2ps python3-pip make vim"
+	p="$p htop a2ps python3-pip make vim"
 
  # desktop related
-	p="$p i3 i3lock i3status xsettingsd dmenu rofi udiskie wmctrl py3status xrandr"
-	p="$p clipit xautolock xset xsetroot pavucontrol ImageMagick autorandr"
+	p="$p sway waybar dmenu rofi udiskie dunst"
+	p="$p pavucontrol ImageMagick mate-polkit"
+	p="$p j4-dmenu-desktop gnome-tweaks wlrctl wtype clipman"
 
  # nice to have apps & related
 	p="$p gparted xterm qalculate-gtk"

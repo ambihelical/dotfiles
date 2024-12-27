@@ -1,20 +1,12 @@
 #!/bin/bash
 
-# This seems to be needed in order for the keyboard settings to have effect.
-sleep 1
-
-# setup displays
-${HOME}/bin/i3wm-monitor-setup
+#sleep 1
 
 # desktop integration
-xsettingsd -c ~/.config/xsettingsd &
-
-# this is run on keyboard changes, but it needs X up to actually function
-# at this point we know we have X.
-${HOME}/bin/udev-setup-keyboard.sh
+#xsettingsd -c ~/.config/xsettingsd/xsettingsd.conf &
 
 # root gets garbled sometimes, so set solid color
-xsetroot -solid "#333333"
+#xsetroot -solid "#333333"
 
 # try to mount google drive if gdfuse config exists and there's a user space driver
 if type google-drive-ocamlfuse > /dev/null 2>&1;  then
@@ -33,3 +25,5 @@ if type google-drive-ocamlfuse > /dev/null 2>&1;  then
 else
     echo "No driver for google drive, no GDrive for you"
 fi
+
+

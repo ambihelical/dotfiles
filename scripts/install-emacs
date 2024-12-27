@@ -16,7 +16,7 @@ else
 fi
 USER="sudo -u $real_user"
 
-version=29.1
+version=29.3
 tarfile=emacs.tar.xz
 srcfile="https://ftp.gnu.org/gnu/emacs/emacs-${version}.tar.xz"
 

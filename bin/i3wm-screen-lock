@@ -1,7 +1,0 @@
-#!/bin/sh -e
-
-i3lock --ignore-empty-password --color=87ceeb
-sleep 1
-
-# Turn the screen off after a delay.
-#sleep 60; pgrep i3lock && xset dpms force off
