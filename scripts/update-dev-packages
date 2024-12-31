@@ -70,7 +70,7 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
  elif [ "$linux" == 'fedora' ]; then
 
   # documentation tools
-	q="$q doxygen plantuml"
+	q="$p doxygen plantuml"
 	p="$p librsvg2-tools lyx-fonts"
 	p="$p python3-docutils plantuml "
 
@@ -93,12 +93,12 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
 	p="$p libtree-sitter-devel libsq3-devel libXft-devel libXft"
 	p="$p libdeflate-devel poppler-glib-devel "
 
-  # needed to build asciidoctor-mathematical
-    p="$p cairo-devel gdk-pixbuf2-devel libffi-devel libxml2-devel pango-devel redhat-rpm-config lasem-devel liblerc-devel"
-
   # needed to build rust packages
 	p="$p openssl-devel libwebp-devel libzstd-devel jbigkit-devel"
 	p="$p libxcb-devel "
+
+  # for intel oneapi
+    p="$p kernel-devel pkgconfig"
 
     dnf install -y $p
  fi
