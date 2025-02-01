@@ -1958,6 +1958,8 @@
 
 (use-package magit
   :after ( evil evil-collection )
+  :custom
+  (magit-diff-refine-hunk 't)   ; show word-granularity
   :init
   (setq magit-save-repository-buffers 'dontask                ; save repo modified buffers w/o asking
         magit-log-margin '(t "%Y-%m-%d %H:%M " magit-log-margin-width t 18)
