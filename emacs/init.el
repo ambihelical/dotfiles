@@ -1431,7 +1431,8 @@
   :config
   ;; TODO - editorconfig may make some of this obsolete
   (defun me:python-mode-config ()
-    (semantic-mode t)
+    ;; This seems to take over things, not sure why it was deemed necessary
+    ;; (semantic-mode t)
     (setq evil-shift-width 4)
     (setq python-indent-offset 4)
     (setq python-indent-guess-indent-offset t)
@@ -1702,6 +1703,11 @@
   (flycheck-disabled-checkers '(emacs-lisp-checkdoc))
   (flycheck-mode-line-prefix "☑")
   (flycheck-idle-change-delay 3)     ;; default of 0.5s is too noisy
+  :config
+  ;; direct windows to python, which is python3. Not sure I understand this
+  ;; competely, or if it is correct, but it avoids warnings.
+  (when (eq system-type 'windows-nt)
+    (setq flycheck-python-pycompile-executable (executable-find "python")))
   :general
   (:prefix "C-c"
            "!"  '(:ignore t :which-key "Flycheck→" )))
