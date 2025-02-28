@@ -23,6 +23,10 @@
 	where = name-rev --name-only
 	wt = worktree
 	sw = switch
+	# remove local branches with deleted upstream (safe version)
+	gone = "!git fetch -p && git for-each-ref --format '%(refname:short) %(upstream:track)' | awk '$2 == \"[gone]\" {print $1}' | xargs -r -I{} sh -c 'echo Deleting {} && git branch -d {}'"
+	# remove local branches with deleted upstream (unconditionally)
+	gonef = "!git fetch -p && git for-each-ref --format '%(refname:short) %(upstream:track)' | awk '$2 == \"[gone]\" {print $1}' | xargs -r -I{} sh -c 'echo Deleting {} && git branch -D {}'"
 [color]
 	status = true
 	ui = auto
