@@ -1970,6 +1970,7 @@
   (setq magit-save-repository-buffers 'dontask                ; save repo modified buffers w/o asking
         magit-log-margin '(t "%Y-%m-%d %H:%M " magit-log-margin-width t 18)
         magit-status-margin '(t "%Y-%m-%d %H:%M " magit-log-margin-width nil 18)
+        magit-no-confirm '(set-and-push stage-all-changes unstage-all-changes)
         magit-section-initial-visibility-alist '(( stashes . hide ))
         magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1
         magit-repository-directories `((,(expand-file-name "dev" "~") . 1)))
