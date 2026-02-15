@@ -52,8 +52,6 @@
 	auto = 0
 [clean]
 	requireForce = true
-[github]
-	user = ambihelical
 [core]
 	excludesfile = ~/.config/git/ignore
 [merge]

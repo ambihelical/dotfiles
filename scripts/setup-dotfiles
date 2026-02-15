@@ -29,6 +29,7 @@ pkgs=(
 # set the user and email for this repo only
 git config --add --local user.name "ambihelical"
 git config --add --local user.email "ambihelical@users.noreply.github.com"
+git config --add --local github.user "ambihelical"
 
 
 # we may have ran vim already, so move the viminfo file if
