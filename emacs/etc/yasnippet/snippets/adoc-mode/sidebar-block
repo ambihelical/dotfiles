@@ -1,9 +1,0 @@
-# -*- mode: snippet -*-
-# name: sidebar-block
-# key: sbb
-# --
-.${1:title}
-****
-${2}
-****
-$0

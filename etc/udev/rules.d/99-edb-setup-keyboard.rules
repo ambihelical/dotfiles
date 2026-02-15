@@ -1,2 +1,0 @@
-# Realforce 87
-ATTR{idVendor}=="0853", ATTR{idProduct}=="0111", ENV{DISPLAY}=":0", ENV{HOME}="/home/eric", ENV{XAUTHORITY}="/run/user/1000/gdm/Xauthority", RUN+="/home/eric/bin/udev-setup-keyboard.sh"

@@ -1,0 +1,28 @@
+#!/bin/bash
+#
+# Make sure some system packages are present. These are only the
+# most basic packages needed to set up a basic system, plus a few
+# nice-to-haves.
+#
+# strict mode
+set -euo pipefail
+
+# in case we need it...
+script_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+need_cmd() {
+    command -v "$1" >/dev/null 2>&1 || {
+        echo "Required command not found: $1" >&2
+        exit 1
+    }
+}
+# Preconditions
+need_cmd stow
+
+
+# stow packages
+pkgs=(
+    bash emacs git readline ripgrep vim
+)
+
+stow -t $HOME -d $script_path/../packages "${pkgs[@]}"

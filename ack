@@ -1,3 +1,0 @@
---ignore-file=match:/\.d$/
---ignore-file=match:/^tags$/
---ignore-dir=html

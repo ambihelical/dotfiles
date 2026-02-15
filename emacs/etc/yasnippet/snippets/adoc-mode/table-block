@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name: table-block
-# key: tab
-# --
-|===
-|$1
-|===

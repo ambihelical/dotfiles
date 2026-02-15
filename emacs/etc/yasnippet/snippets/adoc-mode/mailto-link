@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: mailto-link
-# key: email
-# --
-mailto:${1:email}[${2:label}] $0

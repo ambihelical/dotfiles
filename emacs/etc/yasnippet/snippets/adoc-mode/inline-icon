@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: inline-icon
-# key: icon
-# --
-icon:${1:name}[] $0
