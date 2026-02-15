@@ -18,12 +18,18 @@ need_cmd() {
 }
 # Preconditions
 need_cmd stow
+need_cmd git
 
 
 # stow packages
 pkgs=(
-    bash emacs git readline ripgrep vim
+    bash emacs git readline ripgrep vim utility
 )
+
+# set the user and email for this repo only
+git config --add --local user.name "ambihelical"
+git config --add --local user.email "ambihelical@users.noreply.github.com"
+
 
 # we may have ran vim already, so move the viminfo file if
 # it exists

@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Ensure we're inside a git repo
+git rev-parse --is-inside-work-tree >/dev/null 2>&1 || {
+    echo "Not inside a git repository"
+    exit 1
+}
+
+# Refresh remotes once (cheap if already up to date)
+git fetch --all --prune --quiet || true
+
+printf "\nRepository: %s\n\n" "$(git rev-parse --show-toplevel)"
+
+# Enumerate worktrees
+git worktree list --porcelain | awk '
+    /^worktree / { wt=$2 }
+    /^branch /   { br=$2 }
+    /^$/ {
+        print wt "|" br
+        wt=""
+        br=""
+    }
+' | while IFS="|" read -r wt branch; do
+
+    echo "=== $wt ==="
+
+    # Detached HEAD?
+    if [[ -z "${branch:-}" ]]; then
+        echo "  Branch: (detached HEAD)"
+    else
+        short_branch="${branch#refs/heads/}"
+        echo "  Branch: $short_branch"
+    fi
+
+    # Upstream status
+    if [[ -n "${branch:-}" ]]; then
+        upstream=$(git -C "$wt" rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null || true)
+
+        if [[ -n "$upstream" ]]; then
+            read ahead behind < <(
+                git -C "$wt" rev-list --left-right --count "$upstream"...HEAD
+            )
+            echo "  Upstream: $upstream"
+
+            if [[ "$ahead" -eq 0 && "$behind" -eq 0 ]]; then
+                echo "  Sync:     up to date"
+            else
+                [[ "$ahead" -gt 0 ]]  && echo "  Ahead:    $ahead"
+                [[ "$behind" -gt 0 ]] && echo "  Behind:   $behind"
+            fi
+        else
+            echo "  Upstream: (none)"
+        fi
+    fi
+
+    # Working tree status
+    status=$(git -C "$wt" status --porcelain)
+
+    if [[ -z "$status" ]]; then
+        echo "  Changes:  clean"
+    else
+        staged=$(echo "$status" | grep -E '^[A-Z]' || true)
+        unstaged=$(echo "$status" | grep -E '^.[A-Z]' || true)
+        untracked=$(echo "$status" | grep -E '^\?\?' || true)
+
+        [[ -n "$staged" ]]    && echo "  Staged:   yes"
+        [[ -n "$unstaged" ]]  && echo "  Modified: yes"
+        [[ -n "$untracked" ]] && echo "  Untracked: yes"
+    fi
+
+    echo
+done
