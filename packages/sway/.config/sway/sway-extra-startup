@@ -1,0 +1,29 @@
+#!/bin/bash
+
+#sleep 1
+
+# desktop integration
+#xsettingsd -c ~/.config/xsettingsd/xsettingsd.conf &
+
+# root gets garbled sometimes, so set solid color
+#xsetroot -solid "#333333"
+
+# try to mount google drive if gdfuse config exists and there's a user space driver
+if type google-drive-ocamlfuse > /dev/null 2>&1;  then
+    gdrive=~/GDrive
+    if [ -e ~/.config/gdfuse/default/config ]; then
+        if mountpoint -q $gdrive ; then
+            echo "$gdrive already mounted, no action"
+        else
+            [ -d $gdrive ] || mkdir -p $gdrive
+            google-drive-ocamlfuse -xdgbd $gdrive
+            echo "Google drive $gdrive ready"
+        fi
+    else
+        echo "gdfuse must be configured for google drive"
+    fi
+else
+    echo "No driver for google drive, no GDrive for you"
+fi
+
+
