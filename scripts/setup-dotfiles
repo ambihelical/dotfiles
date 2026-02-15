@@ -30,4 +30,4 @@ pkgs=(
 mkdir -p ~/.cache/vim
 [ -e ~/.viminfo ] && mv -f ~/.viminfo ~/.cache/vim/viminfo
 
-stow -t $HOME -d $script_path/../packages "${pkgs[@]}"
+stow --dotfiles -t $HOME -d $script_path/../packages "${pkgs[@]}"
