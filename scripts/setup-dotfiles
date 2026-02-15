@@ -25,4 +25,9 @@ pkgs=(
     bash emacs git readline ripgrep vim
 )
 
+# we may have ran vim already, so move the viminfo file if
+# it exists
+mkdir -p ~/.cache/vim
+[ -e ~/.viminfo ] && mv -f ~/.viminfo ~/.cache/vim/viminfo
+
 stow -t $HOME -d $script_path/../packages "${pkgs[@]}"
