@@ -23,7 +23,12 @@ need_cmd gsettings
 
 # turn off the exposé function
 gsettings set org.gnome.mutter overlay-key ''
+
 # right control is compose
 # caps lock is super
 # windows key is hyper
 gsettings set org.gnome.desktop.input-sources xkb-options "['caps:super', 'altwin:hyper_win', 'compose:rctrl']"
+
+# sloppy focus with no auto-raise
+gsettings set org.gnome.desktop.wm.preferences focus-mode 'sloppy'
+gsettings set org.gnome.desktop.wm.preferences auto-raise false
