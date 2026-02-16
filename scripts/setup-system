@@ -22,7 +22,7 @@ need_cmd gsettings
 
 
 # turn off the exposé function
-gsettings reset org.gnome.mutter overlay-key
+gsettings set org.gnome.mutter overlay-key ''
 # right control is compose
 # caps lock is super
 # windows key is hyper
