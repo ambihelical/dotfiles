@@ -31,11 +31,21 @@ pkgs=(
     vim emacs
 )
 
+# extras for any desktop
+pkgs+=(
+    foot alacritty
+    pavucontrol udiskie brightnessctl playerctl
+    fonts-dejavu fonts-noto fonts-font-awesome fonts-roboto
+    qalculate-gtk
+)
+
 # desktop, especially for sway
 pkgs+=(
-    qalculate-gtk
-    sway waybar rofi dunst j4-dmenu-desktop wlrctl wtype clipman
-    udiskie
+    wayland-protocols xwayland wl-clipboard wlrctl wtype xdg-desktop-portal-wlr mako-notifier
+    sway swaybg swayidle swaylock waybar
+    grim slurp foot wofi
+    pavucontrol udiskie brightnessctl playerctl clipman
+    j4-dmenu-desktop
 )
 
 
