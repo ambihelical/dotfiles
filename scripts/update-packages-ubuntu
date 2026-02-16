@@ -34,10 +34,10 @@ pkgs=(
 # desktop, especially for sway
 pkgs+=(
     qalculate-gtk
-    sway waybar dmenu rofi
+    sway waybar rofi dunst j4-dmenu-desktop wlrctl wtype clipman
+    udiskie
 )
 
-#udiskie dunst wmctrl
 
 
 sudo apt-get update

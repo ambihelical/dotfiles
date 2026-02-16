@@ -24,6 +24,7 @@ need_cmd git
 # stow packages
 pkgs=(
     bash emacs git readline ripgrep vim utility
+    sway
 )
 
 # set the user and email for this repo only
