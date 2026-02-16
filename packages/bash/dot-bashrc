@@ -18,8 +18,7 @@
 [ -d ${GEM_HOME}/ruby/3.0.0/bin ] || mkdir -p ${GEM_HOME}/ruby/3.0.0/bin    # ruby gems
 [ -d ~/.local/bin ] || mkdir -p ~/.local/bin                                # locally installed execs
 [ -d ${XDG_DATA_HOME}/cargo/bin/ ] || mkdir -p ${XDG_DATA_HOME}/cargo/bin   # rust cargo
-[ -d ~/bin ] || mkdir -p ~/bin                                              # my utilities
-PATH=${XDG_DATA_HOME}/cargo/bin/:~/.local/bin:~/bin:${GEM_HOME}/ruby/3.0.0/bin:"${PATH}"
+PATH=${XDG_DATA_HOME}/cargo/bin/:~/.local/bin:${GEM_HOME}/ruby/3.0.0/bin:"${PATH}"
 
 export RIPGREP_CONFIG_PATH=${XDG_CONFIG_HOME}/ripgrep/config
 
