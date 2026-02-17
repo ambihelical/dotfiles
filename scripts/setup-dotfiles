@@ -24,10 +24,13 @@ need_cmd git
 # stow packages
 pkgs=(
     bash emacs git readline ripgrep vim utility
-    sway
+    sway waybar
 )
 
 # set the user and email for this repo only
+git config --unset-all --local user.name
+git config --unset-all --local user.email
+git config --unset-all --local github.user
 git config --add --local user.name "ambihelical"
 git config --add --local user.email "ambihelical@users.noreply.github.com"
 git config --add --local github.user "ambihelical"

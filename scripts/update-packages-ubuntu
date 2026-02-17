@@ -36,7 +36,7 @@ pkgs+=(
     foot alacritty
     pavucontrol udiskie brightnessctl playerctl
     fonts-dejavu fonts-noto fonts-font-awesome fonts-roboto
-    qalculate-gtk
+    qalculate-gtk gnome-calendar
 )
 
 # desktop, especially for sway
