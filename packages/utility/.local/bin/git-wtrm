@@ -21,9 +21,7 @@ fi
 status=0
 
 for wt in "$@"; do
-    echo "Removing worktree: $wt"
-
-    if git worktree remove "$wt"; then
+    if git worktree remove "$wt" >/dev/null 2>&1; then
         echo "$wt: ✓ success"
     else
         echo "$wt: ✗ fail" >&2
