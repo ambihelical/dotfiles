@@ -42,6 +42,7 @@ pkgs+=(
 # desktop, especially for sway
 pkgs+=(
     wayland-protocols xwayland wl-clipboard wlrctl wtype xdg-desktop-portal-wlr mako-notifier
+    wayland-utils wlr-randr
     sway swaybg swayidle swaylock waybar
     grim slurp foot wofi
     pavucontrol udiskie brightnessctl playerctl clipman

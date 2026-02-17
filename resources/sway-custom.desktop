@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Sway Custom
+Comment=Tiling window manager
+Exec=dbus-run-session /usr/bin/sway
+Type=Application
+DesktopNames=Sway Custom
