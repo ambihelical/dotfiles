@@ -27,13 +27,12 @@ while read -r wt; do
 
     branch=$(git -C "$wt" symbolic-ref --quiet --short HEAD 2>/dev/null || echo "DETACHED")
     if upstream=$(git -C "$wt" rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null); then
-        # Check if upstream ref actually exists
-        if git -C "$wt" show-ref --verify --quiet "refs/remotes/$upstream"; then
+        if [[ "$upstream" == "@{u}" ]]; then
+            upstream_state="GONE"
+        else
             read behind ahead < <(
                 git -C "$wt" rev-list --left-right --count "$upstream"...HEAD
             )
-        else
-            upstream_state="GONE"
         fi
     else
         upstream_state="NONE"
@@ -41,7 +40,7 @@ while read -r wt; do
 
 
     ahead=0; behind=0
-    if [[ -n "$upstream" ]]; then
+    if [[ "$upstream_state" == "" ]]; then
         read behind ahead < <(git -C "$wt" rev-list --left-right --count "$upstream"...HEAD)
     fi
 
