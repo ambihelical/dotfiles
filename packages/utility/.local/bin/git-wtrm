@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+usage() {
+    echo "Usage: $(basename "$0") <worktree-path> [<worktree-path> ...]"
+    exit 1
+}
+
+# Require at least one argument
+if [[ $# -lt 1 ]]; then
+    usage
+fi
+
+# Ensure we are inside a git repository
+if ! git rev-parse --git-dir >/dev/null 2>&1; then
+    echo "Error: not inside a git repository."
+    exit 2
+fi
+
+status=0
+
+for wt in "$@"; do
+    echo "Removing worktree: $wt"
+
+    if git worktree remove "$wt"; then
+        echo "✓ Removed $wt"
+    else
+        echo "✗ Failed to remove $wt" >&2
+        status=1
+    fi
+done
+
+exit $status
