@@ -20,12 +20,25 @@ while read -r wt; do
 
     # Strip parent prefix
     name="${wt#$parent/}"
+    upstream_state=""
 
     # Mark current worktree as "."
     #[[ "$wt" == "$current" ]] && name="."
 
     branch=$(git -C "$wt" symbolic-ref --quiet --short HEAD 2>/dev/null || echo "DETACHED")
-    upstream=$(git -C "$wt" rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null || true)
+    if upstream=$(git -C "$wt" rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null); then
+        # Check if upstream ref actually exists
+        if git -C "$wt" show-ref --verify --quiet "refs/remotes/$upstream"; then
+            read behind ahead < <(
+                git -C "$wt" rev-list --left-right --count "$upstream"...HEAD
+            )
+        else
+            upstream_state="GONE"
+        fi
+    else
+        upstream_state="NONE"
+    fi
+
 
     ahead=0; behind=0
     if [[ -n "$upstream" ]]; then
@@ -43,6 +56,10 @@ while read -r wt; do
     # Truncate branch to 40 chars
     if (( ${#branch} > 40 )); then
         branch="${branch:0:37}..."
+    fi
+    # append upstream state
+    if [[ -n "$upstream_state" ]]; then
+        branch="$branch ($upstream_state)"
     fi
 
     printf "[%-3s ↑%-3d ↓%-3d] %-20s %-40s\n" \
