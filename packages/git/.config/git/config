@@ -16,10 +16,11 @@
 	rbi = rebase -i
 	rbc = rebase --continue
 	rba = rebase --abort
-	fap = fetch --all --prune
-	ftp = fetch --all --prune
+	fa = fetch --all --prune
 	pick = cherry-pick
-	picka = cherry-pick --abort
+	cp = cherry-pick
+	cpa = cherry-pick --abort
+	cpc = cherry-pick --continue
 	where = name-rev --name-only
 	wt = worktree
 	sw = switch
