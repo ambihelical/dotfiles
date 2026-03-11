@@ -556,7 +556,6 @@
       (set-face-attribute 'whitespace-trailing nil :foreground fg :background "PaleVioletRed1" ))))
 
 (use-package display-fill-column-indicator
-  :disabled 
   :hook ((prog-mode text-mode with-editor-mode) . display-fill-column-indicator-mode )
   :hook (me:after-load-theme . me:display-fill-column-indicator-after-theme-change)
   :general
@@ -564,9 +563,12 @@
   :custom
   (display-fill-column-indicator-character ?\u2502)
   :config
-  (defconst me:fill-column-font (if (eq window-system 'w32) "DejaVuSansMono Nerd Font Mono-14" "DejaVu Sans Mono NF-14"))
+  ;; N.B. DejaVu Sans Mono has the extra long vertical bar which connects
+  ;;  (defconst me:fill-column-font (if (eq window-system 'w32) "DejaVuSansMono Nerd Font Mono-14" "DejaVu Sans Mono NF-14"))
+  ;; DejaVu Sans Mono connects, might be because it's the default font :shrug:
+  (defconst me:fill-column-font "DejaVu Sans Mono-14")
+
   (defun me:display-fill-column-indicator-after-theme-change ()
-    ;; N.B. DejaVu Sans Mono has the extra long vertical bar which connects
     (if me:theme-is-dark-p
         (if (display-graphic-p)
             (set-face-attribute 'fill-column-indicator nil :foreground "grey30" :font me:fill-column-font)
