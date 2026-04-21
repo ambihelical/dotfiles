@@ -512,9 +512,14 @@
           (switch-to-buffer-other-window buffer)
         (switch-to-buffer buffer))))
   ;; Define M-2 to M-9 as selecting the nth buffer
+  ;; Also super key the same
   (dotimes (ind 8) ;; 0 to 7
     (let ((key (+ 2 ind)))
       (global-set-key (kbd (concat "M-" (format "%d" key)))
+                      (lambda (&optional prefix)
+                        (interactive "P")
+                        (me:window-nth-buffer ind prefix)))
+      (global-set-key (kbd (concat "s-" (format "%d" key)))
                       (lambda (&optional prefix)
                         (interactive "P")
                         (me:window-nth-buffer ind prefix)))))
