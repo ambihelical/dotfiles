@@ -32,3 +32,14 @@ gsettings set org.gnome.desktop.input-sources xkb-options "['caps:super', 'altwi
 # sloppy focus with no auto-raise
 gsettings set org.gnome.desktop.wm.preferences focus-mode 'sloppy'
 gsettings set org.gnome.desktop.wm.preferences auto-raise false
+
+# remove super bindings gnome rudely steals. We need these for emacs
+for schema in $(gsettings list-schemas); do
+  for key in $(gsettings list-keys "$schema"); do
+    val=$(gsettings get "$schema" "$key" 2>/dev/null)
+    if echo "$val" | grep -q '<Super>'; then
+      echo "Clearing $schema $key"
+      gsettings set "$schema" "$key" "[]"
+    fi
+  done
+done
