@@ -1544,7 +1544,14 @@
     ;; skip anything less than a warning
     (compilation-set-skip-threshold 1)
     (when (and (display-graphic-p) (not (eq window-system 'w32)))
-      (x-urgency-hint (selected-frame))))
+      (x-urgency-hint (selected-frame)))
+    ;;if no errors, make the compilation buffer go away in a few seconds
+    ;;if errors, switch to the compile buffer
+    (if (null (string-match ".*exited abnormally.*" str))
+        (progn
+          (run-at-time "2 sec" nil 'quit-windows-on buf)
+          (message "No Compilation Errors!"))
+      (switch-to-buffer-other-window next-error-last-buffer)))
   :init
   (setq compilation-scroll-output t
         compilation-ask-about-save nil                 ; save all modified
