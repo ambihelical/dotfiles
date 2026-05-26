@@ -1352,6 +1352,21 @@
   :custom
   (indent-tabs-mode t))
 
+;; add treesitter
+;;
+;; NB Run treesit-install-language-grammar for each type
+(use-package treesit
+  :ensure nil
+  :preface
+  (setq treesit-language-source-alist
+        '((typst "https://github.com/uben0/tree-sitter-typst"))))
+
+;; Typst support
+(use-package typst-ts-mode
+  :ensure t
+  :mode
+  (("\\.typ\\'" . typst-ts-mode)))
+
 (use-package cmake-mode
   :init
   (setq cmake-tab-width 4)
