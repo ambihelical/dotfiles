@@ -94,10 +94,10 @@ elif [ "${OSTYPE:0:5}" == 'linux' ]; then
  
  # cli tools
 	p="$p autojump ripgrep general-purpose-preprocessor"
-	p="$p htop a2ps python3-pip make vim"
+	p="$p htop a2ps python3-pip make vim rclone"
 
  # desktop related
-	p="$p sway waybar dmenu rofi udiskie dunst"
+	p="$p sway waybar dmenu rofi udiskie dunst grimshot"
 	p="$p pavucontrol ImageMagick mate-polkit"
 	p="$p j4-dmenu-desktop gnome-tweaks wlrctl wtype clipman"
 
