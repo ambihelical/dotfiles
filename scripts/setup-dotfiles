@@ -24,7 +24,7 @@ need_cmd git
 # stow packages
 pkgs=(
     bash emacs git readline ripgrep vim utility
-    sway waybar
+    sway waybar starship
 )
 
 # set the user and email for this repo only
