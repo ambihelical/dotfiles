@@ -29,6 +29,7 @@ pkgs=(
     autojump clangd ripgrep tree
     git gitk
     vim emacs
+    rclone
 )
 
 # extras for any desktop
