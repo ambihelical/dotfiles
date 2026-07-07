@@ -10,7 +10,7 @@ set -euo pipefail
 
 # exclude rust target directories
 # delete is needed for git repos
-FLAGS="--archive --verbose --delete --exclude target/ --exclude doc/out/ --exclude archive/ --exclude dotfiles/"
+FLAGS="--archive --verbose --delete --exclude target/ --exclude doc/out/  --exclude dotfiles/"
 OTHER=/run/media/eric/fedora_localhost-live/${HOME}
 
 if [ ! -d ${OTHER} ]; then
