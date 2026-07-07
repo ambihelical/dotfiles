@@ -19,6 +19,7 @@
 [ -d ~/.local/bin ] || mkdir -p ~/.local/bin                                # locally installed execs
 [ -d ${XDG_DATA_HOME}/cargo/bin/ ] || mkdir -p ${XDG_DATA_HOME}/cargo/bin   # rust cargo
 PATH=${XDG_DATA_HOME}/cargo/bin/:~/.local/bin:${GEM_HOME}/ruby/3.0.0/bin:"${PATH}"
+[ -d ~/gdrive ] || mkdir -p ~/gdrive                                        # google drive mount
 
 export RIPGREP_CONFIG_PATH=${XDG_CONFIG_HOME}/ripgrep/config
 
@@ -363,7 +364,6 @@ fi
 
 alias cd..="cd .."
 alias ls-x="ls -x"
-
 ##### OS Specific aliases #####
 
 case "$OSTYPE" in
@@ -382,6 +382,7 @@ linux*)
 	alias pbcopy='xclip -selection clipboard'
 	alias pbpaste='xclip -selection clipboard -o'
     alias realmnt='findmnt --real'
+    alias gdrive='rclone mount gdrive: ~/gdrive --daemon'
 
 	# run commands in new window
 	gterm() { xterm -geometry 80x200-0-0 -title "$1 : $2 $3 $4" -e sh -c "$1 $2 $3 $4"; }
