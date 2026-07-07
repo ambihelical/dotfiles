@@ -35,11 +35,7 @@
 
 (defconst me:default-font
   (pcase (system-name)
-    ("hum" "Roboto Mono-10:autohint=true")
-    ("thumb" "Roboto Mono-14:autohint=true")
-    ("thud" "Roboto Mono-12:autohint=true")
-    ("SGERICBLCLVM" "DejaVu Sans Mono-14")
-    (_ "DejaVu Sans Mono-12")))
+    (_ "DejaVu Sans Mono-10")))
 (add-to-list 'default-frame-alist `(font . ,me:default-font))
 (add-to-list 'default-frame-alist `(fullscreen . maximized))
 
