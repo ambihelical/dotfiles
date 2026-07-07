@@ -260,10 +260,10 @@ set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) re
 mode "$mode_system" {
     bindsym l exec $lockit, mode "default"
     bindsym e exec swaymsg exit, mode "default"
-    bindsym s exec ~/bin/power-control suspend, mode "default"
-    bindsym h exec ~/bin/power-control hibernate, mode "default"
-    bindsym r exec ~/bin/power-control restart
-    bindsym Shift+s exec ~/bin/power-control shutdown
+    bindsym s exec systemctl suspend, mode "default"
+    bindsym h exec systemctl hibernate, mode "default"
+    bindsym r exec systemctl reboot
+    bindsym Shift+s exec systemctl shutdown
 
     # back to normal: Enter or Escape
     bindsym Return mode "default"
