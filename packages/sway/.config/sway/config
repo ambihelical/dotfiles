@@ -1,6 +1,6 @@
 
 # use hyper key as the modifier
-set $mod Mod4
+set $mod Mod3
 set $term foot
 set $dmenufn 'Ubuntu Mono Bold NF-14'
 set $xdgconf ~/.config
@@ -274,7 +274,7 @@ bindsym $mod+BackSpace mode "$mode_system"
 
 # Note: get inputs with swaymsg -t get_inputs
 
-input type:keyboard xkb_options caps:hyper,compose:rctrl
+input type:keyboard xkb_options "caps:hyper,compose:rctrl"
 output HDMI-A-1 pos 1050 0
 output DVI-I-1 pos 0 0 transform 270
 output * scale 1
