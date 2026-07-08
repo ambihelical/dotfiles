@@ -25,29 +25,61 @@ sudo -v
 
 # base packages
 pkgs=(
-    autoconf automake stow pkg-config
-    autojump clangd ripgrep tree
-    git gitk
-    vim emacs
+    autoconf
+    autojump
+    automake
+    clangd
+    emacs
+    git
+    gitk
+    pkg-config
     rclone
+    ripgrep
+    stow
+    tree
+    vim
 )
 
 # extras for any desktop
 pkgs+=(
-	 dejavu-fonts-all
-    foot alacritty
-    pavucontrol udiskie brightnessctl playerctl
-    qalculate-gtk gnome-calendar
+     alacritty
+     foot
+     gnome-calendar
+     qalculate-gtk
+     okular
 )
 
-# desktop, especially for sway
+# fonts
 pkgs+=(
-    wl-clipboard wlrctl wtype xdg-desktop-portal-wlr
-    wayland-utils wlr-randr
-    sway swaybg swayidle swaylock waybar
-    grim slurp foot wofi
-    pavucontrol udiskie brightnessctl playerctl clipman
+    adobe-source-sans-pro-fonts
+    dejavu-fonts-all
+    google-roboto-fonts
+    fontawesome-fonts-all
+)
+
+# wayland & sway specific
+pkgs+=(
+    brightnessctl
+    clipman
+    grim
     j4-dmenu-desktop
+    pavucontrol
+    playerctl
+    slurp
+    sway
+    swaybg
+    swayidle
+    swaylock
+    udiskie
+    waybar
+    wayland-utils
+    wev
+    wl-clipboard
+    wlrctl
+    wlr-randr
+    wtype
+    wofi
+    xdg-desktop-portal-wlr
 )
 
 
