@@ -76,6 +76,8 @@
   (create-lockfiles nil)                                  ; no lockfiles (.#file)
   (debugger-stack-frame-as-list t)                        ; show fns as (fn args) instead of fn(args)
   (describe-bindings-outline t)                           ; use outlines for describe bindings C-h b
+  ;; make these collapsed sections by default
+  (describe-bindings-outline-rules '((match-regexp . "Minor Mode Bindings\\|Key translations\\|Global Bindings\\|Function key map translations")))
   (dnd-indicate-insertion-point t)                        ; show dnd insertion point
   (dnd-scroll-margin 5)                                   ; how many lines scroll margin to autoscroll
   (fast-but-imprecise-scrolling t)                        ; quick and dirty scrolling
