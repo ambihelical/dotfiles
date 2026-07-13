@@ -275,9 +275,9 @@ bindsym $mod+BackSpace mode "$mode_system"
 # Note: get inputs with swaymsg -t get_inputs
 
 input type:keyboard xkb_options "caps:hyper,compose:rctrl"
-output HDMI-A-1 pos 1050 0
-output DVI-I-1 pos 0 0 transform 270
-output * scale 1
+output DP-2 pos 0 0
+output DP-1 pos 2560 0
+output * scale 1.5
 
 # authentication agent for policy kit
 exec /usr/libexec/polkit-mate-authentication-agent-1 &
