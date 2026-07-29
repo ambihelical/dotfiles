@@ -49,14 +49,24 @@ if [ ${OSTYPE:0:5} == 'linux' ]; then
 		fi
 	elif [ "$ID" == "fedora" ]; then
 		# create ssh agent if needed and add private key identities
-		socket="$(find ~/.ssh/agent -maxdepth 1 -type s | head -n1)"
-		if [[ -n "$socket" ]]; then
-			export SSH_AUTH_SOCK="${socket}"
-			echo "using existing ssh-agent $SSH_AUTH_SOCK"
-		else
-			eval `ssh-agent`
-			echo "created new ssh-agent, use ssh-add to setup with keys"
-		fi
+        socket="$HOME/.ssh/agent/socket"
+        if [[ -S "$socket" ]]; then
+            SSH_AUTH_SOCK="$socket" ssh-add -l >/dev/null 2>&1
+            rc=$?
+        else
+            rc=2
+        fi
+        if [ "$rc" -eq 0 ] || [ "$rc" -eq 1 ]; then
+            export SSH_AUTH_SOCK="$socket"
+            echo "using existing ssh-agent $SSH_AUTH_SOCK"
+            if [ "$rc" -eq 1 ]; then
+                echo "Agent has no keys use ssh-add to setup with keys"
+            fi
+        else
+            rm -f "$socket"
+            eval "$(ssh-agent -a "$socket" -s)"
+            echo "created new ssh-agent, use ssh-add to setup with keys"
+        fi
 	fi
 fi
 
