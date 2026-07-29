@@ -276,8 +276,10 @@ bindsym $mod+BackSpace mode "$mode_system"
 
 input type:keyboard xkb_options "caps:hyper,compose:rctrl"
 output DP-2 pos 0 0
-output DP-1 pos 2560 0
+output HDMI-A-1 pos 2560 0 transform 270
+output DP-1 pos 3610 0
 output * scale 1.5
+output HDMI-A-1 scale 1.0
 
 # authentication agent for policy kit
 exec /usr/libexec/polkit-mate-authentication-agent-1 &
