@@ -26,6 +26,7 @@
 [ -e ${HOME}/.local/share/site-bashrc ] && source ${HOME}/.local/share/site-bashrc
 
 # setup path. These are in reverse order of how they appear in the PATH value.
+[ -d /opt/st/cubeprogrammer/bin ] && PATH=/opt/st/cubeprogrammer/bin:"${PATH}"  # stm32 cube programmer
 [ -d /usr/lib/ccache ] && PATH=/usr/lib/ccache:"${PATH}"                    # compile cache
 [ -d ${XDG_DATA_HOME}/npm/bin ] && PATH=${XDG_DATA_HOME}/npm/bin:"${PATH}"  # npm stuff
 # We will need the following paths eventually, so make them now
@@ -436,3 +437,5 @@ linux*)
 *)   # Everything else
 	;;
 esac
+
+export STM32_PRG_PATH=/opt/st/cubeprogrammer/bin
