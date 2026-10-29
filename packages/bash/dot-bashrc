@@ -4,11 +4,25 @@
 # include system bashrc if it exists
 [ -e /etc/bashrc ] && source /etc/bashrc
 
-# include sh/dash profile
-[ -e ${HOME}/.profile ] && source ${HOME}/.profile
+# if /data/cache exists, use it for XDG_CACHE_HOME
+# Generally this will some kind of fast drive at /data
+[ -d /data/cache ] && export XDG_CACHE_HOME=/data/cache
+
+# set XDG dirs to their defaults.  Not strictly necessary for cache, config, state and data, but
+# set in case apps are poorly written.
+[ "$XDG_CACHE_HOME" ] || export XDG_CACHE_HOME=${HOME}/.cache
+[ "$XDG_CONFIG_HOME" ] || export XDG_CONFIG_HOME=${HOME}/.config
+[ "$XDG_DATA_HOME" ] || export XDG_DATA_HOME=${HOME}/.local/share
+[ "$XDG_STATE_HOME" ] || export XDG_STATE_HOME=${HOME}/.local/state
+[ -d $XDG_DATA_HOME ] || mkdir -p $XDG_DATA_HOME
+[ -d $XDG_CACHE_HOME ] || mkdir -p $XDG_CACHE_HOME
+[ -d $XDG_CONFIG_HOME ] || mkdir -p $XDG_CONFIG_HOME
+[ -d $XDG_STATE_HOME ] || mkdir -p $XDG_STATE_HOME
+
+# load common defines (mainly environment variables)
+[ -e ${XDG_CONFIG_HOME}/bash/shell-defines.sh ] && source ${XDG_CONFIG_HOME}/bash/shell-defines.sh
 
 # include local settings
-
 [ -e ${HOME}/.local/share/site-bashrc ] && source ${HOME}/.local/share/site-bashrc
 
 # setup path. These are in reverse order of how they appear in the PATH value.
@@ -38,7 +52,7 @@ if [ ${OSTYPE:0:5} == 'linux' ]; then
 		else
 			# create ssh agent if needed and add private key identities
 			export SSH_AGENT_PID=`pgrep -o -u $USER ssh-agent`
-			sockdir="$(find /tmp -type d -uid $(id -u) -name 'ssh-*' 2>/dev/null | head -n 1)"
+			sockdir="/run/user/$(id -u)/openssh_agent"
 			if [[ "$SSH_AGENT_PID" != '' && "$sockdir" != '' ]]; then
 				export SSH_AUTH_SOCK=$sockdir/agent.$SSH_AGENT_PID
 				echo "using existing ssh-agent $SSH_AGENT_PID on $SSH_AUTH_SOCK"

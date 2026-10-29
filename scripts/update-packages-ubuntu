@@ -31,6 +31,19 @@ pkgs=(
     vim emacs
 )
 
+if [[ -n "$WSL_DISTRO_NAME" ]]; then
+####
+# WSL packages
+####
+pkgs+=(
+
+)
+
+else
+####
+# Normal Ubuntu install
+####
+
 # extras for any desktop
 pkgs+=(
     foot alacritty
@@ -49,6 +62,7 @@ pkgs+=(
     j4-dmenu-desktop
 )
 
+fi
 
 
 sudo apt-get update
