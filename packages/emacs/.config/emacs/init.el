@@ -1357,13 +1357,20 @@
   :ensure nil
   :preface
   (setq treesit-language-source-alist
-        '((typst "https://github.com/uben0/tree-sitter-typst"))))
+        '((yaml "https://github.com/tree-sitter-grammars/tree-sitter-yaml")
+          (typst "https://github.com/uben0/tree-sitter-typst"))))
 
 ;; Typst support
 (use-package typst-ts-mode
   :ensure t
   :mode
   (("\\.typ\\'" . typst-ts-mode)))
+
+;; YAML support
+(use-package yaml-ts-mode
+  :ensure t
+  :mode
+  (("\\.y?ml\\'" . yaml-ts-mode)))
 
 (use-package cmake-mode
   :init
