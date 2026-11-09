@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ $# -ne 1 ]]; then
+    echo "Usage: git wtn <branch-name>"
+    exit 1
+fi
+
+branch="$1"
+issue="${branch#*-}"
+issue="${issue%%-*}"
+
+git fetch origin --prune >/dev/null 2>&1
+dir="../${issue}"
+
+echo "Creating worktree:"
+echo "  branch: $branch"
+echo "  dir:    $dir"
+
+git worktree add -b "$branch" "$dir"
+git -C $dir push -u origin "$branch"
