@@ -783,14 +783,24 @@
   :ensure nil
   :general
   ("M-1"     #'me:find-other-file)
+  :custom
+  (ff-case-fold-search nil)
+  (ff-always-try-to-create nil)
+  (cc-search-directories
+   '("."
+     "../include" "../inc" "../Inc" "../Src" "../src"  ; sibling include/src dirs
+     "../include/*"                                     ; src/foo.cpp -> include/<lib>/foo.hpp
+     "../../src" "../../src/*"                          ; include/<lib>/foo.hpp -> src/[sub/]foo.cpp
+     "../../include/*/*"                                ; src/<sub>/foo.cpp -> include/<lib>/<sub>/foo.hpp
+     "../../../src/*"                                   ; include/<lib>/<sub>/foo.hpp -> src/<sub>/foo.cpp
+     "../../../include/*/*/*" "../../../../src/*/*"     ; same, two levels deep (src/comms/serdes/)
+     "../Inc/*" "../../Inc/*" "../../Src/*"             ; Src/[sub/]foo.c <-> Inc/<sub>/foo.h
+     "/usr/include" "/usr/local/include/*"))
   :config
   (defun me:find-other-file (&optional prefix)
     "Find other file e.g. .h <-> .cpp. Use prefix to put in other window."
     (interactive "P")
-    (let ((ff-case-fold-search nil)
-          (ff-always-try-to-create nil)
-          (ff-search-directories '("." "../include" "../inc")))
-      (ff-find-other-file prefix t))))
+    (ff-find-other-file prefix t)))
 
 ;; remote file editting
 (use-package tramp
